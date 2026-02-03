@@ -278,13 +278,21 @@ async function fetchGviz(sheetName, query){
 function tableToObjects(table){
   const cols = table.cols.map(c=>c.label);
   return (table.rows || []).map(r=>{
-    const obj={};
+    const obj = {};
     r.c.forEach((cell,i)=>{
-      obj[cols[i]] = cell ? (cell.v ?? "") : "";
+      let val = cell ? (cell.v ?? "") : "";
+
+      // 🔑 Normalise Google Sheets Date objects → YYYY-MM-DD
+      if (val && typeof val === "object" && val instanceof Date) {
+        val = val.toISOString().slice(0,10);
+      }
+
+      obj[cols[i]] = val;
     });
     return obj;
   });
 }
+
 
 /* ============================
    Date helpers
