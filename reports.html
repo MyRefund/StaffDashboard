@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>My Refund – Staff Work Tracker</title>
+<title>My Refund – Reports</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 @font-face { font-family:'Okta Neue'; src: local('Okta Neue'); }
@@ -16,161 +16,382 @@
   --bg:#f6f7f8;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:'Okta Neue',system-ui,sans-serif;background:var(--bg);color:var(--text)}
-header{display:flex;align-items:center;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
-header img{max-width:140px}
-main{max-width:1000px;margin:0 auto;padding:24px}
-h2,h3{color:var(--green-dark);margin:0 0 10px}
+body{margin:0;font-family:'Okta Neue',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text)}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
+header img{max-width:150px}
+main{max-width:1200px;margin:0 auto;padding:24px}
+h1,h2,h3{color:var(--green-dark);margin:0 0 10px}
 .card{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px}
 .notice{background:var(--green-soft);color:var(--green-dark);padding:12px;border-radius:14px;font-weight:900}
 .muted{color:var(--muted);font-size:12px}
-.counter{display:flex;align-items:center;gap:10px;margin-top:8px}
-.counter span{font-weight:900;font-size:18px;min-width:32px;text-align:center}
-.counter button{width:36px;height:36px;border-radius:50%}
-button{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.col{flex:1;min-width:240px}
+label{font-size:12px;color:var(--muted);font-weight:800}
+input,select,button{font-family:inherit}
+input[type="date"],select{padding:8px 10px;border:1px solid var(--border);border-radius:10px;width:100%}
+button{padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
 button.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
-input[type="number"]{width:80px;padding:6px;border-radius:8px;border:1px solid var(--border)}
-.hidden{display:none}
+button.secondary{background:#fff;color:var(--green-dark);border-color:var(--green-dark)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.hr{height:1px;background:var(--border);margin:14px 0}
+table{width:100%;border-collapse:collapse}
+th,td{padding:8px;border-bottom:1px solid var(--border);text-align:left;font-size:14px;vertical-align:top}
+th{color:var(--green-dark)}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--green-soft);color:var(--green-dark);font-weight:900;font-size:12px}
+.hidden{display:none !important}
+
+/* Print/PDF styling */
+@media print {
+  body{background:#fff}
+  header, #loginView, #controlsCard, #actionsBar, .no-print {display:none !important}
+  main{padding:0;max-width:none}
+  .card{border-radius:0;box-shadow:none;margin:0 0 10px}
+  table{font-size:12px}
+}
 </style>
 </head>
 <body>
 
 <header>
   <img src="logo.png" alt="My Refund">
-  <strong>Staff Work Tracker</strong>
+  <div class="muted">Reports</div>
 </header>
 
 <main>
 
+<!-- LOGIN -->
 <div id="loginView" class="card">
-  <div class="notice">Welcome</div>
-  <p class="muted">Select your name to start your day.</p>
-  <select id="staffSelect"></select><br><br>
-  <button class="primary" onclick="login()">Start work</button>
+  <div class="notice">Admin access</div>
+  <p class="muted" style="margin:10px 0 0">Select your name to open reports.</p>
+  <div class="row" style="margin-top:12px">
+    <div class="col">
+      <label>Admin name</label>
+      <select id="adminSelect"></select>
+    </div>
+    <div class="col" style="display:flex;align-items:flex-end;gap:10px">
+      <button class="primary" onclick="login()">Open reports</button>
+      <button onclick="logout()">Clear</button>
+    </div>
+  </div>
 </div>
 
+<!-- APP -->
 <div id="appView" class="hidden">
 
-  <div class="card">
-    <h2>Hello, <span id="staffName"></span></h2>
-    <p class="muted">Your work today is saved automatically.</p>
+  <div id="controlsCard" class="card">
+    <h1 style="margin-bottom:6px">Reports</h1>
+    <div class="muted">Select a date range (one day or any timeframe) and run the report.</div>
+
+    <div class="row" style="margin-top:12px">
+      <div class="col">
+        <label>Start date</label>
+        <input type="date" id="startDate">
+      </div>
+      <div class="col">
+        <label>End date</label>
+        <input type="date" id="endDate">
+      </div>
+      <div class="col" style="display:flex;align-items:flex-end;gap:10px">
+        <button class="primary" onclick="runReport()">Run report</button>
+        <button onclick="logout()">Log out</button>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div id="actionsBar" class="row">
+      <div class="col" style="display:flex;gap:10px;flex-wrap:wrap">
+        <button id="downloadBtn" class="secondary" onclick="downloadPDF()" disabled>Download PDF</button>
+        <button id="emailBtn" class="secondary" onclick="emailReport()" disabled>Email report (coming soon)</button>
+        <span id="status" class="muted" style="align-self:center"></span>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <h3>Allocated work</h3>
-    <div id="workList"></div>
+  <div class="card" id="reportHeader">
+    <div class="badge">Selected range: <span id="rangeLabel">—</span></div>
+    <div class="muted" style="margin-top:8px">
+      Team totals are combined. Productivity is per staff and averaged across the selected date range.
+    </div>
   </div>
 
-  <div class="card">
-    <button class="primary" onclick="submitWork()">Submit work</button>
-    <p id="status" class="muted"></p>
+  <div class="card" id="teamCard">
+    <h3>Team totals (combined)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Work type</th>
+          <th>Starting</th>
+          <th>Completed</th>
+          <th>Remaining</th>
+        </tr>
+      </thead>
+      <tbody id="teamRows">
+        <tr><td colspan="4" class="muted">Run a report to see results.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" id="prodCard">
+    <h3>Productivity (per staff)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Staff</th>
+          <th>Hours worked</th>
+          <th>Total interactions</th>
+          <th>Avg interaction time (min)</th>
+          <th>Interactions / hour</th>
+        </tr>
+      </thead>
+      <tbody id="staffRows">
+        <tr><td colspan="5" class="muted">Run a report to see results.</td></tr>
+      </tbody>
+    </table>
   </div>
 
 </div>
-
 </main>
 
 <script>
-const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec";
+/* ============================
+   CONFIG
+   ============================ */
+const SHEET_ID = "1L_jvj8ve-8qdX61Yk0admNdoqJG1fDBTBViqiHRxif0";
+const TAB_ACTIVITY = "activity_log";
+const TAB_SHIFTS = "shifts";
+const TAB_STARTS = "starting_volumes";
 
-const STAFF = [
-  { id:"s1", name:"Alice" },
-  { id:"s2", name:"Bob" },
-  { id:"s3", name:"Charlie" }
-];
+/* ============================
+   USERS (admins only)
+   ============================ */
+const USERS_KEY = "users";
+function getUsers(){
+  try{
+    const u = JSON.parse(localStorage.getItem(USERS_KEY) || "null");
+    if(u && Array.isArray(u)) return u;
+  }catch(e){}
+  return [{id:"u_admin", name:"Drew", role:"admin"}];
+}
 
-const WORK_TYPES = ["Emails","Inbound","Outbound","Live Chat"];
-
-let currentStaff = null;
-let counters = {};
-let startTime = null;
-
-(function init(){
-  const sel = document.getElementById("staffSelect");
-  STAFF.forEach(s=>{
-    const o=document.createElement("option");
-    o.value=s.id; o.textContent=s.name;
-    sel.appendChild(o);
+function loadAdmins(){
+  const admins = getUsers().filter(u=>u.role==="admin");
+  const sel = document.getElementById("adminSelect");
+  sel.innerHTML="";
+  admins.forEach(a=>{
+    const opt=document.createElement("option");
+    opt.value=a.id;
+    opt.textContent=a.name;
+    sel.appendChild(opt);
   });
-})();
+}
 
 function login(){
-  const id = document.getElementById("staffSelect").value;
-  currentStaff = STAFF.find(s=>s.id===id);
-  startTime = Date.now();
-  document.getElementById("staffName").textContent = currentStaff.name;
+  localStorage.setItem("reportsAdmin", document.getElementById("adminSelect").value);
   document.getElementById("loginView").classList.add("hidden");
   document.getElementById("appView").classList.remove("hidden");
-  renderWork();
+}
+function logout(){
+  localStorage.removeItem("reportsAdmin");
+  document.getElementById("appView").classList.add("hidden");
+  document.getElementById("loginView").classList.remove("hidden");
 }
 
-function renderWork(){
-  const wrap = document.getElementById("workList");
-  wrap.innerHTML="";
-  WORK_TYPES.forEach(w=>{
-    counters[w]=0;
-    const div=document.createElement("div");
-    div.className="counter";
-    div.innerHTML = `
-      <strong style="min-width:120px">${w}</strong>
-      <button onclick="inc('${w}',-1)">−</button>
-      <span id="count-${w}">0</span>
-      <button onclick="inc('${w}',1)">+</button>
-      <input type="number" min="0" value="0" onchange="setCount('${w}',this.value)">
-    `;
-    wrap.appendChild(div);
+/* ============================
+   Google Sheets (GViz)
+   ============================ */
+function gvizUrl(sheet) {
+  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheet)}`;
+}
+
+async function fetchTab(sheet){
+  const res = await fetch(gvizUrl(sheet));
+  const txt = await res.text();
+  const json = txt.substring(txt.indexOf("{"), txt.lastIndexOf("}")+1);
+  const data = JSON.parse(json);
+  if(data.status !== "ok") throw new Error(data.errors?.[0]?.message || "Sheet query failed");
+  return data.table;
+}
+
+function tableToObjects(table){
+  const cols = table.cols.map(c=>c.label);
+  return (table.rows||[]).map(r=>{
+    const o={};
+    r.c.forEach((cell,i)=>{
+      let v = cell ? (cell.v ?? "") : "";
+      // Normalize GViz Date(YYYY,MM,DD) into YYYY-MM-DD
+      if(typeof v==="string" && v.startsWith("Date(")){
+        const p=v.replace("Date(","").replace(")","").split(",");
+        v=`${p[0]}-${String(+p[1]+1).padStart(2,"0")}-${String(p[2]).padStart(2,"0")}`;
+      }
+      o[cols[i]] = v;
+    });
+    return o;
   });
 }
 
-function inc(w,delta){
-  counters[w]=Math.max(0,(counters[w]||0)+delta);
-  document.getElementById("count-"+w).textContent=counters[w];
-}
-function setCount(w,val){
-  counters[w]=Math.max(0,Number(val)||0);
-  document.getElementById("count-"+w).textContent=counters[w];
-}
-
-function sendToSheets(payload){
-  fetch(SUBMIT_ENDPOINT,{
-    method:"POST",
-    mode:"no-cors",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify(payload)
-  });
+/* ============================
+   Date helpers
+   ============================ */
+function iso(d){ return d.toISOString().slice(0,10); }
+function datesBetween(startISO, endISO){
+  const out=[];
+  const s = new Date(startISO+"T00:00:00");
+  const e = new Date(endISO+"T00:00:00");
+  for(let d=new Date(s); d<=e; d.setDate(d.getDate()+1)) out.push(iso(d));
+  return out;
 }
 
-function submitWork(){
-  const today = new Date().toISOString().slice(0,10);
-  const minutesWorked = Math.round((Date.now()-startTime)/60000);
+/* ============================
+   Report runner
+   ============================ */
+let lastRun = null; // {start,end}
 
-  Object.entries(counters).forEach(([work,qty])=>{
-    if(qty>0){
-      sendToSheets({
-        activity:{
-          date: today,
-          staff_id: currentStaff.id,
-          staff_name: currentStaff.name,
-          work_type: work,
-          quantity: qty
-        }
+async function runReport(){
+  const start = document.getElementById("startDate").value;
+  const end = document.getElementById("endDate").value;
+  if(!start || !end) return alert("Please choose a start date and end date.");
+  if(end < start) return alert("End date must be on or after the start date.");
+
+  const status = document.getElementById("status");
+  status.textContent = "Loading…";
+
+  try{
+    const [actT, shT, stT] = await Promise.all([
+      fetchTab(TAB_ACTIVITY),
+      fetchTab(TAB_SHIFTS),
+      fetchTab(TAB_STARTS),
+    ]);
+
+    const act = tableToObjects(actT);
+    const shifts = tableToObjects(shT);
+    const starts = tableToObjects(stT);
+
+    const dateList = datesBetween(start, end);
+    const dateSet = new Set(dateList);
+
+    // Completed + interactions
+    const completed = {};      // work_type => qty
+    const staffInts = {};      // staff_id => qty
+    act.forEach(r=>{
+      if(!dateSet.has(String(r.date))) return;
+      const q = Number(r.quantity || 0) || 0;
+      const wt = String(r.work_type || "").trim() || "Uncategorised";
+      completed[wt] = (completed[wt] || 0) + q;
+      const sid = String(r.staff_id || "").trim() || "unknown";
+      staffInts[sid] = (staffInts[sid] || 0) + q;
+    });
+
+    // Starting volumes (sum across range)
+    const starting = {}; // work_type => sum starting_volume
+    starts.forEach(r=>{
+      if(!dateSet.has(String(r.date))) return;
+      const wt = String(r.work_type || "").trim() || "Uncategorised";
+      const s = Number(r.starting_volume || 0) || 0;
+      starting[wt] = (starting[wt] || 0) + s;
+    });
+
+    // Minutes worked (sum across range) + staff names
+    const staffMinutes = {}; // staff_id => minutes
+    const staffNames = {};   // staff_id => name
+    shifts.forEach(r=>{
+      if(!dateSet.has(String(r.date))) return;
+      const id = String(r.staff_id || "").trim() || "unknown";
+      const name = String(r.staff_name || "").trim() || id;
+      staffNames[id] = name;
+      const m = Number(r.minutes_worked || 0) || 0;
+      staffMinutes[id] = (staffMinutes[id] || 0) + m;
+    });
+
+    // Render header
+    document.getElementById("rangeLabel").textContent = `${start} → ${end}`;
+    lastRun = {start, end};
+
+    // Enable action buttons
+    document.getElementById("downloadBtn").disabled = false;
+    document.getElementById("emailBtn").disabled = false;
+
+    // Render team table
+    const teamRows = document.getElementById("teamRows");
+    teamRows.innerHTML = "";
+    const workTypes = Array.from(new Set([...Object.keys(starting), ...Object.keys(completed)])).sort((a,b)=>a.localeCompare(b));
+    if(workTypes.length === 0){
+      teamRows.innerHTML = `<tr><td colspan="4" class="muted">No data found for this date range.</td></tr>`;
+    } else {
+      workTypes.forEach(wt=>{
+        const s = starting[wt] ?? 0;
+        const c = completed[wt] ?? 0;
+
+        // Only show Remaining if you provided a starting volume (even if it was 0)
+        const hasStartEntry = (starting[wt] !== undefined);
+        const remaining = hasStartEntry ? Math.max(0, s - c) : null;
+
+        teamRows.innerHTML += `
+          <tr>
+            <td>${wt}</td>
+            <td>${hasStartEntry ? s : "—"}</td>
+            <td>${c}</td>
+            <td>${hasStartEntry ? remaining : "—"}</td>
+          </tr>`;
       });
     }
-  });
 
-  sendToSheets({
-    shift:{
-      date: today,
-      staff_id: currentStaff.id,
-      staff_name: currentStaff.name,
-      minutes_worked: minutesWorked
+    // Render staff productivity
+    const staffRows = document.getElementById("staffRows");
+    staffRows.innerHTML = "";
+    const staffIds = Array.from(new Set([...Object.keys(staffMinutes), ...Object.keys(staffInts)])).sort((a,b)=>(staffNames[a]||a).localeCompare(staffNames[b]||b));
+    if(staffIds.length === 0){
+      staffRows.innerHTML = `<tr><td colspan="5" class="muted">No staff shift/activity data found for this date range.</td></tr>`;
+    } else {
+      staffIds.forEach(id=>{
+        const mins = staffMinutes[id] || 0;
+        const hours = mins / 60;
+        const ints = staffInts[id] || 0;
+        const avg = ints ? (mins / ints) : null;
+        const iph = hours ? (ints / hours) : null;
+
+        staffRows.innerHTML += `
+          <tr>
+            <td>${staffNames[id] || id}</td>
+            <td>${hours.toFixed(2)}</td>
+            <td>${ints}</td>
+            <td>${avg===null ? "—" : avg.toFixed(1)}</td>
+            <td>${iph===null ? "—" : iph.toFixed(1)}</td>
+          </tr>`;
+      });
     }
-  });
 
-  document.getElementById("status").textContent =
-    "Submitted at " + new Date().toLocaleTimeString();
+    status.textContent = "Last updated: " + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit',second:'2-digit'});
+  } catch(e) {
+    status.textContent = "";
+    alert(e.message || String(e));
+  }
+}
+
+/* ============================
+   Actions
+   ============================ */
+function downloadPDF(){
+  if(!lastRun) return alert("Run a report first.");
+  // Friendly title for the PDF print dialog
+  const originalTitle = document.title;
+  document.title = `My Refund Report ${lastRun.start} to ${lastRun.end}`;
+  window.print();
+  setTimeout(()=>{ document.title = originalTitle; }, 500);
+}
+
+function emailReport(){
+  alert("Email report is coming soon. Next step is choosing how you want emails sent (Google Apps Script vs email service).");
+}
+
+/* ============================
+   Init
+   ============================ */
+loadAdmins();
+if(localStorage.getItem("reportsAdmin")){
+  document.getElementById("loginView").classList.add("hidden");
+  document.getElementById("appView").classList.remove("hidden");
 }
 </script>
-
 </body>
 </html>
