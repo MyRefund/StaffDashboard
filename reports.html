@@ -277,21 +277,34 @@ async function fetchGviz(sheetName, query){
 
 function tableToObjects(table){
   const cols = table.cols.map(c=>c.label);
+
   return (table.rows || []).map(r=>{
     const obj = {};
+
     r.c.forEach((cell,i)=>{
       let val = cell ? (cell.v ?? "") : "";
 
-      // 🔑 Normalise Google Sheets Date objects → YYYY-MM-DD
-      if (val && typeof val === "object" && val instanceof Date) {
-        val = val.toISOString().slice(0,10);
+      // ✅ Handle Google GViz date format: Date(YYYY,MM,DD)
+      if (typeof val === "string" && val.startsWith("Date(")) {
+        const parts = val
+          .replace("Date(", "")
+          .replace(")", "")
+          .split(",");
+
+        const year = parts[0];
+        const month = String(Number(parts[1]) + 1).padStart(2, "0");
+        const day = String(parts[2]).padStart(2, "0");
+
+        val = `${year}-${month}-${day}`;
       }
 
       obj[cols[i]] = val;
     });
+
     return obj;
   });
 }
+
 
 
 /* ============================
