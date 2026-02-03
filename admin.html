@@ -110,9 +110,30 @@ function saveVolumes(){
   const date = document.getElementById("dateInput").value;
   if(!date) return alert("Select a date");
 
+  const rows = [];
+
   [...STARTING_WORK, ...MISSED_WORK].forEach(w=>{
     const id = "field-"+w.replace(/\s/g,'');
-    const val = Number(document.getElementById(id).value||0);
+    const val = Number(document.getElementById(id).value || 0);
+
+    rows.push({
+      date: date,
+      work_type: w,
+      volume: val
+    });
+  });
+
+  fetch(SUBMIT_ENDPOINT,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ starting: rows })
+  });
+
+  document.getElementById("status").textContent =
+    "Saved at " + new Date().toLocaleTimeString();
+}
+
 
     sendToSheets({
       starting:{
