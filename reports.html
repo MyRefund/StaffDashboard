@@ -16,12 +16,12 @@
   --bg:#f6f7f8;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:'Okta Neue',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text)}
+body{margin:0;font-family:'Okta Neue',system-ui,sans-serif;background:var(--bg);color:var(--text)}
 header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
 header img{max-width:150px}
 main{max-width:1200px;margin:0 auto;padding:24px}
 h1,h2,h3{color:var(--green-dark);margin:0 0 10px}
-.card{background:#fff;border-radius:16px;padding:16px;margin:0 0 16px}
+.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px}
 .notice{background:var(--green-soft);color:var(--green-dark);padding:12px;border-radius:14px;font-weight:900}
 .muted{color:var(--muted);font-size:12px}
 .row{display:flex;gap:12px;flex-wrap:wrap}
@@ -30,18 +30,14 @@ input,select,button{font-family:inherit}
 input[type="date"],input[type="month"],select{padding:8px 10px;border:1px solid var(--border);border-radius:10px;width:100%}
 button{padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
 button.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
-.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 0}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
 .tab{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
 .tab.active{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
 .section{display:none}
 .section.active{display:block}
 table{width:100%;border-collapse:collapse}
-th,td{padding:8px;border-bottom:1px solid var(--border);text-align:left;font-size:14px;vertical-align:top}
-.pill{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border:1px solid var(--border);border-radius:999px;background:#fff;font-weight:900;color:var(--green-dark);font-size:12px}
-.pill span{color:var(--muted);font-weight:800}
-.hr{height:1px;background:var(--border);margin:14px 0}
-.hidden{display:none !important}
-small.code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;background:#f3f4f6;padding:2px 6px;border-radius:8px}
+th,td{padding:8px;border-bottom:1px solid var(--border);text-align:left;font-size:14px}
+.hidden{display:none}
 </style>
 </head>
 <body>
@@ -52,463 +48,127 @@ small.code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospa
 </header>
 
 <main>
-  <div id="loginView">
-    <h1>Reports</h1>
-    <div class="card">
-      <div class="notice">Admin access</div>
-      <p class="muted" style="margin:10px 0 0">Select your name to open reports.</p>
-      <div class="row" style="margin-top:12px">
-        <div class="col">
-          <label class="muted">Admin name</label><br>
-          <select id="adminSelect"></select>
-        </div>
-        <div class="col" style="display:flex;align-items:flex-end;gap:10px">
-          <button class="primary" onclick="login()">Open reports</button>
-          <button onclick="logout()">Clear</button>
-        </div>
-      </div>
-      <div class="hr"></div>
-      <div class="muted">
-        <div><strong style="color:var(--green-dark)">Google Sheet connection</strong></div>
-        <div style="margin-top:6px">
-          Open this file in a text editor and set <small class="code">SHEET_ID</small> below.
-          It’s the long ID in your sheet URL between <small class="code">/d/</small> and <small class="code">/edit</small>.
-        </div>
-      </div>
-    </div>
+
+<div id="loginView">
+  <h1>Reports</h1>
+  <div class="card">
+    <div class="notice">Admin access</div>
+    <p class="muted">Select your name to open reports.</p>
+    <select id="adminSelect">
+      <option>Drew</option>
+    </select>
+    <br><br>
+    <button class="primary" onclick="login()">Open reports</button>
+  </div>
+</div>
+
+<div id="appView" class="hidden">
+  <h1>Reports</h1>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('daily')">Daily</div>
   </div>
 
-  <div id="appView" class="hidden">
-    <div class="row">
-      <div class="col">
-        <h1>Reports</h1>
-        <div class="muted">Read-only dashboards pulled from Google Sheets.</div>
-      </div>
-      <div class="col" style="display:flex;justify-content:flex-end;align-items:flex-end;gap:10px">
-        <button onclick="logout()">Log out</button>
-        <button onclick="refreshActive()">Refresh</button>
-      </div>
-    </div>
-
+  <section id="daily" class="section active">
     <div class="card">
-      <div class="notice">Pick a period, then select the date range. (Default is blank – you choose each time.)</div>
-      <div class="tabs" style="margin-top:12px">
-        <div class="tab active" data-tab="daily" onclick="showTab('daily')">Daily</div>
-        <div class="tab" data-tab="weekly" onclick="showTab('weekly')">Weekly</div>
-        <div class="tab" data-tab="monthly" onclick="showTab('monthly')">Monthly</div>
-      </div>
+      <input type="date" id="dailyDate">
+      <button class="primary" onclick="runDaily()">Run</button>
     </div>
-
-    <!-- DAILY -->
-    <section id="daily" class="section active">
-      <div class="card">
-        <h3>Daily</h3>
-        <div class="row">
-          <div class="col">
-            <label class="muted">Date</label><br>
-            <input type="date" id="dailyDate">
-          </div>
-          <div class="col" style="display:flex;align-items:flex-end;gap:10px">
-            <button class="primary" onclick="runDaily()">Run</button>
-            <span class="muted" id="dailyStamp"></span>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Team totals (combined)</h3>
-        <table><thead><tr><th>Work type</th><th>Completed</th><th>Starting</th><th>Remaining</th></tr></thead><tbody id="dailyTeamRows"></tbody></table>
-      </div>
-      <div class="card">
-        <h3>Individual productivity</h3>
-        <table><thead><tr><th>Staff</th><th>Hours worked</th><th>Total interactions</th><th>Avg interaction time (min)</th><th>Interactions / hour</th></tr></thead><tbody id="dailyStaffRows"></tbody></table>
-      </div>
-    </section>
-
-    <!-- WEEKLY -->
-    <section id="weekly" class="section">
-      <div class="card">
-        <h3>Weekly</h3>
-        <div class="row">
-          <div class="col">
-            <label class="muted">Week starting (Monday)</label><br>
-            <input type="date" id="weekStart">
-          </div>
-          <div class="col" style="display:flex;align-items:flex-end;gap:10px">
-            <button class="primary" onclick="runWeekly()">Run</button>
-            <span class="muted" id="weeklyStamp"></span>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Team totals (combined)</h3>
-        <table><thead><tr><th>Work type</th><th>Completed</th><th>Starting</th><th>Remaining</th></tr></thead><tbody id="weeklyTeamRows"></tbody></table>
-      </div>
-      <div class="card">
-        <h3>Individual productivity</h3>
-        <table><thead><tr><th>Staff</th><th>Hours worked</th><th>Total interactions</th><th>Avg interaction time (min)</th><th>Interactions / hour</th></tr></thead><tbody id="weeklyStaffRows"></tbody></table>
-      </div>
-    </section>
-
-    <!-- MONTHLY -->
-    <section id="monthly" class="section">
-      <div class="card">
-        <h3>Monthly</h3>
-        <div class="row">
-          <div class="col">
-            <label class="muted">Month</label><br>
-            <input type="month" id="monthPick">
-          </div>
-          <div class="col" style="display:flex;align-items:flex-end;gap:10px">
-            <button class="primary" onclick="runMonthly()">Run</button>
-            <span class="muted" id="monthlyStamp"></span>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Team totals (combined)</h3>
-        <table><thead><tr><th>Work type</th><th>Completed</th><th>Starting</th><th>Remaining</th></tr></thead><tbody id="monthlyTeamRows"></tbody></table>
-      </div>
-      <div class="card">
-        <h3>Individual productivity</h3>
-        <table><thead><tr><th>Staff</th><th>Hours worked</th><th>Total interactions</th><th>Avg interaction time (min)</th><th>Interactions / hour</th></tr></thead><tbody id="monthlyStaffRows"></tbody></table>
-      </div>
-    </section>
-
     <div class="card">
-      <div class="muted">
-        <strong style="color:var(--green-dark)">Note:</strong> This is read-only. Next we’ll wire staff/admin pages to WRITE into the same sheet.
-      </div>
+      <h3>Team totals</h3>
+      <table><tbody id="dailyTeam"></tbody></table>
     </div>
-  </div>
+    <div class="card">
+      <h3>Individual productivity</h3>
+      <table><tbody id="dailyStaff"></tbody></table>
+    </div>
+  </section>
+</div>
+
 </main>
 
 <script>
-/* ============================
-   CONFIG — SET THIS
-   ============================ */
 const SHEET_ID = "1L_jvj8ve-8qdX61Yk0admNdoqJG1fDBTBViqiHRxif0";
-
-/* Tabs in your Google Sheet */
 const TAB_ACTIVITY = "activity_log";
 const TAB_SHIFTS = "shifts";
-const TAB_STARTS = "starting_volumes";
 
-/* ============================
-   Local users (from your existing site)
-   ============================ */
-const USERS_KEY = "users";
-function getUsers(){
-  try{
-    const u = JSON.parse(localStorage.getItem(USERS_KEY) || "null");
-    if(u && Array.isArray(u)) return u;
-  }catch(e){}
-  // fallback
-  return [{id:"u_admin",name:"Drew",role:"admin"}];
+function gvizUrl(sheet){
+  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${sheet}`;
 }
 
-/* ============================
-   Simple login
-   ============================ */
-function loadAdmins(){
-  const admins = getUsers().filter(u=>u.role==="admin");
-  const sel = document.getElementById("adminSelect");
-  sel.innerHTML="";
-  admins.forEach(a=>{
-    const opt=document.createElement("option");
-    opt.value=a.id;
-    opt.textContent=a.name;
-    sel.appendChild(opt);
-  });
-}
-function login(){
-  const id = document.getElementById("adminSelect").value;
-  localStorage.setItem("reportsAdmin", id);
-  document.getElementById("loginView").classList.add("hidden");
-  document.getElementById("appView").classList.remove("hidden");
-}
-function logout(){
-  localStorage.removeItem("reportsAdmin");
-  document.getElementById("appView").classList.add("hidden");
-  document.getElementById("loginView").classList.remove("hidden");
-}
-
-/* ============================
-   Tabs
-   ============================ */
-let currentTab="daily";
-function showTab(id){
-  currentTab=id;
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-  document.querySelector(`.tab[data-tab="${id}"]`).classList.add("active");
-  document.getElementById(id).classList.add("active");
-}
-function refreshActive(){
-  if(currentTab==="daily") runDaily();
-  if(currentTab==="weekly") runWeekly();
-  if(currentTab==="monthly") runMonthly();
-}
-
-/* ============================
-   Google Sheets (GViz) fetch
-   Read-only via "Anyone with link: Viewer"
-   ============================ */
-function gvizUrl(sheetName, query){
-  const base = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq`;
-  const params = new URLSearchParams();
-  params.set("sheet", sheetName);
-  if(query) params.set("tq", query);
-  return `${base}?${params.toString()}`;
-}
-
-async function fetchGviz(sheetName, query){
-  if(!SHEET_ID || SHEET_ID.includes("PASTE_YOUR_SHEET_ID_HERE")){
-    throw new Error("Sheet ID not set. Open reports.html and set SHEET_ID.");
-  }
-  const url = gvizUrl(sheetName, query);
-  const res = await fetch(url);
-  const text = await res.text();
-  // Google returns: "google.visualization.Query.setResponse({...});"
-  const json = text.substring(text.indexOf("{"), text.lastIndexOf("}")+1);
-  const data = JSON.parse(json);
-  if(data.status !== "ok") throw new Error(data.errors?.[0]?.message || "Sheet query failed");
-  return data.table;
+async function fetchSheet(sheet){
+  const res = await fetch(gvizUrl(sheet));
+  const txt = await res.text();
+  const json = txt.substring(txt.indexOf("{"), txt.lastIndexOf("}")+1);
+  return JSON.parse(json).table;
 }
 
 function tableToObjects(table){
   const cols = table.cols.map(c=>c.label);
-
-  return (table.rows || []).map(r=>{
-    const obj = {};
-
+  return (table.rows||[]).map(r=>{
+    const o={};
     r.c.forEach((cell,i)=>{
-      let val = cell ? (cell.v ?? "") : "";
-
-      // ✅ Handle Google GViz date format: Date(YYYY,MM,DD)
-      if (typeof val === "string" && val.startsWith("Date(")) {
-        const parts = val
-          .replace("Date(", "")
-          .replace(")", "")
-          .split(",");
-
-        const year = parts[0];
-        const month = String(Number(parts[1]) + 1).padStart(2, "0");
-        const day = String(parts[2]).padStart(2, "0");
-
-        val = `${year}-${month}-${day}`;
+      let v = cell ? cell.v : "";
+      if(typeof v==="string" && v.startsWith("Date(")){
+        const p=v.replace("Date(","").replace(")","").split(",");
+        v=`${p[0]}-${String(+p[1]+1).padStart(2,"0")}-${String(p[2]).padStart(2,"0")}`;
       }
-
-      obj[cols[i]] = val;
+      o[cols[i]]=v;
     });
-
-    return obj;
+    return o;
   });
 }
 
-
-
-/* ============================
-   Date helpers
-   ============================ */
-function datesBetween(startISO, endISO){
-  const out=[];
-  const s = new Date(startISO+"T00:00:00");
-  const e = new Date(endISO+"T00:00:00");
-  for(let d=new Date(s); d<=e; d.setDate(d.getDate()+1)){
-    out.push(d.toISOString().slice(0,10));
+function sheetTimeToMinutes(v){
+  if(typeof v==="number") return v*1440;
+  if(typeof v==="string" && v.includes(":")){
+    const [h,m]=v.split(":").map(Number);
+    return h*60+m;
   }
-  return out;
-}
-function weekRange(mondayISO){
-  const s = new Date(mondayISO+"T00:00:00");
-  const day = (s.getDay()+6)%7; // Monday=0
-  s.setDate(s.getDate()-day);
-  const e = new Date(s); e.setDate(e.getDate()+6);
-  return {start:s.toISOString().slice(0,10), end:e.toISOString().slice(0,10)};
-}
-function monthRange(ym){
-  const s = new Date(ym+"-01T00:00:00");
-  const e = new Date(s.getFullYear(), s.getMonth()+1, 0);
-  return {start:s.toISOString().slice(0,10), end:e.toISOString().slice(0,10)};
-}
-function sheetTimeToMinutes(val){
-  // Google Sheets time comes through as fraction of day
-  if (typeof val === "number") {
-    return val * 24 * 60;
-  }
-
-  // Fallback for HH:MM strings
-  if (typeof val === "string" && val.includes(":")) {
-    const [h,m] = val.split(":").map(Number);
-    return (h * 60) + m;
-  }
-
   return 0;
 }
 
-
-/* ============================
-   Core report calculations
-   ============================ */
-function sumActivity(rows, dates){
-  const set = new Set(dates);
-  const totals = {}; // work_type => sum
-  const staffTotals = {}; // staff_id => sum interactions
-  rows.forEach(r=>{
-    if(!set.has(String(r.date))) return;
-    const qty = Number(r.quantity || 0) || 0;
-    totals[r.work_type] = (totals[r.work_type] || 0) + qty;
-    staffTotals[r.staff_id] = (staffTotals[r.staff_id] || 0) + qty;
-  });
-  return {totals, staffTotals};
-}
-
-function sumStarts(rows, dates){
-  const set = new Set(dates);
-  const starts = {}; // work_type => sum starting_volume
-  rows.forEach(r=>{
-    if(!set.has(String(r.date))) return;
-    const s = Number(r.starting_volume || 0) || 0;
-    starts[r.work_type] = (starts[r.work_type] || 0) + s;
-  });
-  return starts;
-}
-
-function calcProductivity(shiftRows, staffTotals, dates){
-  const set = new Set(dates);
-  const byStaff = {}; // staff_id => {name, minutes, breaks, interactions}
-  shiftRows.forEach(r=>{
-    if(!set.has(String(r.date))) return;
-    const id = r.staff_id;
-    if(!byStaff[id]) byStaff[id] = {name:r.staff_name || id, minutes:0, interactions:0};
-   let mins = 0;
-
-const startMin = sheetTimeToMinutes(r.start_time);
-const finishMin = sheetTimeToMinutes(r.finish_time);
-
-if (finishMin > startMin) {
-  mins = finishMin - startMin;
-  const bm = Number(r.break_minutes || 0) || 0;
-  mins = Math.max(0, mins - bm);
-}
-
-    }
-    byStaff[id].minutes += mins;
-  });
-  Object.keys(byStaff).forEach(id=>{
-    byStaff[id].interactions = staffTotals[id] || 0;
-  });
-  return byStaff;
-}
-
-function renderTeamTable(tbodyId, totals, starts){
-  const tbody = document.getElementById(tbodyId);
-  tbody.innerHTML="";
-  const keys = Array.from(new Set([...Object.keys(totals), ...Object.keys(starts)])).sort();
-  if(keys.length===0){
-    tbody.innerHTML = `<tr><td colspan="4" class="muted">No data yet for this period.</td></tr>`;
-    return;
-  }
-  keys.forEach(k=>{
-    const c = totals[k] || 0;
-    const s = starts[k] ?? null;
-    const rem = (s===null || s===undefined || s===0) ? "" : Math.max(0, s - c);
-    tbody.innerHTML += `
-      <tr>
-        <td>${k}</td>
-        <td>${c}</td>
-        <td>${(s===null || s===undefined || s===0) ? "—" : s}</td>
-        <td>${(s===null || s===undefined || s===0) ? "—" : rem}</td>
-      </tr>`;
-  });
-}
-
-function renderStaffTable(tbodyId, byStaff){
-  const tbody = document.getElementById(tbodyId);
-  tbody.innerHTML="";
-  const ids = Object.keys(byStaff);
-  if(ids.length===0){
-    tbody.innerHTML = `<tr><td colspan="5" class="muted">No shift data yet for this period.</td></tr>`;
-    return;
-  }
-  ids.sort((a,b)=> byStaff[a].name.localeCompare(byStaff[b].name)).forEach(id=>{
-    const s = byStaff[id];
-    const hours = s.minutes / 60;
-    const interactions = s.interactions || 0;
-    const avg = interactions ? (s.minutes / interactions) : null;
-    const iph = hours ? (interactions / hours) : null;
-    tbody.innerHTML += `
-      <tr>
-        <td>${s.name}</td>
-        <td>${hours ? hours.toFixed(2) : "0.00"}</td>
-        <td>${interactions}</td>
-        <td>${avg===null ? "—" : avg.toFixed(1)}</td>
-        <td>${iph===null ? "—" : iph.toFixed(1)}</td>
-      </tr>`;
-  });
-}
-
-/* ============================
-   Run reports
-   ============================ */
-async function runForDates(dates, teamBodyId, staffBodyId, stampId){
-  const stamp = document.getElementById(stampId);
-  stamp.textContent = "Loading…";
-
-  try{
-    // Fetch whole tabs (small datasets) – simplest + robust
-    const [actT, shT, stT] = await Promise.all([
-      fetchGviz(TAB_ACTIVITY, ""),
-      fetchGviz(TAB_SHIFTS, ""),
-      fetchGviz(TAB_STARTS, ""),
-    ]);
-
-    const act = tableToObjects(actT);
-    const shifts = tableToObjects(shT);
-    const starts = tableToObjects(stT);
-
-    const {totals, staffTotals} = sumActivity(act, dates);
-    const startTotals = sumStarts(starts, dates);
-    const prod = calcProductivity(shifts, staffTotals, dates);
-
-    renderTeamTable(teamBodyId, totals, startTotals);
-    renderStaffTable(staffBodyId, prod);
-
-    stamp.textContent = "Last updated: " + new Date().toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'});
-  }catch(err){
-    stamp.textContent = "";
-    alert(err.message || String(err));
-  }
-}
-
-function runDaily(){
-  const d = document.getElementById("dailyDate").value;
-  if(!d) return alert("Select a date first.");
-  runForDates([d], "dailyTeamRows", "dailyStaffRows", "dailyStamp");
-}
-function runWeekly(){
-  const w = document.getElementById("weekStart").value;
-  if(!w) return alert("Select a week start date first.");
-  const r = weekRange(w);
-  const dates = datesBetween(r.start, r.end);
-  runForDates(dates, "weeklyTeamRows", "weeklyStaffRows", "weeklyStamp");
-}
-function runMonthly(){
-  const m = document.getElementById("monthPick").value;
-  if(!m) return alert("Select a month first.");
-  const r = monthRange(m);
-  const dates = datesBetween(r.start, r.end);
-  runForDates(dates, "monthlyTeamRows", "monthlyStaffRows", "monthlyStamp");
-}
-
-/* ============================
-   Init
-   ============================ */
-loadAdmins();
-if(localStorage.getItem("reportsAdmin")){
+function login(){
   document.getElementById("loginView").classList.add("hidden");
   document.getElementById("appView").classList.remove("hidden");
 }
+
+function showTab(id){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelector(`.tab[onclick="showTab('${id}')"]`).classList.add("active");
+  document.getElementById(id).classList.add("active");
+}
+
+async function runDaily(){
+  const date=document.getElementById("dailyDate").value;
+  const act=tableToObjects(await fetchSheet(TAB_ACTIVITY));
+  const sh=tableToObjects(await fetchSheet(TAB_SHIFTS));
+
+  const totals={};
+  const staff={};
+
+  act.filter(r=>r.date===date).forEach(r=>{
+    totals[r.work_type]=(totals[r.work_type]||0)+Number(r.quantity||0);
+    staff[r.staff_id]=(staff[r.staff_id]||0)+Number(r.quantity||0);
+  });
+
+  const team=document.getElementById("dailyTeam");
+  team.innerHTML="";
+  Object.keys(totals).forEach(k=>{
+    team.innerHTML+=`<tr><td>${k}</td><td>${totals[k]}</td></tr>`;
+  });
+
+  const staffTable=document.getElementById("dailyStaff");
+  staffTable.innerHTML="";
+  sh.filter(r=>r.date===date).forEach(r=>{
+    const mins=sheetTimeToMinutes(r.finish_time)-sheetTimeToMinutes(r.start_time)-(Number(r.break_minutes)||0);
+    const hrs=(mins/60).toFixed(2);
+    const inter=staff[r.staff_id]||0;
+    const avg=inter?(mins/inter).toFixed(1):"—";
+    staffTable.innerHTML+=`<tr><td>${r.staff_name}</td><td>${hrs}</td><td>${inter}</td><td>${avg}</td></tr>`;
+  });
+}
+
 </script>
 </body>
 </html>
