@@ -141,7 +141,9 @@ function sendToSheets(payload){
 }
 
 function submitWork(){
-  const today = new Date().toISOString().slice(0,10);
+  const today = new Date().toLocaleDateString("en-CA", {
+  timeZone: "Pacific/Auckland"
+});
   const minutesWorked = Math.round((Date.now()-startTime)/60000);
 
   Object.entries(counters).forEach(([work,qty])=>{
