@@ -161,7 +161,14 @@ async function runDaily(){
   const staffTable=document.getElementById("dailyStaff");
   staffTable.innerHTML="";
   sh.filter(r=>r.date===date).forEach(r=>{
-    const mins=sheetTimeToMinutes(r.finish_time)-sheetTimeToMinutes(r.start_time)-(Number(r.break_minutes)||0);
+    const startMin = sheetTimeToMinutes(r.start_time);
+const finishMin = sheetTimeToMinutes(r.finish_time);
+const breakMin = Number(r.break_minutes) || 0;
+
+let mins = finishMin - startMin - breakMin;
+
+// 🔒 Never allow negative work time
+if (mins < 0) mins = 0;
     const hrs=(mins/60).toFixed(2);
     const inter=staff[r.staff_id]||0;
     const avg=inter?(mins/inter).toFixed(1):"—";
