@@ -5,7 +5,6 @@
 <title>My Refund – Reports</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-@font-face { font-family:'Okta Neue'; src: local('Okta Neue'); }
 :root{
   --green-dark:#094B35;
   --green:#03953F;
@@ -16,382 +15,196 @@
   --bg:#f6f7f8;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:'Okta Neue',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text)}
-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
-header img{max-width:150px}
-main{max-width:1200px;margin:0 auto;padding:24px}
+body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
+main{max-width:1100px;margin:0 auto;padding:24px}
 h1,h2,h3{color:var(--green-dark);margin:0 0 10px}
 .card{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px}
-.notice{background:var(--green-soft);color:var(--green-dark);padding:12px;border-radius:14px;font-weight:900}
-.muted{color:var(--muted);font-size:12px}
-.row{display:flex;gap:12px;flex-wrap:wrap}
-.col{flex:1;min-width:240px}
-label{font-size:12px;color:var(--muted);font-weight:800}
-input,select,button{font-family:inherit}
-input[type="date"],select{padding:8px 10px;border:1px solid var(--border);border-radius:10px;width:100%}
-button{padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
-button.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
-button.secondary{background:#fff;color:var(--green-dark);border-color:var(--green-dark)}
-button:disabled{opacity:.5;cursor:not-allowed}
-.hr{height:1px;background:var(--border);margin:14px 0}
+.notice{background:var(--green-soft);padding:12px;border-radius:12px;font-weight:700}
 table{width:100%;border-collapse:collapse}
-th,td{padding:8px;border-bottom:1px solid var(--border);text-align:left;font-size:14px;vertical-align:top}
-th{color:var(--green-dark)}
-.badge{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--green-soft);color:var(--green-dark);font-weight:900;font-size:12px}
-.hidden{display:none !important}
-
-/* Print/PDF styling */
-@media print {
-  body{background:#fff}
-  header, #loginView, #controlsCard, #actionsBar, .no-print {display:none !important}
-  main{padding:0;max-width:none}
-  .card{border-radius:0;box-shadow:none;margin:0 0 10px}
-  table{font-size:12px}
-}
+th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left}
+th{font-size:12px;color:var(--muted)}
+button{padding:10px 14px;border-radius:10px;border:1px solid var(--green-dark);background:var(--green-dark);color:#fff;font-weight:800;cursor:pointer}
+input[type="date"]{padding:8px;border-radius:8px;border:1px solid var(--border)}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.muted{color:var(--muted);font-size:12px}
 </style>
 </head>
 <body>
 
 <header>
-  <img src="logo.png" alt="My Refund">
-  <div class="muted">Reports</div>
+  <h1>Reports</h1>
 </header>
 
 <main>
 
-<!-- LOGIN -->
-<div id="loginView" class="card">
-  <div class="notice">Admin access</div>
-  <p class="muted" style="margin:10px 0 0">Select your name to open reports.</p>
-  <div class="row" style="margin-top:12px">
-    <div class="col">
-      <label>Admin name</label>
-      <select id="adminSelect"></select>
-    </div>
-    <div class="col" style="display:flex;align-items:flex-end;gap:10px">
-      <button class="primary" onclick="login()">Open reports</button>
-      <button onclick="logout()">Clear</button>
-    </div>
-  </div>
+<div class="card notice">
+  Select a date range to generate a report. Productivity averages adjust automatically to the selected range.
 </div>
 
-<!-- APP -->
-<div id="appView" class="hidden">
-
-  <div id="controlsCard" class="card">
-    <h1 style="margin-bottom:6px">Reports</h1>
-    <div class="muted">Select a date range (one day or any timeframe) and run the report.</div>
-
-    <div class="row" style="margin-top:12px">
-      <div class="col">
-        <label>Start date</label>
-        <input type="date" id="startDate">
-      </div>
-      <div class="col">
-        <label>End date</label>
-        <input type="date" id="endDate">
-      </div>
-      <div class="col" style="display:flex;align-items:flex-end;gap:10px">
-        <button class="primary" onclick="runReport()">Run report</button>
-        <button onclick="logout()">Log out</button>
-      </div>
+<div class="card">
+  <div class="actions">
+    <div>
+      <label>Start date</label><br>
+      <input type="date" id="startDate">
     </div>
-
-    <div class="hr"></div>
-
-    <div id="actionsBar" class="row">
-      <div class="col" style="display:flex;gap:10px;flex-wrap:wrap">
-        <button id="downloadBtn" class="secondary" onclick="downloadPDF()" disabled>Download PDF</button>
-        <button id="emailBtn" class="secondary" onclick="emailReport()" disabled>Email report (coming soon)</button>
-        <span id="status" class="muted" style="align-self:center"></span>
-      </div>
+    <div>
+      <label>End date</label><br>
+      <input type="date" id="endDate">
+    </div>
+    <div style="align-self:flex-end">
+      <button onclick="runReport()">Run report</button>
     </div>
   </div>
-
-  <div class="card" id="reportHeader">
-    <div class="badge">Selected range: <span id="rangeLabel">—</span></div>
-    <div class="muted" style="margin-top:8px">
-      Team totals are combined. Productivity is per staff and averaged across the selected date range.
-    </div>
-  </div>
-
-  <div class="card" id="teamCard">
-    <h3>Team totals (combined)</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Work type</th>
-          <th>Starting</th>
-          <th>Completed</th>
-          <th>Remaining</th>
-        </tr>
-      </thead>
-      <tbody id="teamRows">
-        <tr><td colspan="4" class="muted">Run a report to see results.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card" id="prodCard">
-    <h3>Productivity (per staff)</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Staff</th>
-          <th>Hours worked</th>
-          <th>Total interactions</th>
-          <th>Avg interaction time (min)</th>
-          <th>Interactions / hour</th>
-        </tr>
-      </thead>
-      <tbody id="staffRows">
-        <tr><td colspan="5" class="muted">Run a report to see results.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
+  <p id="updated" class="muted"></p>
 </div>
+
+<div class="card">
+  <h2>Team totals (combined)</h2>
+  <table id="teamTable">
+    <thead>
+      <tr>
+        <th>Work type</th>
+        <th>Completed</th>
+        <th>Starting</th>
+        <th>Remaining</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Individual productivity</h2>
+  <table id="staffTable">
+    <thead>
+      <tr>
+        <th>Staff</th>
+        <th>Hours worked</th>
+        <th>Total interactions</th>
+        <th>Avg interaction time (min)</th>
+        <th>Interactions / hour</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
 </main>
 
 <script>
-/* ============================
-   CONFIG
-   ============================ */
 const SHEET_ID = "1L_jvj8ve-8qdX61Yk0admNdoqJG1fDBTBViqiHRxif0";
-const TAB_ACTIVITY = "activity_log";
-const TAB_SHIFTS = "shifts";
-const TAB_STARTS = "starting_volumes";
+const ACTIVITY_URL = `https://opensheet.elk.sh/${SHEET_ID}/activity_log`;
+const SHIFTS_URL = `https://opensheet.elk.sh/${SHEET_ID}/shifts`;
+const STARTING_URL = `https://opensheet.elk.sh/${SHEET_ID}/starting_volumes`;
 
-/* ============================
-   USERS (admins only)
-   ============================ */
-const USERS_KEY = "users";
-function getUsers(){
-  try{
-    const u = JSON.parse(localStorage.getItem(USERS_KEY) || "null");
-    if(u && Array.isArray(u)) return u;
-  }catch(e){}
-  return [{id:"u_admin", name:"Drew", role:"admin"}];
+function nzDate(dateStr){
+  return new Date(dateStr + "T00:00:00+13:00");
 }
-
-function loadAdmins(){
-  const admins = getUsers().filter(u=>u.role==="admin");
-  const sel = document.getElementById("adminSelect");
-  sel.innerHTML="";
-  admins.forEach(a=>{
-    const opt=document.createElement("option");
-    opt.value=a.id;
-    opt.textContent=a.name;
-    sel.appendChild(opt);
-  });
-}
-
-function login(){
-  localStorage.setItem("reportsAdmin", document.getElementById("adminSelect").value);
-  document.getElementById("loginView").classList.add("hidden");
-  document.getElementById("appView").classList.remove("hidden");
-}
-function logout(){
-  localStorage.removeItem("reportsAdmin");
-  document.getElementById("appView").classList.add("hidden");
-  document.getElementById("loginView").classList.remove("hidden");
-}
-
-/* ============================
-   Google Sheets (GViz)
-   ============================ */
-function gvizUrl(sheet) {
-  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheet)}`;
-}
-
-async function fetchTab(sheet){
-  const res = await fetch(gvizUrl(sheet));
-  const txt = await res.text();
-  const json = txt.substring(txt.indexOf("{"), txt.lastIndexOf("}")+1);
-  const data = JSON.parse(json);
-  if(data.status !== "ok") throw new Error(data.errors?.[0]?.message || "Sheet query failed");
-  return data.table;
-}
-
-function tableToObjects(table){
-  const cols = table.cols.map(c=>c.label);
-  return (table.rows||[]).map(r=>{
-    const o={};
-    r.c.forEach((cell,i)=>{
-      let v = cell ? (cell.v ?? "") : "";
-      // Normalize GViz Date(YYYY,MM,DD) into YYYY-MM-DD
-      if(typeof v==="string" && v.startsWith("Date(")){
-        const p=v.replace("Date(","").replace(")","").split(",");
-        v=`${p[0]}-${String(+p[1]+1).padStart(2,"0")}-${String(p[2]).padStart(2,"0")}`;
-      }
-      o[cols[i]] = v;
-    });
-    return o;
-  });
-}
-
-/* ============================
-   Date helpers
-   ============================ */
-function iso(d){ return d.toISOString().slice(0,10); }
-function datesBetween(startISO, endISO){
-  const out=[];
-  const s = new Date(startISO+"T00:00:00");
-  const e = new Date(endISO+"T00:00:00");
-  for(let d=new Date(s); d<=e; d.setDate(d.getDate()+1)) out.push(iso(d));
-  return out;
-}
-
-/* ============================
-   Report runner
-   ============================ */
-let lastRun = null; // {start,end}
 
 async function runReport(){
-  const start = document.getElementById("startDate").value;
-  const end = document.getElementById("endDate").value;
-  if(!start || !end) return alert("Please choose a start date and end date.");
-  if(end < start) return alert("End date must be on or after the start date.");
+  const startVal = document.getElementById("startDate").value;
+  const endVal = document.getElementById("endDate").value;
+  if(!startVal || !endVal) return alert("Select a start and end date");
 
-  const status = document.getElementById("status");
-  status.textContent = "Loading…";
+  const start = nzDate(startVal);
+  const end = nzDate(endVal);
 
-  try{
-    const [actT, shT, stT] = await Promise.all([
-      fetchTab(TAB_ACTIVITY),
-      fetchTab(TAB_SHIFTS),
-      fetchTab(TAB_STARTS),
-    ]);
+  const [activity, shifts, starting] = await Promise.all([
+    fetch(ACTIVITY_URL).then(r=>r.json()),
+    fetch(SHIFTS_URL).then(r=>r.json()),
+    fetch(STARTING_URL).then(r=>r.json())
+  ]);
 
-    const act = tableToObjects(actT);
-    const shifts = tableToObjects(shT);
-    const starts = tableToObjects(stT);
+  const filteredActivity = activity.filter(r=>{
+    const d = nzDate(r.date);
+    return d >= start && d <= end;
+  });
 
-    const dateList = datesBetween(start, end);
-    const dateSet = new Set(dateList);
+  const filteredShifts = shifts.filter(r=>{
+    const d = nzDate(r.date);
+    return d >= start && d <= end;
+  });
 
-    // Completed + interactions
-    const completed = {};      // work_type => qty
-    const staffInts = {};      // staff_id => qty
-    act.forEach(r=>{
-      if(!dateSet.has(String(r.date))) return;
-      const q = Number(r.quantity || 0) || 0;
-      const wt = String(r.work_type || "").trim() || "Uncategorised";
-      completed[wt] = (completed[wt] || 0) + q;
-      const sid = String(r.staff_id || "").trim() || "unknown";
-      staffInts[sid] = (staffInts[sid] || 0) + q;
-    });
+  renderTeamTotals(filteredActivity, starting, startVal, endVal);
+  renderStaff(filteredActivity, filteredShifts);
 
-    // Starting volumes (sum across range)
-    const starting = {}; // work_type => sum starting_volume
-    starts.forEach(r=>{
-      if(!dateSet.has(String(r.date))) return;
-      const wt = String(r.work_type || "").trim() || "Uncategorised";
-      const s = Number(r.starting_volume || 0) || 0;
-      starting[wt] = (starting[wt] || 0) + s;
-    });
+  document.getElementById("updated").textContent =
+    "Last updated: " + new Date().toLocaleTimeString();
+}
 
-    // Minutes worked (sum across range) + staff names
-    const staffMinutes = {}; // staff_id => minutes
-    const staffNames = {};   // staff_id => name
-    shifts.forEach(r=>{
-      if(!dateSet.has(String(r.date))) return;
-      const id = String(r.staff_id || "").trim() || "unknown";
-      const name = String(r.staff_name || "").trim() || id;
-      staffNames[id] = name;
-      const m = Number(r.minutes_worked || 0) || 0;
-      staffMinutes[id] = (staffMinutes[id] || 0) + m;
-    });
+function renderTeamTotals(activity, starting, start, end){
+  const map = {};
+  activity.forEach(r=>{
+    map[r.work_type] = (map[r.work_type]||0) + Number(r.quantity||0);
+  });
 
-    // Render header
-    document.getElementById("rangeLabel").textContent = `${start} → ${end}`;
-    lastRun = {start, end};
-
-    // Enable action buttons
-    document.getElementById("downloadBtn").disabled = false;
-    document.getElementById("emailBtn").disabled = false;
-
-    // Render team table
-    const teamRows = document.getElementById("teamRows");
-    teamRows.innerHTML = "";
-    const workTypes = Array.from(new Set([...Object.keys(starting), ...Object.keys(completed)])).sort((a,b)=>a.localeCompare(b));
-    if(workTypes.length === 0){
-      teamRows.innerHTML = `<tr><td colspan="4" class="muted">No data found for this date range.</td></tr>`;
-    } else {
-      workTypes.forEach(wt=>{
-        const s = starting[wt] ?? 0;
-        const c = completed[wt] ?? 0;
-
-        // Only show Remaining if you provided a starting volume (even if it was 0)
-        const hasStartEntry = (starting[wt] !== undefined);
-        const remaining = hasStartEntry ? Math.max(0, s - c) : null;
-
-        teamRows.innerHTML += `
-          <tr>
-            <td>${wt}</td>
-            <td>${hasStartEntry ? s : "—"}</td>
-            <td>${c}</td>
-            <td>${hasStartEntry ? remaining : "—"}</td>
-          </tr>`;
-      });
+  const startMap = {};
+  starting.forEach(r=>{
+    if(r.date >= start && r.date <= end){
+      startMap[r.work_type] = Number(r.volume||0);
     }
+  });
 
-    // Render staff productivity
-    const staffRows = document.getElementById("staffRows");
-    staffRows.innerHTML = "";
-    const staffIds = Array.from(new Set([...Object.keys(staffMinutes), ...Object.keys(staffInts)])).sort((a,b)=>(staffNames[a]||a).localeCompare(staffNames[b]||b));
-    if(staffIds.length === 0){
-      staffRows.innerHTML = `<tr><td colspan="5" class="muted">No staff shift/activity data found for this date range.</td></tr>`;
-    } else {
-      staffIds.forEach(id=>{
-        const mins = staffMinutes[id] || 0;
-        const hours = mins / 60;
-        const ints = staffInts[id] || 0;
-        const avg = ints ? (mins / ints) : null;
-        const iph = hours ? (ints / hours) : null;
+  const tbody = document.querySelector("#teamTable tbody");
+  tbody.innerHTML = "";
 
-        staffRows.innerHTML += `
-          <tr>
-            <td>${staffNames[id] || id}</td>
-            <td>${hours.toFixed(2)}</td>
-            <td>${ints}</td>
-            <td>${avg===null ? "—" : avg.toFixed(1)}</td>
-            <td>${iph===null ? "—" : iph.toFixed(1)}</td>
-          </tr>`;
-      });
-    }
+  Object.keys(map).forEach(w=>{
+    const s = startMap[w] || 0;
+    const c = map[w];
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${w}</td>
+      <td>${c}</td>
+      <td>${s || "—"}</td>
+      <td>${s ? Math.max(0,s-c) : "—"}</td>
+    `;
+    tbody.appendChild(tr);
+  });
 
-    status.textContent = "Last updated: " + new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit',second:'2-digit'});
-  } catch(e) {
-    status.textContent = "";
-    alert(e.message || String(e));
+  if(!Object.keys(map).length){
+    tbody.innerHTML = "<tr><td colspan='4'>No data for this period</td></tr>";
   }
 }
 
-/* ============================
-   Actions
-   ============================ */
-function downloadPDF(){
-  if(!lastRun) return alert("Run a report first.");
-  // Friendly title for the PDF print dialog
-  const originalTitle = document.title;
-  document.title = `My Refund Report ${lastRun.start} to ${lastRun.end}`;
-  window.print();
-  setTimeout(()=>{ document.title = originalTitle; }, 500);
-}
+function renderStaff(activity, shifts){
+  const staffMap = {};
 
-function emailReport(){
-  alert("Email report is coming soon. Next step is choosing how you want emails sent (Google Apps Script vs email service).");
-}
+  shifts.forEach(s=>{
+    const k = s.staff_name;
+    staffMap[k] = staffMap[k] || { minutes:0, interactions:0 };
+    staffMap[k].minutes += Number(s.minutes_worked||0);
+  });
 
-/* ============================
-   Init
-   ============================ */
-loadAdmins();
-if(localStorage.getItem("reportsAdmin")){
-  document.getElementById("loginView").classList.add("hidden");
-  document.getElementById("appView").classList.remove("hidden");
+  activity.forEach(a=>{
+    const k = a.staff_name;
+    staffMap[k] = staffMap[k] || { minutes:0, interactions:0 };
+    staffMap[k].interactions += Number(a.quantity||0);
+  });
+
+  const tbody = document.querySelector("#staffTable tbody");
+  tbody.innerHTML = "";
+
+  Object.entries(staffMap).forEach(([name,d])=>{
+    const hrs = d.minutes/60;
+    const avg = d.interactions ? (d.minutes/d.interactions).toFixed(2) : "—";
+    const rate = hrs ? (d.interactions/hrs).toFixed(2) : "—";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${name}</td>
+      <td>${hrs.toFixed(2)}</td>
+      <td>${d.interactions}</td>
+      <td>${avg}</td>
+      <td>${rate}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  if(!Object.keys(staffMap).length){
+    tbody.innerHTML = "<tr><td colspan='5'>No shift data for this period</td></h5>";
+  }
 }
 </script>
+
 </body>
 </html>
