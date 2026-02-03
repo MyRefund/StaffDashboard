@@ -331,7 +331,21 @@ function monthRange(ym){
   const e = new Date(s.getFullYear(), s.getMonth()+1, 0);
   return {start:s.toISOString().slice(0,10), end:e.toISOString().slice(0,10)};
 }
-function minutesBetween(a,b){ return (new Date(b) - new Date(a)) / 60000; }
+function sheetTimeToMinutes(val){
+  // Google Sheets time comes through as fraction of day
+  if (typeof val === "number") {
+    return val * 24 * 60;
+  }
+
+  // Fallback for HH:MM strings
+  if (typeof val === "string" && val.includes(":")) {
+    const [h,m] = val.split(":").map(Number);
+    return (h * 60) + m;
+  }
+
+  return 0;
+}
+
 
 /* ============================
    Core report calculations
@@ -367,13 +381,17 @@ function calcProductivity(shiftRows, staffTotals, dates){
     if(!set.has(String(r.date))) return;
     const id = r.staff_id;
     if(!byStaff[id]) byStaff[id] = {name:r.staff_name || id, minutes:0, interactions:0};
-    const start = r.start_time ? `${r.date}T${String(r.start_time).padStart(5,"0")}:00` : null;
-    const finish = r.finish_time ? `${r.date}T${String(r.finish_time).padStart(5,"0")}:00` : null;
-    let mins = 0;
-    if(start && finish){
-      mins = Math.max(0, minutesBetween(start, finish));
-      const bm = Number(r.break_minutes || 0) || 0;
-      mins = Math.max(0, mins - bm);
+   let mins = 0;
+
+const startMin = sheetTimeToMinutes(r.start_time);
+const finishMin = sheetTimeToMinutes(r.finish_time);
+
+if (finishMin > startMin) {
+  mins = finishMin - startMin;
+  const bm = Number(r.break_minutes || 0) || 0;
+  mins = Math.max(0, mins - bm);
+}
+
     }
     byStaff[id].minutes += mins;
   });
