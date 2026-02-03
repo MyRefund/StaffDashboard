@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My Refund – Admin Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+@font-face { font-family:'Okta Neue'; src: local('Okta Neue'); }
+:root{
+  --green-dark:#094B35;
+  --green:#03953F;
+  --green-soft:#ECFDF5;
+  --border:#e5e7eb;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Okta Neue',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:#f6f7f8;color:#111827}
+header{display:flex;align-items:center;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
+header img{max-width:150px}
+main{padding:24px;max-width:1200px;margin:0 auto}
+h1,h2,h3{color:var(--green-dark);margin-top:0}
+.notice{background:var(--green-soft);color:var(--green-dark);padding:12px;border-radius:14px;font-weight:700}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 20px}
+.tab{padding:10px 14px;border-radius:10px;border:1px solid var(--border);font-weight:900;background:#fff;cursor:pointer}
+.tab.active{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
+.section{display:none}
+.section.active{display:block}
+.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px}
+button{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
+button.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
+.muted{font-size:12px;color:#6b7280}
+</style>
+</head>
+<body>
+
+<header><img src="logo.png" alt="My Refund"></header>
+
+<main>
+<h1>Admin Dashboard</h1>
+<div class="notice">Full internal admin dashboard for My Refund workflow tracking.</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab(event,'overview')">Overview</div>
+  <div class="tab" onclick="showTab(event,'rundown')">Rundown</div>
+  <div class="tab" onclick="showTab(event,'allocation')">Allocation</div>
+  <div class="tab" onclick="showTab(event,'library')">Assigned Work Library</div>
+  <div class="tab" onclick="showTab(event,'users')">Users</div>
+</div>
+
+<div id="overview" class="section active">
+  <div class="card">
+    <h3>Overview</h3>
+    <p class="muted">Live staff status, start/finish times, notes, and daily totals will display here.</p>
+  </div>
+</div>
+
+<div id="rundown" class="section">
+  <div class="card">
+    <h3>Daily Rundown</h3>
+    <p class="muted">Totals for core work, allocated work, delinks, and cancellations.</p>
+  </div>
+</div>
+
+<div id="allocation" class="section">
+  <div class="card">
+    <h3>Allocation</h3>
+    <p class="muted">Allocate Emails, A2A, Unverified (and future work types) per staff per day.</p>
+  </div>
+</div>
+
+<div id="library" class="section">
+  <div class="card">
+    <h3>Assigned Work Library</h3>
+    <p class="muted">Create, enable, disable, or remove assignable work types.</p>
+  </div>
+</div>
+
+<div id="users" class="section">
+  <div class="card">
+    <h3>User Management</h3>
+    <p class="muted">Add, edit, or remove staff and admin users.</p>
+  </div>
+</div>
+
+<button onclick="location.href='index.html'">Back to login</button>
+</main>
+
+<script>
+function showTab(evt,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  evt.target.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+</script>
+
+</body>
+</html>
