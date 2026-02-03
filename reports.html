@@ -119,11 +119,22 @@ function tableToObjects(table){
 }
 
 function sheetTimeToMinutes(v){
-  if(typeof v==="number") return v*1440;
-  if(typeof v==="string" && v.includes(":")){
-    const [h,m]=v.split(":").map(Number);
-    return h*60+m;
+  // Case 1: Google GViz Date object
+  if (v instanceof Date) {
+    return (v.getHours() * 60) + v.getMinutes();
   }
+
+  // Case 2: Fraction of a day (number)
+  if (typeof v === "number") {
+    return v * 24 * 60;
+  }
+
+  // Case 3: "HH:MM" string
+  if (typeof v === "string" && v.includes(":")) {
+    const [h, m] = v.split(":").map(Number);
+    return (h * 60) + m;
+  }
+
   return 0;
 }
 
