@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My Refund – Reports</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{
+  --green-dark:#094B35;
+  --green:#03953F;
+  --green-soft:#ECFDF5;
+  --border:#e5e7eb;
+  --text:#111827;
+  --muted:#6b7280;
+  --bg:#f6f7f8;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
+main{max-width:1100px;margin:0 auto;padding:24px}
+h1,h2,h3{color:var(--green-dark);margin:0 0 10px}
+.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px}
+.notice{background:var(--green-soft);padding:12px;border-radius:12px;font-weight:700}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left}
+th{font-size:12px;color:var(--muted)}
+button{padding:10px 14px;border-radius:10px;border:1px solid var(--green-dark);background:var(--green-dark);color:#fff;font-weight:800;cursor:pointer}
+input[type="date"]{padding:8px;border-radius:8px;border:1px solid var(--border)}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.muted{color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Reports</h1>
+</header>
+
+<main>
+
+<div class="card notice">
+  Select a date range to generate a report. Productivity averages adjust automatically to the selected range.
+</div>
+
+<div class="card">
+  <div class="actions">
+    <div>
+      <label>Start date</label><br>
+      <input type="date" id="startDate">
+    </div>
+    <div>
+      <label>End date</label><br>
+      <input type="date" id="endDate">
+    </div>
+    <div style="align-self:flex-end">
+      <button onclick="runReport()">Run report</button>
+    </div>
+  </div>
+  <p id="updated" class="muted"></p>
+</div>
+
+<div class="card">
+  <h2>Team totals (combined)</h2>
+  <table id="teamTable">
+    <thead>
+      <tr>
+        <th>Work type</th>
+        <th>Completed</th>
+        <th>Starting</th>
+        <th>Remaining</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Individual productivity</h2>
+  <table id="staffTable">
+    <thead>
+      <tr>
+        <th>Staff</th>
+        <th>Hours worked</th>
+        <th>Total interactions</th>
+        <th>Avg interaction time (min)</th>
+        <th>Interactions / hour</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+</main>
+
+<script>
+const SHEET_ID = "1L_jvj8ve-8qdX61Yk0admNdoqJG1fDBTBViqiHRxif0";
+const ACTIVITY_URL = `https://opensheet.elk.sh/${SHEET_ID}/activity_log`;
+const SHIFTS_URL = `https://opensheet.elk.sh/${SHEET_ID}/shifts`;
+const STARTING_URL = `https://opensheet.elk.sh/${SHEET_ID}/starting_volumes`;
+
+function nzDate(dateStr){
+  return new Date(dateStr + "T00:00:00+13:00");
+}
+
+async function runReport(){
+  const startVal = document.getElementById("startDate").value;
+  const endVal = document.getElementById("endDate").value;
+  if(!startVal || !endVal) return alert("Select a start and end date");
+
+  const start = nzDate(startVal);
+  const end = nzDate(endVal);
+
+  const [activity, shifts, starting] = await Promise.all([
+    fetch(ACTIVITY_URL).then(r=>r.json()),
+    fetch(SHIFTS_URL).then(r=>r.json()),
+    fetch(STARTING_URL).then(r=>r.json())
+  ]);
+
+  const filteredActivity = activity.filter(r=>{
+    const d = nzDate(r.date);
+    return d >= start && d <= end;
+  });
+
+  const filteredShifts = shifts.filter(r=>{
+    const d = nzDate(r.date);
+    return d >= start && d <= end;
+  });
+
+  renderTeamTotals(filteredActivity, starting, startVal, endVal);
+  renderStaff(filteredActivity, filteredShifts);
+
+  document.getElementById("updated").textContent =
+    "Last updated: " + new Date().toLocaleTimeString();
+}
+
+function renderTeamTotals(activity, starting, start, end){
+  const map = {};
+  activity.forEach(r=>{
+    map[r.work_type] = (map[r.work_type]||0) + Number(r.quantity||0);
+  });
+
+  const startMap = {};
+  starting.forEach(r=>{
+    if(r.date >= start && r.date <= end){
+      startMap[r.work_type] = Number(r.volume||0);
+    }
+  });
+
+  const tbody = document.querySelector("#teamTable tbody");
+  tbody.innerHTML = "";
+
+  Object.keys(map).forEach(w=>{
+    const s = startMap[w] || 0;
+    const c = map[w];
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${w}</td>
+      <td>${c}</td>
+      <td>${s || "—"}</td>
+      <td>${s ? Math.max(0,s-c) : "—"}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  if(!Object.keys(map).length){
+    tbody.innerHTML = "<tr><td colspan='4'>No data for this period</td></tr>";
+  }
+}
+
+function renderStaff(activity, shifts){
+  const staffMap = {};
+
+  shifts.forEach(s=>{
+    const k = s.staff_name;
+    staffMap[k] = staffMap[k] || { minutes:0, interactions:0 };
+    staffMap[k].minutes += Number(s.minutes_worked||0);
+  });
+
+  activity.forEach(a=>{
+    const k = a.staff_name;
+    staffMap[k] = staffMap[k] || { minutes:0, interactions:0 };
+    staffMap[k].interactions += Number(a.quantity||0);
+  });
+
+  const tbody = document.querySelector("#staffTable tbody");
+  tbody.innerHTML = "";
+
+  Object.entries(staffMap).forEach(([name,d])=>{
+    const hrs = d.minutes/60;
+    const avg = d.interactions ? (d.minutes/d.interactions).toFixed(2) : "—";
+    const rate = hrs ? (d.interactions/hrs).toFixed(2) : "—";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${name}</td>
+      <td>${hrs.toFixed(2)}</td>
+      <td>${d.interactions}</td>
+      <td>${avg}</td>
+      <td>${rate}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  if(!Object.keys(staffMap).length){
+    tbody.innerHTML = "<tr><td colspan='5'>No shift data for this period</td></h5>";
+  }
+}
+</script>
+
+</body>
+</html>
