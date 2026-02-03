@@ -1,0 +1,1037 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My Refund – Admin Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+@font-face { font-family:'Okta Neue'; src: local('Okta Neue'); }
+:root{
+  --green-dark:#094B35;
+  --green:#03953F;
+  --green-soft:#ECFDF5;
+  --border:#e5e7eb;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Okta Neue', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background:#f6f7f8;
+  color:#111827;
+}
+header{
+  display:flex;
+  align-items:center;
+  padding:16px 24px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+}
+header img{max-width:150px}
+main{padding:24px;max-width:1200px;margin:0 auto}
+h1,h2,h3{color:var(--green-dark);margin-top:0}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.tab{
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-weight:800;
+  background:#fff;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--green-dark);
+  color:#fff;
+  border-color:var(--green-dark);
+}
+.section{display:none}
+.section.active{display:block}
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:16px;
+}
+.notice{
+  background:var(--green-soft);
+  color:var(--green-dark);
+  padding:12px;
+  border-radius:14px;
+  font-weight:700;
+}
+.muted{font-size:12px;color:#6b7280}
+table{width:100%;border-collapse:collapse}
+th,td{padding:8px;border-bottom:1px solid var(--border);text-align:left;font-size:14px}
+input[type=text],input[type=number],input[type=time],input[type=date],select{padding:7px;border:1px solid var(--border);border-radius:10px}
+button{
+  padding:9px 12px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+button.primary{
+  background:var(--green-dark);
+  color:#fff;
+  border-color:var(--green-dark);
+}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.col{flex:1;min-width:280px}
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#eef2f7;
+  font-size:12px;
+  font-weight:800;
+}
+.hr{height:1px;background:var(--border);margin:14px 0}
+</style>
+</head>
+<body>
+<header><img src="logo.png" alt="My Refund"></header>
+<main>
+<h1>Admin Dashboard</h1>
+
+<div class="tabs">
+  <div class="tab active" data-tab="overview" onclick="showTab('overview')">Overview</div>
+  <div class="tab" data-tab="rundown" onclick="showTab('rundown')">Rundown</div>
+  <div class="tab" data-tab="users" onclick="showTab('users')">Users</div>
+  <div class="tab" data-tab="allocation" onclick="showTab('allocation')">Allocation</div>
+  <div class="tab" data-tab="library" onclick="showTab('library')">Assigned Work Library</div>
+  <div class="tab" data-tab="breaks" onclick="showTab('breaks')">Breaks</div>
+  <div class="tab" data-tab="notes" onclick="showTab('notes')">Notes</div>
+  <div class="tab" data-tab="reports" onclick="showTab('reports')">Reports</div>
+</div>
+
+
+<!-- OVERVIEW -->
+<section id="overview" class="section active">
+  <div class="card">
+    <h3>Today at a glance</h3>
+    <div class="muted">Pick a date to review staff start/finish times, break times, notes and allocations.</div>
+    <div class="hr"></div>
+    <div class="row">
+      <div class="col">
+        <label class="muted">Date</label><br>
+        <input type="date" id="ovDate">
+      </div>
+      <div class="col" style="display:flex;align-items:flex-end;gap:10px">
+        <button class="primary" onclick="renderOverview()">Refresh</button>
+        <button onclick="jumpToReports()">Open reports</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Staff status</h3>
+    <div class="muted">Status is based on login (start) and submit (finish).</div>
+    <div class="hr"></div>
+    <div id="overviewStaff"></div>
+  </div>
+</section>
+
+<!-- RUNDOWN -->
+<section id="rundown" class="section">
+  <div class="card">
+    <h3>Daily rundown</h3>
+    <div class="muted">Totals per staff member for core work, allocated work, and delinks/cancellations.</div>
+    <div class="hr"></div>
+    <div class="row">
+      <div class="col">
+        <label class="muted">Date</label><br>
+        <input type="date" id="rdDate">
+      </div>
+      <div class="col" style="display:flex;align-items:flex-end;gap:10px">
+        <button class="primary" onclick="renderRundown()">Refresh</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Per-staff totals</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Staff</th>
+          <th>Core (Inbound/Outbound/Live Chat)</th>
+          <th>Allocated work</th>
+          <th>Delinks & Cancel</th>
+          <th>Total interactions</th>
+        </tr>
+      </thead>
+      <tbody id="rundownRows"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Combined totals</h3>
+    <table>
+      <thead><tr><th>Work type</th><th>Completed</th></tr></thead>
+      <tbody id="rundownTotals"></tbody>
+    </table>
+  </div>
+</section>
+<!-- USERS -->
+<section id="users" class="section">
+  <div class="card">
+    <h3>Users</h3>
+    <div class="muted">Add, remove, or update user names. Names can be edited safely without breaking history.</div>
+    <div class="hr"></div>
+    <table>
+      <thead><tr><th>Name</th><th>Role</th><th>ID</th><th>Actions</th></tr></thead>
+      <tbody id="userRows"></tbody>
+    </table>
+
+    <h4 style="margin-top:14px">Add user</h4>
+    <div class="row">
+      <input id="newName" type="text" placeholder="Full name" style="flex:2;min-width:220px">
+      <select id="newRole" style="min-width:160px">
+        <option value="staff">Staff</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button class="primary" onclick="addUser()">Add</button>
+    </div>
+  </div>
+</section>
+
+<!-- ALLOCATION -->
+<section id="allocation" class="section">
+  <div class="card">
+    <h3>Daily allocation</h3>
+    <div class="muted">Core daily work and delinks/cancels are always shown for staff. Use this tab to allocate additional work types (e.g. Emails, A2A, Unverified).</div>
+    <div class="hr"></div>
+    <div class="row">
+      <div class="col">
+        <label class="muted">Date</label><br>
+        <input type="date" id="allocDate">
+      </div>
+      <div class="col">
+        <label class="muted">Staff member</label><br>
+        <select id="allocStaff"></select>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+    <h4>Allocate work types</h4>
+    <div class="muted">Tick the work you want this person to complete today. Changes show on their staff page immediately.</div>
+    <div id="allocOptions" style="margin-top:10px"></div>
+    <div style="margin-top:12px">
+      <button class="primary" onclick="saveAllocation()">Save allocation</button>
+      <button onclick="clearAllocation()">Clear allocation</button>
+    </div>
+  </div>
+</section>
+
+<!-- LIBRARY -->
+<section id="library" class="section">
+  <div class="card">
+    <h3>Assigned Work Library</h3>
+    <div class="muted">Create new assignable work types and manage existing ones. These appear in Allocation and on staff pages (if allocated).</div>
+    <div class="hr"></div>
+
+    <table>
+      <thead><tr><th>Work type</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="libRows"></tbody>
+    </table>
+
+    <h4 style="margin-top:14px">Add new work type</h4>
+    <div class="row">
+      <input id="libNewName" type="text" placeholder="e.g. Quality Checks" style="flex:2;min-width:240px">
+      <button class="primary" onclick="addWorkType()">Add</button>
+    </div>
+  </div>
+</section>
+
+<!-- BREAKS -->
+<section id="breaks" class="section">
+  <div class="card">
+    <h3>Break scheduling</h3>
+    <div class="muted">Set daily break times for each staff member. Staff will see these on their page and receive alerts at the scheduled time.</div>
+    <div class="hr"></div>
+    <div class="row">
+      <div class="col">
+        <label class="muted">Date</label><br>
+        <input type="date" id="breakDate">
+      </div>
+      <div class="col">
+        <label class="muted">Staff member</label><br>
+        <select id="breakStaff"></select>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+    <div class="row">
+      <div class="col">
+        <label><span class="badge">Break 1</span> <span class="muted">10 minutes</span></label><br>
+        <input type="time" id="b1Time">
+      </div>
+      <div class="col">
+        <label><span class="badge">Lunch</span> <span class="muted">30 minutes</span></label><br>
+        <input type="time" id="b2Time">
+      </div>
+      <div class="col">
+        <label><span class="badge">Break 2</span> <span class="muted">10 minutes</span></label><br>
+        <input type="time" id="b3Time">
+      </div>
+    </div>
+
+    <div style="margin-top:12px">
+      <button class="primary" onclick="saveBreaks()">Save breaks</button>
+      <button onclick="clearBreaks()">Clear</button>
+    </div>
+  </div>
+</section>
+
+<!-- NOTES -->
+<section id="notes" class="section">
+  <div class="card">
+    <h3>Staff notes</h3>
+    <div class="muted">Add a note for a staff member. Staff will see this message at the top of their page for the selected date.</div>
+    <div class="hr"></div>
+
+    <div class="row">
+      <div class="col">
+        <label class="muted">Date</label><br>
+        <input type="date" id="noteDate">
+      </div>
+      <div class="col">
+        <label class="muted">Staff member</label><br>
+        <select id="noteStaff"></select>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+    <label class="muted">Note</label><br>
+    <textarea id="noteText" rows="4" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:14px"></textarea>
+
+    <div style="margin-top:12px">
+      <button class="primary" onclick="saveNote()">Save note</button>
+      <button onclick="clearNote()">Clear</button>
+    </div>
+  </div>
+</section>
+
+<!-- REPORTS -->
+<section id="reports" class="section">
+  <div class="card notice">
+    Reports are calculated from staff start/finish times and the total interactions completed. Individual staff metrics are shown only in the productivity section; everything else is combined totals.
+  </div>
+
+  <div class="card">
+    <h3>Report period</h3>
+    <div class="row">
+      <div class="col">
+        <label class="muted">View</label><br>
+        <select id="repMode" onchange="renderReports()">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+      </div>
+      <div class="col" id="dailyPick">
+        <label class="muted">Date</label><br>
+        <input type="date" id="repDate" onchange="renderReports()">
+      </div>
+      <div class="col" id="weekPick" style="display:none">
+        <label class="muted">Week starting (Mon)</label><br>
+        <input type="date" id="repWeek" onchange="renderReports()">
+      </div>
+      <div class="col" id="monthPick" style="display:none">
+        <label class="muted">Month</label><br>
+        <input type="month" id="repMonth" onchange="renderReports()">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Starting workload (admin input)</h3>
+    <div class="muted">Enter starting volumes for the selected day(s). For weekly/monthly, totals are the sum of daily starting volumes.</div>
+    <div class="hr"></div>
+    <div id="startHint" class="muted" style="margin-bottom:10px"></div>
+    <table>
+      <thead><tr><th>Work type</th><th>Starting volume</th></tr></thead>
+      <tbody id="startRows"></tbody>
+    </table>
+    <div style="margin-top:12px">
+      <button class="primary" onclick="saveStarts()">Save starting volumes</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Team totals (combined)</h3>
+    <table>
+      <thead>
+        <tr><th>Work type</th><th>Completed</th><th>Start</th><th>Remaining</th></tr>
+      </thead>
+      <tbody id="teamTotals"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Individual productivity (staff only)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Staff</th>
+          <th>Hours worked</th>
+          <th>Total interactions</th>
+          <th>Avg interaction time (min)</th>
+          <th>Interactions / hour</th>
+        </tr>
+      </thead>
+      <tbody id="staffRows"></tbody>
+    </table>
+  </div>
+</section>
+
+<button onclick="location.href='index.html'">Back to login</button>
+</main>
+
+<script>
+/* ----------- helpers & storage keys ----------- */
+const USERS_KEY="users";
+const LIB_KEY="assignedWorkLibrary";
+const CORE=["Inbound","Outbound","Live Chat"];
+const EVENTS=["Cancel request","Delink – SMS","Delink – Live Chat","Delink – Phone","Delink – Email"];
+
+function uid(){ return "u_" + Math.random().toString(36).slice(2,9); }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+
+function getUsers(){
+  let users = JSON.parse(localStorage.getItem(USERS_KEY)||"null");
+  if(!users){
+    users=[{id:"u_admin",name:"Drew",role:"admin"},{id:"u_1",name:"Sarah",role:"staff"},{id:"u_2",name:"Alex",role:"staff"}];
+  }
+  users = users.map(u => u.id ? u : ({id:uid(),name:u.name,role:u.role}));
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  return users;
+}
+function saveUsers(users){ localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
+
+function getLibrary(){
+  let lib = JSON.parse(localStorage.getItem(LIB_KEY) || "null");
+  if(!lib){
+    lib = [
+      {id:"w_emails", name:"Emails", active:true},
+      {id:"w_a2a", name:"A2A", active:true},
+      {id:"w_unverified", name:"Unverified", active:true}
+    ];
+    localStorage.setItem(LIB_KEY, JSON.stringify(lib));
+  }
+  return lib;
+}
+function saveLibrary(lib){ localStorage.setItem(LIB_KEY, JSON.stringify(lib)); }
+
+function workKey(userId,date){ return `work::${userId}::${date}`; }
+function breaksKey(userId,date){ return `breaks::${userId}::${date}`; }
+function noteKey(userId,date){ return `note::${userId}::${date}`; }
+function tallyKey(userId,date,work){ return `tally::${userId}::${date}::${work}`; }
+function shiftStartKey(userId,date){ return `shift::${userId}::${date}::start`; }
+function shiftFinishKey(userId,date){ return `shift::${userId}::${date}::finish`; }
+function startVolKey(work,date){ return `startvol::${work}::${date}`; }
+
+function allWorkTypes(){
+  const lib = getLibrary().filter(x=>x.active).map(x=>x.name);
+  // Work types used for reporting: core + allocated library + events
+  return [...CORE, ...lib, ...EVENTS];
+}
+
+/* ----------- tabs ----------- */
+function showTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelector(`.tab[data-tab="${id}"]`).classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+/* ----------- USERS tab ----------- */
+function renderUsers(){
+  const body = document.getElementById("userRows");
+  body.innerHTML="";
+  getUsers().forEach(u=>{
+    const idCell = `<span class="badge">${u.id}</span>`;
+    body.innerHTML += `
+      <tr>
+        <td><input type="text" value="${escapeHtml(u.name)}" onchange="renameUser('${u.id}', this.value)"></td>
+        <td>${u.role}</td>
+        <td>${idCell}</td>
+        <td><button onclick="removeUser('${u.id}')">Remove</button></td>
+      </tr>`;
+  });
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function renameUser(id, name){
+  let users = getUsers().map(u => u.id===id ? ({...u, name}) : u);
+  saveUsers(users);
+  // Refresh staff selects where needed
+  fillStaffSelects();
+  renderUsers();
+}
+function addUser(){
+  const name = document.getElementById("newName").value.trim();
+  const role = document.getElementById("newRole").value;
+  if(!name) return alert("Enter a name");
+  const users = getUsers();
+  users.push({id:uid(), name, role});
+  saveUsers(users);
+  document.getElementById("newName").value="";
+  fillStaffSelects();
+  renderUsers();
+}
+function removeUser(id){
+  if(!confirm("Remove this user?")) return;
+  const users = getUsers().filter(u=>u.id!==id);
+  saveUsers(users);
+  fillStaffSelects();
+  renderUsers();
+}
+
+/* ----------- shared staff select fill ----------- */
+function fillStaffSelects(){
+  const staff = getUsers().filter(u=>u.role==="staff");
+  const ids = ["allocStaff","breakStaff","noteStaff"];
+  ids.forEach(selId=>{
+    const sel = document.getElementById(selId);
+    sel.innerHTML="";
+    staff.forEach(u=>{
+      const opt=document.createElement("option");
+      opt.value=u.id;
+      opt.textContent=u.name;
+      sel.appendChild(opt);
+    });
+  });
+}
+
+/* ----------- ALLOCATION tab ----------- */
+function renderAllocationUI(){
+  const date = document.getElementById("allocDate").value;
+  const userId = document.getElementById("allocStaff").value;
+  const lib = getLibrary().filter(x=>x.active);
+
+  const existing = JSON.parse(localStorage.getItem(workKey(userId, date)) || "[]");
+  const set = new Set(existing);
+
+  const wrap = document.getElementById("allocOptions");
+  wrap.innerHTML="";
+  lib.forEach(w=>{
+    const id = `alloc_${w.id}`;
+    const checked = set.has(w.name) ? "checked" : "";
+    const row = document.createElement("div");
+    row.style.margin="8px 0";
+    row.innerHTML = `
+      <label style="display:flex;gap:10px;align-items:center">
+        <input type="checkbox" id="${id}" ${checked}>
+        <span style="font-weight:800;color:var(--green-dark)">${escapeHtml(w.name)}</span>
+      </label>`;
+    wrap.appendChild(row);
+  });
+
+  if(lib.length===0){
+    wrap.innerHTML = `<div class="muted">No work types exist yet. Add them in the Assigned Work Library.</div>`;
+  }
+}
+
+function saveAllocation(){
+  const date = document.getElementById("allocDate").value;
+  const userId = document.getElementById("allocStaff").value;
+  const lib = getLibrary().filter(x=>x.active);
+
+  const selected = [];
+  lib.forEach(w=>{
+    const cb = document.getElementById(`alloc_${w.id}`);
+    if(cb && cb.checked) selected.push(w.name);
+  });
+
+  localStorage.setItem(workKey(userId, date), JSON.stringify(selected));
+  alert("Allocation saved.");
+}
+
+function clearAllocation(){
+  const date = document.getElementById("allocDate").value;
+  const userId = document.getElementById("allocStaff").value;
+  localStorage.setItem(workKey(userId, date), JSON.stringify([]));
+  renderAllocationUI();
+}
+
+/* ----------- LIBRARY tab ----------- */
+function renderLibrary(){
+  const body = document.getElementById("libRows");
+  body.innerHTML="";
+  const lib = getLibrary();
+  lib.forEach(w=>{
+    body.innerHTML += `
+      <tr>
+        <td><input type="text" value="${escapeHtml(w.name)}" onchange="renameWorkType('${w.id}', this.value)"></td>
+        <td>${w.active ? '<span class="badge">Active</span>' : '<span class="badge">Hidden</span>'}</td>
+        <td>
+          <button onclick="toggleWorkType('${w.id}')">${w.active ? 'Hide' : 'Activate'}</button>
+          <button onclick="deleteWorkType('${w.id}')">Remove</button>
+        </td>
+      </tr>`;
+  });
+}
+function addWorkType(){
+  const name = document.getElementById("libNewName").value.trim();
+  if(!name) return alert("Enter a work type name");
+  const lib = getLibrary();
+  lib.push({id:"w_"+uid(), name, active:true});
+  saveLibrary(lib);
+  document.getElementById("libNewName").value="";
+  renderLibrary();
+  renderAllocationUI();
+  renderReports();
+
+// Overview/Rundown defaults
+try{document.getElementById('ovDate').value = todayISO();}catch(e){}
+try{document.getElementById('rdDate').value = todayISO();}catch(e){}
+try{renderOverview();}catch(e){}
+try{renderRundown();}catch(e){}
+
+}
+function renameWorkType(id, name){
+  const lib = getLibrary().map(w => w.id===id ? ({...w, name}) : w);
+  saveLibrary(lib);
+  renderLibrary();
+  renderAllocationUI();
+  renderReports();
+}
+function toggleWorkType(id){
+  const lib = getLibrary().map(w => w.id===id ? ({...w, active:!w.active}) : w);
+  saveLibrary(lib);
+  renderLibrary();
+  renderAllocationUI();
+  renderReports();
+}
+function deleteWorkType(id){
+  if(!confirm("Remove this work type?")) return;
+  const lib = getLibrary().filter(w=>w.id!==id);
+  saveLibrary(lib);
+  renderLibrary();
+  renderAllocationUI();
+  renderReports();
+}
+
+/* ----------- BREAKS tab ----------- */
+function loadBreaksUI(){
+  const date = document.getElementById("breakDate").value;
+  const userId = document.getElementById("breakStaff").value;
+  const br = JSON.parse(localStorage.getItem(breaksKey(userId,date)) || "{}");
+  document.getElementById("b1Time").value = br.b1?.time || "";
+  document.getElementById("b2Time").value = br.b2?.time || "";
+  document.getElementById("b3Time").value = br.b3?.time || "";
+}
+function saveBreaks(){
+  const date = document.getElementById("breakDate").value;
+  const userId = document.getElementById("breakStaff").value;
+  const br = {
+    b1:{time:document.getElementById("b1Time").value || ""},
+    b2:{time:document.getElementById("b2Time").value || ""},
+    b3:{time:document.getElementById("b3Time").value || ""},
+  };
+  localStorage.setItem(breaksKey(userId,date), JSON.stringify(br));
+  alert("Breaks saved.");
+  renderReports();
+}
+function clearBreaks(){
+  const date = document.getElementById("breakDate").value;
+  const userId = document.getElementById("breakStaff").value;
+  localStorage.removeItem(breaksKey(userId,date));
+  loadBreaksUI();
+  renderReports();
+}
+
+/* ----------- NOTES tab ----------- */
+function loadNoteUI(){
+  const date = document.getElementById("noteDate").value;
+  const userId = document.getElementById("noteStaff").value;
+  document.getElementById("noteText").value = localStorage.getItem(noteKey(userId,date)) || "";
+}
+function saveNote(){
+  const date = document.getElementById("noteDate").value;
+  const userId = document.getElementById("noteStaff").value;
+  localStorage.setItem(noteKey(userId,date), document.getElementById("noteText").value || "");
+  alert("Note saved.");
+}
+function clearNote(){
+  const date = document.getElementById("noteDate").value;
+  const userId = document.getElementById("noteStaff").value;
+  localStorage.removeItem(noteKey(userId,date));
+  loadNoteUI();
+}
+
+/* ----------- REPORTS tab ----------- */
+function datesInRange(startISO, endISO){
+  const out=[];
+  const s = new Date(startISO+"T00:00:00");
+  const e = new Date(endISO+"T00:00:00");
+  for(let d=new Date(s); d<=e; d.setDate(d.getDate()+1)){
+    out.push(d.toISOString().slice(0,10));
+  }
+  return out;
+}
+
+function weekRange(mondayISO){
+  // mondayISO is a date; we treat it as start
+  const s = new Date(mondayISO+"T00:00:00");
+  // ensure it's Monday (if not, snap back to Monday)
+  const day = (s.getDay()+6)%7; // Monday=0
+  s.setDate(s.getDate()-day);
+  const e = new Date(s); e.setDate(e.getDate()+6);
+  return {start:s.toISOString().slice(0,10), end:e.toISOString().slice(0,10)};
+}
+
+function monthRange(ym){
+  // ym: YYYY-MM
+  const s = new Date(ym+"-01T00:00:00");
+  const e = new Date(s.getFullYear(), s.getMonth()+1, 0);
+  return {start:s.toISOString().slice(0,10), end:e.toISOString().slice(0,10)};
+}
+
+function minutesBetween(a,b){ return (new Date(b)-new Date(a))/60000; }
+
+function updateReportPickers(){
+  const mode = document.getElementById("repMode").value;
+  document.getElementById("dailyPick").style.display = mode==="daily" ? "" : "none";
+  document.getElementById("weekPick").style.display = mode==="weekly" ? "" : "none";
+  document.getElementById("monthPick").style.display = mode==="monthly" ? "" : "none";
+}
+
+function getReportDates(){
+  const mode = document.getElementById("repMode").value;
+  if(mode==="daily"){
+    const d = document.getElementById("repDate").value;
+    return {mode, dates:[d], label:d};
+  }
+  if(mode==="weekly"){
+    const w = document.getElementById("repWeek").value;
+    const r = weekRange(w);
+    const dates = datesInRange(r.start, r.end);
+    return {mode, dates, label:`${r.start} to ${r.end}`};
+  }
+  const m = document.getElementById("repMonth").value; // YYYY-MM
+  const r = monthRange(m);
+  const dates = datesInRange(r.start, r.end);
+  return {mode:"monthly", dates, label:`${r.start} to ${r.end}`};
+}
+
+function renderStartInputs(){
+  const {dates,label} = getReportDates();
+  const hint = document.getElementById("startHint");
+  hint.textContent = `Period: ${label}`;
+
+  const tbody = document.getElementById("startRows");
+  tbody.innerHTML = "";
+  const types = allWorkTypes();
+
+  types.forEach(w=>{
+    let current="";
+    // For daily: show that day's start; for ranges: show sum (read-only style) but allow entering as sum by writing into each day? We'll allow editing only for daily to keep it simple.
+    if(dates.length===1){
+      current = localStorage.getItem(startVolKey(w, dates[0])) || "";
+    }else{
+      let sum=0;
+      dates.forEach(d=>{ sum += parseInt(localStorage.getItem(startVolKey(w,d))||"0"); });
+      current = sum ? String(sum) : "";
+    }
+    const editable = dates.length===1;
+    tbody.innerHTML += `
+      <tr>
+        <td>${escapeHtml(w)}</td>
+        <td>
+          <input type="number" min="0" data-work="${escapeHtml(w)}" value="${escapeHtml(current)}" ${editable ? "" : "disabled"}>
+        </td>
+      </tr>`;
+  });
+
+  document.getElementById("startHint").insertAdjacentHTML("beforeend", dates.length===1 ? "" : " · Starting volumes for weekly/monthly are summed from daily entries.");
+}
+
+function saveStarts(){
+  const {dates} = getReportDates();
+  if(dates.length!==1){
+    alert("To keep this accurate, starting volumes can be entered on the Daily report only. Switch to Daily to enter starting volumes.");
+    return;
+  }
+  const d = dates[0];
+  document.querySelectorAll("#startRows input[data-work]").forEach(inp=>{
+    localStorage.setItem(startVolKey(inp.dataset.work, d), inp.value || "0");
+  });
+  alert("Starting volumes saved.");
+  renderReports();
+}
+
+function computeCompletedTotals(dates){
+  const totals = {};
+  allWorkTypes().forEach(w => totals[w]=0);
+  const staff = getUsers().filter(u=>u.role==="staff");
+
+  dates.forEach(d=>{
+    staff.forEach(u=>{
+      allWorkTypes().forEach(w=>{
+        totals[w] += parseInt(localStorage.getItem(tallyKey(u.id,d,w)) || "0");
+      });
+    });
+  });
+  return totals;
+}
+
+function computeStartTotals(dates){
+  const starts = {};
+  allWorkTypes().forEach(w => starts[w]=0);
+  dates.forEach(d=>{
+    allWorkTypes().forEach(w=>{
+      starts[w] += parseInt(localStorage.getItem(startVolKey(w,d)) || "0");
+    });
+  });
+  return starts;
+}
+
+function renderTeamTotals(){
+  const {dates} = getReportDates();
+  const completed = computeCompletedTotals(dates);
+  const starts = computeStartTotals(dates);
+
+  const tbody = document.getElementById("teamTotals");
+  tbody.innerHTML="";
+  allWorkTypes().forEach(w=>{
+    const c = completed[w] || 0;
+    const s = starts[w] || 0;
+    const hasStart = s > 0;
+    const remaining = hasStart ? Math.max(0, s - c) : 0;
+    tbody.innerHTML += `
+      <tr>
+        <td>${escapeHtml(w)}</td>
+        <td>${c}</td>
+        <td>${hasStart ? s : "—"}</td>
+        <td>${hasStart ? remaining : "—"}</td>
+      </tr>`;
+  });
+}
+
+function renderProductivity(){
+  const {dates} = getReportDates();
+  const staff = getUsers().filter(u=>u.role==="staff");
+  const tbody = document.getElementById("staffRows");
+  tbody.innerHTML="";
+
+  staff.forEach(u=>{
+    let totalMinutes = 0;
+    let totalInteractions = 0;
+
+    dates.forEach(d=>{
+      const s = localStorage.getItem(shiftStartKey(u.id,d));
+      const f = localStorage.getItem(shiftFinishKey(u.id,d));
+      if(s && f){
+        let mins = minutesBetween(s,f);
+        // subtract breaks if set (10+30+10 if times exist)
+        const br = JSON.parse(localStorage.getItem(breaksKey(u.id,d)) || "{}");
+        if(br.b1?.time) mins -= 10;
+        if(br.b2?.time) mins -= 30;
+        if(br.b3?.time) mins -= 10;
+        mins = Math.max(0, mins);
+        totalMinutes += mins;
+      }
+      // interactions for that day
+      allWorkTypes().forEach(w=>{
+        totalInteractions += parseInt(localStorage.getItem(tallyKey(u.id,d,w)) || "0");
+      });
+    });
+
+    if(totalMinutes===0 && totalInteractions===0){
+      tbody.innerHTML += `<tr><td>${escapeHtml(u.name)}</td><td colspan="4" class="muted">No data</td></tr>`;
+      return;
+    }
+
+    const hours = (totalMinutes/60);
+    const avg = totalInteractions ? (totalMinutes/totalInteractions) : null;
+    const iph = hours ? (totalInteractions/hours) : null;
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${escapeHtml(u.name)}</td>
+        <td>${hours.toFixed(2)}</td>
+        <td>${totalInteractions}</td>
+        <td>${avg===null ? "—" : avg.toFixed(1)}</td>
+        <td>${iph===null ? "—" : iph.toFixed(1)}</td>
+      </tr>`;
+  });
+}
+
+function renderReports(){
+  updateReportPickers();
+  renderStartInputs();
+  renderTeamTotals();
+  renderProductivity();
+}
+
+/* ----------- init ----------- */
+function initDates(){
+  const t = todayISO();
+  document.getElementById("allocDate").value = t;
+  document.getElementById("breakDate").value = t;
+  document.getElementById("noteDate").value = t;
+  document.getElementById("repDate").value = t;
+
+  // week picker default: this week's Monday
+  const now = new Date();
+  const day = (now.getDay()+6)%7; // Monday=0
+  const monday = new Date(now); monday.setDate(now.getDate()-day);
+  document.getElementById("repWeek").value = monday.toISOString().slice(0,10);
+
+  // month picker default
+  const ym = now.toISOString().slice(0,7);
+  document.getElementById("repMonth").value = ym;
+}
+
+initDates();
+getLibrary(); // seed defaults if needed
+fillStaffSelects();
+renderUsers();
+renderLibrary();
+renderAllocationUI();
+loadBreaksUI();
+loadNoteUI();
+renderReports();
+
+// Hook select/date changes
+document.getElementById("allocDate").addEventListener("change", renderAllocationUI);
+document.getElementById("allocStaff").addEventListener("change", renderAllocationUI);
+
+document.getElementById("breakDate").addEventListener("change", loadBreaksUI);
+document.getElementById("breakStaff").addEventListener("change", loadBreaksUI);
+
+document.getElementById("noteDate").addEventListener("change", loadNoteUI);
+document.getElementById("noteStaff").addEventListener("change", loadNoteUI);
+
+
+/* ----------- OVERVIEW + RUNDOWN ----------- */
+function fmtTime(iso){
+  if(!iso) return "—";
+  try { return new Date(iso).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}); }
+  catch(e){ return "—"; }
+}
+function getBreaksFor(userId,date){
+  const br = JSON.parse(localStorage.getItem(breaksKey(userId,date)) || "{}");
+  return {
+    b1: br.b1?.time || "—",
+    b2: br.b2?.time || "—",
+    b3: br.b3?.time || "—",
+  };
+}
+function statusFor(userId,date){
+  const s = localStorage.getItem(shiftStartKey(userId,date));
+  const f = localStorage.getItem(shiftFinishKey(userId,date));
+  if(s && f) return {label:"Submitted", cls:"badge"};
+  if(s && !f) return {label:"Working", cls:"badge"};
+  return {label:"Not started", cls:"badge"};
+}
+function jumpToReports(){
+  showTab('reports');
+  // Scroll to top for convenience
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function renderOverview(){
+  const date = document.getElementById("ovDate").value;
+  const staff = getUsers().filter(u=>u.role==="staff");
+  const wrap = document.getElementById("overviewStaff");
+  wrap.innerHTML = "";
+
+  if(staff.length===0){
+    wrap.innerHTML = '<div class="muted">No staff users found. Add staff in the Users tab.</div>';
+    return;
+  }
+
+  staff.forEach(u=>{
+    const sISO = localStorage.getItem(shiftStartKey(u.id,date));
+    const fISO = localStorage.getItem(shiftFinishKey(u.id,date));
+    const st = statusFor(u.id,date);
+    const br = getBreaksFor(u.id,date);
+    const note = localStorage.getItem(noteKey(u.id,date)) || "";
+    const alloc = JSON.parse(localStorage.getItem(workKey(u.id,date)) || "[]");
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.marginBottom = "12px";
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+        <div>
+          <div style="font-weight:900;color:var(--green-dark);font-size:16px">${escapeHtml(u.name)}</div>
+          <div class="muted">Start: ${fmtTime(sISO)} · Finish: ${fmtTime(fISO)}</div>
+        </div>
+        <div class="${st.cls}">${st.label}</div>
+      </div>
+      <div class="hr"></div>
+      <div class="row">
+        <div class="col">
+          <div class="muted" style="margin-bottom:6px"><strong style="color:var(--green-dark)">Breaks</strong></div>
+          <div class="muted">Break 1 (10m): <strong style="color:var(--green-dark)">${br.b1}</strong></div>
+          <div class="muted">Lunch (30m): <strong style="color:var(--green-dark)">${br.b2}</strong></div>
+          <div class="muted">Break 2 (10m): <strong style="color:var(--green-dark)">${br.b3}</strong></div>
+        </div>
+        <div class="col">
+          <div class="muted" style="margin-bottom:6px"><strong style="color:var(--green-dark)">Allocated work</strong></div>
+          <div class="muted">${alloc.length ? escapeHtml(alloc.join(", ")) : "None allocated"}</div>
+        </div>
+      </div>
+      ${note.trim() ? `<div class="hr"></div><div class="muted"><strong style="color:var(--green-dark)">Note:</strong> ${escapeHtml(note)}</div>` : ""}
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+function sumTalliesForUserDate(userId,date,workList){
+  let sum=0;
+  workList.forEach(w=>{
+    sum += parseInt(localStorage.getItem(tallyKey(userId,date,w)) || "0");
+  });
+  return sum;
+}
+
+function renderRundown(){
+  const date = document.getElementById("rdDate").value;
+  const staff = getUsers().filter(u=>u.role==="staff");
+  const lib = getLibrary().filter(x=>x.active).map(x=>x.name);
+
+  const rows = document.getElementById("rundownRows");
+  rows.innerHTML = "";
+
+  if(staff.length===0){
+    rows.innerHTML = '<tr><td colspan="5" class="muted">No staff users found.</td></tr>';
+  } else {
+    staff.forEach(u=>{
+      const coreTotal = sumTalliesForUserDate(u.id,date,CORE);
+      const alloc = JSON.parse(localStorage.getItem(workKey(u.id,date)) || "[]");
+      const allocTotal = sumTalliesForUserDate(u.id,date,alloc);
+      const eventsTotal = sumTalliesForUserDate(u.id,date,EVENTS);
+      const total = coreTotal + allocTotal + eventsTotal;
+
+      rows.innerHTML += `
+        <tr>
+          <td>${escapeHtml(u.name)}</td>
+          <td>${coreTotal}</td>
+          <td>${allocTotal}</td>
+          <td>${eventsTotal}</td>
+          <td><strong style="color:var(--green-dark)">${total}</strong></td>
+        </tr>`;
+    });
+  }
+
+  // Combined totals by work type for that date
+  const totals = {};
+  [...CORE, ...lib, ...EVENTS].forEach(w => totals[w]=0);
+  staff.forEach(u=>{
+    Object.keys(totals).forEach(w=>{
+      totals[w] += parseInt(localStorage.getItem(tallyKey(u.id,date,w)) || "0");
+    });
+  });
+
+  const tBody = document.getElementById("rundownTotals");
+  tBody.innerHTML = "";
+  Object.keys(totals).forEach(w=>{
+    tBody.innerHTML += `<tr><td>${escapeHtml(w)}</td><td>${totals[w]}</td></tr>`;
+  });
+}
+</script>
+</body>
+</html>
