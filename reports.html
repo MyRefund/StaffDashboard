@@ -27,7 +27,7 @@ h1,h2,h3{color:var(--green-dark);margin:0 0 10px}
 .row{display:flex;gap:12px;flex-wrap:wrap}
 .col{flex:1;min-width:260px}
 input,select,button{font-family:inherit}
-input[type="date"],input[type="month"],select{padding:8px 10px;border:1px solid var(--border);border-radius:10px;width:100%}
+input[type="date"]{padding:8px 10px;border:1px solid var(--border);border-radius:10px;width:100%}
 button{padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
 button.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
 .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
@@ -56,14 +56,14 @@ th,td{padding:8px;border-bottom:1px solid var(--border);text-align:left;font-siz
     <p class="muted">Select your name to open reports.</p>
     <select id="adminSelect">
       <option>Drew</option>
-    </select>
-    <br><br>
+    </select><br><br>
     <button class="primary" onclick="login()">Open reports</button>
   </div>
 </div>
 
 <div id="appView" class="hidden">
   <h1>Reports</h1>
+
   <div class="tabs">
     <div class="tab active" onclick="showTab('daily')">Daily</div>
   </div>
@@ -73,13 +73,29 @@ th,td{padding:8px;border-bottom:1px solid var(--border);text-align:left;font-siz
       <input type="date" id="dailyDate">
       <button class="primary" onclick="runDaily()">Run</button>
     </div>
+
     <div class="card">
       <h3>Team totals</h3>
-      <table><tbody id="dailyTeam"></tbody></table>
+      <table>
+        <thead><tr><th>Work type</th><th>Completed</th></tr></thead>
+        <tbody id="dailyTeam"></tbody>
+      </table>
     </div>
+
     <div class="card">
       <h3>Individual productivity</h3>
-      <table><tbody id="dailyStaff"></tbody></table>
+      <table>
+        <thead>
+          <tr>
+            <th>Staff</th>
+            <th>Hours worked</th>
+            <th>Total interactions</th>
+            <th>Avg interaction time (min)</th>
+            <th>Interactions / hour</th>
+          </tr>
+        </thead>
+        <tbody id="dailyStaff"></tbody>
+      </table>
     </div>
   </section>
 </div>
@@ -87,7 +103,7 @@ th,td{padding:8px;border-bottom:1px solid var(--border);text-align:left;font-siz
 </main>
 
 <script>
-const SHEET_ID = "1L_jvj8ve-8qdX61Yk0admNdoqJG1fDBTBViqiHRxif0";
+const SHEET_ID = "PASTE_YOUR_SHEET_ID_HERE";
 const TAB_ACTIVITY = "activity_log";
 const TAB_SHIFTS = "shifts";
 
@@ -118,26 +134,6 @@ function tableToObjects(table){
   });
 }
 
-function sheetTimeToMinutes(v){
-  // Case 1: Google GViz Date object
-  if (v instanceof Date) {
-    return (v.getHours() * 60) + v.getMinutes();
-  }
-
-  // Case 2: Fraction of a day (number)
-  if (typeof v === "number") {
-    return v * 24 * 60;
-  }
-
-  // Case 3: "HH:MM" string
-  if (typeof v === "string" && v.includes(":")) {
-    const [h, m] = v.split(":").map(Number);
-    return (h * 60) + m;
-  }
-
-  return 0;
-}
-
 function login(){
   document.getElementById("loginView").classList.add("hidden");
   document.getElementById("appView").classList.remove("hidden");
@@ -152,15 +148,18 @@ function showTab(id){
 
 async function runDaily(){
   const date=document.getElementById("dailyDate").value;
+  if(!date) return alert("Pick a date");
+
   const act=tableToObjects(await fetchSheet(TAB_ACTIVITY));
   const sh=tableToObjects(await fetchSheet(TAB_SHIFTS));
 
   const totals={};
-  const staff={};
+  const staffInteractions={};
 
   act.filter(r=>r.date===date).forEach(r=>{
-    totals[r.work_type]=(totals[r.work_type]||0)+Number(r.quantity||0);
-    staff[r.staff_id]=(staff[r.staff_id]||0)+Number(r.quantity||0);
+    const q=Number(r.quantity)||0;
+    totals[r.work_type]=(totals[r.work_type]||0)+q;
+    staffInteractions[r.staff_id]=(staffInteractions[r.staff_id]||0)+q;
   });
 
   const team=document.getElementById("dailyTeam");
@@ -172,18 +171,20 @@ async function runDaily(){
   const staffTable=document.getElementById("dailyStaff");
   staffTable.innerHTML="";
   sh.filter(r=>r.date===date).forEach(r=>{
-    const startMin = sheetTimeToMinutes(r.start_time);
-const finishMin = sheetTimeToMinutes(r.finish_time);
-const breakMin = Number(r.break_minutes) || 0;
+    const mins=Number(r.minutes_worked)||0;
+    const hours=mins/60;
+    const interactions=staffInteractions[r.staff_id]||0;
+    const avg=interactions?(mins/interactions).toFixed(1):"—";
+    const iph=hours?(interactions/hours).toFixed(1):"—";
 
-let mins = finishMin - startMin - breakMin;
-
-// 🔒 Never allow negative work time
-if (mins < 0) mins = 0;
-    const hrs=(mins/60).toFixed(2);
-    const inter=staff[r.staff_id]||0;
-    const avg=inter?(mins/inter).toFixed(1):"—";
-    staffTable.innerHTML+=`<tr><td>${r.staff_name}</td><td>${hrs}</td><td>${inter}</td><td>${avg}</td></tr>`;
+    staffTable.innerHTML+=`
+      <tr>
+        <td>${r.staff_name}</td>
+        <td>${hours.toFixed(2)}</td>
+        <td>${interactions}</td>
+        <td>${avg}</td>
+        <td>${iph}</td>
+      </tr>`;
   });
 }
 
