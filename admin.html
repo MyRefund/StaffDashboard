@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My Refund – Admin Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+@font-face { font-family:'Okta Neue'; src: local('Okta Neue'); }
+:root{
+  --green-dark:#094B35;
+  --green:#03953F;
+  --green-soft:#ECFDF5;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Okta Neue', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background:#f6f7f8;
+  color:#111827;
+}
+header{
+  display:flex;
+  align-items:center;
+  padding:14px 20px;
+  background:#fff;
+  border-bottom:1px solid #e5e7eb;
+}
+header img{max-width:140px}
+main{padding:20px}
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:14px;
+}
+h1,h2,h3{color:var(--green-dark);margin-top:0}
+.notice{
+  background:var(--green-soft);
+  color:var(--green-dark);
+  padding:12px;
+  border-radius:14px;
+  font-weight:700;
+}
+.muted{color:#6b7280;font-size:12px}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.tab{
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
+  background:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--green-dark);
+  color:#fff;
+  border-color:var(--green-dark);
+}
+button{
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
+  font-weight:800;
+  background:#fff;
+  cursor:pointer;
+}
+button.primary{
+  background:var(--green-dark);
+  color:#fff;
+  border-color:var(--green-dark);
+}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #e5e7eb;text-align:left}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="logo.png" alt="My Refund">
+</header>
+
+<main>
+  <h1>Admin Dashboard</h1>
+
+  <div class="notice">
+    This is the full Admin Dashboard shell used for My Refund internal workflow tracking.
+  </div>
+
+  <div class="tabs">
+    <div class="tab active">Overview</div>
+    <div class="tab">Rundown</div>
+    <div class="tab">Allocation</div>
+    <div class="tab">Assigned Work Library</div>
+    <div class="tab">Users</div>
+  </div>
+
+  <div class="card">
+    <h3>Overview</h3>
+    <p class="muted">
+      Staff status, start/finish times, notes, and daily activity overview will display here.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Daily Rundown</h3>
+    <p class="muted">
+      Totals for Core work, Allocated work, Delinks, and Cancellations per staff member.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Allocation</h3>
+    <p class="muted">
+      Allocate Emails, A2A, Unverified (and future work types) per staff per day.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Assigned Work Library</h3>
+    <p class="muted">
+      Create, enable, disable, or remove assignable work types used across the system.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>User Management</h3>
+    <p class="muted">
+      Add, edit, or remove staff and admin users.
+    </p>
+  </div>
+
+  <button onclick="location.href='index.html'">Back to login</button>
+</main>
+
+</body>
+</html>
