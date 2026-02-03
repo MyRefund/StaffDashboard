@@ -16,18 +16,73 @@
   --bg:#f6f7f8;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:'Okta Neue',system-ui,sans-serif;background:var(--bg);color:var(--text)}
-header{padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
-main{max-width:900px;margin:0 auto;padding:24px}
-h1,h2{color:var(--green-dark);margin:0 0 10px}
-.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px}
-.notice{background:var(--green-soft);padding:12px;border-radius:12px;font-weight:800;color:var(--green-dark)}
-label{font-size:12px;color:var(--muted);font-weight:800}
-input[type="date"],input[type="number"]{padding:8px;border-radius:8px;border:1px solid var(--border)}
-.row{display:flex;gap:16px;flex-wrap:wrap}
-.col{flex:1;min-width:200px}
-button{padding:10px 14px;border-radius:10px;border:1px solid var(--green-dark);background:var(--green-dark);color:#fff;font-weight:900;cursor:pointer}
-.muted{color:var(--muted);font-size:12px}
+body{
+  margin:0;
+  font-family:'Okta Neue',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text)
+}
+header{
+  padding:16px 24px;
+  background:#fff;
+  border-bottom:1px solid var(--border)
+}
+main{
+  max-width:900px;
+  margin:0 auto;
+  padding:24px
+}
+h1,h2{
+  color:var(--green-dark);
+  margin:0 0 10px
+}
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:16px
+}
+.notice{
+  background:var(--green-soft);
+  padding:12px;
+  border-radius:12px;
+  font-weight:800;
+  color:var(--green-dark)
+}
+label{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800
+}
+input[type="date"],
+input[type="number"]{
+  padding:8px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  width:100%
+}
+.row{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap
+}
+.col{
+  flex:1;
+  min-width:200px
+}
+button{
+  padding:10px 16px;
+  border-radius:10px;
+  border:1px solid var(--green-dark);
+  background:var(--green-dark);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer
+}
+.muted{
+  color:var(--muted);
+  font-size:12px
+}
 </style>
 </head>
 <body>
@@ -39,7 +94,8 @@ button{padding:10px 14px;border-radius:10px;border:1px solid var(--green-dark);b
 <main>
 
 <div class="card notice">
-  Enter starting volumes for the selected date. These will feed directly into reports.
+  Enter starting volumes at the beginning of the day, and missed interactions at the end of the day.
+  These feed directly into reports.
 </div>
 
 <div class="card">
@@ -65,55 +121,65 @@ button{padding:10px 14px;border-radius:10px;border:1px solid var(--green-dark);b
 </main>
 
 <script>
+/* ============================
+   CONFIG
+============================ */
 const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec";
 
 const STARTING_WORK = ["Emails","Unverified","A2A","To Call"];
 const MISSED_WORK = ["Missed Calls","Missed Chats"];
 
+/* ============================
+   HELPERS
+============================ */
 function nzToday(){
-  return new Date().toLocaleDateString("en-CA",{ timeZone:"Pacific/Auckland" });
+  return new Date().toLocaleDateString("en-CA",{
+    timeZone:"Pacific/Auckland"
+  });
 }
 
+function fieldHTML(label){
+  const id = "field-" + label.replace(/\s/g,'');
+  return `
+    <div class="col">
+      <label>${label}</label><br>
+      <input type="number" min="0" value="0" id="${id}">
+    </div>
+  `;
+}
+
+/* ============================
+   RENDER
+============================ */
 function render(){
   document.getElementById("dateInput").value = nzToday();
 
   const sWrap = document.getElementById("startingFields");
   const mWrap = document.getElementById("missedFields");
 
-  STARTING_WORK.forEach(w=>{
+  sWrap.innerHTML = "";
+  mWrap.innerHTML = "";
+
+  STARTING_WORK.forEach(w => {
     sWrap.innerHTML += fieldHTML(w);
   });
-  MISSED_WORK.forEach(w=>{
+
+  MISSED_WORK.forEach(w => {
     mWrap.innerHTML += fieldHTML(w);
   });
 }
 
-function fieldHTML(label){
-  return `
-    <div class="col">
-      <label>${label}</label><br>
-      <input type="number" min="0" value="0" id="field-${label.replace(/\s/g,'')}">
-    </div>
-  `;
-}
-
-function sendToSheets(payload){
-  fetch(SUBMIT_ENDPOINT,{
-    method:"POST",
-    mode:"no-cors",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify(payload)
-  });
-}
-
+/* ============================
+   SUBMIT (BATCH)
+============================ */
 function saveVolumes(){
   const date = document.getElementById("dateInput").value;
   if(!date) return alert("Select a date");
 
   const rows = [];
 
-  [...STARTING_WORK, ...MISSED_WORK].forEach(w=>{
-    const id = "field-"+w.replace(/\s/g,'');
+  [...STARTING_WORK, ...MISSED_WORK].forEach(w => {
+    const id = "field-" + w.replace(/\s/g,'');
     const val = Number(document.getElementById(id).value || 0);
 
     rows.push({
@@ -128,20 +194,6 @@ function saveVolumes(){
     mode:"no-cors",
     headers:{ "Content-Type":"application/json" },
     body: JSON.stringify({ starting: rows })
-  });
-
-  document.getElementById("status").textContent =
-    "Saved at " + new Date().toLocaleTimeString();
-}
-
-
-    sendToSheets({
-      starting:{
-        date: date,
-        work_type: w,
-        volume: val
-      }
-    });
   });
 
   document.getElementById("status").textContent =
