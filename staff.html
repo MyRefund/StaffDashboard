@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>My Refund – Staff Workflow</title>
+<title>My Refund – Staff Work Tracker</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 @font-face { font-family:'Okta Neue'; src: local('Okta Neue'); }
@@ -10,180 +10,212 @@
   --green-dark:#094B35;
   --green:#03953F;
   --green-soft:#ECFDF5;
+  --border:#e5e7eb;
+  --text:#111827;
+  --muted:#6b7280;
+  --bg:#f6f7f8;
 }
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:'Okta Neue', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background:#f6f7f8;
-  color:#111827;
-}
-header{
-  display:flex;
-  align-items:center;
-  padding:14px 20px;
-  background:#fff;
-  border-bottom:1px solid #e5e7eb;
-}
+body{margin:0;font-family:'Okta Neue',system-ui,sans-serif;background:var(--bg);color:var(--text)}
+header{display:flex;align-items:center;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
 header img{max-width:140px}
-main{padding:20px}
-.card{
-  background:#fff;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:14px;
-}
-.notice{
-  background:var(--green-soft);
-  color:var(--green-dark);
-  padding:12px;
-  border-radius:14px;
-  font-weight:700;
-}
-h1,h2,h3{color:var(--green-dark);margin-top:0}
-.counter{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed #e5e7eb}
-.controls{display:flex;gap:6px}
-button{
-  padding:8px 12px;
-  border-radius:8px;
-  border:1px solid #e5e7eb;
-  font-weight:700;
-  background:#fff;
-  cursor:pointer;
-}
-button.primary{
-  background:var(--green-dark);
-  color:#fff;
-  border-color:var(--green-dark);
-}
-input[type=number]{width:70px;text-align:center;font-weight:700}
-.status{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:14px;
-}
-.badge{
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-}
-.working{background:#dcfce7;color:#166534}
-.submitted{background:#e5e7eb;color:#374151}
-.muted{font-size:12px;color:#6b7280}
+main{max-width:1000px;margin:0 auto;padding:24px}
+h1,h2,h3{color:var(--green-dark);margin:0 0 10px}
+.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px}
+.notice{background:var(--green-soft);color:var(--green-dark);padding:12px;border-radius:14px;font-weight:900}
+.muted{color:var(--muted);font-size:12px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.col{flex:1;min-width:220px}
+label{font-size:12px;color:var(--muted);font-weight:800}
+button{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
+button.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
+button.secondary{border-color:var(--green-dark);color:var(--green-dark)}
+.counter{display:flex;align-items:center;gap:10px;margin-top:8px}
+.counter span{font-weight:900;font-size:18px;min-width:32px;text-align:center}
+.counter button{width:36px;height:36px;border-radius:50%}
+input[type="number"]{width:80px;padding:6px;border-radius:8px;border:1px solid var(--border)}
+.hidden{display:none}
 </style>
 </head>
 <body>
 
 <header>
   <img src="logo.png" alt="My Refund">
+  <strong>Staff Work Tracker</strong>
 </header>
 
 <main>
 
-<div class="status card">
-  <div>
-    <strong id="staffName"></strong><br>
-    <span class="muted" id="timeInfo"></span>
+<!-- LOGIN -->
+<div id="loginView" class="card">
+  <div class="notice">Welcome</div>
+  <p class="muted">Select your name to start your day.</p>
+  <select id="staffSelect"></select>
+  <br><br>
+  <button class="primary" onclick="login()">Start work</button>
+</div>
+
+<!-- APP -->
+<div id="appView" class="hidden">
+
+  <div class="card">
+    <h2>Hello, <span id="staffName"></span></h2>
+    <p class="muted">Your work today will be saved automatically.</p>
   </div>
-  <div class="badge working" id="statusBadge">Working</div>
-</div>
 
-<div class="notice">
-  Log your work as you go. Submit when your day is complete.
-</div>
+  <!-- WORK COUNTERS -->
+  <div class="card">
+    <h3>Allocated work</h3>
+    <div id="workList"></div>
+  </div>
 
-<div class="card"><h3>Core daily work</h3><div id="core"></div></div>
-<div class="card"><h3>Allocated work</h3><div id="assigned"></div></div>
-<div class="card"><h3>Delinks & cancels</h3><div id="events"></div></div>
+  <!-- SUBMIT -->
+  <div class="card">
+    <button class="primary" onclick="submitWork()">Submit work</button>
+    <p id="status" class="muted"></p>
+  </div>
 
-<div class="card">
-  <h3>End of day</h3>
-  <button class="primary" onclick="submitDay()">Submit work</button>
-  <img src="illustration-submit.png" style="max-width:220px;margin-top:14px">
 </div>
 
 </main>
 
 <script>
-const user = JSON.parse(localStorage.getItem("user") || "{}");
-if(user.role !== "staff") location.href = "index.html";
+/* ============================
+   CONFIG
+============================ */
+const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec";
 
-const day = new Date().toISOString().slice(0,10);
-const CORE=["Inbound","Outbound","Live Chat"];
-const EVENTS=[
-  "Cancel request",
-  "Delink – SMS",
-  "Delink – Live Chat",
-  "Delink – Phone",
-  "Delink – Email"
+/* ============================
+   DATA (demo users + work)
+============================ */
+const STAFF = [
+  { id:"s1", name:"Alice" },
+  { id:"s2", name:"Bob" },
+  { id:"s3", name:"Charlie" }
 ];
 
-const assigned = JSON.parse(localStorage.getItem(`work::${user.id}::${day}`) || "[]");
+const WORK_TYPES = ["Emails","Inbound","Outbound","Live Chat"];
 
-const startKey = `shift::${user.id}::${day}::start`;
-const finishKey = `shift::${user.id}::${day}::finish`;
+/* ============================
+   STATE
+============================ */
+let currentStaff = null;
+let counters = {};
+let startTime = null;
 
-const startTime = localStorage.getItem(startKey);
-const finishTime = localStorage.getItem(finishKey);
+/* ============================
+   INIT
+============================ */
+(function init(){
+  const sel = document.getElementById("staffSelect");
+  STAFF.forEach(s=>{
+    const o=document.createElement("option");
+    o.value=s.id; o.textContent=s.name;
+    sel.appendChild(o);
+  });
+})();
 
-document.getElementById("staffName").innerText = user.name;
-updateTimeInfo();
+/* ============================
+   LOGIN
+============================ */
+function login(){
+  const id = document.getElementById("staffSelect").value;
+  currentStaff = STAFF.find(s=>s.id===id);
+  if(!currentStaff) return alert("Select your name");
 
-function updateTimeInfo(){
-  const start = startTime ? new Date(startTime).toLocaleTimeString() : "—";
-  const finish = finishTime ? new Date(finishTime).toLocaleTimeString() : "—";
-  document.getElementById("timeInfo").innerText = `Start: ${start} · Finish: ${finish}`;
+  startTime = Date.now();
+
+  document.getElementById("staffName").textContent = currentStaff.name;
+  document.getElementById("loginView").classList.add("hidden");
+  document.getElementById("appView").classList.remove("hidden");
+
+  renderWork();
 }
 
-function tallyKey(w){return `tally::${user.id}::${day}::${w}`}
-
-function render(list, el){
-  el.innerHTML="";
-  list.forEach(w=>{
-    const v = parseInt(localStorage.getItem(tallyKey(w)) || "0");
-    const row = document.createElement("div");
-    row.className = "counter";
-    row.innerHTML = `
-      <span>${w}</span>
-      <div class="controls">
-        <button onclick="step('${w}',-1)">−</button>
-        <input type="number" min="0" value="${v}" onchange="setVal('${w}',this.value)">
-        <button onclick="step('${w}',1)">+</button>
-      </div>`;
-    el.appendChild(row);
+/* ============================
+   RENDER WORK
+============================ */
+function renderWork(){
+  const wrap = document.getElementById("workList");
+  wrap.innerHTML="";
+  WORK_TYPES.forEach(w=>{
+    counters[w]=0;
+    const div=document.createElement("div");
+    div.className="counter";
+    div.innerHTML = `
+      <strong style="min-width:120px">${w}</strong>
+      <button onclick="inc('${w}',-1)">−</button>
+      <span id="count-${w}">0</span>
+      <button onclick="inc('${w}',1)">+</button>
+      <input type="number" min="0" value="0" onchange="setCount('${w}',this.value)">
+    `;
+    wrap.appendChild(div);
   });
 }
 
-function step(w,d){
-  let v = parseInt(localStorage.getItem(tallyKey(w)) || "0");
-  v = Math.max(0, v + d);
-  localStorage.setItem(tallyKey(w), v);
-  load();
-}
-function setVal(w,val){
-  let v = parseInt(val || "0");
-  if(v < 0 || isNaN(v)) v = 0;
-  localStorage.setItem(tallyKey(w), v);
-  load();
+function inc(w,delta){
+  counters[w]=Math.max(0,(counters[w]||0)+delta);
+  document.getElementById("count-"+w).textContent=counters[w];
 }
 
-function load(){
-  render(CORE, document.getElementById("core"));
-  render(assigned, document.getElementById("assigned"));
-  render(EVENTS, document.getElementById("events"));
+function setCount(w,val){
+  counters[w]=Math.max(0,Number(val)||0);
+  document.getElementById("count-"+w).textContent=counters[w];
 }
 
-function submitDay(){
-  localStorage.setItem(finishKey, new Date().toISOString());
-  document.getElementById("statusBadge").innerText = "Submitted";
-  document.getElementById("statusBadge").className = "badge submitted";
-  updateTimeInfo();
-  alert("Thank you — your day has been submitted.");
+/* ============================
+   SUBMIT TO SHEETS
+============================ */
+async function sendToSheets(payload){
+  try{
+    const res = await fetch(SUBMIT_ENDPOINT,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
+    });
+    const json = await res.json();
+    if(json.status!=="ok") throw new Error(json.message||"Failed");
+  }catch(e){
+    console.error(e);
+    alert("Could not save data. Please tell admin.");
+  }
 }
 
-load();
+function submitWork(){
+  if(!currentStaff) return;
+
+  const today = new Date().toISOString().slice(0,10);
+  const minutesWorked = Math.round((Date.now()-startTime)/60000);
+
+  const entries = Object.entries(counters).filter(([,v])=>v>0);
+
+  if(entries.length===0){
+    if(!confirm("No work recorded. Submit anyway?")) return;
+  }
+
+  entries.forEach(([work,qty])=>{
+    sendToSheets({
+      activity:{
+        date: today,
+        staff_id: currentStaff.id,
+        staff_name: currentStaff.name,
+        work_type: work,
+        quantity: qty
+      }
+    });
+  });
+
+  sendToSheets({
+    shift:{
+      date: today,
+      staff_id: currentStaff.id,
+      staff_name: currentStaff.name,
+      minutes_worked: minutesWorked
+    }
+  });
+
+  document.getElementById("status").textContent = "Submitted at " + new Date().toLocaleTimeString();
+}
 </script>
 
 </body>
