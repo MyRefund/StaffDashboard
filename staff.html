@@ -20,19 +20,15 @@ body{margin:0;font-family:'Okta Neue',system-ui,sans-serif;background:var(--bg);
 header{display:flex;align-items:center;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
 header img{max-width:140px}
 main{max-width:1000px;margin:0 auto;padding:24px}
-h1,h2,h3{color:var(--green-dark);margin:0 0 10px}
+h2,h3{color:var(--green-dark);margin:0 0 10px}
 .card{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px}
 .notice{background:var(--green-soft);color:var(--green-dark);padding:12px;border-radius:14px;font-weight:900}
 .muted{color:var(--muted);font-size:12px}
-.row{display:flex;gap:12px;flex-wrap:wrap}
-.col{flex:1;min-width:220px}
-label{font-size:12px;color:var(--muted);font-weight:800}
-button{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
-button.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
-button.secondary{border-color:var(--green-dark);color:var(--green-dark)}
 .counter{display:flex;align-items:center;gap:10px;margin-top:8px}
 .counter span{font-weight:900;font-size:18px;min-width:32px;text-align:center}
 .counter button{width:36px;height:36px;border-radius:50%}
+button{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
+button.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
 input[type="number"]{width:80px;padding:6px;border-radius:8px;border:1px solid var(--border)}
 .hidden{display:none}
 </style>
@@ -46,30 +42,25 @@ input[type="number"]{width:80px;padding:6px;border-radius:8px;border:1px solid v
 
 <main>
 
-<!-- LOGIN -->
 <div id="loginView" class="card">
   <div class="notice">Welcome</div>
   <p class="muted">Select your name to start your day.</p>
-  <select id="staffSelect"></select>
-  <br><br>
+  <select id="staffSelect"></select><br><br>
   <button class="primary" onclick="login()">Start work</button>
 </div>
 
-<!-- APP -->
 <div id="appView" class="hidden">
 
   <div class="card">
     <h2>Hello, <span id="staffName"></span></h2>
-    <p class="muted">Your work today will be saved automatically.</p>
+    <p class="muted">Your work today is saved automatically.</p>
   </div>
 
-  <!-- WORK COUNTERS -->
   <div class="card">
     <h3>Allocated work</h3>
     <div id="workList"></div>
   </div>
 
-  <!-- SUBMIT -->
   <div class="card">
     <button class="primary" onclick="submitWork()">Submit work</button>
     <p id="status" class="muted"></p>
@@ -80,14 +71,8 @@ input[type="number"]{width:80px;padding:6px;border-radius:8px;border:1px solid v
 </main>
 
 <script>
-/* ============================
-   CONFIG
-============================ */
 const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec";
 
-/* ============================
-   DATA (demo users + work)
-============================ */
 const STAFF = [
   { id:"s1", name:"Alice" },
   { id:"s2", name:"Bob" },
@@ -96,16 +81,10 @@ const STAFF = [
 
 const WORK_TYPES = ["Emails","Inbound","Outbound","Live Chat"];
 
-/* ============================
-   STATE
-============================ */
 let currentStaff = null;
 let counters = {};
 let startTime = null;
 
-/* ============================
-   INIT
-============================ */
 (function init(){
   const sel = document.getElementById("staffSelect");
   STAFF.forEach(s=>{
@@ -115,26 +94,16 @@ let startTime = null;
   });
 })();
 
-/* ============================
-   LOGIN
-============================ */
 function login(){
   const id = document.getElementById("staffSelect").value;
   currentStaff = STAFF.find(s=>s.id===id);
-  if(!currentStaff) return alert("Select your name");
-
   startTime = Date.now();
-
   document.getElementById("staffName").textContent = currentStaff.name;
   document.getElementById("loginView").classList.add("hidden");
   document.getElementById("appView").classList.remove("hidden");
-
   renderWork();
 }
 
-/* ============================
-   RENDER WORK
-============================ */
 function renderWork(){
   const wrap = document.getElementById("workList");
   wrap.innerHTML="";
@@ -157,52 +126,36 @@ function inc(w,delta){
   counters[w]=Math.max(0,(counters[w]||0)+delta);
   document.getElementById("count-"+w).textContent=counters[w];
 }
-
 function setCount(w,val){
   counters[w]=Math.max(0,Number(val)||0);
   document.getElementById("count-"+w).textContent=counters[w];
 }
 
-/* ============================
-   SUBMIT TO SHEETS
-============================ */
-async function sendToSheets(payload){
-  try{
-    const res = await fetch(SUBMIT_ENDPOINT,{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    });
-    const json = await res.json();
-    if(json.status!=="ok") throw new Error(json.message||"Failed");
-  }catch(e){
-    console.error(e);
-    alert("Could not save data. Please tell admin.");
-  }
+function sendToSheets(payload){
+  fetch(SUBMIT_ENDPOINT,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(payload)
+  });
 }
 
 function submitWork(){
-  if(!currentStaff) return;
-
   const today = new Date().toISOString().slice(0,10);
   const minutesWorked = Math.round((Date.now()-startTime)/60000);
 
-  const entries = Object.entries(counters).filter(([,v])=>v>0);
-
-  if(entries.length===0){
-    if(!confirm("No work recorded. Submit anyway?")) return;
-  }
-
-  entries.forEach(([work,qty])=>{
-    sendToSheets({
-      activity:{
-        date: today,
-        staff_id: currentStaff.id,
-        staff_name: currentStaff.name,
-        work_type: work,
-        quantity: qty
-      }
-    });
+  Object.entries(counters).forEach(([work,qty])=>{
+    if(qty>0){
+      sendToSheets({
+        activity:{
+          date: today,
+          staff_id: currentStaff.id,
+          staff_name: currentStaff.name,
+          work_type: work,
+          quantity: qty
+        }
+      });
+    }
   });
 
   sendToSheets({
@@ -214,7 +167,8 @@ function submitWork(){
     }
   });
 
-  document.getElementById("status").textContent = "Submitted at " + new Date().toLocaleTimeString();
+  document.getElementById("status").textContent =
+    "Submitted at " + new Date().toLocaleTimeString();
 }
 </script>
 
