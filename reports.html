@@ -20,18 +20,15 @@ body{margin:0;font-family:'Okta Neue',system-ui,sans-serif;background:var(--bg);
 header{display:flex;align-items:center;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
 header img{max-width:140px}
 main{max-width:1000px;margin:0 auto;padding:24px}
-h1,h2,h3{color:var(--green-dark);margin:0 0 10px}
+h2,h3{color:var(--green-dark);margin:0 0 10px}
 .card{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px}
 .notice{background:var(--green-soft);color:var(--green-dark);padding:12px;border-radius:14px;font-weight:900}
 .muted{color:var(--muted);font-size:12px}
-.row{display:flex;gap:12px;flex-wrap:wrap}
-.col{flex:1;min-width:220px}
-label{font-size:12px;color:var(--muted);font-weight:800}
-button{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
-button.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
 .counter{display:flex;align-items:center;gap:10px;margin-top:8px}
 .counter span{font-weight:900;font-size:18px;min-width:32px;text-align:center}
 .counter button{width:36px;height:36px;border-radius:50%}
+button{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
+button.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
 input[type="number"]{width:80px;padding:6px;border-radius:8px;border:1px solid var(--border)}
 .hidden{display:none}
 </style>
@@ -53,9 +50,10 @@ input[type="number"]{width:80px;padding:6px;border-radius:8px;border:1px solid v
 </div>
 
 <div id="appView" class="hidden">
+
   <div class="card">
     <h2>Hello, <span id="staffName"></span></h2>
-    <p class="muted">Your work today will be saved automatically.</p>
+    <p class="muted">Your work today is saved automatically.</p>
   </div>
 
   <div class="card">
@@ -67,6 +65,7 @@ input[type="number"]{width:80px;padding:6px;border-radius:8px;border:1px solid v
     <button class="primary" onclick="submitWork()">Submit work</button>
     <p id="status" class="muted"></p>
   </div>
+
 </div>
 
 </main>
@@ -132,17 +131,13 @@ function setCount(w,val){
   document.getElementById("count-"+w).textContent=counters[w];
 }
 
-async function sendToSheets(payload){
-  try{
-    await fetch(SUBMIT_ENDPOINT,{
-      method:"POST",
-      mode:"no-cors",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    });
-  }catch(e){
-    alert("Could not save data. Please tell admin.");
-  }
+function sendToSheets(payload){
+  fetch(SUBMIT_ENDPOINT,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(payload)
+  });
 }
 
 function submitWork(){
