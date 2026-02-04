@@ -1,226 +1,281 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>My Refund — Team Overview</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Refund — Staff Overview</title>
 
-  <style>
-    :root{
-      --green-dark:#094B35;
-      --green:#03953F;
-      --green-soft:#ECFDF5;
-      --text:#0f172a;
-      --muted:#64748b;
-      --card-bg:rgba(255,255,255,.92);
-      --radius:18px;
-      --shadow:0 20px 40px rgba(0,0,0,.15);
-    }
+<style>
+:root{
+  --g0:#094B35;
+  --g1:#03953F;
+  --g2:#ECFDF5;
+  --g3:#BBF7D0;
+  --bg:#f6f7f8;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --radius:16px;
+  --shadow:0 8px 20px rgba(0,0,0,.06);
+}
 
-    *{box-sizing:border-box}
+*{box-sizing:border-box}
 
-    body{
-      margin:0;
-      font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      color:var(--text);
-      min-height:100vh;
-      background:
-        linear-gradient(rgba(9,75,53,.35), rgba(9,75,53,.55)),
-        url("assets/hero.jpg") center / cover no-repeat fixed;
-    }
+body{
+  margin:0;
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background:linear-gradient(180deg,var(--g2),#fff 60%,var(--bg));
+  color:var(--text);
+}
 
-    .page{
-      min-height:100vh;
-      padding:28px;
-      display:flex;
-      flex-direction:column;
-      gap:28px;
-    }
+.wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:18px;
+}
 
-    /* Top bar */
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      background:var(--card-bg);
-      border-radius:var(--radius);
-      padding:14px 20px;
-      box-shadow:var(--shadow);
-    }
+/* Top bar */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:12px 16px;
+  box-shadow:var(--shadow);
+}
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
 
-    .brand img{
-      height:30px;
-    }
+.brand img{
+  height:28px;
+}
 
-    .brand strong{
-      color:var(--green-dark);
-      font-size:16px;
-    }
+.brand h1{
+  font-size:16px;
+  margin:0;
+  color:var(--g0);
+}
 
-    .nav{
-      display:flex;
-      gap:10px;
-    }
+.actions{
+  display:flex;
+  gap:8px;
+}
 
-    .nav a{
-      text-decoration:none;
-      font-weight:800;
-      font-size:13px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid var(--green-dark);
-      color:var(--green-dark);
-      background:#fff;
-    }
+.btn{
+  border-radius:12px;
+  padding:8px 14px;
+  font-weight:800;
+  font-size:13px;
+  border:1px solid var(--g0);
+  background:var(--g0);
+  color:#fff;
+  cursor:pointer;
+}
 
-    .nav a.primary{
-      background:var(--green-dark);
-      color:#fff;
-    }
+.btn.secondary{
+  background:#fff;
+  color:var(--g0);
+}
 
-    /* Header */
-    .header{
-      max-width:900px;
-      color:#fff;
-    }
+/* Header */
+.header{
+  margin-top:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
 
-    .header h1{
-      margin:0 0 6px 0;
-      font-size:36px;
-    }
+.header h2{
+  margin:0;
+  font-size:20px;
+  color:var(--g0);
+}
 
-    .header p{
-      margin:0;
-      font-size:16px;
-      opacity:.95;
-    }
+.refresh{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:700;
+}
 
-    /* Staff grid */
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-      gap:18px;
-    }
+/* Grid */
+.grid{
+  margin-top:16px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:16px;
+}
 
-    .card{
-      background:var(--card-bg);
-      border-radius:var(--radius);
-      padding:18px;
-      box-shadow:var(--shadow);
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
+/* Staff card */
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:16px;
+  position:relative;
+}
 
-    .name{
-      font-weight:900;
-      color:var(--green-dark);
-      font-size:16px;
-    }
+.card h3{
+  margin:0 0 6px 0;
+  font-size:15px;
+}
 
-    .status{
-      font-size:13px;
-      font-weight:800;
-      display:flex;
-      align-items:center;
-      gap:6px;
-    }
+.status{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:800;
+  font-size:13px;
+}
 
-    .dot{
-      width:10px;
-      height:10px;
-      border-radius:50%;
-    }
+.dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+}
 
-    .working{background:#22c55e}
-    .break{background:#facc15}
-    .offline{background:#cbd5e1}
+/* Status colours */
+.working .dot{background:#16a34a}
+.break .dot{background:#f59e0b}
+.offline .dot{background:#9ca3af}
 
-    .time{
-      font-size:12px;
-      color:var(--muted);
-    }
+.working{color:#065f46}
+.break{color:#92400e}
+.offline{color:#6b7280}
 
-    @media (max-width:640px){
-      .header h1{font-size:28px}
-    }
-  </style>
+.time{
+  margin-top:6px;
+  font-size:12px;
+  color:var(--muted);
+  font-weight:700;
+}
+
+.empty{
+  margin-top:24px;
+  padding:16px;
+  background:var(--g2);
+  border:1px dashed rgba(3,149,63,.35);
+  border-radius:14px;
+  font-weight:800;
+  color:var(--g0);
+}
+
+/* Responsive */
+@media(max-width:700px){
+  .actions{flex-wrap:wrap}
+}
+</style>
 </head>
 
 <body>
-  <div class="page">
+<div class="wrap">
 
-    <!-- Top bar -->
-    <div class="topbar">
-      <div class="brand">
-        <img src="assets/logo.png" alt="My Refund">
-        <strong>My Refund</strong>
-      </div>
-
-      <div class="nav">
-        <a href="staff.html">Staff login</a>
-        <a href="admin.html">Admin</a>
-        <a href="reports.html" class="primary">Reports</a>
-      </div>
+  <div class="topbar">
+    <div class="brand">
+      <img src="logo.png" alt="My Refund">
+      <h1>Staff Overview</h1>
     </div>
 
-    <!-- Intro -->
-    <div class="header">
-      <h1>Today’s team</h1>
-      <p>Live overview of who’s working today.</p>
+    <div class="actions">
+      <a href="admin.html"><button class="btn secondary">Admin</button></a>
+      <a href="reports.html"><button class="btn secondary">Reports</button></a>
     </div>
-
-    <!-- Staff cards -->
-    <div class="grid" id="staffGrid"></div>
-
   </div>
 
+  <div class="header">
+    <h2>Today’s activity</h2>
+    <div class="refresh" id="refreshText">Auto-refreshing every 30s</div>
+  </div>
+
+  <div id="grid" class="grid"></div>
+
+</div>
+
 <script>
-/* ==========================
-   DEMO DATA (replace later)
-========================== */
-const staff = JSON.parse(localStorage.getItem("myrefund_staff")) || [
-  { name:"Alice", status:"working", start:"8:55am" },
-  { name:"Ben", status:"break", start:"9:02am" },
-  { name:"Charlie", status:"offline" }
-];
+/* =========================================
+   CONFIG
+========================================= */
+const REFRESH_MS = 30000;
 
-const grid = document.getElementById("staffGrid");
+/* =========================================
+   DATA HELPERS
+========================================= */
+function getTodayKey(){
+  return new Date().toLocaleDateString("en-CA",{timeZone:"Pacific/Auckland"});
+}
 
+function loadStaff(){
+  return JSON.parse(localStorage.getItem("staffList") || "[]");
+}
+
+function loadStatus(name){
+  const today = getTodayKey();
+  const data = JSON.parse(localStorage.getItem("staffStatus_"+name) || "{}");
+
+  if(data.date !== today) return { state:"offline" };
+
+  return data;
+}
+
+/* =========================================
+   RENDER
+========================================= */
 function render(){
+  const grid = document.getElementById("grid");
   grid.innerHTML = "";
-  staff.forEach(s=>{
+
+  const staff = loadStaff();
+
+  if(!staff.length){
+    grid.innerHTML = `<div class="empty">No staff configured yet.</div>`;
+    return;
+  }
+
+  staff.forEach(name=>{
+    const status = loadStatus(name);
+
+    let cls = "offline";
+    let label = "Not logged in";
+    let time = "";
+
+    if(status.state === "working"){
+      cls = "working";
+      label = "Working";
+      time = "Started: " + status.start;
+    }
+    if(status.state === "break"){
+      cls = "break";
+      label = "On break";
+      time = "Break started: " + status.breakStart;
+    }
+
     const card = document.createElement("div");
-    card.className = "card";
-
-    const dotClass =
-      s.status==="working" ? "working" :
-      s.status==="break" ? "break" : "offline";
-
-    const label =
-      s.status==="working" ? "Working" :
-      s.status==="break" ? "On break" : "Not logged in";
-
+    card.className = `card ${cls}`;
     card.innerHTML = `
-      <div class="name">${s.name}</div>
-      <div class="status">
-        <span class="dot ${dotClass}"></span>
+      <h3>${name}</h3>
+      <div class="status ${cls}">
+        <span class="dot"></span>
         ${label}
       </div>
-      <div class="time">${s.start ? "Started " + s.start : ""}</div>
+      ${time ? `<div class="time">${time}</div>` : ""}
     `;
     grid.appendChild(card);
   });
 }
 
+/* =========================================
+   INIT
+========================================= */
 render();
+setInterval(render, REFRESH_MS);
 </script>
-
 </body>
 </html>
