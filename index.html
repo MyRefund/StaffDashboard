@@ -1,224 +1,225 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Refund — Staff Login</title>
+  <meta charset="utf-8">
+  <title>My Refund — Team Overview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>
-:root{
-  --g0:#094B35;
-  --g1:#03953F;
-  --g2:#ECFDF5;
-  --g3:#BBF7D0;
-  --border:#e5e7eb;
-  --text:#111827;
-  --muted:#6b7280;
-  --radius:18px;
-  --shadow:0 12px 28px rgba(0,0,0,.08);
-}
+  <style>
+    :root{
+      --green-dark:#094B35;
+      --green:#03953F;
+      --green-soft:#ECFDF5;
+      --text:#0f172a;
+      --muted:#64748b;
+      --card-bg:rgba(255,255,255,.92);
+      --radius:18px;
+      --shadow:0 20px 40px rgba(0,0,0,.15);
+    }
 
-body{
-  margin:0;
-  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  background:linear-gradient(180deg,var(--g2),#ffffff 65%);
-  color:var(--text);
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+    *{box-sizing:border-box}
 
-.container{
-  width:100%;
-  max-width:520px;
-  padding:24px;
-}
+    body{
+      margin:0;
+      font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      background:
+        linear-gradient(rgba(9,75,53,.35), rgba(9,75,53,.55)),
+        url("assets/hero.jpg") center / cover no-repeat fixed;
+    }
 
-.card{
-  background:#fff;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  border:1px solid var(--border);
-  padding:24px 22px 26px;
-}
+    .page{
+      min-height:100vh;
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      gap:28px;
+    }
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:16px;
-}
+    /* Top bar */
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      padding:14px 20px;
+      box-shadow:var(--shadow);
+    }
 
-.brand img{
-  height:34px;
-}
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
 
-.brand h1{
-  margin:0;
-  font-size:18px;
-  color:var(--g0);
-}
+    .brand img{
+      height:30px;
+    }
 
-.sub{
-  color:var(--muted);
-  font-size:14px;
-  margin-bottom:22px;
-  line-height:1.4;
-}
+    .brand strong{
+      color:var(--green-dark);
+      font-size:16px;
+    }
 
-label{
-  font-weight:900;
-  font-size:13px;
-  color:var(--g0);
-  margin-bottom:6px;
-  display:block;
-}
+    .nav{
+      display:flex;
+      gap:10px;
+    }
 
-select{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  font-size:15px;
-  margin-bottom:16px;
-}
+    .nav a{
+      text-decoration:none;
+      font-weight:800;
+      font-size:13px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--green-dark);
+      color:var(--green-dark);
+      background:#fff;
+    }
 
-button{
-  width:100%;
-  border:none;
-  border-radius:14px;
-  padding:14px;
-  font-size:15px;
-  font-weight:900;
-  cursor:pointer;
-}
+    .nav a.primary{
+      background:var(--green-dark);
+      color:#fff;
+    }
 
-button.primary{
-  background:var(--g0);
-  color:#fff;
-}
+    /* Header */
+    .header{
+      max-width:900px;
+      color:#fff;
+    }
 
-button.secondary{
-  background:var(--g1);
-  color:#fff;
-  margin-top:10px;
-}
+    .header h1{
+      margin:0 0 6px 0;
+      font-size:36px;
+    }
 
-button.ghost{
-  background:var(--g2);
-  color:var(--g0);
-  margin-top:10px;
-}
+    .header p{
+      margin:0;
+      font-size:16px;
+      opacity:.95;
+    }
 
-button:hover{opacity:.95;}
+    /* Staff grid */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+      gap:18px;
+    }
 
-.divider{
-  height:1px;
-  background:var(--border);
-  margin:20px 0;
-}
+    .card{
+      background:var(--card-bg);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
 
-.admin-links{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
+    .name{
+      font-weight:900;
+      color:var(--green-dark);
+      font-size:16px;
+    }
 
-footer{
-  margin-top:16px;
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-}
-</style>
+    .status{
+      font-size:13px;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+    }
+
+    .working{background:#22c55e}
+    .break{background:#facc15}
+    .offline{background:#cbd5e1}
+
+    .time{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    @media (max-width:640px){
+      .header h1{font-size:28px}
+    }
+  </style>
 </head>
 
 <body>
+  <div class="page">
 
-<div class="container">
-  <div class="card">
+    <!-- Top bar -->
+    <div class="topbar">
+      <div class="brand">
+        <img src="assets/logo.png" alt="My Refund">
+        <strong>My Refund</strong>
+      </div>
 
-    <div class="brand">
-      <img src="assets/logo.png" onerror="this.style.display='none'">
-      <h1>Welcome</h1>
+      <div class="nav">
+        <a href="staff.html">Staff login</a>
+        <a href="admin.html">Admin</a>
+        <a href="reports.html" class="primary">Reports</a>
+      </div>
     </div>
 
-    <div class="sub">
-      Select your name to start your day.  
-      Your work will be tracked automatically.
+    <!-- Intro -->
+    <div class="header">
+      <h1>Today’s team</h1>
+      <p>Live overview of who’s working today.</p>
     </div>
 
-    <label for="staffSelect">Your name</label>
-    <select id="staffSelect">
-      <option value="">Select your name…</option>
-    </select>
-
-    <button class="primary" onclick="loginStaff()">
-      Start work
-    </button>
-
-    <div class="divider"></div>
-
-    <div class="admin-links">
-      <button class="ghost" onclick="goAdmin()">
-        Admin
-      </button>
-
-      <button class="ghost" onclick="goReports()">
-        Reports
-      </button>
-    </div>
+    <!-- Staff cards -->
+    <div class="grid" id="staffGrid"></div>
 
   </div>
 
-  <footer>
-    My Refund — Internal system
-  </footer>
-</div>
-
 <script>
-/* ===== CONFIG ===== */
-const USERS_KEY = "myrefund_users";
+/* ==========================
+   DEMO DATA (replace later)
+========================== */
+const staff = JSON.parse(localStorage.getItem("myrefund_staff")) || [
+  { name:"Alice", status:"working", start:"8:55am" },
+  { name:"Ben", status:"break", start:"9:02am" },
+  { name:"Charlie", status:"offline" }
+];
 
-/* ===== LOAD USERS ===== */
-function loadUsers(){
-  const users = JSON.parse(localStorage.getItem(USERS_KEY)||"[]");
-  const sel = document.getElementById("staffSelect");
+const grid = document.getElementById("staffGrid");
 
-  users.forEach(u=>{
-    const o=document.createElement("option");
-    o.value=u;
-    o.textContent=u;
-    sel.appendChild(o);
+function render(){
+  grid.innerHTML = "";
+  staff.forEach(s=>{
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const dotClass =
+      s.status==="working" ? "working" :
+      s.status==="break" ? "break" : "offline";
+
+    const label =
+      s.status==="working" ? "Working" :
+      s.status==="break" ? "On break" : "Not logged in";
+
+    card.innerHTML = `
+      <div class="name">${s.name}</div>
+      <div class="status">
+        <span class="dot ${dotClass}"></span>
+        ${label}
+      </div>
+      <div class="time">${s.start ? "Started " + s.start : ""}</div>
+    `;
+    grid.appendChild(card);
   });
 }
 
-/* ===== STAFF LOGIN ===== */
-function loginStaff(){
-  const name=document.getElementById("staffSelect").value;
-  if(!name){
-    alert("Please select your name.");
-    return;
-  }
-
-  localStorage.setItem("myrefund_active_staff", name);
-  localStorage.setItem("myrefund_login_time", new Date().toISOString());
-
-  window.location.href="staff.html";
-}
-
-/* ===== ADMIN / REPORTS ===== */
-function goAdmin(){
-  window.location.href="admin.html";
-}
-
-function goReports(){
-  window.location.href="reports.html";
-}
-
-/* ===== INIT ===== */
-loadUsers();
+render();
 </script>
 
 </body>
