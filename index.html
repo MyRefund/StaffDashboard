@@ -103,11 +103,38 @@ body{
   padding:24px;
 }
 
+.section{
+  margin-bottom:32px;
+}
+
 .section-title{
   font-size:18px;
   font-weight:900;
   color:var(--g0);
-  margin-bottom:16px;
+  margin-bottom:12px;
+}
+
+/* Start day buttons */
+.start-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:12px;
+}
+
+.start-btn{
+  border-radius:14px;
+  padding:14px;
+  border:1px solid var(--g0);
+  background:var(--g0);
+  color:#fff;
+  font-weight:900;
+  font-size:15px;
+  cursor:pointer;
+  text-align:center;
+}
+
+.start-btn:hover{
+  background:#0b5c42;
 }
 
 /* Staff grid */
@@ -197,8 +224,23 @@ body{
 
 <!-- ================= CONTENT ================= -->
 <div class="wrap">
-  <div class="section-title">Today’s activity</div>
-  <div id="grid" class="grid"></div>
+
+  <!-- Start day -->
+  <div class="section">
+    <div class="section-title">Start your day</div>
+    <div class="start-grid">
+      <button class="start-btn" onclick="startDay('Emma')">Emma</button>
+      <button class="start-btn" onclick="startDay('Maddy')">Maddy</button>
+      <button class="start-btn" onclick="startDay('Pepe')">Pepe</button>
+    </div>
+  </div>
+
+  <!-- Overview -->
+  <div class="section">
+    <div class="section-title">Today’s activity</div>
+    <div id="grid" class="grid"></div>
+  </div>
+
 </div>
 
 <script>
@@ -210,9 +252,38 @@ const TZ = "Pacific/Auckland";
 function todayISO(){
   return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
 }
+function nowTime(){
+  return new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",timeZone:TZ});
+}
 function todayHuman(){
   return new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
 }
+
+/* ================= LOGIN ================= */
+function startDay(name){
+  const today = todayISO();
+
+  // store staff list
+  let staff = JSON.parse(localStorage.getItem("staffList") || "[]");
+  if(!staff.includes(name)){
+    staff.push(name);
+    localStorage.setItem("staffList", JSON.stringify(staff));
+  }
+
+  // store status
+  localStorage.setItem("staffStatus_"+name, JSON.stringify({
+    date: today,
+    state: "working",
+    start: nowTime()
+  }));
+
+  // remember current user
+  localStorage.setItem("currentStaff", name);
+
+  window.location.href = "staff.html";
+}
+
+/* ================= OVERVIEW ================= */
 function loadStaff(){
   return JSON.parse(localStorage.getItem("staffList") || "[]");
 }
@@ -223,7 +294,6 @@ function loadStatus(name){
   return s;
 }
 
-/* ================= RENDER ================= */
 function render(){
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
