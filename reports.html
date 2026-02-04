@@ -6,81 +6,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
+    :root {
+      --green-dark: #094B35;
+      --green-main: #03953F;
+      --green-soft: #ECFDF5;
+      --green-light: #BBF7D0;
+      --text-dark: #111827;
+      --text-muted: #6b7280;
+    }
+
     body {
       font-family: Arial, sans-serif;
-      background: #ECFDF5;
+      background: var(--green-soft);
       margin: 0;
       padding: 24px;
-      color: #111827;
+      color: var(--text-dark);
     }
 
     header {
       display: flex;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 32px;
     }
 
     header h1 {
-      color: #094B35;
+      color: var(--green-dark);
       margin: 0;
+      font-size: 26px;
     }
 
     .card {
       background: #ffffff;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      padding: 24px;
+      max-width: 520px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
     label {
       font-weight: bold;
-      color: #094B35;
+      color: var(--green-dark);
       display: block;
       margin-bottom: 6px;
     }
 
     input[type="date"] {
-      padding: 8px;
+      padding: 10px;
       width: 100%;
-      max-width: 220px;
-      margin-bottom: 16px;
+      max-width: 240px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
     }
 
     .actions {
-      margin-top: 16px;
+      margin-top: 12px;
     }
 
     button {
-      background: #094B35;
+      background: var(--green-dark);
       color: white;
       border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
+      padding: 12px 18px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 14px;
       margin-right: 8px;
     }
 
     button.secondary {
-      background: #03953F;
+      background: var(--green-main);
     }
 
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+    button:hover {
+      opacity: 0.95;
     }
 
     .note {
       font-size: 13px;
-      color: #6b7280;
-      margin-top: 12px;
+      color: var(--text-muted);
+      margin-top: 16px;
+      line-height: 1.4;
     }
 
     footer {
-      margin-top: 40px;
+      margin-top: 48px;
       font-size: 12px;
-      color: #6b7280;
+      color: var(--text-muted);
     }
   </style>
 </head>
@@ -99,35 +112,35 @@
     <input type="date" id="endDate">
 
     <div class="actions">
-      <button id="runReportBtn" disabled>
-        Run report
-      </button>
-
       <button id="downloadPdfBtn" class="secondary">
-        Download PDF
+        Download PDF report
       </button>
     </div>
 
     <div class="note">
-      Select a date range, then download a PDF report for that period.
+      Select a date range to generate a report for that period.  
+      The PDF includes team totals and individual productivity.
     </div>
   </div>
 
   <footer>
-    My Refund – Internal Reporting
+    My Refund – Internal reporting
   </footer>
 
   <script>
-    // === CONFIG ===
+    /*********************************
+     * CONFIG
+     *********************************/
     const PDF_WEB_APP_URL =
       "https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec";
 
-    // === ELEMENTS ===
     const startInput = document.getElementById("startDate");
     const endInput = document.getElementById("endDate");
     const downloadBtn = document.getElementById("downloadPdfBtn");
 
-    // === DOWNLOAD PDF ===
+    /*********************************
+     * DOWNLOAD PDF
+     *********************************/
     downloadBtn.addEventListener("click", () => {
       const start = startInput.value;
       const end = endInput.value;
