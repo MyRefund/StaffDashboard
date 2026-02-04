@@ -2,173 +2,353 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>My Refund – Staff Work Tracker</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Refund — Staff</title>
+
 <style>
-@font-face { font-family:'Okta Neue'; src: local('Okta Neue'); }
 :root{
-  --green-dark:#094B35;
-  --green:#03953F;
-  --green-soft:#ECFDF5;
+  --g0:#094B35;
+  --g1:#03953F;
+  --g2:#ECFDF5;
+  --g3:#BBF7D0;
   --border:#e5e7eb;
   --text:#111827;
   --muted:#6b7280;
-  --bg:#f6f7f8;
+  --radius:18px;
+  --shadow:0 12px 28px rgba(0,0,0,.08);
 }
-*{box-sizing:border-box}
-body{margin:0;font-family:'Okta Neue',system-ui,sans-serif;background:var(--bg);color:var(--text)}
-header{display:flex;align-items:center;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid var(--border)}
-header img{max-width:140px}
-main{max-width:1000px;margin:0 auto;padding:24px}
-h2,h3{color:var(--green-dark);margin:0 0 10px}
-.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:16px}
-.notice{background:var(--green-soft);color:var(--green-dark);padding:12px;border-radius:14px;font-weight:900}
-.muted{color:var(--muted);font-size:12px}
-.counter{display:flex;align-items:center;gap:10px;margin-top:8px}
-.counter span{font-weight:900;font-size:18px;min-width:32px;text-align:center}
-.counter button{width:36px;height:36px;border-radius:50%}
-button{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer}
-button.primary{background:var(--green-dark);color:#fff;border-color:var(--green-dark)}
-input[type="number"]{width:80px;padding:6px;border-radius:8px;border:1px solid var(--border)}
-.hidden{display:none}
+
+body{
+  margin:0;
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background:linear-gradient(180deg,var(--g2),#ffffff 60%);
+  color:var(--text);
+}
+
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:18px 18px 40px;
+}
+
+/* Header */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:12px 16px;
+  box-shadow:var(--shadow);
+  position:sticky;
+  top:10px;
+  z-index:10;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.brand img{height:30px;}
+.brand strong{color:var(--g0);}
+
+.status{
+  font-weight:900;
+  color:var(--g1);
+  font-size:13px;
+}
+
+/* Layout */
+.section{
+  margin-top:20px;
+}
+
+.card{
+  background:#fff;
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  padding:16px;
+  margin-bottom:16px;
+}
+
+.card h2{
+  margin:0 0 12px;
+  color:var(--g0);
+}
+
+/* Counters */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
+
+.counter{
+  background:var(--g2);
+  border-radius:14px;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.counter strong{
+  color:var(--g0);
+  font-size:14px;
+}
+
+.counter-controls{
+  display:flex;
+  gap:6px;
+}
+
+.counter-controls button,
+.counter-controls input{
+  flex:1;
+}
+
+button{
+  border:none;
+  border-radius:12px;
+  padding:10px;
+  font-weight:900;
+  cursor:pointer;
+  font-size:14px;
+}
+
+button.primary{
+  background:var(--g0);
+  color:#fff;
+}
+
+button.secondary{
+  background:var(--g1);
+  color:#fff;
+}
+
+button.ghost{
+  background:#fff;
+  border:1px solid var(--border);
+  color:var(--g0);
+}
+
+input{
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  font-size:14px;
+}
+
+/* Notes */
+.notice{
+  background:var(--g2);
+  border-radius:14px;
+  padding:12px;
+  font-weight:800;
+  color:var(--g0);
+}
+
+/* Break popup */
+#breakPopup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+.popup-card{
+  background:#fff;
+  border-radius:20px;
+  padding:24px;
+  max-width:360px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+
+.popup-card h3{
+  margin:0 0 10px;
+  color:var(--g0);
+}
+
+.popup-card p{
+  color:var(--muted);
+  margin-bottom:16px;
+}
+
+/* Footer */
+footer{
+  margin-top:30px;
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+}
 </style>
 </head>
+
 <body>
 
+<div class="wrap">
+
 <header>
-  <img src="logo.png" alt="My Refund">
-  <strong>Staff Work Tracker</strong>
+  <div class="brand">
+    <img src="assets/logo.png" onerror="this.style.display='none'">
+    <strong id="staffName">Staff</strong>
+  </div>
+  <div class="status" id="statusText">Working</div>
 </header>
 
-<main>
-
-<div id="loginView" class="card">
-  <div class="notice">Welcome</div>
-  <p class="muted">Select your name to start your day.</p>
-  <select id="staffSelect"></select><br><br>
-  <button class="primary" onclick="login()">Start work</button>
+<!-- WORK -->
+<div class="section">
+  <div class="card">
+    <h2>Today’s work</h2>
+    <div class="grid" id="workGrid"></div>
+  </div>
 </div>
 
-<div id="appView" class="hidden">
-
+<!-- NOTES -->
+<div class="section">
   <div class="card">
-    <h2>Hello, <span id="staffName"></span></h2>
-    <p class="muted">Your work today is saved automatically.</p>
+    <h2>Notes from admin</h2>
+    <div id="staffNotes" class="notice">No notes for today</div>
   </div>
+</div>
 
+<!-- SUBMIT -->
+<div class="section">
   <div class="card">
-    <h3>Allocated work</h3>
-    <div id="workList"></div>
+    <h2>End of day</h2>
+    <button class="primary" onclick="submitDay()">Submit today’s work</button>
   </div>
+</div>
 
-  <div class="card">
-    <button class="primary" onclick="submitWork()">Submit work</button>
-    <p id="status" class="muted"></p>
-  </div>
+<footer>
+  My Refund — Staff workspace
+</footer>
 
 </div>
 
-</main>
+<!-- BREAK POPUP -->
+<div id="breakPopup">
+  <div class="popup-card">
+    <h3>Break time</h3>
+    <p>It’s time to take your break.</p>
+    <button class="primary" onclick="ackBreak()">Acknowledge break</button>
+  </div>
+</div>
+
+<audio id="breakSound">
+  <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg">
+</audio>
 
 <script>
-const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec";
-
-const STAFF = [
-  { id:"s1", name:"Alice" },
-  { id:"s2", name:"Bob" },
-  { id:"s3", name:"Charlie" }
+/* ===== CONFIG ===== */
+const WORK_TYPES = [
+  "Inbound","Outbound","Live Chat",
+  "Emails","Unverified","A2A",
+  "Delinks – SMS","Delinks – Live Chat",
+  "Delinks – Phone","Delinks – Email",
+  "Cancel Requests"
 ];
 
-const WORK_TYPES = ["Emails","Inbound","Outbound","Live Chat"];
+const STAFF_DATA_KEY = "myrefund_staff_data";
 
-let currentStaff = null;
-let counters = {};
-let startTime = null;
+/* ===== STATE ===== */
+const counters = {};
+const staffName = localStorage.getItem("myrefund_active_staff");
+document.getElementById("staffName").textContent = staffName || "Staff";
 
-(function init(){
-  const sel = document.getElementById("staffSelect");
-  STAFF.forEach(s=>{
-    const o=document.createElement("option");
-    o.value=s.id; o.textContent=s.name;
-    sel.appendChild(o);
-  });
-})();
+/* ===== BUILD COUNTERS ===== */
+WORK_TYPES.forEach(w=>{
+  counters[w]=0;
+  const el=document.createElement("div");
+  el.className="counter";
+  el.innerHTML=`
+    <strong>${w}</strong>
+    <div class="counter-controls">
+      <button class="ghost" onclick="addOne('${w}')">+1</button>
+      <input type="number" min="0" placeholder="0" onchange="setCount('${w}',this.value)">
+    </div>
+  `;
+  document.getElementById("workGrid").appendChild(el);
+});
 
-function login(){
-  const id = document.getElementById("staffSelect").value;
-  currentStaff = STAFF.find(s=>s.id===id);
-  startTime = Date.now();
-  document.getElementById("staffName").textContent = currentStaff.name;
-  document.getElementById("loginView").classList.add("hidden");
-  document.getElementById("appView").classList.remove("hidden");
-  renderWork();
+/* ===== COUNTERS ===== */
+function addOne(w){ counters[w]++; }
+function setCount(w,v){ counters[w]=Number(v)||0; }
+
+/* ===== LOAD NOTES + BREAKS ===== */
+const staffData = JSON.parse(localStorage.getItem(STAFF_DATA_KEY)||"{}")[staffName] || {};
+document.getElementById("staffNotes").textContent = staffData.notes || "No notes for today";
+
+/* ===== BREAK HANDLING ===== */
+const breaks = (staffData.breaks||"")
+  .split(",")
+  .map(b=>b.trim())
+  .filter(Boolean);
+
+const today = new Date().toISOString().slice(0,10);
+
+breaks.forEach(t=>{
+  const [h,m]=t.split(":");
+  if(!h||!m) return;
+  const breakTime = new Date(`${today}T${h}:${m}:00`);
+  const delay = breakTime - Date.now();
+  if(delay>0){
+    setTimeout(()=>triggerBreak(), delay);
+  }
+});
+
+function triggerBreak(){
+  document.getElementById("breakSound").play();
+  document.getElementById("breakPopup").style.display="flex";
+  document.getElementById("statusText").textContent="On break";
 }
 
-function renderWork(){
-  const wrap = document.getElementById("workList");
-  wrap.innerHTML="";
-  WORK_TYPES.forEach(w=>{
-    counters[w]=0;
-    const div=document.createElement("div");
-    div.className="counter";
-    div.innerHTML = `
-      <strong style="min-width:120px">${w}</strong>
-      <button onclick="inc('${w}',-1)">−</button>
-      <span id="count-${w}">0</span>
-      <button onclick="inc('${w}',1)">+</button>
-      <input type="number" min="0" value="0" onchange="setCount('${w}',this.value)">
-    `;
-    wrap.appendChild(div);
-  });
+function ackBreak(){
+  document.getElementById("breakPopup").style.display="none";
+  document.getElementById("statusText").textContent="Working";
 }
 
-function inc(w,delta){
-  counters[w]=Math.max(0,(counters[w]||0)+delta);
-  document.getElementById("count-"+w).textContent=counters[w];
-}
-function setCount(w,val){
-  counters[w]=Math.max(0,Number(val)||0);
-  document.getElementById("count-"+w).textContent=counters[w];
-}
+/* ===== SUBMIT ===== */
+function submitDay(){
+  const loginTime = localStorage.getItem("myrefund_login_time");
+  const minutesWorked = loginTime
+    ? Math.round((Date.now()-new Date(loginTime)) / 60000)
+    : 0;
 
-function sendToSheets(payload){
-  fetch(SUBMIT_ENDPOINT,{
-    method:"POST",
-    mode:"no-cors",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify(payload)
-  });
-}
-
-function submitWork(){
-  const today = new Date().toISOString().slice(0,10);
-  const minutesWorked = Math.round((Date.now()-startTime)/60000);
-
-  Object.entries(counters).forEach(([work,qty])=>{
-    if(qty>0){
-      sendToSheets({
-        activity:{
-          date: today,
-          staff_id: currentStaff.id,
-          staff_name: currentStaff.name,
-          work_type: work,
-          quantity: qty
-        }
-      });
-    }
-  });
-
-  sendToSheets({
-    shift:{
-      date: today,
-      staff_id: currentStaff.id,
-      staff_name: currentStaff.name,
+  const payload = {
+    activity: Object.entries(counters)
+      .filter(([_,v])=>v>0)
+      .map(([type,qty])=>({
+        date: new Date().toISOString().slice(0,10),
+        staff_id: staffName,
+        staff_name: staffName,
+        work_type: type,
+        quantity: qty
+      })),
+    shift: {
+      date: new Date().toISOString().slice(0,10),
+      staff_id: staffName,
+      staff_name: staffName,
       minutes_worked: minutesWorked
     }
-  });
+  };
 
-  document.getElementById("status").textContent =
-    "Submitted at " + new Date().toLocaleTimeString();
+  fetch("https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec",{
+    method:"POST",
+    body:JSON.stringify(payload)
+  }).then(()=>{
+    alert("Your work has been submitted. Thank you!");
+    localStorage.removeItem("myrefund_login_time");
+    window.location.href="index.html";
+  });
 }
 </script>
 
