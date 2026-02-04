@@ -2,205 +2,299 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>My Refund – Admin Starting Volumes</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Refund — Admin</title>
+
 <style>
-@font-face { font-family:'Okta Neue'; src: local('Okta Neue'); }
 :root{
-  --green-dark:#094B35;
-  --green:#03953F;
-  --green-soft:#ECFDF5;
+  --g0:#094B35;
+  --g1:#03953F;
+  --g2:#ECFDF5;
+  --g3:#BBF7D0;
   --border:#e5e7eb;
   --text:#111827;
   --muted:#6b7280;
-  --bg:#f6f7f8;
+  --radius:16px;
+  --shadow:0 10px 25px rgba(0,0,0,.06);
 }
-*{box-sizing:border-box}
+
 body{
   margin:0;
-  font-family:'Okta Neue',system-ui,sans-serif;
-  background:var(--bg);
-  color:var(--text)
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background:linear-gradient(180deg,var(--g2),#fff 60%);
+  color:var(--text);
 }
+
+.wrap{max-width:1200px;margin:0 auto;padding:20px 20px 48px;}
+
 header{
-  padding:16px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   background:#fff;
-  border-bottom:1px solid var(--border)
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:12px 16px;
+  box-shadow:var(--shadow);
+  position:sticky;
+  top:10px;
+  z-index:10;
 }
-main{
-  max-width:900px;
-  margin:0 auto;
-  padding:24px
+
+.brand{display:flex;align-items:center;gap:12px;}
+.brand img{height:30px;}
+.brand strong{color:var(--g0);}
+
+nav{display:flex;gap:8px;flex-wrap:wrap;}
+nav button{
+  border:none;
+  background:var(--g2);
+  color:var(--g0);
+  padding:8px 14px;
+  border-radius:999px;
+  font-weight:900;
+  cursor:pointer;
 }
-h1,h2{
-  color:var(--green-dark);
-  margin:0 0 10px
+nav button.active{
+  background:var(--g0);
+  color:#fff;
 }
+
+.section{display:none;margin-top:20px;}
+.section.active{display:block;}
+
 .card{
   background:#fff;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:16px
-}
-.notice{
-  background:var(--green-soft);
-  padding:12px;
-  border-radius:12px;
-  font-weight:800;
-  color:var(--green-dark)
-}
-label{
-  font-size:12px;
-  color:var(--muted);
-  font-weight:800
-}
-input[type="date"],
-input[type="number"]{
-  padding:8px;
-  border-radius:8px;
   border:1px solid var(--border);
-  width:100%
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:16px;
+  margin-bottom:16px;
 }
+
+.card h2{margin:0 0 12px;color:var(--g0);}
+.card small{color:var(--muted);}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
+
+input, textarea, select{
+  width:100%;
+  padding:8px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-size:14px;
+}
+
+textarea{resize:vertical;}
+
+button.primary{
+  background:var(--g0);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
 .row{
   display:flex;
-  gap:16px;
-  flex-wrap:wrap
+  justify-content:space-between;
+  align-items:center;
+  background:var(--g2);
+  padding:10px 12px;
+  border-radius:12px;
+  font-weight:800;
 }
-.col{
-  flex:1;
-  min-width:200px
-}
-button{
-  padding:10px 16px;
-  border-radius:10px;
-  border:1px solid var(--green-dark);
-  background:var(--green-dark);
-  color:#fff;
-  font-weight:900;
-  cursor:pointer
-}
-.muted{
+
+.muted{color:var(--muted);}
+
+footer{
+  margin-top:40px;
+  font-size:12px;
   color:var(--muted);
-  font-size:12px
+  text-align:center;
 }
 </style>
 </head>
+
 <body>
+<div class="wrap">
 
 <header>
-  <h1>Admin – Starting Volumes</h1>
+  <div class="brand">
+    <img src="assets/logo.png" onerror="this.style.display='none'">
+    <strong>Admin</strong>
+  </div>
+
+  <nav>
+    <button class="active" data-tab="overview">Overview</button>
+    <button data-tab="rundown">Rundown</button>
+    <button data-tab="allocation">Allocation / Breaks / Notes</button>
+    <button data-tab="users">Users</button>
+  </nav>
 </header>
 
-<main>
-
-<div class="card notice">
-  Enter starting volumes at the beginning of the day, and missed interactions at the end of the day.
-  These feed directly into reports.
+<!-- OVERVIEW -->
+<div class="section active" id="overview">
+  <div class="card">
+    <h2>Staff currently working</h2>
+    <div id="overviewList" class="list"></div>
+  </div>
 </div>
 
-<div class="card">
-  <label>Date</label><br>
-  <input type="date" id="dateInput">
+<!-- RUNDOWN -->
+<div class="section" id="rundown">
+  <div class="card">
+    <h2>Today’s work completed</h2>
+    <div id="rundownList" class="list"></div>
+  </div>
 </div>
 
-<div class="card">
-  <h2>Starting volumes (start of day)</h2>
-  <div class="row" id="startingFields"></div>
+<!-- ALLOCATION / BREAKS / NOTES -->
+<div class="section" id="allocation">
+  <div class="card">
+    <h2>Staff control</h2>
+    <small>Allocate work, set breaks, and add notes</small>
+
+    <div class="grid" style="margin-top:12px;">
+      <select id="staffSelect"></select>
+
+      <textarea id="notesInput" placeholder="Notes for this staff member"></textarea>
+
+      <input id="breaksInput" placeholder="Break times (e.g. 10:30, 13:00, 15:30)">
+    </div>
+
+    <button class="primary" style="margin-top:12px;" onclick="saveStaffControl()">Save</button>
+  </div>
 </div>
 
-<div class="card">
-  <h2>Missed interactions (end of day)</h2>
-  <div class="row" id="missedFields"></div>
+<!-- USERS -->
+<div class="section" id="users">
+  <div class="card">
+    <h2>Users</h2>
+
+    <div class="grid">
+      <input id="newUserName" placeholder="New staff name">
+      <button class="primary" onclick="addUser()">Add user</button>
+    </div>
+
+    <div class="list" id="usersList" style="margin-top:12px;"></div>
+  </div>
 </div>
 
-<div class="card">
-  <button onclick="saveVolumes()">Save volumes</button>
-  <p id="status" class="muted"></p>
-</div>
+<footer>
+  My Refund — Internal admin
+</footer>
 
-</main>
+</div>
 
 <script>
-/* ============================
-   CONFIG
-============================ */
-const SUBMIT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec";
+/* ===== STORAGE ===== */
+const USERS_KEY = "myrefund_users";
+const STAFF_DATA_KEY = "myrefund_staff_data";
 
-const STARTING_WORK = ["Emails","Unverified","A2A","To Call"];
-const MISSED_WORK = ["Missed Calls","Missed Chats"];
+/* ===== TABS ===== */
+document.querySelectorAll("nav button").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
+  };
+});
 
-/* ============================
-   HELPERS
-============================ */
-function nzToday(){
-  return new Date().toLocaleDateString("en-CA",{
-    timeZone:"Pacific/Auckland"
+/* ===== USERS ===== */
+function getUsers(){
+  return JSON.parse(localStorage.getItem(USERS_KEY)||"[]");
+}
+function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u));}
+
+function addUser(){
+  const name=document.getElementById("newUserName").value.trim();
+  if(!name)return;
+  const users=getUsers();
+  users.push(name);
+  saveUsers(users);
+  document.getElementById("newUserName").value="";
+  renderUsers();
+  renderStaffSelect();
+}
+
+function renderUsers(){
+  const el=document.getElementById("usersList");
+  el.innerHTML="";
+  getUsers().forEach(u=>{
+    const r=document.createElement("div");
+    r.className="row";
+    r.innerHTML=`${u} <button onclick="removeUser('${u}')">Remove</button>`;
+    el.appendChild(r);
+  });
+}
+function removeUser(u){
+  saveUsers(getUsers().filter(x=>x!==u));
+  renderUsers();
+  renderStaffSelect();
+}
+
+/* ===== STAFF DATA ===== */
+function getStaffData(){
+  return JSON.parse(localStorage.getItem(STAFF_DATA_KEY)||"{}");
+}
+function saveStaffData(d){
+  localStorage.setItem(STAFF_DATA_KEY,JSON.stringify(d));
+}
+
+function renderStaffSelect(){
+  const sel=document.getElementById("staffSelect");
+  sel.innerHTML="";
+  getUsers().forEach(u=>{
+    const o=document.createElement("option");
+    o.value=u;o.textContent=u;
+    sel.appendChild(o);
   });
 }
 
-function fieldHTML(label){
-  const id = "field-" + label.replace(/\s/g,'');
-  return `
-    <div class="col">
-      <label>${label}</label><br>
-      <input type="number" min="0" value="0" id="${id}">
-    </div>
-  `;
+/* ===== CONTROL SAVE ===== */
+function saveStaffControl(){
+  const staff=document.getElementById("staffSelect").value;
+  const notes=document.getElementById("notesInput").value;
+  const breaks=document.getElementById("breaksInput").value;
+
+  const data=getStaffData();
+  data[staff]={notes,breaks};
+  saveStaffData(data);
+  alert("Saved");
 }
 
-/* ============================
-   RENDER
-============================ */
-function render(){
-  document.getElementById("dateInput").value = nzToday();
-
-  const sWrap = document.getElementById("startingFields");
-  const mWrap = document.getElementById("missedFields");
-
-  sWrap.innerHTML = "";
-  mWrap.innerHTML = "";
-
-  STARTING_WORK.forEach(w => {
-    sWrap.innerHTML += fieldHTML(w);
-  });
-
-  MISSED_WORK.forEach(w => {
-    mWrap.innerHTML += fieldHTML(w);
+/* ===== OVERVIEW / RUNDOWN (BROWSER DATA) ===== */
+function renderOverview(){
+  const el=document.getElementById("overviewList");
+  el.innerHTML="";
+  getUsers().forEach(u=>{
+    const r=document.createElement("div");
+    r.className="row";
+    r.innerHTML=`${u} <span class="muted">Working</span>`;
+    el.appendChild(r);
   });
 }
 
-/* ============================
-   SUBMIT (BATCH)
-============================ */
-function saveVolumes(){
-  const date = document.getElementById("dateInput").value;
-  if(!date) return alert("Select a date");
-
-  const rows = [];
-
-  [...STARTING_WORK, ...MISSED_WORK].forEach(w => {
-    const id = "field-" + w.replace(/\s/g,'');
-    const val = Number(document.getElementById(id).value || 0);
-
-    rows.push({
-      date: date,
-      work_type: w,
-      volume: val
-    });
-  });
-
-  fetch(SUBMIT_ENDPOINT,{
-    method:"POST",
-    mode:"no-cors",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({ starting: rows })
-  });
-
-  document.getElementById("status").textContent =
-    "Saved at " + new Date().toLocaleTimeString();
+function renderRundown(){
+  const el=document.getElementById("rundownList");
+  el.innerHTML="<div class='muted'>Data shown once staff submit work.</div>";
 }
 
-render();
+/* ===== INIT ===== */
+renderUsers();
+renderStaffSelect();
+renderOverview();
+renderRundown();
 </script>
 
 </body>
