@@ -2,150 +2,223 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>My Refund – Daily Workflow</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Refund — Staff Login</title>
+
 <style>
-@font-face { font-family:'Okta Neue'; src: local('Okta Neue'); }
 :root{
-  --green-dark:#094B35;
-  --green:#03953F;
-  --green-soft:#ECFDF5;
+  --g0:#094B35;
+  --g1:#03953F;
+  --g2:#ECFDF5;
+  --g3:#BBF7D0;
   --border:#e5e7eb;
+  --text:#111827;
+  --muted:#6b7280;
+  --radius:18px;
+  --shadow:0 12px 28px rgba(0,0,0,.08);
 }
-*{box-sizing:border-box}
+
 body{
   margin:0;
-  font-family:'Okta Neue', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background:#f6f7f8;
-  color:#111827;
-}
-header{
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background:linear-gradient(180deg,var(--g2),#ffffff 65%);
+  color:var(--text);
+  min-height:100vh;
   display:flex;
   align-items:center;
-  padding:16px 24px;
+  justify-content:center;
+}
+
+.container{
+  width:100%;
+  max-width:520px;
+  padding:24px;
+}
+
+.card{
   background:#fff;
-  border-bottom:1px solid var(--border);
-}
-header img{max-width:150px}
-main{
-  max-width:900px;
-  margin:40px auto;
-  padding:0 20px;
-}
-.hero{
-  background:var(--green-soft);
-  border-radius:20px;
-  padding:28px;
-  margin-bottom:28px;
-}
-.hero h1{
-  margin:0 0 6px 0;
-  color:var(--green-dark);
-}
-.hero p{
-  margin:0;
-  color:#065f46;
-  font-weight:500;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-  gap:14px;
-}
-.user-card{
-  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
   border:1px solid var(--border);
-  border-radius:16px;
-  padding:18px;
-  text-align:left;
+  padding:24px 22px 26px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.brand img{
+  height:34px;
+}
+
+.brand h1{
+  margin:0;
+  font-size:18px;
+  color:var(--g0);
+}
+
+.sub{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:22px;
+  line-height:1.4;
+}
+
+label{
+  font-weight:900;
+  font-size:13px;
+  color:var(--g0);
+  margin-bottom:6px;
+  display:block;
+}
+
+select{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  font-size:15px;
+  margin-bottom:16px;
+}
+
+button{
+  width:100%;
+  border:none;
+  border-radius:14px;
+  padding:14px;
+  font-size:15px;
+  font-weight:900;
   cursor:pointer;
-  transition:all .15s ease;
 }
-.user-card:hover{
-  border-color:var(--green);
-  box-shadow:0 6px 18px rgba(0,0,0,.06);
-  transform:translateY(-1px);
-}
-.user-name{
-  font-weight:800;
-}
-.user-role{
-  font-size:12px;
-  color:#6b7280;
-  margin-top:4px;
-}
-.admin-badge{
-  display:inline-block;
-  margin-top:10px;
-  padding:4px 8px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:700;
-  background:var(--green-dark);
+
+button.primary{
+  background:var(--g0);
   color:#fff;
 }
+
+button.secondary{
+  background:var(--g1);
+  color:#fff;
+  margin-top:10px;
+}
+
+button.ghost{
+  background:var(--g2);
+  color:var(--g0);
+  margin-top:10px;
+}
+
+button:hover{opacity:.95;}
+
+.divider{
+  height:1px;
+  background:var(--border);
+  margin:20px 0;
+}
+
+.admin-links{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
 footer{
+  margin-top:16px;
   text-align:center;
-  margin-top:40px;
   font-size:12px;
-  color:#6b7280;
+  color:var(--muted);
 }
 </style>
 </head>
+
 <body>
 
-<header>
-  <img src="logo.png" alt="My Refund">
-</header>
+<div class="container">
+  <div class="card">
 
-<main>
-  <div class="hero">
-    <h1>Daily Workflow</h1>
-    <p>Select your name to begin your day.</p>
+    <div class="brand">
+      <img src="assets/logo.png" onerror="this.style.display='none'">
+      <h1>Welcome</h1>
+    </div>
+
+    <div class="sub">
+      Select your name to start your day.  
+      Your work will be tracked automatically.
+    </div>
+
+    <label for="staffSelect">Your name</label>
+    <select id="staffSelect">
+      <option value="">Select your name…</option>
+    </select>
+
+    <button class="primary" onclick="loginStaff()">
+      Start work
+    </button>
+
+    <div class="divider"></div>
+
+    <div class="admin-links">
+      <button class="ghost" onclick="goAdmin()">
+        Admin
+      </button>
+
+      <button class="ghost" onclick="goReports()">
+        Reports
+      </button>
+    </div>
+
   </div>
 
-  <div class="grid" id="users"></div>
-
   <footer>
-    Internal system · My Refund
+    My Refund — Internal system
   </footer>
-</main>
+</div>
 
 <script>
-const USERS_KEY="users";
+/* ===== CONFIG ===== */
+const USERS_KEY = "myrefund_users";
 
-let users = JSON.parse(localStorage.getItem(USERS_KEY) || "null");
-if(!users){
-  users=[
-    {id:"u_admin", name:"Drew", role:"admin"},
-    {id:"u_1", name:"Sarah", role:"staff"},
-    {id:"u_2", name:"Alex", role:"staff"}
-  ];
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+/* ===== LOAD USERS ===== */
+function loadUsers(){
+  const users = JSON.parse(localStorage.getItem(USERS_KEY)||"[]");
+  const sel = document.getElementById("staffSelect");
+
+  users.forEach(u=>{
+    const o=document.createElement("option");
+    o.value=u;
+    o.textContent=u;
+    sel.appendChild(o);
+  });
 }
 
-const box = document.getElementById("users");
-
-users.forEach(u => {
-  const div = document.createElement("div");
-  div.className = "user-card";
-  div.onclick = () => login(u);
-  div.innerHTML = `
-    <div class="user-name">${u.name}</div>
-    <div class="user-role">${u.role === "admin" ? "Administrator" : "Staff member"}</div>
-    ${u.role === "admin" ? '<div class="admin-badge">Admin</div>' : ''}
-  `;
-  box.appendChild(div);
-});
-
-function login(u){
-  localStorage.setItem("user", JSON.stringify(u));
-  const day = new Date().toISOString().slice(0,10);
-  if(u.role === "staff" && !localStorage.getItem(`shift::${u.id}::${day}::start`)){
-    localStorage.setItem(`shift::${u.id}::${day}::start`, new Date().toISOString());
+/* ===== STAFF LOGIN ===== */
+function loginStaff(){
+  const name=document.getElementById("staffSelect").value;
+  if(!name){
+    alert("Please select your name.");
+    return;
   }
-  location.href = u.role === "admin" ? "admin.html" : "staff.html";
+
+  localStorage.setItem("myrefund_active_staff", name);
+  localStorage.setItem("myrefund_login_time", new Date().toISOString());
+
+  window.location.href="staff.html";
 }
+
+/* ===== ADMIN / REPORTS ===== */
+function goAdmin(){
+  window.location.href="admin.html";
+}
+
+function goReports(){
+  window.location.href="reports.html";
+}
+
+/* ===== INIT ===== */
+loadUsers();
 </script>
 
 </body>
