@@ -1,119 +1,259 @@
-<!-- ONLY THE <script> SECTION HAS CHANGED MEANINGFULLY -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Refund — Staff</title>
+
+  <style>
+    :root{
+      --green-dark:#094B35;
+      --green:#03953F;
+      --green-soft:#ECFDF5;
+      --border:#e5e7eb;
+      --text:#111827;
+      --muted:#6b7280;
+      --radius:14px;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:#fff;
+      color:var(--text);
+    }
+
+    /* ===== Top bar (same as index) ===== */
+    header{
+      background:var(--green-dark);
+      color:#fff;
+      padding:14px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+    }
+
+    .brand img{
+      height:26px;
+    }
+
+    .nav{
+      display:flex;
+      gap:16px;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .nav a{
+      color:#fff;
+      text-decoration:none;
+      opacity:.9;
+    }
+
+    .nav a:hover{opacity:1}
+
+    /* ===== Page ===== */
+    main{
+      max-width:900px;
+      margin:0 auto;
+      padding:28px 20px 60px;
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:20px;
+      margin-bottom:22px;
+    }
+
+    h1{
+      margin:0 0 6px;
+      color:var(--green-dark);
+      font-size:24px;
+    }
+
+    .sub{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    /* ===== Work rows ===== */
+    .work-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid var(--border);
+    }
+
+    .work-row:last-child{border-bottom:none}
+
+    .work-name{
+      font-weight:800;
+    }
+
+    .controls{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .controls button{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      border:1px solid var(--border);
+      background:#fff;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .controls input{
+      width:60px;
+      text-align:center;
+      padding:6px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      font-weight:800;
+    }
+
+    /* ===== Submit ===== */
+    .submit-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .submit-btn{
+      background:var(--green-dark);
+      color:#fff;
+      border:none;
+      padding:12px 20px;
+      border-radius:12px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .status{
+      font-size:13px;
+      color:var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <img src="logo.png" alt="My Refund">
+    <span>Staff Dashboard</span>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="reports.html">Reports</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- Staff greeting -->
+  <div class="card">
+    <h1 id="staffName">Hello</h1>
+    <div class="sub">Enter your completed work for today.</div>
+  </div>
+
+  <!-- Allocated work -->
+  <div class="card" id="workArea"></div>
+
+  <!-- Submit -->
+  <div class="card">
+    <div class="submit-wrap">
+      <button class="submit-btn" onclick="submitWork()">Submit work</button>
+      <div class="status" id="statusText">Not submitted yet</div>
+    </div>
+  </div>
+
+</main>
+
 <script>
-/* ===== CONFIG ===== */
+/* ================= CONFIG ================= */
+const WEB_APP_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+/* Work types (locked) */
 const WORK_TYPES = [
-  "Inbound","Outbound","Live Chat",
-  "Emails","Unverified","A2A",
-  "Delinks – SMS","Delinks – Live Chat",
-  "Delinks – Phone","Delinks – Email",
-  "Cancel Requests"
+  "Emails",
+  "Inbound",
+  "Outbound",
+  "Live Chat"
 ];
 
-const STAFF_DATA_KEY = "myrefund_staff_data";
-const BREAK_LOG_KEY = "myrefund_break_log";
+/* ================= INIT ================= */
+const params = new URLSearchParams(window.location.search);
+const staff = params.get("name") || "Staff";
+document.getElementById("staffName").textContent = `Hello, ${staff}`;
 
-/* ===== STATE ===== */
-const counters = {};
-const staffName = localStorage.getItem("myrefund_active_staff");
-document.getElementById("staffName").textContent = staffName || "Staff";
+const workArea = document.getElementById("workArea");
 
-/* ===== BUILD COUNTERS ===== */
-WORK_TYPES.forEach(w=>{
-  counters[w]=0;
-  const el=document.createElement("div");
-  el.className="counter";
-  el.innerHTML=`
-    <strong>${w}</strong>
-    <div class="counter-controls">
-      <button class="ghost" onclick="addOne('${w}')">+1</button>
-      <input type="number" min="0" placeholder="0" onchange="setCount('${w}',this.value)">
+WORK_TYPES.forEach(type=>{
+  const row = document.createElement("div");
+  row.className = "work-row";
+  row.innerHTML = `
+    <div class="work-name">${type}</div>
+    <div class="controls">
+      <button onclick="adjust('${type}',-1)">−</button>
+      <input id="val-${type}" type="number" value="0" min="0">
+      <button onclick="adjust('${type}',1)">+</button>
     </div>
   `;
-  document.getElementById("workGrid").appendChild(el);
+  workArea.appendChild(row);
 });
 
-function addOne(w){ counters[w]++; }
-function setCount(w,v){ counters[w]=Number(v)||0; }
-
-/* ===== LOAD NOTES + BREAKS ===== */
-const staffData = JSON.parse(localStorage.getItem(STAFF_DATA_KEY)||"{}")[staffName] || {};
-document.getElementById("staffNotes").textContent = staffData.notes || "No notes for today";
-
-/* ===== BREAK HANDLING ===== */
-let currentBreakTime = null;
-
-const breaks = (staffData.breaks||"")
-  .split(",")
-  .map(b=>b.trim())
-  .filter(Boolean);
-
-const today = new Date().toISOString().slice(0,10);
-
-breaks.forEach(t=>{
-  const [h,m]=t.split(":");
-  if(!h||!m) return;
-  const breakTime = new Date(`${today}T${h}:${m}:00`);
-  const delay = breakTime - Date.now();
-  if(delay>0){
-    setTimeout(()=>triggerBreak(t), delay);
-  }
-});
-
-function triggerBreak(time){
-  currentBreakTime = time;
-  document.getElementById("breakSound").play();
-  document.getElementById("breakPopup").style.display="flex";
-  document.getElementById("statusText").textContent="On break";
+/* ================= ACTIONS ================= */
+function adjust(type,delta){
+  const el = document.getElementById("val-"+type);
+  el.value = Math.max(0, Number(el.value||0) + delta);
 }
 
-function ackBreak(){
-  // Save acknowledgement
-  const log = JSON.parse(localStorage.getItem(BREAK_LOG_KEY)||"{}");
-  if(!log[staffName]) log[staffName]=[];
-  log[staffName].push({
-    time: currentBreakTime,
-    acknowledgedAt: new Date().toISOString()
-  });
-  localStorage.setItem(BREAK_LOG_KEY, JSON.stringify(log));
-
-  // Reset UI
-  document.getElementById("breakPopup").style.display="none";
-  document.getElementById("statusText").textContent="Working";
-  currentBreakTime = null;
-}
-
-/* ===== SUBMIT ===== */
-function submitDay(){
-  const loginTime = localStorage.getItem("myrefund_login_time");
-  const minutesWorked = loginTime
-    ? Math.round((Date.now()-new Date(loginTime)) / 60000)
-    : 0;
-
+async function submitWork(){
   const payload = {
-    activity: Object.entries(counters)
-      .filter(([_,v])=>v>0)
-      .map(([type,qty])=>({
-        date: new Date().toISOString().slice(0,10),
-        staff_id: staffName,
-        staff_name: staffName,
-        work_type: type,
-        quantity: qty
-      })),
-    shift: {
-      date: new Date().toISOString().slice(0,10),
-      staff_id: staffName,
-      staff_name: staffName,
-      minutes_worked: minutesWorked
-    }
+    staff,
+    date: new Date().toLocaleDateString("en-CA",{timeZone:"Pacific/Auckland"}),
+    work:{}
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec",{
-    method:"POST",
-    body:JSON.stringify(payload)
-  }).then(()=>{
-    alert("Your work has been submitted. Thank you!");
-    localStorage.removeItem("myrefund_login_time");
-    window.location.href="index.html";
+  WORK_TYPES.forEach(t=>{
+    payload.work[t] = Number(document.getElementById("val-"+t).value||0);
   });
+
+  document.getElementById("statusText").textContent = "Submitting…";
+
+  try{
+    await fetch(WEB_APP_URL,{
+      method:"POST",
+      body:JSON.stringify(payload)
+    });
+    document.getElementById("statusText").textContent =
+      "Submitted at " + new Date().toLocaleTimeString();
+  }catch(e){
+    document.getElementById("statusText").textContent =
+      "Submission failed — tell admin";
+  }
 }
 </script>
+
+</body>
+</html>
