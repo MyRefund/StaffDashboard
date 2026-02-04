@@ -120,6 +120,21 @@
       font-weight:800;
     }
 
+    .note-box{
+      background:var(--g2);
+      border:1px solid var(--g3);
+      border-radius:12px;
+      padding:12px;
+      font-weight:700;
+      color:var(--g0);
+      line-height:1.4;
+    }
+
+    .empty{
+      color:var(--muted);
+      font-weight:700;
+    }
+
     .submit{
       margin-top:28px;
       display:flex;
@@ -136,10 +151,6 @@
       font-weight:900;
       cursor:pointer;
     }
-
-    @media(max-width:600px){
-      h1{font-size:22px;}
-    }
   </style>
 </head>
 
@@ -153,7 +164,44 @@
 <main>
 
   <h1 id="greeting">Hello</h1>
-  <div class="sub">Track your work for today</div>
+  <div class="sub">Here’s what’s planned for your day</div>
+
+  <div class="grid">
+
+    <!-- BREAKS -->
+    <div class="card">
+      <h2>Your breaks today</h2>
+
+      <div class="row">
+        <div class="label">Morning break</div>
+        <div class="muted">10:30 – 10:45</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Lunch</div>
+        <div class="muted">12:30 – 1:00</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Afternoon break</div>
+        <div class="muted">3:00 – 3:15</div>
+      </div>
+    </div>
+
+    <!-- ADMIN NOTES -->
+    <div class="card">
+      <h2>Notes from admin</h2>
+      <div class="note-box">
+        Please focus on Emails first this morning.  
+        Live Chat coverage will be lighter after lunch.
+      </div>
+      <!-- Empty state example -->
+      <!-- <div class="empty">No notes for today.</div> -->
+    </div>
+
+  </div>
+
+  <br/>
 
   <div class="grid">
 
@@ -212,7 +260,7 @@
       </div>
     </div>
 
-    <!-- DELINKS / CANCELLATIONS -->
+    <!-- DELINKS -->
     <div class="card">
       <h2>Delinks & cancellations</h2>
 
@@ -244,12 +292,10 @@
 </main>
 
 <script>
-  // Name from URL
   const params = new URLSearchParams(window.location.search);
   const name = params.get("name") || "there";
   document.getElementById("greeting").textContent = `Hello, ${name}`;
 
-  // Live clock
   function tick(){
     const now = new Date();
     document.getElementById("clock").textContent =
@@ -264,7 +310,7 @@
   }
 
   function submitWork(){
-    alert("Submission wiring stays as-is — ready to connect.");
+    alert("Submission wiring remains unchanged.");
   }
 </script>
 
