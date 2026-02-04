@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Refund — Staff</title>
+<title>My Refund — Staff Login</title>
 
 <style>
 :root{
@@ -21,107 +21,77 @@
 body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  background:linear-gradient(180deg,var(--g2),#ffffff 60%);
+  background:linear-gradient(180deg,var(--g2),#ffffff 65%);
   color:var(--text);
-}
-
-.wrap{
-  max-width:1100px;
-  margin:0 auto;
-  padding:18px 18px 40px;
-}
-
-/* Header */
-header{
+  min-height:100vh;
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:center;
+}
+
+.container{
+  width:100%;
+  max-width:520px;
+  padding:24px;
+}
+
+.card{
   background:#fff;
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:12px 16px;
+  border-radius:var(--radius);
   box-shadow:var(--shadow);
-  position:sticky;
-  top:10px;
-  z-index:10;
+  border:1px solid var(--border);
+  padding:24px 22px 26px;
 }
 
 .brand{
   display:flex;
   align-items:center;
   gap:12px;
-}
-
-.brand img{height:30px;}
-.brand strong{color:var(--g0);}
-
-.status{
-  font-weight:900;
-  color:var(--g1);
-  font-size:13px;
-}
-
-/* Layout */
-.section{
-  margin-top:20px;
-}
-
-.card{
-  background:#fff;
-  border-radius:var(--radius);
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
-  padding:16px;
   margin-bottom:16px;
 }
 
-.card h2{
-  margin:0 0 12px;
+.brand img{
+  height:34px;
+}
+
+.brand h1{
+  margin:0;
+  font-size:18px;
   color:var(--g0);
 }
 
-.card small{
+.sub{
   color:var(--muted);
-}
-
-/* Counters */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:12px;
-}
-
-.counter{
-  background:var(--g2);
-  border-radius:14px;
-  padding:12px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.counter strong{
-  color:var(--g0);
   font-size:14px;
+  margin-bottom:22px;
+  line-height:1.4;
 }
 
-.counter-controls{
-  display:flex;
-  gap:6px;
+label{
+  font-weight:900;
+  font-size:13px;
+  color:var(--g0);
+  margin-bottom:6px;
+  display:block;
 }
 
-.counter-controls button,
-.counter-controls input{
-  flex:1;
+select{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  font-size:15px;
+  margin-bottom:16px;
 }
 
 button{
+  width:100%;
   border:none;
-  border-radius:12px;
-  padding:10px;
+  border-radius:14px;
+  padding:14px;
+  font-size:15px;
   font-weight:900;
   cursor:pointer;
-  font-size:14px;
 }
 
 button.primary{
@@ -132,33 +102,31 @@ button.primary{
 button.secondary{
   background:var(--g1);
   color:#fff;
+  margin-top:10px;
 }
 
 button.ghost{
-  background:#fff;
-  border:1px solid var(--border);
-  color:var(--g0);
-}
-
-input{
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:8px;
-  font-size:14px;
-}
-
-/* Notes / breaks */
-.notice{
   background:var(--g2);
-  border-radius:14px;
-  padding:12px;
-  font-weight:800;
   color:var(--g0);
+  margin-top:10px;
 }
 
-/* Footer */
+button:hover{opacity:.95;}
+
+.divider{
+  height:1px;
+  background:var(--border);
+  margin:20px 0;
+}
+
+.admin-links{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
 footer{
-  margin-top:30px;
+  margin-top:16px;
   text-align:center;
   font-size:12px;
   color:var(--muted);
@@ -168,127 +136,89 @@ footer{
 
 <body>
 
-<div class="wrap">
-
-<header>
-  <div class="brand">
-    <img src="assets/logo.png" onerror="this.style.display='none'">
-    <strong id="staffName">Staff</strong>
-  </div>
-  <div class="status">Working</div>
-</header>
-
-<!-- WORK COUNTERS -->
-<div class="section">
+<div class="container">
   <div class="card">
-    <h2>Today’s work</h2>
-    <small>Tap +1 as you complete work, or enter a number</small>
 
-    <div class="grid" id="workGrid"></div>
+    <div class="brand">
+      <img src="assets/logo.png" onerror="this.style.display='none'">
+      <h1>Welcome</h1>
+    </div>
+
+    <div class="sub">
+      Select your name to start your day.  
+      Your work will be tracked automatically.
+    </div>
+
+    <label for="staffSelect">Your name</label>
+    <select id="staffSelect">
+      <option value="">Select your name…</option>
+    </select>
+
+    <button class="primary" onclick="loginStaff()">
+      Start work
+    </button>
+
+    <div class="divider"></div>
+
+    <div class="admin-links">
+      <button class="ghost" onclick="goAdmin()">
+        Admin
+      </button>
+
+      <button class="ghost" onclick="goReports()">
+        Reports
+      </button>
+    </div>
+
   </div>
-</div>
 
-<!-- BREAKS / NOTES -->
-<div class="section">
-  <div class="card">
-    <h2>Notes & breaks</h2>
-    <div id="staffNotes" class="notice">No notes for today</div>
-  </div>
-</div>
-
-<!-- SUBMIT -->
-<div class="section">
-  <div class="card">
-    <h2>End of day</h2>
-    <button class="primary" onclick="submitDay()">Submit today’s work</button>
-  </div>
-</div>
-
-<footer>
-  My Refund — Staff workspace
-</footer>
-
+  <footer>
+    My Refund — Internal system
+  </footer>
 </div>
 
 <script>
 /* ===== CONFIG ===== */
-const WORK_TYPES = [
-  "Inbound",
-  "Outbound",
-  "Live Chat",
-  "Emails",
-  "Unverified",
-  "A2A",
-  "Delinks – SMS",
-  "Delinks – Live Chat",
-  "Delinks – Phone",
-  "Delinks – Email",
-  "Cancel Requests"
-];
+const USERS_KEY = "myrefund_users";
 
-/* ===== STATE ===== */
-const counters = {};
-const staffName = localStorage.getItem("myrefund_active_staff");
+/* ===== LOAD USERS ===== */
+function loadUsers(){
+  const users = JSON.parse(localStorage.getItem(USERS_KEY)||"[]");
+  const sel = document.getElementById("staffSelect");
 
-/* ===== INIT ===== */
-document.getElementById("staffName").textContent = staffName || "Staff";
-
-WORK_TYPES.forEach(w=>{
-  counters[w]=0;
-  const el=document.createElement("div");
-  el.className="counter";
-  el.innerHTML=`
-    <strong>${w}</strong>
-    <div class="counter-controls">
-      <button class="ghost" onclick="addOne('${w}')">+1</button>
-      <input type="number" min="0" placeholder="0" onchange="setCount('${w}',this.value)">
-    </div>
-  `;
-  document.getElementById("workGrid").appendChild(el);
-});
-
-/* ===== COUNTERS ===== */
-function addOne(w){
-  counters[w]++;
-}
-function setCount(w,val){
-  counters[w]=Number(val)||0;
-}
-
-/* ===== SUBMIT ===== */
-function submitDay(){
-  const loginTime = localStorage.getItem("myrefund_login_time");
-  const minutesWorked = loginTime
-    ? Math.round((Date.now()-new Date(loginTime)) / 60000)
-    : 0;
-
-  const payload = {
-    activity: Object.entries(counters)
-      .filter(([_,v])=>v>0)
-      .map(([type,qty])=>({
-        date: new Date().toISOString().slice(0,10),
-        staff_id: staffName,
-        staff_name: staffName,
-        work_type: type,
-        quantity: qty
-      })),
-    shift: {
-      date: new Date().toISOString().slice(0,10),
-      staff_id: staffName,
-      staff_name: staffName,
-      minutes_worked: minutesWorked
-    }
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec",{
-    method:"POST",
-    body:JSON.stringify(payload)
-  }).then(()=>{
-    alert("Your work has been submitted. Thank you!");
-    localStorage.removeItem("myrefund_login_time");
-    window.location.href="index.html";
+  users.forEach(u=>{
+    const o=document.createElement("option");
+    o.value=u;
+    o.textContent=u;
+    sel.appendChild(o);
   });
 }
+
+/* ===== STAFF LOGIN ===== */
+function loginStaff(){
+  const name=document.getElementById("staffSelect").value;
+  if(!name){
+    alert("Please select your name.");
+    return;
+  }
+
+  localStorage.setItem("myrefund_active_staff", name);
+  localStorage.setItem("myrefund_login_time", new Date().toISOString());
+
+  window.location.href="staff.html";
+}
+
+/* ===== ADMIN / REPORTS ===== */
+function goAdmin(){
+  window.location.href="admin.html";
+}
+
+function goReports(){
+  window.location.href="reports.html";
+}
+
+/* ===== INIT ===== */
+loadUsers();
 </script>
 
 </body>
