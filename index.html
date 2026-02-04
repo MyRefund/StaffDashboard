@@ -122,6 +122,9 @@ body{
 }
 
 .start-btn{
+  display:block;
+  text-decoration:none;
+  text-align:center;
   border-radius:14px;
   padding:14px;
   border:1px solid var(--g0);
@@ -130,7 +133,6 @@ body{
   font-weight:900;
   font-size:15px;
   cursor:pointer;
-  text-align:center;
 }
 
 .start-btn:hover{
@@ -229,9 +231,9 @@ body{
   <div class="section">
     <div class="section-title">Start your day</div>
     <div class="start-grid">
-      <button class="start-btn" onclick="startDay('Emma')">Emma</button>
-      <button class="start-btn" onclick="startDay('Maddy')">Maddy</button>
-      <button class="start-btn" onclick="startDay('Pepe')">Pepe</button>
+      <a href="staff.html" class="start-btn" onclick="startDay('Emma')">Emma</a>
+      <a href="staff.html" class="start-btn" onclick="startDay('Maddy')">Maddy</a>
+      <a href="staff.html" class="start-btn" onclick="startDay('Pepe')">Pepe</a>
     </div>
   </div>
 
@@ -263,24 +265,19 @@ function todayHuman(){
 function startDay(name){
   const today = todayISO();
 
-  // store staff list
   let staff = JSON.parse(localStorage.getItem("staffList") || "[]");
   if(!staff.includes(name)){
     staff.push(name);
     localStorage.setItem("staffList", JSON.stringify(staff));
   }
 
-  // store status
   localStorage.setItem("staffStatus_"+name, JSON.stringify({
     date: today,
     state: "working",
     start: nowTime()
   }));
 
-  // remember current user
   localStorage.setItem("currentStaff", name);
-
-  window.location.href = "staff.html";
 }
 
 /* ================= OVERVIEW ================= */
