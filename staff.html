@@ -25,15 +25,13 @@ body{
   color:var(--text);
 }
 
-/* ================= PAGE BACKGROUND ================= */
-
+/* =============== BACKGROUND =============== */
 .page{
   min-height:100vh;
   background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
 }
 
-/* ================= HEADER ================= */
-
+/* =============== HEADER =============== */
 .header{
   background:var(--g0);
   color:#fff;
@@ -44,8 +42,8 @@ body{
   max-width:1200px;
   margin:0 auto;
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
 }
 
 .brand{
@@ -59,7 +57,7 @@ body{
 .brand-text{
   display:flex;
   flex-direction:column;
-  line-height:1.15;
+  line-height:1.1;
 }
 
 .brand-text strong{
@@ -76,18 +74,15 @@ body{
 .clock{
   font-weight:900;
   font-size:14px;
-  opacity:.95;
 }
 
-/* ================= CONTENT ================= */
-
+/* =============== CONTENT =============== */
 .wrap{
   max-width:1200px;
   margin:0 auto;
   padding:36px 24px 60px;
 }
 
-/* Greeting */
 .hello{
   font-size:26px;
   font-weight:900;
@@ -95,38 +90,43 @@ body{
   margin-bottom:28px;
 }
 
-/* Panels */
+/* =============== PANELS =============== */
 .panel{
-  background:rgba(255,255,255,.92);
-  backdrop-filter:blur(4px);
+  background:rgba(255,255,255,.94);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:20px 22px;
-  margin-bottom:22px;
-  max-width:520px;
+  padding:22px;
+  margin-bottom:26px;
 }
 
 .panel h3{
-  margin:0 0 14px 0;
+  margin:0 0 16px 0;
   font-size:16px;
   font-weight:900;
   color:var(--g0);
 }
 
-/* Counters */
-.counter{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:12px;
+/* Horizontal grid inside panels */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
 }
 
-.counter:last-child{margin-bottom:0}
+.item{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+}
 
-.counter label{
+.item label{
+  display:block;
   font-weight:900;
+  margin-bottom:10px;
 }
 
+/* Counter controls */
 .controls{
   display:flex;
   align-items:center;
@@ -144,7 +144,7 @@ body{
 }
 
 .controls input{
-  width:50px;
+  width:56px;
   text-align:center;
   border:1px solid var(--border);
   border-radius:8px;
@@ -152,7 +152,7 @@ body{
   font-weight:900;
 }
 
-/* Notes / info blocks */
+/* Notes */
 .note{
   background:var(--g2);
   border-radius:12px;
@@ -161,12 +161,12 @@ body{
   color:var(--g0);
 }
 
-/* Break button */
+/* Breaks */
 .break-row{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:14px;
+  align-items:center;
+  gap:16px;
 }
 
 .break-row button{
@@ -198,10 +198,9 @@ body{
 </head>
 
 <body>
-
 <div class="page">
 
-<!-- ================= HEADER ================= -->
+<!-- HEADER -->
 <div class="header">
   <div class="header-inner">
     <div class="brand">
@@ -215,7 +214,6 @@ body{
   </div>
 </div>
 
-<!-- ================= CONTENT ================= -->
 <div class="wrap">
 
   <div class="hello" id="helloText">Hello</div>
@@ -223,31 +221,30 @@ body{
   <!-- Live interactions -->
   <div class="panel">
     <h3>Live interactions</h3>
-
-    <div class="counter">
-      <label>Inbound</label>
-      <div class="controls">
-        <button onclick="adjust('inbound',-1)">−</button>
-        <input id="inbound" value="0">
-        <button onclick="adjust('inbound',1)">+</button>
+    <div class="grid">
+      <div class="item">
+        <label>Inbound</label>
+        <div class="controls">
+          <button onclick="adj('inbound',-1)">−</button>
+          <input id="inbound" value="0">
+          <button onclick="adj('inbound',1)">+</button>
+        </div>
       </div>
-    </div>
-
-    <div class="counter">
-      <label>Outbound</label>
-      <div class="controls">
-        <button onclick="adjust('outbound',-1)">−</button>
-        <input id="outbound" value="0">
-        <button onclick="adjust('outbound',1)">+</button>
+      <div class="item">
+        <label>Outbound</label>
+        <div class="controls">
+          <button onclick="adj('outbound',-1)">−</button>
+          <input id="outbound" value="0">
+          <button onclick="adj('outbound',1)">+</button>
+        </div>
       </div>
-    </div>
-
-    <div class="counter">
-      <label>Live chat</label>
-      <div class="controls">
-        <button onclick="adjust('chat',-1)">−</button>
-        <input id="chat" value="0">
-        <button onclick="adjust('chat',1)">+</button>
+      <div class="item">
+        <label>Live chat</label>
+        <div class="controls">
+          <button onclick="adj('chat',-1)">−</button>
+          <input id="chat" value="0">
+          <button onclick="adj('chat',1)">+</button>
+        </div>
       </div>
     </div>
   </div>
@@ -261,22 +258,22 @@ body{
   <!-- Delinks -->
   <div class="panel">
     <h3>Delinks & cancellations</h3>
-
-    <div class="counter">
-      <label>Delinks</label>
-      <div class="controls">
-        <button onclick="adjust('delink',-1)">−</button>
-        <input id="delink" value="0">
-        <button onclick="adjust('delink',1)">+</button>
+    <div class="grid">
+      <div class="item">
+        <label>Delinks</label>
+        <div class="controls">
+          <button onclick="adj('delink',-1)">−</button>
+          <input id="delink" value="0">
+          <button onclick="adj('delink',1)">+</button>
+        </div>
       </div>
-    </div>
-
-    <div class="counter">
-      <label>Cancellations</label>
-      <div class="controls">
-        <button onclick="adjust('cancel',-1)">−</button>
-        <input id="cancel" value="0">
-        <button onclick="adjust('cancel',1)">+</button>
+      <div class="item">
+        <label>Cancellations</label>
+        <div class="controls">
+          <button onclick="adj('cancel',-1)">−</button>
+          <input id="cancel" value="0">
+          <button onclick="adj('cancel',1)">+</button>
+        </div>
       </div>
     </div>
   </div>
@@ -305,23 +302,19 @@ body{
 </div>
 
 <script>
-/* Staff name */
 const name = localStorage.getItem("currentStaff") || "Staff";
 document.getElementById("staffNameLabel").textContent = name;
 document.getElementById("helloText").textContent = "Hello, " + name;
 
-/* Clock */
 function tick(){
   document.getElementById("clock").textContent =
     new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
-tick();
-setInterval(tick,1000);
+tick(); setInterval(tick,1000);
 
-/* Counters */
-function adjust(id,delta){
-  const el = document.getElementById(id);
-  let v = Number(el.value||0)+delta;
+function adj(id,d){
+  const el=document.getElementById(id);
+  let v=Number(el.value||0)+d;
   if(v<0) v=0;
   el.value=v;
 }
