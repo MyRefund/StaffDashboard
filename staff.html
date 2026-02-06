@@ -14,6 +14,7 @@
   --muted:#6b7280;
   --border:#e5e7eb;
   --radius:16px;
+  --shadow:0 10px 30px rgba(0,0,0,.12);
 }
 
 *{box-sizing:border-box}
@@ -28,9 +29,7 @@ body{
 
 .page{
   min-height:100vh;
-  background:
-    url("My Refund-Hero Images-02 (1).jpg") right center / cover no-repeat,
-    #ffffff;
+  background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
 }
 
 /* ================= HEADER ================= */
@@ -38,7 +37,7 @@ body{
 .header{
   background:var(--g0);
   color:#fff;
-  padding:16px 24px;
+  padding:14px 24px;
 }
 
 .header-inner{
@@ -46,8 +45,7 @@ body{
   margin:0 auto;
   display:flex;
   align-items:center;
-  justify-content:flex-start;
-  gap:16px;
+  justify-content:space-between;
 }
 
 .brand{
@@ -56,9 +54,7 @@ body{
   gap:14px;
 }
 
-.brand img{
-  height:28px;
-}
+.brand img{height:26px}
 
 .brand-text{
   display:flex;
@@ -67,14 +63,20 @@ body{
 }
 
 .brand-text strong{
-  font-size:16px;
+  font-size:15px;
   font-weight:900;
 }
 
 .brand-text span{
-  font-size:13px;
+  font-size:12px;
   opacity:.9;
   font-weight:700;
+}
+
+.clock{
+  font-weight:900;
+  font-size:14px;
+  opacity:.95;
 }
 
 /* ================= CONTENT ================= */
@@ -82,64 +84,56 @@ body{
 .wrap{
   max-width:1200px;
   margin:0 auto;
-  padding:32px 24px 48px;
+  padding:36px 24px 60px;
 }
 
-.top-row{
-  display:flex;
-  align-items:flex-end;
-  justify-content:flex-start;
-  gap:24px;
-  margin-bottom:32px;
-}
-
+/* Greeting */
 .hello{
   font-size:26px;
   font-weight:900;
   color:var(--g0);
+  margin-bottom:28px;
 }
 
-.clock{
-  font-weight:900;
-  color:var(--muted);
-  font-size:14px;
-}
-
-/* ================= SECTIONS ================= */
-
-.section{
-  margin-bottom:36px;
+/* Panels */
+.panel{
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(4px);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px 22px;
+  margin-bottom:22px;
   max-width:520px;
 }
 
-.section-title{
-  font-size:18px;
+.panel h3{
+  margin:0 0 14px 0;
+  font-size:16px;
   font-weight:900;
   color:var(--g0);
-  margin-bottom:12px;
 }
 
-/* ================= COUNTERS ================= */
-
+/* Counters */
 .counter{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:12px;
   margin-bottom:12px;
 }
+
+.counter:last-child{margin-bottom:0}
 
 .counter label{
   font-weight:900;
 }
 
-.counter-controls{
+.controls{
   display:flex;
   align-items:center;
   gap:6px;
 }
 
-.counter-controls button{
+.controls button{
   width:32px;
   height:32px;
   border-radius:8px;
@@ -149,8 +143,8 @@ body{
   cursor:pointer;
 }
 
-.counter-controls input{
-  width:52px;
+.controls input{
+  width:50px;
   text-align:center;
   border:1px solid var(--border);
   border-radius:8px;
@@ -158,27 +152,7 @@ body{
   font-weight:900;
 }
 
-/* ================= BREAKS ================= */
-
-.break-box{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.break-box button{
-  border-radius:999px;
-  padding:8px 16px;
-  border:1px solid var(--g0);
-  background:var(--g0);
-  color:#fff;
-  font-weight:900;
-  cursor:pointer;
-}
-
-/* ================= NOTES ================= */
-
+/* Notes / info blocks */
 .note{
   background:var(--g2);
   border-radius:12px;
@@ -187,13 +161,30 @@ body{
   color:var(--g0);
 }
 
-/* ================= SUBMIT ================= */
-
-.submit-row{
-  margin-top:32px;
+/* Break button */
+.break-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
 }
 
-.submit-btn{
+.break-row button{
+  border-radius:999px;
+  padding:8px 16px;
+  border:none;
+  background:var(--g0);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* Submit */
+.submit{
+  margin-top:30px;
+}
+
+.submit button{
   border-radius:14px;
   padding:14px 22px;
   font-weight:900;
@@ -202,14 +193,6 @@ body{
   background:var(--g0);
   color:#fff;
   cursor:pointer;
-}
-
-/* ================= RESPONSIVE ================= */
-
-@media(max-width:900px){
-  .page{
-    background:#fff;
-  }
 }
 </style>
 </head>
@@ -228,24 +211,22 @@ body{
         <span>Work tracker</span>
       </div>
     </div>
+    <div class="clock" id="clock"></div>
   </div>
 </div>
 
 <!-- ================= CONTENT ================= -->
 <div class="wrap">
 
-  <div class="top-row">
-    <div class="hello" id="helloText">Hello</div>
-    <div class="clock" id="clock"></div>
-  </div>
+  <div class="hello" id="helloText">Hello</div>
 
-  <!-- LIVE INTERACTIONS -->
-  <div class="section">
-    <div class="section-title">Live interactions</div>
+  <!-- Live interactions -->
+  <div class="panel">
+    <h3>Live interactions</h3>
 
     <div class="counter">
       <label>Inbound</label>
-      <div class="counter-controls">
+      <div class="controls">
         <button onclick="adjust('inbound',-1)">−</button>
         <input id="inbound" value="0">
         <button onclick="adjust('inbound',1)">+</button>
@@ -254,7 +235,7 @@ body{
 
     <div class="counter">
       <label>Outbound</label>
-      <div class="counter-controls">
+      <div class="controls">
         <button onclick="adjust('outbound',-1)">−</button>
         <input id="outbound" value="0">
         <button onclick="adjust('outbound',1)">+</button>
@@ -263,7 +244,7 @@ body{
 
     <div class="counter">
       <label>Live chat</label>
-      <div class="counter-controls">
+      <div class="controls">
         <button onclick="adjust('chat',-1)">−</button>
         <input id="chat" value="0">
         <button onclick="adjust('chat',1)">+</button>
@@ -271,19 +252,19 @@ body{
     </div>
   </div>
 
-  <!-- ALLOCATED WORK -->
-  <div class="section">
-    <div class="section-title">Allocated work</div>
+  <!-- Allocated work -->
+  <div class="panel">
+    <h3>Allocated work</h3>
     <div class="note">Admin-assigned work will appear here.</div>
   </div>
 
-  <!-- DELINKS & CANCELLATIONS -->
-  <div class="section">
-    <div class="section-title">Delinks & cancellations</div>
+  <!-- Delinks -->
+  <div class="panel">
+    <h3>Delinks & cancellations</h3>
 
     <div class="counter">
       <label>Delinks</label>
-      <div class="counter-controls">
+      <div class="controls">
         <button onclick="adjust('delink',-1)">−</button>
         <input id="delink" value="0">
         <button onclick="adjust('delink',1)">+</button>
@@ -292,7 +273,7 @@ body{
 
     <div class="counter">
       <label>Cancellations</label>
-      <div class="counter-controls">
+      <div class="controls">
         <button onclick="adjust('cancel',-1)">−</button>
         <input id="cancel" value="0">
         <button onclick="adjust('cancel',1)">+</button>
@@ -300,45 +281,44 @@ body{
     </div>
   </div>
 
-  <!-- BREAKS -->
-  <div class="section">
-    <div class="section-title">Breaks</div>
-    <div class="break-box">
-      <div class="muted">Your allocated breaks will appear here.</div>
+  <!-- Breaks -->
+  <div class="panel">
+    <h3>Breaks</h3>
+    <div class="break-row">
+      <div class="note">Your allocated breaks will appear here.</div>
       <button>Acknowledge break</button>
     </div>
   </div>
 
-  <!-- NOTES -->
-  <div class="section">
-    <div class="section-title">Notes from admin</div>
+  <!-- Notes -->
+  <div class="panel">
+    <h3>Notes from admin</h3>
     <div class="note">No notes for today.</div>
   </div>
 
-  <!-- SUBMIT -->
-  <div class="submit-row">
-    <button class="submit-btn">Submit work</button>
+  <!-- Submit -->
+  <div class="submit">
+    <button>Submit work</button>
   </div>
 
 </div>
 </div>
 
 <script>
-/* ================= INIT STAFF ================= */
+/* Staff name */
 const name = localStorage.getItem("currentStaff") || "Staff";
 document.getElementById("staffNameLabel").textContent = name;
 document.getElementById("helloText").textContent = "Hello, " + name;
 
-/* ================= CLOCK ================= */
+/* Clock */
 function tick(){
-  const now = new Date();
   document.getElementById("clock").textContent =
-    now.toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+    new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 tick();
 setInterval(tick,1000);
 
-/* ================= COUNTERS ================= */
+/* Counters */
 function adjust(id,delta){
   const el = document.getElementById(id);
   let v = Number(el.value||0)+delta;
