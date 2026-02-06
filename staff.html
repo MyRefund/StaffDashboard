@@ -14,7 +14,7 @@
   --muted:#6b7280;
   --border:#e5e7eb;
   --radius:16px;
-  --shadow:0 10px 30px rgba(0,0,0,.12);
+  --shadow:0 12px 32px rgba(0,0,0,.14);
 }
 
 *{box-sizing:border-box}
@@ -54,12 +54,6 @@ body{
 
 .brand img{height:26px}
 
-.brand-text{
-  display:flex;
-  flex-direction:column;
-  line-height:1.1;
-}
-
 .brand-text strong{
   font-size:15px;
   font-weight:900;
@@ -87,16 +81,57 @@ body{
   font-size:26px;
   font-weight:900;
   color:var(--g0);
-  margin-bottom:20px;
+  margin-bottom:24px;
 }
 
-/* ===== PANELS ===== */
+/* ===== LAYOUT ===== */
+.layout{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:24px;
+}
+
+/* ===== LEFT COLUMN ===== */
+.side-card{
+  background:var(--g0);
+  color:#fff;
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:var(--shadow);
+  margin-bottom:18px;
+}
+
+.side-card h3{
+  margin:0 0 10px 0;
+  font-size:14px;
+  font-weight:900;
+}
+
+.side-card p{
+  margin:0;
+  font-size:13px;
+  line-height:1.4;
+  opacity:.95;
+}
+
+.side-card button{
+  margin-top:12px;
+  border:none;
+  border-radius:999px;
+  padding:8px 14px;
+  font-weight:900;
+  background:#fff;
+  color:var(--g0);
+  cursor:pointer;
+}
+
+/* ===== WORK PANELS ===== */
 .panel{
-  background:rgba(255,255,255,.95);
+  background:rgba(255,255,255,.96);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:22px;
-  margin-bottom:26px;
+  margin-bottom:22px;
 }
 
 .panel h3{
@@ -106,7 +141,7 @@ body{
   color:var(--g0);
 }
 
-/* Horizontal grids */
+/* ===== GRIDS ===== */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -126,7 +161,7 @@ body{
   margin-bottom:10px;
 }
 
-/* Counters */
+/* ===== COUNTERS ===== */
 .controls{
   display:flex;
   align-items:center;
@@ -152,36 +187,9 @@ body{
   font-weight:900;
 }
 
-/* Notes */
-.note{
-  background:var(--g2);
-  border-radius:12px;
-  padding:14px;
-  font-weight:800;
-  color:var(--g0);
-}
-
-/* Breaks */
-.break-panel{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-}
-
-.break-panel button{
-  border-radius:999px;
-  padding:8px 16px;
-  border:none;
-  background:var(--g0);
-  color:#fff;
-  font-weight:900;
-  cursor:pointer;
-}
-
-/* Submit */
+/* ===== SUBMIT ===== */
 .submit{
-  margin-top:30px;
+  margin-top:26px;
 }
 
 .submit button{
@@ -194,6 +202,11 @@ body{
   color:#fff;
   cursor:pointer;
 }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+}
 </style>
 </head>
 
@@ -204,7 +217,7 @@ body{
 <div class="header">
   <div class="header-inner">
     <div class="brand">
-      <img src="logo.png" alt="My Refund">
+      <img src="logo.png">
       <div class="brand-text">
         <strong id="staffNameLabel">Staff</strong>
         <span>Work tracker</span>
@@ -215,89 +228,95 @@ body{
 </div>
 
 <div class="wrap">
-
   <div class="hello" id="helloText">Hello</div>
 
-  <!-- WORK NOTES (TOP) -->
-  <div class="panel">
-    <h3>Work Notes</h3>
-    <div class="note">No work notes for today.</div>
-  </div>
+  <div class="layout">
 
-  <!-- LIVE INTERACTIONS -->
-  <div class="panel">
-    <h3>Live interactions</h3>
-    <div class="grid">
-      <div class="item">
-        <label>Inbound</label>
-        <div class="controls">
-          <button onclick="adj('inbound',-1)">−</button>
-          <input id="inbound" value="0">
-          <button onclick="adj('inbound',1)">+</button>
-        </div>
+    <!-- LEFT COLUMN -->
+    <div>
+      <div class="side-card">
+        <h3>Work Notes</h3>
+        <p>No work notes for today.</p>
       </div>
-      <div class="item">
-        <label>Outbound</label>
-        <div class="controls">
-          <button onclick="adj('outbound',-1)">−</button>
-          <input id="outbound" value="0">
-          <button onclick="adj('outbound',1)">+</button>
-        </div>
+
+      <div class="side-card">
+        <h3>Breaks</h3>
+        <p>No breaks scheduled.</p>
+        <button>Acknowledge break</button>
       </div>
-      <div class="item">
-        <label>Live chat</label>
-        <div class="controls">
-          <button onclick="adj('chat',-1)">−</button>
-          <input id="chat" value="0">
-          <button onclick="adj('chat',1)">+</button>
-        </div>
+
+      <div class="side-card">
+        <h3>Next Shift</h3>
+        <p>Tomorrow<br><strong>9:00am – 5:00pm</strong></p>
       </div>
     </div>
-  </div>
 
-  <!-- ALLOCATED WORK -->
-  <div class="panel">
-    <h3>Allocated work</h3>
-    <div class="note">Admin-assigned work will appear here.</div>
-  </div>
+    <!-- RIGHT COLUMN -->
+    <div>
 
-  <!-- DELINKS -->
-  <div class="panel">
-    <h3>Delinks & cancellations</h3>
-    <div class="grid">
-      <div class="item">
-        <label>Delinks</label>
-        <div class="controls">
-          <button onclick="adj('delink',-1)">−</button>
-          <input id="delink" value="0">
-          <button onclick="adj('delink',1)">+</button>
+      <div class="panel">
+        <h3>Live interactions</h3>
+        <div class="grid">
+          <div class="item">
+            <label>Inbound</label>
+            <div class="controls">
+              <button onclick="adj('inbound',-1)">−</button>
+              <input id="inbound" value="0">
+              <button onclick="adj('inbound',1)">+</button>
+            </div>
+          </div>
+          <div class="item">
+            <label>Outbound</label>
+            <div class="controls">
+              <button onclick="adj('outbound',-1)">−</button>
+              <input id="outbound" value="0">
+              <button onclick="adj('outbound',1)">+</button>
+            </div>
+          </div>
+          <div class="item">
+            <label>Live chat</label>
+            <div class="controls">
+              <button onclick="adj('chat',-1)">−</button>
+              <input id="chat" value="0">
+              <button onclick="adj('chat',1)">+</button>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="item">
-        <label>Cancellations</label>
-        <div class="controls">
-          <button onclick="adj('cancel',-1)">−</button>
-          <input id="cancel" value="0">
-          <button onclick="adj('cancel',1)">+</button>
+
+      <div class="panel">
+        <h3>Allocated work</h3>
+        <p>No allocated work for today.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Delinks & cancellations</h3>
+        <div class="grid">
+          <div class="item">
+            <label>Delinks</label>
+            <div class="controls">
+              <button onclick="adj('delink',-1)">−</button>
+              <input id="delink" value="0">
+              <button onclick="adj('delink',1)">+</button>
+            </div>
+          </div>
+          <div class="item">
+            <label>Cancellations</label>
+            <div class="controls">
+              <button onclick="adj('cancel',-1)">−</button>
+              <input id="cancel" value="0">
+              <button onclick="adj('cancel',1)">+</button>
+            </div>
+          </div>
         </div>
       </div>
+
+      <div class="submit">
+        <button>Submit work</button>
+      </div>
+
     </div>
   </div>
-
-  <!-- BREAKS (SEPARATE) -->
-  <div class="panel">
-    <h3>Breaks</h3>
-    <div class="break-panel">
-      <div class="note">Your allocated breaks will appear here.</div>
-      <button>Acknowledge break</button>
-    </div>
-  </div>
-
-  <!-- SUBMIT -->
-  <div class="submit">
-    <button>Submit work</button>
-  </div>
-
 </div>
 </div>
 
