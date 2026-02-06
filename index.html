@@ -15,6 +15,7 @@
   --border:#e5e7eb;
   --radius:16px;
   --shadow:0 6px 18px rgba(0,0,0,.06);
+  --bg-image:url("hero.jpg"); /* ← UPDATE filename if needed */
 }
 
 *{box-sizing:border-box}
@@ -22,8 +23,11 @@
 body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background:#ffffff;
   color:var(--text);
+  min-height:100vh;
+  background:
+    linear-gradient(rgba(255,255,255,.92), rgba(255,255,255,.92)),
+    var(--bg-image) center / cover no-repeat fixed;
 }
 
 /* ================= HEADER ================= */
@@ -188,6 +192,7 @@ body{
   font-weight:700;
 }
 
+/* Empty */
 .empty{
   padding:16px;
   background:var(--g2);
@@ -227,7 +232,6 @@ body{
 <!-- ================= CONTENT ================= -->
 <div class="wrap">
 
-  <!-- Start day -->
   <div class="section">
     <div class="section-title">Start your day</div>
     <div class="start-grid">
@@ -237,7 +241,6 @@ body{
     </div>
   </div>
 
-  <!-- Overview -->
   <div class="section">
     <div class="section-title">Today’s activity</div>
     <div id="grid" class="grid"></div>
@@ -246,11 +249,9 @@ body{
 </div>
 
 <script>
-/* ================= CONFIG ================= */
 const REFRESH_MS = 30000;
 const TZ = "Pacific/Auckland";
 
-/* ================= HELPERS ================= */
 function todayISO(){
   return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
 }
@@ -274,6 +275,7 @@ function startDay(name){
   localStorage.setItem("staffStatus_"+name, JSON.stringify({
     date: today,
     state: "working",
+    scheduled: "—",        // placeholder for roster
     start: nowTime()
   }));
 
@@ -307,10 +309,9 @@ function render(){
 
     let cls="offline", label="Not logged in", time="";
     if(s.state==="working"){
-      cls="working"; label="Working"; time="Started: "+s.start;
-    }
-    if(s.state==="break"){
-      cls="break"; label="On break"; time="Break started: "+s.breakStart;
+      cls="working";
+      label="Working";
+      time = `Scheduled: ${s.scheduled}<br>Started: ${s.start}`;
     }
 
     const el = document.createElement("div");
@@ -326,7 +327,6 @@ function render(){
   });
 }
 
-/* ================= INIT ================= */
 document.getElementById("todayLabel").textContent = todayHuman();
 render();
 setInterval(render, REFRESH_MS);
