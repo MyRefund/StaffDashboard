@@ -1,317 +1,362 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>My Refund — Staff</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Refund — Staff</title>
 
-  <style>
-    :root{
-      --g0:#094B35;
-      --g1:#03953F;
-      --g2:#ECFDF5;
-      --g3:#BBF7D0;
-      --bg:#f6f7f8;
-      --text:#111827;
-      --muted:#6b7280;
-      --border:#e5e7eb;
-      --radius:16px;
-      --shadow:0 10px 25px rgba(0,0,0,.06);
-    }
+<style>
+:root{
+  --g0:#094B35;
+  --g1:#03953F;
+  --g2:#ECFDF5;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --radius:16px;
+  --shadow:0 6px 18px rgba(0,0,0,.06);
+}
 
-    body{
-      margin:0;
-      background:#fff;
-      color:var(--text);
-      font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    }
+*{box-sizing:border-box}
 
-    header{
-      background:var(--g0);
-      color:#fff;
-      padding:18px 22px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
+body{
+  margin:0;
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background:#fff;
+  color:var(--text);
+}
 
-    header img{
-      height:28px;
-    }
+/* ================= HEADER ================= */
 
-    .clock{
-      font-weight:800;
-      font-size:15px;
-      letter-spacing:.3px;
-    }
+.header{
+  background:var(--g0);
+  color:#fff;
+  padding:16px 24px;
+}
 
-    main{
-      max-width:1100px;
-      margin:0 auto;
-      padding:28px 18px 48px;
-    }
+.header-inner{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
 
-    h1{
-      color:var(--g0);
-      margin:0 0 6px;
-      font-size:26px;
-    }
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
 
-    .sub{
-      color:var(--muted);
-      font-weight:700;
-      margin-bottom:22px;
-    }
+.brand img{
+  height:28px;
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:18px;
-    }
+.brand-text{
+  display:flex;
+  flex-direction:column;
+  line-height:1.15;
+}
 
-    .card{
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:18px;
-    }
+.brand-text strong{
+  font-size:16px;
+  font-weight:900;
+}
 
-    .card h2{
-      margin:0 0 12px;
-      font-size:16px;
-      color:var(--g0);
-    }
+.brand-text span{
+  font-size:13px;
+  opacity:.9;
+  font-weight:700;
+}
 
-    .row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:12px;
-      gap:10px;
-    }
+/* ================= CONTENT ================= */
 
-    .label{
-      font-weight:800;
-    }
+.wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:32px 24px 48px;
+}
 
-    .controls{
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
+.top-row{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  margin-bottom:32px;
+}
 
-    button.step{
-      width:32px;
-      height:32px;
-      border-radius:8px;
-      border:1px solid var(--border);
-      background:#fff;
-      font-weight:900;
-      cursor:pointer;
-    }
+.hello{
+  font-size:26px;
+  font-weight:900;
+  color:var(--g0);
+}
 
-    input.count{
-      width:60px;
-      text-align:center;
-      padding:6px;
-      border-radius:8px;
-      border:1px solid var(--border);
-      font-weight:800;
-    }
+.clock{
+  font-weight:900;
+  color:var(--muted);
+  font-size:14px;
+}
 
-    .note-box{
-      background:var(--g2);
-      border:1px solid var(--g3);
-      border-radius:12px;
-      padding:12px;
-      font-weight:700;
-      color:var(--g0);
-      line-height:1.4;
-    }
+.section{
+  margin-bottom:36px;
+}
 
-    .empty{
-      color:var(--muted);
-      font-weight:700;
-    }
+.section-title{
+  font-size:18px;
+  font-weight:900;
+  color:var(--g0);
+  margin-bottom:12px;
+}
 
-    .submit{
-      margin-top:28px;
-      display:flex;
-      justify-content:flex-end;
-    }
+/* ================= CARDS ================= */
 
-    .submit button{
-      background:var(--g0);
-      color:#fff;
-      border:none;
-      border-radius:14px;
-      padding:14px 22px;
-      font-size:15px;
-      font-weight:900;
-      cursor:pointer;
-    }
-  </style>
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px;
+}
+
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+}
+
+/* ================= COUNTERS ================= */
+
+.counter{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.counter label{
+  font-weight:900;
+}
+
+.counter-controls{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.counter-controls button{
+  width:32px;
+  height:32px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.counter-controls input{
+  width:52px;
+  text-align:center;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:6px;
+  font-weight:900;
+}
+
+/* ================= BREAKS ================= */
+
+.break-box{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.break-box button{
+  border-radius:999px;
+  padding:8px 16px;
+  border:1px solid var(--g0);
+  background:var(--g0);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* ================= NOTES ================= */
+
+.note{
+  background:var(--g2);
+  border-radius:12px;
+  padding:14px;
+  font-weight:800;
+  color:var(--g0);
+}
+
+/* ================= SUBMIT ================= */
+
+.submit-row{
+  margin-top:32px;
+  display:flex;
+  justify-content:flex-end;
+}
+
+.submit-btn{
+  border-radius:14px;
+  padding:14px 22px;
+  font-weight:900;
+  font-size:15px;
+  border:none;
+  background:var(--g0);
+  color:#fff;
+  cursor:pointer;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:700px){
+  .top-row{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-<header>
-  <img src="logo.png" alt="My Refund" />
-  <div class="clock" id="clock">--:--:--</div>
-</header>
-
-<main>
-
-  <h1 id="greeting">Hello</h1>
-  <div class="sub">Here’s what’s planned for your day</div>
-
-  <div class="grid">
-
-    <!-- BREAKS -->
-    <div class="card">
-      <h2>Your breaks today</h2>
-
-      <div class="row">
-        <div class="label">Morning break</div>
-        <div class="muted">10:30 – 10:45</div>
-      </div>
-
-      <div class="row">
-        <div class="label">Lunch</div>
-        <div class="muted">12:30 – 1:00</div>
-      </div>
-
-      <div class="row">
-        <div class="label">Afternoon break</div>
-        <div class="muted">3:00 – 3:15</div>
+<!-- ================= HEADER ================= -->
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="My Refund">
+      <div class="brand-text">
+        <strong id="staffNameLabel">Staff</strong>
+        <span>Work tracker</span>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- ADMIN NOTES -->
-    <div class="card">
-      <h2>Notes from admin</h2>
-      <div class="note-box">
-        Please focus on Emails first this morning.  
-        Live Chat coverage will be lighter after lunch.
-      </div>
-      <!-- Empty state example -->
-      <!-- <div class="empty">No notes for today.</div> -->
-    </div>
+<!-- ================= CONTENT ================= -->
+<div class="wrap">
 
+  <div class="top-row">
+    <div class="hello" id="helloText">Hello</div>
+    <div class="clock" id="clock"></div>
   </div>
 
-  <br/>
+  <!-- LIVE INTERACTIONS -->
+  <div class="section">
+    <div class="section-title">Live interactions</div>
+    <div class="card grid-3">
 
-  <div class="grid">
-
-    <!-- CORE INTERACTIONS -->
-    <div class="card">
-      <h2>Core interactions</h2>
-
-      <div class="row">
-        <div class="label">Inbound</div>
-        <div class="controls">
-          <button class="step" onclick="step('inbound',-1)">−</button>
-          <input id="inbound" class="count" value="0" />
-          <button class="step" onclick="step('inbound',1)">+</button>
+      <div class="counter">
+        <label>Inbound</label>
+        <div class="counter-controls">
+          <button onclick="adjust('inbound',-1)">−</button>
+          <input id="inbound" value="0">
+          <button onclick="adjust('inbound',1)">+</button>
         </div>
       </div>
 
-      <div class="row">
-        <div class="label">Outbound</div>
-        <div class="controls">
-          <button class="step" onclick="step('outbound',-1)">−</button>
-          <input id="outbound" class="count" value="0" />
-          <button class="step" onclick="step('outbound',1)">+</button>
+      <div class="counter">
+        <label>Outbound</label>
+        <div class="counter-controls">
+          <button onclick="adjust('outbound',-1)">−</button>
+          <input id="outbound" value="0">
+          <button onclick="adjust('outbound',1)">+</button>
         </div>
       </div>
 
-      <div class="row">
-        <div class="label">Live Chat</div>
-        <div class="controls">
-          <button class="step" onclick="step('chat',-1)">−</button>
-          <input id="chat" class="count" value="0" />
-          <button class="step" onclick="step('chat',1)">+</button>
+      <div class="counter">
+        <label>Live chat</label>
+        <div class="counter-controls">
+          <button onclick="adjust('chat',-1)">−</button>
+          <input id="chat" value="0">
+          <button onclick="adjust('chat',1)">+</button>
         </div>
       </div>
+
     </div>
-
-    <!-- ALLOCATED WORK -->
-    <div class="card">
-      <h2>Allocated work</h2>
-
-      <div class="row">
-        <div class="label">Emails</div>
-        <div class="controls">
-          <button class="step" onclick="step('emails',-1)">−</button>
-          <input id="emails" class="count" value="0" />
-          <button class="step" onclick="step('emails',1)">+</button>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="label">A2A / Unverified</div>
-        <div class="controls">
-          <button class="step" onclick="step('a2a',-1)">−</button>
-          <input id="a2a" class="count" value="0" />
-          <button class="step" onclick="step('a2a',1)">+</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- DELINKS -->
-    <div class="card">
-      <h2>Delinks & cancellations</h2>
-
-      <div class="row">
-        <div class="label">Delinks</div>
-        <div class="controls">
-          <button class="step" onclick="step('delink',-1)">−</button>
-          <input id="delink" class="count" value="0" />
-          <button class="step" onclick="step('delink',1)">+</button>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="label">Cancellations</div>
-        <div class="controls">
-          <button class="step" onclick="step('cancel',-1)">−</button>
-          <input id="cancel" class="count" value="0" />
-          <button class="step" onclick="step('cancel',1)">+</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-  <div class="submit">
-    <button onclick="submitWork()">Submit work</button>
+  <!-- ALLOCATED WORK -->
+  <div class="section">
+    <div class="section-title">Allocated work</div>
+    <div class="card">
+      <div class="muted">Admin-assigned work will appear here.</div>
+    </div>
   </div>
 
-</main>
+  <!-- DELINKS / CANCELLATIONS -->
+  <div class="section">
+    <div class="section-title">Delinks & cancellations</div>
+    <div class="card grid-3">
+      <div class="counter">
+        <label>Delinks</label>
+        <div class="counter-controls">
+          <button onclick="adjust('delink',-1)">−</button>
+          <input id="delink" value="0">
+          <button onclick="adjust('delink',1)">+</button>
+        </div>
+      </div>
+
+      <div class="counter">
+        <label>Cancellations</label>
+        <div class="counter-controls">
+          <button onclick="adjust('cancel',-1)">−</button>
+          <input id="cancel" value="0">
+          <button onclick="adjust('cancel',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BREAKS -->
+  <div class="section">
+    <div class="section-title">Breaks</div>
+    <div class="card break-box">
+      <div class="muted">Your allocated breaks will show here.</div>
+      <button>Acknowledge break</button>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="section">
+    <div class="section-title">Notes from admin</div>
+    <div class="note">
+      No notes for today.
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-row">
+    <button class="submit-btn">Submit work</button>
+  </div>
+
+</div>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const name = params.get("name") || "there";
-  document.getElementById("greeting").textContent = `Hello, ${name}`;
+/* ================= INIT STAFF ================= */
+const name = localStorage.getItem("currentStaff") || "Staff";
+document.getElementById("staffNameLabel").textContent = name;
+document.getElementById("helloText").textContent = "Hello, " + name;
 
-  function tick(){
-    const now = new Date();
-    document.getElementById("clock").textContent =
-      now.toLocaleTimeString("en-NZ",{ hour12:false });
-  }
-  setInterval(tick,1000);
-  tick();
+/* ================= CLOCK ================= */
+function tick(){
+  const now = new Date();
+  document.getElementById("clock").textContent =
+    now.toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+}
+tick();
+setInterval(tick,1000);
 
-  function step(id,delta){
-    const el = document.getElementById(id);
-    el.value = Math.max(0,(+el.value||0)+delta);
-  }
-
-  function submitWork(){
-    alert("Submission wiring remains unchanged.");
-  }
+/* ================= COUNTERS ================= */
+function adjust(id,delta){
+  const el = document.getElementById(id);
+  let v = Number(el.value||0)+delta;
+  if(v<0) v=0;
+  el.value=v;
+}
 </script>
 
 </body>
