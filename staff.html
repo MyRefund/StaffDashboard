@@ -14,7 +14,6 @@
   --muted:#6b7280;
   --border:#e5e7eb;
   --radius:16px;
-  --shadow:0 6px 18px rgba(0,0,0,.06);
 }
 
 *{box-sizing:border-box}
@@ -22,8 +21,16 @@
 body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background:#fff;
   color:var(--text);
+}
+
+/* ================= PAGE BACKGROUND ================= */
+
+.page{
+  min-height:100vh;
+  background:
+    url("My Refund-Hero Images-02 (1).jpg") right center / cover no-repeat,
+    #ffffff;
 }
 
 /* ================= HEADER ================= */
@@ -39,7 +46,8 @@ body{
   margin:0 auto;
   display:flex;
   align-items:center;
-  justify-content:space-between;
+  justify-content:flex-start;
+  gap:16px;
 }
 
 .brand{
@@ -80,7 +88,8 @@ body{
 .top-row{
   display:flex;
   align-items:flex-end;
-  justify-content:space-between;
+  justify-content:flex-start;
+  gap:24px;
   margin-bottom:32px;
 }
 
@@ -96,8 +105,11 @@ body{
   font-size:14px;
 }
 
+/* ================= SECTIONS ================= */
+
 .section{
   margin-bottom:36px;
+  max-width:520px;
 }
 
 .section-title{
@@ -107,22 +119,6 @@ body{
   margin-bottom:12px;
 }
 
-/* ================= CARDS ================= */
-
-.card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:18px;
-}
-
-.grid-3{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;
-}
-
 /* ================= COUNTERS ================= */
 
 .counter{
@@ -130,6 +126,7 @@ body{
   align-items:center;
   justify-content:space-between;
   gap:12px;
+  margin-bottom:12px;
 }
 
 .counter label{
@@ -194,8 +191,6 @@ body{
 
 .submit-row{
   margin-top:32px;
-  display:flex;
-  justify-content:flex-end;
 }
 
 .submit-btn{
@@ -211,17 +206,17 @@ body{
 
 /* ================= RESPONSIVE ================= */
 
-@media(max-width:700px){
-  .top-row{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:8px;
+@media(max-width:900px){
+  .page{
+    background:#fff;
   }
 }
 </style>
 </head>
 
 <body>
+
+<div class="page">
 
 <!-- ================= HEADER ================= -->
 <div class="header">
@@ -247,66 +242,60 @@ body{
   <!-- LIVE INTERACTIONS -->
   <div class="section">
     <div class="section-title">Live interactions</div>
-    <div class="card grid-3">
 
-      <div class="counter">
-        <label>Inbound</label>
-        <div class="counter-controls">
-          <button onclick="adjust('inbound',-1)">−</button>
-          <input id="inbound" value="0">
-          <button onclick="adjust('inbound',1)">+</button>
-        </div>
+    <div class="counter">
+      <label>Inbound</label>
+      <div class="counter-controls">
+        <button onclick="adjust('inbound',-1)">−</button>
+        <input id="inbound" value="0">
+        <button onclick="adjust('inbound',1)">+</button>
       </div>
+    </div>
 
-      <div class="counter">
-        <label>Outbound</label>
-        <div class="counter-controls">
-          <button onclick="adjust('outbound',-1)">−</button>
-          <input id="outbound" value="0">
-          <button onclick="adjust('outbound',1)">+</button>
-        </div>
+    <div class="counter">
+      <label>Outbound</label>
+      <div class="counter-controls">
+        <button onclick="adjust('outbound',-1)">−</button>
+        <input id="outbound" value="0">
+        <button onclick="adjust('outbound',1)">+</button>
       </div>
+    </div>
 
-      <div class="counter">
-        <label>Live chat</label>
-        <div class="counter-controls">
-          <button onclick="adjust('chat',-1)">−</button>
-          <input id="chat" value="0">
-          <button onclick="adjust('chat',1)">+</button>
-        </div>
+    <div class="counter">
+      <label>Live chat</label>
+      <div class="counter-controls">
+        <button onclick="adjust('chat',-1)">−</button>
+        <input id="chat" value="0">
+        <button onclick="adjust('chat',1)">+</button>
       </div>
-
     </div>
   </div>
 
   <!-- ALLOCATED WORK -->
   <div class="section">
     <div class="section-title">Allocated work</div>
-    <div class="card">
-      <div class="muted">Admin-assigned work will appear here.</div>
-    </div>
+    <div class="note">Admin-assigned work will appear here.</div>
   </div>
 
-  <!-- DELINKS / CANCELLATIONS -->
+  <!-- DELINKS & CANCELLATIONS -->
   <div class="section">
     <div class="section-title">Delinks & cancellations</div>
-    <div class="card grid-3">
-      <div class="counter">
-        <label>Delinks</label>
-        <div class="counter-controls">
-          <button onclick="adjust('delink',-1)">−</button>
-          <input id="delink" value="0">
-          <button onclick="adjust('delink',1)">+</button>
-        </div>
-      </div>
 
-      <div class="counter">
-        <label>Cancellations</label>
-        <div class="counter-controls">
-          <button onclick="adjust('cancel',-1)">−</button>
-          <input id="cancel" value="0">
-          <button onclick="adjust('cancel',1)">+</button>
-        </div>
+    <div class="counter">
+      <label>Delinks</label>
+      <div class="counter-controls">
+        <button onclick="adjust('delink',-1)">−</button>
+        <input id="delink" value="0">
+        <button onclick="adjust('delink',1)">+</button>
+      </div>
+    </div>
+
+    <div class="counter">
+      <label>Cancellations</label>
+      <div class="counter-controls">
+        <button onclick="adjust('cancel',-1)">−</button>
+        <input id="cancel" value="0">
+        <button onclick="adjust('cancel',1)">+</button>
       </div>
     </div>
   </div>
@@ -314,8 +303,8 @@ body{
   <!-- BREAKS -->
   <div class="section">
     <div class="section-title">Breaks</div>
-    <div class="card break-box">
-      <div class="muted">Your allocated breaks will show here.</div>
+    <div class="break-box">
+      <div class="muted">Your allocated breaks will appear here.</div>
       <button>Acknowledge break</button>
     </div>
   </div>
@@ -323,9 +312,7 @@ body{
   <!-- NOTES -->
   <div class="section">
     <div class="section-title">Notes from admin</div>
-    <div class="note">
-      No notes for today.
-    </div>
+    <div class="note">No notes for today.</div>
   </div>
 
   <!-- SUBMIT -->
@@ -333,6 +320,7 @@ body{
     <button class="submit-btn">Submit work</button>
   </div>
 
+</div>
 </div>
 
 <script>
