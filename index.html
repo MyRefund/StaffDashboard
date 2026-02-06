@@ -12,9 +12,6 @@
   --g2:#ECFDF5;
   --text:#111827;
   --muted:#6b7280;
-  --border:#e5e7eb;
-  --radius:16px;
-  --shadow:0 6px 18px rgba(0,0,0,.06);
 }
 
 *{box-sizing:border-box}
@@ -23,9 +20,7 @@ body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color:var(--text);
-  min-height:100vh;
-  background:
-    url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat fixed;
+  background:#ffffff;
 }
 
 /* ================= HEADER ================= */
@@ -42,7 +37,6 @@ body{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:16px;
 }
 
 .brand{
@@ -51,9 +45,7 @@ body{
   gap:14px;
 }
 
-.brand img{
-  height:28px;
-}
+.brand img{height:28px}
 
 .title{
   display:flex;
@@ -61,16 +53,8 @@ body{
   line-height:1.2;
 }
 
-.title strong{
-  font-size:16px;
-  font-weight:900;
-}
-
-.title span{
-  font-size:13px;
-  opacity:.9;
-  font-weight:700;
-}
+.title strong{font-size:16px;font-weight:900}
+.title span{font-size:13px;opacity:.9;font-weight:700}
 
 .menu{
   display:flex;
@@ -95,81 +79,75 @@ body{
   color:var(--g0);
 }
 
-/* ================= PAGE LAYOUT ================= */
+/* ================= LAYOUT ================= */
 
 .page{
-  display:flex;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
   min-height:calc(100vh - 72px);
 }
 
-.left-panel{
-  width:420px;
-  max-width:100%;
-  background:#ffffff;
-  box-shadow:4px 0 24px rgba(0,0,0,.08);
-  overflow-y:auto;
-  border-right:1px solid rgba(0,0,0,.06);
+/* LEFT CONTENT (ON IMAGE WALL) */
+.left{
+  padding:48px 48px 48px 72px;
+  background:
+    url("My Refund-Hero Images-02 (1).jpg") left center / cover no-repeat;
+}
+
+/* RIGHT IMAGE ONLY */
+.right{
+  background:
+    url("My Refund-Hero Images-02 (1).jpg") right center / cover no-repeat;
 }
 
 /* ================= CONTENT ================= */
 
-.wrap{
-  padding:24px;
-}
-
-.section{
-  margin-bottom:32px;
-}
+.section{margin-bottom:40px}
 
 .section-title{
   font-size:18px;
   font-weight:900;
   color:var(--g0);
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
-/* Start day buttons (STACKED) */
+/* Start buttons */
 .start-stack{
   display:flex;
   flex-direction:column;
   gap:12px;
+  max-width:320px;
 }
 
 .start-btn{
-  display:block;
-  text-decoration:none;
-  text-align:left;
   border-radius:14px;
   padding:14px 16px;
-  border:1px solid var(--g0);
   background:var(--g0);
   color:#fff;
   font-weight:900;
   font-size:15px;
-  cursor:pointer;
+  text-decoration:none;
 }
 
-.start-btn:hover{
-  background:#0b5c42;
-}
+.start-btn:hover{background:#0b5c42}
 
-/* Staff cards (STACKED) */
+/* Staff status */
 .stack{
   display:flex;
   flex-direction:column;
-  gap:12px;
+  gap:14px;
+  max-width:360px;
 }
 
 .card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(4px);
+  border-radius:16px;
   padding:16px;
 }
 
 .card h3{
-  margin:0 0 8px 0;
+  margin:0 0 6px;
   font-size:15px;
 }
 
@@ -191,10 +169,6 @@ body{
 .break .dot{background:#f59e0b}
 .offline .dot{background:#9ca3af}
 
-.working{color:#065f46}
-.break{color:#92400e}
-.offline{color:#6b7280}
-
 .time{
   margin-top:6px;
   font-size:12px;
@@ -202,29 +176,18 @@ body{
   font-weight:700;
 }
 
-.empty{
-  padding:16px;
-  background:var(--g2);
-  border:1px dashed rgba(3,149,63,.35);
-  border-radius:14px;
-  font-weight:900;
-  color:var(--g0);
-}
-
 /* Responsive */
 @media(max-width:900px){
-  .page{flex-direction:column}
-  .left-panel{
-    width:100%;
-    box-shadow:none;
-  }
+  .page{grid-template-columns:1fr}
+  .right{display:none}
+  .left{padding:32px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
+<!-- HEADER -->
 <div class="header">
   <div class="header-inner">
     <div class="brand">
@@ -242,102 +205,77 @@ body{
   </div>
 </div>
 
-<!-- ================= PAGE ================= -->
+<!-- PAGE -->
 <div class="page">
-  <div class="left-panel">
-    <div class="wrap">
+  <div class="left">
 
-      <!-- Start day -->
-      <div class="section">
-        <div class="section-title">Start your day</div>
-        <div class="start-stack">
-          <a href="staff.html" class="start-btn" onclick="startDay('Emma')">Emma</a>
-          <a href="staff.html" class="start-btn" onclick="startDay('Maddy')">Maddy</a>
-          <a href="staff.html" class="start-btn" onclick="startDay('Pepe')">Pepe</a>
-        </div>
+    <div class="section">
+      <div class="section-title">Start your day</div>
+      <div class="start-stack">
+        <a href="staff.html" class="start-btn" onclick="startDay('Emma')">Emma</a>
+        <a href="staff.html" class="start-btn" onclick="startDay('Maddy')">Maddy</a>
+        <a href="staff.html" class="start-btn" onclick="startDay('Pepe')">Pepe</a>
       </div>
-
-      <!-- Overview -->
-      <div class="section">
-        <div class="section-title">Today’s activity</div>
-        <div id="stack" class="stack"></div>
-      </div>
-
     </div>
+
+    <div class="section">
+      <div class="section-title">Today’s activity</div>
+      <div id="stack" class="stack"></div>
+    </div>
+
   </div>
+
+  <div class="right"></div>
 </div>
 
 <script>
-/* ================= CONFIG ================= */
-const REFRESH_MS = 30000;
-const TZ = "Pacific/Auckland";
+const TZ="Pacific/Auckland", REFRESH_MS=30000;
 
-/* ================= HELPERS ================= */
+function todayHuman(){
+  return new Date().toLocaleDateString("en-NZ",{
+    weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ
+  });
+}
 function todayISO(){
   return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
 }
 function nowTime(){
   return new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",timeZone:TZ});
 }
-function todayHuman(){
-  return new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
-}
 
-/* ================= LOGIN ================= */
 function startDay(name){
-  const today = todayISO();
-
-  let staff = JSON.parse(localStorage.getItem("staffList") || "[]");
+  const today=todayISO();
+  let staff=JSON.parse(localStorage.getItem("staffList")||"[]");
   if(!staff.includes(name)){
     staff.push(name);
-    localStorage.setItem("staffList", JSON.stringify(staff));
+    localStorage.setItem("staffList",JSON.stringify(staff));
   }
-
-  localStorage.setItem("staffStatus_"+name, JSON.stringify({
-    date: today,
-    state: "working",
-    start: nowTime()
+  localStorage.setItem("staffStatus_"+name,JSON.stringify({
+    date:today,state:"working",start:nowTime()
   }));
-
-  localStorage.setItem("currentStaff", name);
+  localStorage.setItem("currentStaff",name);
 }
 
-/* ================= OVERVIEW ================= */
 function loadStaff(){
-  return JSON.parse(localStorage.getItem("staffList") || "[]");
+  return JSON.parse(localStorage.getItem("staffList")||"[]");
 }
 function loadStatus(name){
-  const today = todayISO();
-  const s = JSON.parse(localStorage.getItem("staffStatus_"+name) || "{}");
-  if(s.date !== today) return {state:"offline"};
+  const s=JSON.parse(localStorage.getItem("staffStatus_"+name)||"{}");
+  if(s.date!==todayISO()) return {state:"offline"};
   return s;
 }
 
 function render(){
-  const stack = document.getElementById("stack");
-  stack.innerHTML = "";
-
-  const staff = loadStaff();
-
-  if(!staff.length){
-    stack.innerHTML = `<div class="empty">No staff have logged in yet today.</div>`;
-    return;
-  }
-
+  const stack=document.getElementById("stack");
+  stack.innerHTML="";
+  const staff=loadStaff();
   staff.forEach(name=>{
-    const s = loadStatus(name);
-
-    let cls="offline", label="Not logged in", time="";
-    if(s.state==="working"){
-      cls="working"; label="Working"; time="Started: "+s.start;
-    }
-    if(s.state==="break"){
-      cls="break"; label="On break"; time="Break started: "+s.breakStart;
-    }
-
-    const el = document.createElement("div");
-    el.className = `card ${cls}`;
-    el.innerHTML = `
+    const s=loadStatus(name);
+    let label="Not logged in", cls="offline", time="";
+    if(s.state==="working"){cls="working";label="Working";time="Started: "+s.start}
+    const el=document.createElement("div");
+    el.className=`card ${cls}`;
+    el.innerHTML=`
       <h3>${name}</h3>
       <div class="status ${cls}">
         <span class="dot"></span>${label}
@@ -348,10 +286,9 @@ function render(){
   });
 }
 
-/* ================= INIT ================= */
-document.getElementById("todayLabel").textContent = todayHuman();
+document.getElementById("todayLabel").textContent=todayHuman();
 render();
-setInterval(render, REFRESH_MS);
+setInterval(render,REFRESH_MS);
 </script>
 
 </body>
