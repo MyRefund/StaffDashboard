@@ -9,9 +9,9 @@
 :root{
   --g0:#094B35;
   --g1:#03953F;
-  --g2:#ECFDF5;
   --text:#111827;
   --muted:#6b7280;
+  --radius:16px;
 }
 
 *{box-sizing:border-box}
@@ -20,7 +20,6 @@ body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color:var(--text);
-  background:#ffffff;
 }
 
 /* ================= HEADER ================= */
@@ -32,7 +31,7 @@ body{
 }
 
 .header-inner{
-  max-width:1200px;
+  max-width:1400px;
   margin:0 auto;
   display:flex;
   align-items:center;
@@ -45,27 +44,39 @@ body{
   gap:14px;
 }
 
-.brand img{height:28px}
-
-.title{
-  display:flex;
-  flex-direction:column;
-  line-height:1.2;
+.brand img{
+  height:28px;
 }
 
-.title strong{font-size:16px;font-weight:900}
-.title span{font-size:13px;opacity:.9;font-weight:700}
+.brand-text{
+  display:flex;
+  flex-direction:column;
+  line-height:1.15;
+}
+
+.brand-text strong{
+  font-size:16px;
+  font-weight:900;
+}
+
+.brand-text span{
+  font-size:13px;
+  opacity:.9;
+  font-weight:700;
+}
 
 .menu{
   display:flex;
   gap:10px;
 }
 
-.menu a{text-decoration:none}
+.menu a{
+  text-decoration:none;
+}
 
 .menu button{
   border-radius:999px;
-  padding:8px 14px;
+  padding:8px 16px;
   font-weight:900;
   font-size:13px;
   border:1px solid #fff;
@@ -79,30 +90,20 @@ body{
   color:var(--g0);
 }
 
-/* ================= LAYOUT ================= */
+/* ================= PAGE LAYOUT ================= */
 
 .page{
   display:grid;
   grid-template-columns: 1fr 1fr;
   min-height:calc(100vh - 72px);
+  background:url("My Refund-Hero Images-02 (1).jpg") center center / cover no-repeat;
 }
 
-/* LEFT CONTENT (ON IMAGE WALL) */
+/* ================= LEFT CONTENT ================= */
+
 .left{
-  padding:48px 48px 48px 72px;
-  background:
-    url("My Refund-Hero Images-02 (1).jpg") left center / cover no-repeat;
+  padding:48px 56px;
 }
-
-/* RIGHT IMAGE ONLY */
-.right{
-  background:
-    url("My Refund-Hero Images-02 (1).jpg") right center / cover no-repeat;
-}
-
-/* ================= CONTENT ================= */
-
-.section{margin-bottom:40px}
 
 .section-title{
   font-size:18px;
@@ -112,62 +113,72 @@ body{
 }
 
 /* Start buttons */
-.start-stack{
+
+.start-list{
   display:flex;
   flex-direction:column;
   gap:12px;
-  max-width:320px;
+  margin-bottom:36px;
 }
 
 .start-btn{
-  border-radius:14px;
-  padding:14px 16px;
   background:var(--g0);
   color:#fff;
+  border:none;
+  border-radius:14px;
+  padding:14px 18px;
   font-weight:900;
   font-size:15px;
-  text-decoration:none;
+  cursor:pointer;
+  text-align:left;
 }
 
-.start-btn:hover{background:#0b5c42}
+.start-btn:hover{
+  background:#0b5c42;
+}
 
-/* Staff status */
-.stack{
+/* Status cards */
+
+.status-list{
   display:flex;
   flex-direction:column;
-  gap:14px;
-  max-width:360px;
+  gap:12px;
 }
 
-.card{
+.status-card{
   background:rgba(255,255,255,.88);
-  backdrop-filter:blur(4px);
-  border-radius:16px;
-  padding:16px;
+  backdrop-filter: blur(4px);
+  border-radius:14px;
+  padding:14px 16px;
 }
 
-.card h3{
-  margin:0 0 6px;
-  font-size:15px;
+.status-card h3{
+  margin:0 0 6px 0;
+  font-size:14px;
+  font-weight:900;
 }
 
 .status{
   display:flex;
   align-items:center;
   gap:8px;
-  font-weight:900;
   font-size:13px;
+  font-weight:800;
 }
 
 .dot{
-  width:10px;
-  height:10px;
+  width:9px;
+  height:9px;
   border-radius:50%;
 }
 
 .working .dot{background:#16a34a}
 .break .dot{background:#f59e0b}
 .offline .dot{background:#9ca3af}
+
+.working{color:#065f46}
+.break{color:#92400e}
+.offline{color:#6b7280}
 
 .time{
   margin-top:6px;
@@ -176,23 +187,31 @@ body{
   font-weight:700;
 }
 
-/* Responsive */
-@media(max-width:900px){
-  .page{grid-template-columns:1fr}
-  .right{display:none}
-  .left{padding:32px}
+/* ================= RIGHT ================= */
+
+.right{
+  /* intentionally empty – image only */
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1000px){
+  .page{
+    grid-template-columns:1fr;
+  }
+  .right{display:none;}
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
+<!-- ================= HEADER ================= -->
 <div class="header">
   <div class="header-inner">
     <div class="brand">
       <img src="logo.png" alt="My Refund">
-      <div class="title">
+      <div class="brand-text">
         <strong>Staff Overview</strong>
         <span id="todayLabel"></span>
       </div>
@@ -205,90 +224,116 @@ body{
   </div>
 </div>
 
-<!-- PAGE -->
+<!-- ================= PAGE ================= -->
 <div class="page">
+
+  <!-- LEFT -->
   <div class="left">
 
-    <div class="section">
-      <div class="section-title">Start your day</div>
-      <div class="start-stack">
-        <a href="staff.html" class="start-btn" onclick="startDay('Emma')">Emma</a>
-        <a href="staff.html" class="start-btn" onclick="startDay('Maddy')">Maddy</a>
-        <a href="staff.html" class="start-btn" onclick="startDay('Pepe')">Pepe</a>
-      </div>
+    <div class="section-title">Start your day</div>
+    <div class="start-list">
+      <button class="start-btn" onclick="startDay('Emma')">Emma</button>
+      <button class="start-btn" onclick="startDay('Maddy')">Maddy</button>
+      <button class="start-btn" onclick="startDay('Pepe')">Pepe</button>
     </div>
 
-    <div class="section">
-      <div class="section-title">Today’s activity</div>
-      <div id="stack" class="stack"></div>
-    </div>
+    <div class="section-title">Today’s activity</div>
+    <div id="statusList" class="status-list"></div>
 
   </div>
 
+  <!-- RIGHT -->
   <div class="right"></div>
+
 </div>
 
 <script>
-const TZ="Pacific/Auckland", REFRESH_MS=30000;
+/* ================= CONFIG ================= */
+const REFRESH_MS = 30000;
+const TZ = "Pacific/Auckland";
 
-function todayHuman(){
-  return new Date().toLocaleDateString("en-NZ",{
-    weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ
-  });
-}
+/* ================= HELPERS ================= */
 function todayISO(){
   return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
 }
 function nowTime(){
   return new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",timeZone:TZ});
 }
+function todayHuman(){
+  return new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
+}
 
+/* ================= LOGIN ================= */
 function startDay(name){
-  const today=todayISO();
-  let staff=JSON.parse(localStorage.getItem("staffList")||"[]");
+  const today = todayISO();
+
+  let staff = JSON.parse(localStorage.getItem("staffList") || "[]");
   if(!staff.includes(name)){
     staff.push(name);
-    localStorage.setItem("staffList",JSON.stringify(staff));
+    localStorage.setItem("staffList", JSON.stringify(staff));
   }
-  localStorage.setItem("staffStatus_"+name,JSON.stringify({
-    date:today,state:"working",start:nowTime()
+
+  localStorage.setItem("staffStatus_"+name, JSON.stringify({
+    date: today,
+    state: "working",
+    start: nowTime()
   }));
-  localStorage.setItem("currentStaff",name);
+
+  localStorage.setItem("currentStaff", name);
+  window.location.href = "staff.html";
 }
 
+/* ================= STATUS ================= */
 function loadStaff(){
-  return JSON.parse(localStorage.getItem("staffList")||"[]");
+  return JSON.parse(localStorage.getItem("staffList") || "[]");
 }
+
 function loadStatus(name){
-  const s=JSON.parse(localStorage.getItem("staffStatus_"+name)||"{}");
-  if(s.date!==todayISO()) return {state:"offline"};
+  const today = todayISO();
+  const s = JSON.parse(localStorage.getItem("staffStatus_"+name) || "{}");
+  if(s.date !== today) return {state:"offline"};
   return s;
 }
 
 function render(){
-  const stack=document.getElementById("stack");
-  stack.innerHTML="";
-  const staff=loadStaff();
+  const list = document.getElementById("statusList");
+  list.innerHTML = "";
+
+  const staff = loadStaff();
+
+  if(!staff.length){
+    list.innerHTML = `<div class="status-card">No staff have logged in yet today.</div>`;
+    return;
+  }
+
   staff.forEach(name=>{
-    const s=loadStatus(name);
-    let label="Not logged in", cls="offline", time="";
-    if(s.state==="working"){cls="working";label="Working";time="Started: "+s.start}
-    const el=document.createElement("div");
-    el.className=`card ${cls}`;
-    el.innerHTML=`
+    const s = loadStatus(name);
+
+    let cls="offline", label="Not logged in", time="";
+    if(s.state==="working"){
+      cls="working"; label="Working"; time="Started: "+s.start;
+    }
+    if(s.state==="break"){
+      cls="break"; label="On break"; time="Break started: "+s.breakStart;
+    }
+
+    const el = document.createElement("div");
+    el.className = `status-card ${cls}`;
+    el.innerHTML = `
       <h3>${name}</h3>
       <div class="status ${cls}">
         <span class="dot"></span>${label}
       </div>
       ${time?`<div class="time">${time}</div>`:""}
     `;
-    stack.appendChild(el);
+    list.appendChild(el);
   });
 }
 
-document.getElementById("todayLabel").textContent=todayHuman();
+/* ================= INIT ================= */
+document.getElementById("todayLabel").textContent = todayHuman();
 render();
-setInterval(render,REFRESH_MS);
+setInterval(render, REFRESH_MS);
 </script>
 
 </body>
