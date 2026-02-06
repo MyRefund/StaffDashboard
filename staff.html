@@ -25,13 +25,13 @@ body{
   color:var(--text);
 }
 
-/* =============== BACKGROUND =============== */
+/* ===== BACKGROUND ===== */
 .page{
   min-height:100vh;
   background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
 }
 
-/* =============== HEADER =============== */
+/* ===== HEADER ===== */
 .header{
   background:var(--g0);
   color:#fff;
@@ -76,7 +76,7 @@ body{
   font-size:14px;
 }
 
-/* =============== CONTENT =============== */
+/* ===== CONTENT ===== */
 .wrap{
   max-width:1200px;
   margin:0 auto;
@@ -87,12 +87,12 @@ body{
   font-size:26px;
   font-weight:900;
   color:var(--g0);
-  margin-bottom:28px;
+  margin-bottom:20px;
 }
 
-/* =============== PANELS =============== */
+/* ===== PANELS ===== */
 .panel{
-  background:rgba(255,255,255,.94);
+  background:rgba(255,255,255,.95);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:22px;
@@ -106,7 +106,7 @@ body{
   color:var(--g0);
 }
 
-/* Horizontal grid inside panels */
+/* Horizontal grids */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -126,7 +126,7 @@ body{
   margin-bottom:10px;
 }
 
-/* Counter controls */
+/* Counters */
 .controls{
   display:flex;
   align-items:center;
@@ -162,14 +162,14 @@ body{
 }
 
 /* Breaks */
-.break-row{
+.break-panel{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:16px;
 }
 
-.break-row button{
+.break-panel button{
   border-radius:999px;
   padding:8px 16px;
   border:none;
@@ -218,7 +218,13 @@ body{
 
   <div class="hello" id="helloText">Hello</div>
 
-  <!-- Live interactions -->
+  <!-- WORK NOTES (TOP) -->
+  <div class="panel">
+    <h3>Work Notes</h3>
+    <div class="note">No work notes for today.</div>
+  </div>
+
+  <!-- LIVE INTERACTIONS -->
   <div class="panel">
     <h3>Live interactions</h3>
     <div class="grid">
@@ -249,13 +255,13 @@ body{
     </div>
   </div>
 
-  <!-- Allocated work -->
+  <!-- ALLOCATED WORK -->
   <div class="panel">
     <h3>Allocated work</h3>
     <div class="note">Admin-assigned work will appear here.</div>
   </div>
 
-  <!-- Delinks -->
+  <!-- DELINKS -->
   <div class="panel">
     <h3>Delinks & cancellations</h3>
     <div class="grid">
@@ -278,22 +284,16 @@ body{
     </div>
   </div>
 
-  <!-- Breaks -->
+  <!-- BREAKS (SEPARATE) -->
   <div class="panel">
     <h3>Breaks</h3>
-    <div class="break-row">
+    <div class="break-panel">
       <div class="note">Your allocated breaks will appear here.</div>
       <button>Acknowledge break</button>
     </div>
   </div>
 
-  <!-- Notes -->
-  <div class="panel">
-    <h3>Notes from admin</h3>
-    <div class="note">No notes for today.</div>
-  </div>
-
-  <!-- Submit -->
+  <!-- SUBMIT -->
   <div class="submit">
     <button>Submit work</button>
   </div>
