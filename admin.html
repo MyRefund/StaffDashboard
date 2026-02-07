@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Refund — Admin Dashboard</title>
+<title>My Refund — Admin</title>
 
 <style>
 :root{
@@ -22,8 +22,8 @@
 body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color:var(--text);
   background:#f7f7f7;
+  color:var(--text);
 }
 
 /* ===== HEADER ===== */
@@ -80,12 +80,12 @@ body{
 }
 
 .tab{
-  border-radius:999px;
   padding:8px 16px;
-  font-weight:900;
-  font-size:13px;
+  border-radius:999px;
   border:1px solid var(--border);
   background:#fff;
+  font-weight:900;
+  font-size:13px;
   cursor:pointer;
 }
 
@@ -101,7 +101,7 @@ body{
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:22px;
-  margin-bottom:22px;
+  margin-bottom:24px;
 }
 
 .panel h3{
@@ -131,16 +131,23 @@ body{
   font-weight:900;
 }
 
+.meta{
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+}
+
 .status{
+  margin-top:6px;
   font-size:13px;
   font-weight:900;
 }
 
-.status.working{color:#065f46}
-.status.break{color:#92400e}
-.status.offline{color:#6b7280}
+.working{color:#065f46}
+.break{color:#92400e}
+.offline{color:#6b7280}
 
-/* ===== FORM ELEMENTS ===== */
+/* ===== FORMS ===== */
 label{
   display:block;
   font-size:12px;
@@ -153,11 +160,11 @@ input, select, textarea{
   padding:10px;
   border-radius:10px;
   border:1px solid var(--border);
-  margin-bottom:12px;
+  margin-bottom:14px;
   font-weight:700;
 }
 
-textarea{min-height:80px;resize:vertical}
+textarea{min-height:90px}
 
 /* ===== COUNTERS ===== */
 .item{
@@ -183,26 +190,21 @@ textarea{min-height:80px;resize:vertical}
   font-weight:900;
 }
 
-/* ===== ACTIONS ===== */
+/* ===== ACTION ===== */
 .actions{
   text-align:right;
 }
 
 .actions button{
-  border-radius:14px;
   padding:14px 22px;
-  font-weight:900;
-  font-size:15px;
-  border:none;
+  border-radius:14px;
   background:var(--g0);
   color:#fff;
+  border:none;
+  font-weight:900;
   cursor:pointer;
 }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width:900px){
-  .grid{grid-template-columns:1fr}
-}
 </style>
 </head>
 
@@ -214,8 +216,8 @@ textarea{min-height:80px;resize:vertical}
     <div class="brand">
       <img src="logo.png">
       <div class="brand-text">
-        <strong>Admin Dashboard</strong>
-        <span>Daily operations</span>
+        <strong>Admin</strong>
+        <span>Operations dashboard</span>
       </div>
     </div>
     <div class="clock" id="clock"></div>
@@ -227,8 +229,7 @@ textarea{min-height:80px;resize:vertical}
   <!-- TABS -->
   <div class="tabs">
     <button class="tab active">Overview</button>
-    <button class="tab">Rundown</button>
-    <button class="tab">Allocation</button>
+    <button class="tab">Assign Work</button>
     <button class="tab">Users</button>
     <button class="tab">Work Library</button>
   </div>
@@ -239,38 +240,25 @@ textarea{min-height:80px;resize:vertical}
     <div class="grid">
       <div class="staff-card">
         <h4>Emma</h4>
-        <div class="status working">Working — started 9:02am</div>
+        <div class="meta">Started 9:02am</div>
+        <div class="status working">Working · 128 completed</div>
       </div>
       <div class="staff-card">
         <h4>Maddy</h4>
-        <div class="status break">On break — 10:30am</div>
+        <div class="meta">Started 9:05am</div>
+        <div class="status break">On break · 64 completed</div>
       </div>
       <div class="staff-card">
         <h4>Pepe</h4>
+        <div class="meta">—</div>
         <div class="status offline">Not logged in</div>
       </div>
     </div>
   </div>
 
-  <!-- RUNDOWN -->
+  <!-- ASSIGN WORK -->
   <div class="panel">
-    <h3>Rundown</h3>
-    <label>Staff member</label>
-    <select>
-      <option>Emma</option>
-      <option>Maddy</option>
-      <option>Pepe</option>
-    </select>
-    <div class="grid">
-      <div class="item"><strong>Inbound:</strong> 42</div>
-      <div class="item"><strong>Outbound:</strong> 18</div>
-      <div class="item"><strong>Emails:</strong> 63</div>
-    </div>
-  </div>
-
-  <!-- ALLOCATION -->
-  <div class="panel">
-    <h3>Allocation</h3>
+    <h3>Assign work</h3>
 
     <label>Staff member</label>
     <select>
@@ -283,10 +271,10 @@ textarea{min-height:80px;resize:vertical}
     <input type="date">
 
     <label>Work notes</label>
-    <textarea placeholder="Notes staff will see today…"></textarea>
+    <textarea placeholder="These appear at the top of the staff page"></textarea>
 
     <label>Breaks</label>
-    <input type="text" placeholder="e.g. Lunch 12:30 – 1:00">
+    <input placeholder="e.g. Morning tea 10:30, Lunch 12:30">
 
     <div class="grid">
       <div class="item">
@@ -299,10 +287,6 @@ textarea{min-height:80px;resize:vertical}
       </div>
       <div class="item">
         <label>A2A</label>
-        <div class="controls"><button>-</button><input value="0"><button>+</button></div>
-      </div>
-      <div class="item">
-        <label>To Call</label>
         <div class="controls"><button>-</button><input value="0"><button>+</button></div>
       </div>
     </div>
@@ -320,19 +304,18 @@ textarea{min-height:80px;resize:vertical}
       <div class="item">Maddy</div>
       <div class="item">Pepe</div>
     </div>
-    <button style="margin-top:14px">Add user</button>
+    <button style="margin-top:12px">Add user</button>
   </div>
 
   <!-- WORK LIBRARY -->
   <div class="panel">
-    <h3>Assigned work library</h3>
+    <h3>Work library</h3>
     <div class="grid">
       <div class="item">Emails</div>
       <div class="item">Unverified</div>
       <div class="item">A2A</div>
-      <div class="item">To Call</div>
     </div>
-    <button style="margin-top:14px">Create new work type</button>
+    <button style="margin-top:12px">Create new work type</button>
   </div>
 
 </div>
