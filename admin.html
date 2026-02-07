@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Refund — Admin</title>
+<title>My Refund — Admin Dashboard</title>
 
 <style>
 :root{
@@ -22,8 +22,13 @@
 body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background:#f7f7f7;
   color:var(--text);
+}
+
+/* ===== BACKGROUND (HERO IMAGE) ===== */
+.page{
+  min-height:100vh;
+  background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
 }
 
 /* ===== HEADER ===== */
@@ -48,6 +53,12 @@ body{
 }
 
 .brand img{height:26px}
+
+.brand-text{
+  display:flex;
+  flex-direction:column;
+  line-height:1.1;
+}
 
 .brand-text strong{
   font-size:15px;
@@ -76,14 +87,14 @@ body{
 .tabs{
   display:flex;
   gap:8px;
-  margin-bottom:22px;
+  margin-bottom:24px;
 }
 
 .tab{
   padding:8px 16px;
   border-radius:999px;
-  border:1px solid var(--border);
-  background:#fff;
+  border:1px solid rgba(255,255,255,.4);
+  background:rgba(255,255,255,.9);
   font-weight:900;
   font-size:13px;
   cursor:pointer;
@@ -95,9 +106,13 @@ body{
   border-color:var(--g0);
 }
 
+/* ===== TAB SECTIONS ===== */
+.tab-section{display:none}
+.tab-section.active{display:block}
+
 /* ===== PANELS ===== */
 .panel{
-  background:#fff;
+  background:rgba(255,255,255,.95);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:22px;
@@ -204,11 +219,11 @@ textarea{min-height:90px}
   font-weight:900;
   cursor:pointer;
 }
-
 </style>
 </head>
 
 <body>
+<div class="page">
 
 <!-- HEADER -->
 <div class="header">
@@ -216,8 +231,8 @@ textarea{min-height:90px}
     <div class="brand">
       <img src="logo.png">
       <div class="brand-text">
-        <strong>Admin</strong>
-        <span>Operations dashboard</span>
+        <strong>Admin Dashboard</strong>
+        <span>Operations overview</span>
       </div>
     </div>
     <div class="clock" id="clock"></div>
@@ -228,96 +243,116 @@ textarea{min-height:90px}
 
   <!-- TABS -->
   <div class="tabs">
-    <button class="tab active">Overview</button>
-    <button class="tab">Assign Work</button>
-    <button class="tab">Users</button>
-    <button class="tab">Work Library</button>
+    <button class="tab active" onclick="showTab('overview')">Overview</button>
+    <button class="tab" onclick="showTab('assign')">Assign Work</button>
+    <button class="tab" onclick="showTab('users')">Users</button>
+    <button class="tab" onclick="showTab('library')">Work Library</button>
   </div>
 
-  <!-- OVERVIEW -->
-  <div class="panel">
-    <h3>Staff overview</h3>
-    <div class="grid">
-      <div class="staff-card">
-        <h4>Emma</h4>
-        <div class="meta">Started 9:02am</div>
-        <div class="status working">Working · 128 completed</div>
-      </div>
-      <div class="staff-card">
-        <h4>Maddy</h4>
-        <div class="meta">Started 9:05am</div>
-        <div class="status break">On break · 64 completed</div>
-      </div>
-      <div class="staff-card">
-        <h4>Pepe</h4>
-        <div class="meta">—</div>
-        <div class="status offline">Not logged in</div>
+  <!-- OVERVIEW TAB -->
+  <div id="overview" class="tab-section active">
+    <div class="panel">
+      <h3>Staff overview</h3>
+      <div class="grid">
+        <div class="staff-card">
+          <h4>Emma</h4>
+          <div class="meta">Started 9:02am</div>
+          <div class="status working">
+            Working<br>
+            Inbound: 22 · Outbound: 10 · Chat: 14 · Email: 31 · Other: 8
+          </div>
+        </div>
+        <div class="staff-card">
+          <h4>Maddy</h4>
+          <div class="meta">Started 9:05am</div>
+          <div class="status break">
+            On break<br>
+            Inbound: 14 · Outbound: 7 · Chat: 9 · Email: 18 · Other: 4
+          </div>
+        </div>
+        <div class="staff-card">
+          <h4>Pepe</h4>
+          <div class="meta">—</div>
+          <div class="status offline">Not logged in</div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ASSIGN WORK -->
-  <div class="panel">
-    <h3>Assign work</h3>
+  <!-- ASSIGN WORK TAB -->
+  <div id="assign" class="tab-section">
+    <div class="panel">
+      <h3>Assign work</h3>
 
-    <label>Staff member</label>
-    <select>
-      <option>Emma</option>
-      <option>Maddy</option>
-      <option>Pepe</option>
-    </select>
+      <label>Staff member</label>
+      <select>
+        <option>Emma</option>
+        <option>Maddy</option>
+        <option>Pepe</option>
+      </select>
 
-    <label>Date</label>
-    <input type="date">
+      <label>Date</label>
+      <input type="date">
 
-    <label>Work notes</label>
-    <textarea placeholder="These appear at the top of the staff page"></textarea>
+      <label>Work notes</label>
+      <textarea placeholder="Appears at top of staff page"></textarea>
 
-    <label>Breaks</label>
-    <input placeholder="e.g. Morning tea 10:30, Lunch 12:30">
+      <label>Breaks</label>
+      <input placeholder="e.g. Morning tea 10:30, Lunch 12:30">
 
-    <div class="grid">
-      <div class="item">
-        <label>Emails</label>
-        <div class="controls"><button>-</button><input value="0"><button>+</button></div>
+      <div class="grid">
+        <div class="item">
+          <label>Emails</label>
+          <div class="controls"><button>-</button><input value="0"><button>+</button></div>
+        </div>
+        <div class="item">
+          <label>Unverified</label>
+          <div class="controls"><button>-</button><input value="0"><button>+</button></div>
+        </div>
+        <div class="item">
+          <label>A2A</label>
+          <div class="controls"><button>-</button><input value="0"><button>+</button></div>
+        </div>
+        <div class="item">
+          <label>To Call</label>
+          <div class="controls"><button>-</button><input value="0"><button>+</button></div>
+        </div>
       </div>
-      <div class="item">
-        <label>Unverified</label>
-        <div class="controls"><button>-</button><input value="0"><button>+</button></div>
-      </div>
-      <div class="item">
-        <label>A2A</label>
-        <div class="controls"><button>-</button><input value="0"><button>+</button></div>
-      </div>
-    </div>
 
-    <div class="actions">
-      <button>Save allocation</button>
+      <div class="actions">
+        <button>Save allocation</button>
+      </div>
     </div>
   </div>
 
-  <!-- USERS -->
-  <div class="panel">
-    <h3>Users</h3>
-    <div class="grid">
-      <div class="item">Emma</div>
-      <div class="item">Maddy</div>
-      <div class="item">Pepe</div>
+  <!-- USERS TAB -->
+  <div id="users" class="tab-section">
+    <div class="panel">
+      <h3>Users</h3>
+      <div class="grid">
+        <div class="item">Emma</div>
+        <div class="item">Maddy</div>
+        <div class="item">Pepe</div>
+      </div>
+      <button style="margin-top:14px">Add user</button>
     </div>
-    <button style="margin-top:12px">Add user</button>
   </div>
 
-  <!-- WORK LIBRARY -->
-  <div class="panel">
-    <h3>Work library</h3>
-    <div class="grid">
-      <div class="item">Emails</div>
-      <div class="item">Unverified</div>
-      <div class="item">A2A</div>
+  <!-- WORK LIBRARY TAB -->
+  <div id="library" class="tab-section">
+    <div class="panel">
+      <h3>Work library</h3>
+      <div class="grid">
+        <div class="item">Emails</div>
+        <div class="item">Unverified</div>
+        <div class="item">A2A</div>
+        <div class="item">To Call</div>
+      </div>
+      <button style="margin-top:14px">Create new work type</button>
     </div>
-    <button style="margin-top:12px">Create new work type</button>
   </div>
 
+</div>
 </div>
 
 <script>
@@ -326,6 +361,13 @@ function tick(){
     new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 tick(); setInterval(tick,1000);
+
+function showTab(id){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".tab-section").forEach(s=>s.classList.remove("active"));
+  document.querySelector(`[onclick="showTab('${id}')"]`).classList.add("active");
+  document.getElementById(id).classList.add("active");
+}
 </script>
 
 </body>
