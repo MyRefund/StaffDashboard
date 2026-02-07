@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>My Refund — Admin</title>
 
 <style>
@@ -10,291 +10,293 @@
   --g0:#094B35;
   --g1:#03953F;
   --g2:#ECFDF5;
-  --g3:#BBF7D0;
-  --border:#e5e7eb;
   --text:#111827;
   --muted:#6b7280;
+  --border:#e5e7eb;
   --radius:16px;
-  --shadow:0 10px 25px rgba(0,0,0,.06);
+  --shadow:0 12px 32px rgba(0,0,0,.14);
 }
+
+*{box-sizing:border-box}
 
 body{
   margin:0;
-  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  background:linear-gradient(180deg,var(--g2),#fff 60%);
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color:var(--text);
 }
 
-.wrap{max-width:1200px;margin:0 auto;padding:20px 20px 48px;}
-
-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:12px 16px;
-  box-shadow:var(--shadow);
-  position:sticky;
-  top:10px;
-  z-index:10;
+.page{
+  min-height:100vh;
+  background:#f7f7f7;
 }
 
-.brand{display:flex;align-items:center;gap:12px;}
-.brand img{height:30px;}
-.brand strong{color:var(--g0);}
-
-nav{display:flex;gap:8px;flex-wrap:wrap;}
-nav button{
-  border:none;
-  background:var(--g2);
-  color:var(--g0);
-  padding:8px 14px;
-  border-radius:999px;
-  font-weight:900;
-  cursor:pointer;
-}
-nav button.active{
+/* ===== HEADER ===== */
+.header{
   background:var(--g0);
   color:#fff;
+  padding:14px 24px;
 }
 
-.section{display:none;margin-top:20px;}
-.section.active{display:block;}
-
-.card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:16px;
-  margin-bottom:16px;
+.header-inner{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.card h2{margin:0 0 12px;color:var(--g0);}
-.card small{color:var(--muted);}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
+.brand img{height:26px}
 
-input, textarea, select{
-  width:100%;
-  padding:8px;
-  border-radius:10px;
-  border:1px solid var(--border);
+.brand-text strong{
+  font-size:15px;
+  font-weight:900;
+}
+
+.brand-text span{
+  font-size:12px;
+  opacity:.9;
+  font-weight:700;
+}
+
+.clock{
+  font-weight:900;
   font-size:14px;
 }
 
-textarea{resize:vertical;}
+/* ===== CONTENT ===== */
+.wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:36px 24px 60px;
+}
 
-button.primary{
+.layout{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:24px;
+}
+
+/* ===== SIDE CARDS ===== */
+.side-card{
   background:var(--g0);
   color:#fff;
-  border:none;
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:var(--shadow);
+  margin-bottom:18px;
+}
+
+.side-card h3{
+  margin:0 0 12px;
+  font-size:14px;
+  font-weight:900;
+}
+
+.side-card label{
+  display:block;
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+.side-card input,
+.side-card select,
+.side-card textarea{
+  width:100%;
   border-radius:10px;
-  padding:10px 14px;
+  border:none;
+  padding:10px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.side-card textarea{
+  min-height:80px;
+  resize:vertical;
+}
+
+/* ===== PANELS ===== */
+.panel{
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:22px;
+  margin-bottom:22px;
+}
+
+.panel h3{
+  margin:0 0 16px;
+  font-size:16px;
+  font-weight:900;
+  color:var(--g0);
+}
+
+/* ===== GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
+}
+
+.item{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+}
+
+.item label{
+  display:block;
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+.controls{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.controls button{
+  width:32px;
+  height:32px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#fff;
   font-weight:900;
   cursor:pointer;
 }
 
-.list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:var(--g2);
-  padding:10px 12px;
-  border-radius:12px;
-  font-weight:800;
-}
-
-.muted{color:var(--muted);}
-
-footer{
-  margin-top:40px;
-  font-size:12px;
-  color:var(--muted);
+.controls input{
+  width:56px;
   text-align:center;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:6px;
+  font-weight:900;
+}
+
+/* ===== SAVE ===== */
+.save{
+  text-align:right;
+}
+
+.save button{
+  border-radius:14px;
+  padding:14px 22px;
+  font-weight:900;
+  font-size:15px;
+  border:none;
+  background:var(--g0);
+  color:#fff;
+  cursor:pointer;
+}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="logo.png">
+      <div class="brand-text">
+        <strong>Admin</strong>
+        <span>Daily allocation</span>
+      </div>
+    </div>
+    <div class="clock" id="clock"></div>
+  </div>
+</div>
+
 <div class="wrap">
+  <div class="layout">
 
-<header>
-  <div class="brand">
-    <img src="assets/logo.png" onerror="this.style.display='none'">
-    <strong>Admin</strong>
-  </div>
+    <!-- LEFT -->
+    <div>
+      <div class="side-card">
+        <h3>Staff & date</h3>
+        <label>Staff member</label>
+        <select>
+          <option>Emma</option>
+          <option>Maddy</option>
+          <option>Pepe</option>
+        </select>
+        <label>Date</label>
+        <input type="date">
+      </div>
 
-  <nav>
-    <button class="active" data-tab="overview">Overview</button>
-    <button data-tab="rundown">Rundown</button>
-    <button data-tab="allocation">Allocation / Breaks / Notes</button>
-    <button data-tab="users">Users</button>
-  </nav>
-</header>
+      <div class="side-card">
+        <h3>Work notes</h3>
+        <textarea placeholder="Notes staff will see today…"></textarea>
+      </div>
 
-<!-- OVERVIEW -->
-<div class="section active" id="overview">
-  <div class="card">
-    <h2>Staff currently working</h2>
-    <div id="overviewList" class="list"></div>
-  </div>
-</div>
-
-<!-- RUNDOWN -->
-<div class="section" id="rundown">
-  <div class="card">
-    <h2>Today’s work completed</h2>
-    <div id="rundownList" class="list"></div>
-  </div>
-</div>
-
-<!-- ALLOCATION / BREAKS / NOTES -->
-<div class="section" id="allocation">
-  <div class="card">
-    <h2>Staff control</h2>
-    <small>Allocate work, set breaks, and add notes</small>
-
-    <div class="grid" style="margin-top:12px;">
-      <select id="staffSelect"></select>
-
-      <textarea id="notesInput" placeholder="Notes for this staff member"></textarea>
-
-      <input id="breaksInput" placeholder="Break times (e.g. 10:30, 13:00, 15:30)">
+      <div class="side-card">
+        <h3>Breaks</h3>
+        <input type="text" placeholder="e.g. Lunch 12:30 – 1:00">
+      </div>
     </div>
 
-    <button class="primary" style="margin-top:12px;" onclick="saveStaffControl()">Save</button>
-  </div>
-</div>
+    <!-- RIGHT -->
+    <div>
 
-<!-- USERS -->
-<div class="section" id="users">
-  <div class="card">
-    <h2>Users</h2>
+      <div class="panel">
+        <h3>Allocated work</h3>
+        <div class="grid">
+          <div class="item">
+            <label>Emails</label>
+            <div class="controls">
+              <button>-</button><input value="0"><button>+</button>
+            </div>
+          </div>
+          <div class="item">
+            <label>Unverified</label>
+            <div class="controls">
+              <button>-</button><input value="0"><button>+</button>
+            </div>
+          </div>
+          <div class="item">
+            <label>A2A</label>
+            <div class="controls">
+              <button>-</button><input value="0"><button>+</button>
+            </div>
+          </div>
+          <div class="item">
+            <label>To call</label>
+            <div class="controls">
+              <button>-</button><input value="0"><button>+</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <div class="grid">
-      <input id="newUserName" placeholder="New staff name">
-      <button class="primary" onclick="addUser()">Add user</button>
+      <div class="save">
+        <button>Save allocation</button>
+      </div>
+
     </div>
 
-    <div class="list" id="usersList" style="margin-top:12px;"></div>
   </div>
 </div>
-
-<footer>
-  My Refund — Internal admin
-</footer>
-
 </div>
 
 <script>
-/* ===== STORAGE ===== */
-const USERS_KEY = "myrefund_users";
-const STAFF_DATA_KEY = "myrefund_staff_data";
-
-/* ===== TABS ===== */
-document.querySelectorAll("nav button").forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById(btn.dataset.tab).classList.add("active");
-  };
-});
-
-/* ===== USERS ===== */
-function getUsers(){
-  return JSON.parse(localStorage.getItem(USERS_KEY)||"[]");
+function tick(){
+  document.getElementById("clock").textContent =
+    new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
-function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u));}
-
-function addUser(){
-  const name=document.getElementById("newUserName").value.trim();
-  if(!name)return;
-  const users=getUsers();
-  users.push(name);
-  saveUsers(users);
-  document.getElementById("newUserName").value="";
-  renderUsers();
-  renderStaffSelect();
-}
-
-function renderUsers(){
-  const el=document.getElementById("usersList");
-  el.innerHTML="";
-  getUsers().forEach(u=>{
-    const r=document.createElement("div");
-    r.className="row";
-    r.innerHTML=`${u} <button onclick="removeUser('${u}')">Remove</button>`;
-    el.appendChild(r);
-  });
-}
-function removeUser(u){
-  saveUsers(getUsers().filter(x=>x!==u));
-  renderUsers();
-  renderStaffSelect();
-}
-
-/* ===== STAFF DATA ===== */
-function getStaffData(){
-  return JSON.parse(localStorage.getItem(STAFF_DATA_KEY)||"{}");
-}
-function saveStaffData(d){
-  localStorage.setItem(STAFF_DATA_KEY,JSON.stringify(d));
-}
-
-function renderStaffSelect(){
-  const sel=document.getElementById("staffSelect");
-  sel.innerHTML="";
-  getUsers().forEach(u=>{
-    const o=document.createElement("option");
-    o.value=u;o.textContent=u;
-    sel.appendChild(o);
-  });
-}
-
-/* ===== CONTROL SAVE ===== */
-function saveStaffControl(){
-  const staff=document.getElementById("staffSelect").value;
-  const notes=document.getElementById("notesInput").value;
-  const breaks=document.getElementById("breaksInput").value;
-
-  const data=getStaffData();
-  data[staff]={notes,breaks};
-  saveStaffData(data);
-  alert("Saved");
-}
-
-/* ===== OVERVIEW / RUNDOWN (BROWSER DATA) ===== */
-function renderOverview(){
-  const el=document.getElementById("overviewList");
-  el.innerHTML="";
-  getUsers().forEach(u=>{
-    const r=document.createElement("div");
-    r.className="row";
-    r.innerHTML=`${u} <span class="muted">Working</span>`;
-    el.appendChild(r);
-  });
-}
-
-function renderRundown(){
-  const el=document.getElementById("rundownList");
-  el.innerHTML="<div class='muted'>Data shown once staff submit work.</div>";
-}
-
-/* ===== INIT ===== */
-renderUsers();
-renderStaffSelect();
-renderOverview();
-renderRundown();
+tick(); setInterval(tick,1000);
 </script>
 
 </body>
