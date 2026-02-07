@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Refund — Admin</title>
+<title>My Refund — Admin Dashboard</title>
 
 <style>
 :root{
@@ -23,10 +23,6 @@ body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color:var(--text);
-}
-
-.page{
-  min-height:100vh;
   background:#f7f7f7;
 }
 
@@ -73,52 +69,30 @@ body{
 .wrap{
   max-width:1200px;
   margin:0 auto;
-  padding:36px 24px 60px;
+  padding:28px 24px 60px;
 }
 
-.layout{
-  display:grid;
-  grid-template-columns:320px 1fr;
-  gap:24px;
+/* ===== TABS ===== */
+.tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:22px;
 }
 
-/* ===== SIDE CARDS ===== */
-.side-card{
+.tab{
+  border-radius:999px;
+  padding:8px 16px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid var(--border);
+  background:#fff;
+  cursor:pointer;
+}
+
+.tab.active{
   background:var(--g0);
   color:#fff;
-  border-radius:var(--radius);
-  padding:18px;
-  box-shadow:var(--shadow);
-  margin-bottom:18px;
-}
-
-.side-card h3{
-  margin:0 0 12px;
-  font-size:14px;
-  font-weight:900;
-}
-
-.side-card label{
-  display:block;
-  font-size:12px;
-  font-weight:900;
-  margin-bottom:6px;
-}
-
-.side-card input,
-.side-card select,
-.side-card textarea{
-  width:100%;
-  border-radius:10px;
-  border:none;
-  padding:10px;
-  font-weight:700;
-  margin-bottom:10px;
-}
-
-.side-card textarea{
-  min-height:80px;
-  resize:vertical;
+  border-color:var(--g0);
 }
 
 /* ===== PANELS ===== */
@@ -137,24 +111,62 @@ body{
   color:var(--g0);
 }
 
-/* ===== GRID ===== */
+/* ===== GRIDS ===== */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:16px;
 }
 
+/* ===== STAFF CARD ===== */
+.staff-card{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+}
+
+.staff-card h4{
+  margin:0 0 6px;
+  font-size:14px;
+  font-weight:900;
+}
+
+.status{
+  font-size:13px;
+  font-weight:900;
+}
+
+.status.working{color:#065f46}
+.status.break{color:#92400e}
+.status.offline{color:#6b7280}
+
+/* ===== FORM ELEMENTS ===== */
+label{
+  display:block;
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+input, select, textarea{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  margin-bottom:12px;
+  font-weight:700;
+}
+
+textarea{min-height:80px;resize:vertical}
+
+/* ===== COUNTERS ===== */
 .item{
   border:1px solid var(--border);
   border-radius:14px;
   padding:16px;
 }
 
-.item label{
-  display:block;
-  font-weight:900;
-  margin-bottom:10px;
-}
+.item label{margin-bottom:10px}
 
 .controls{
   display:flex;
@@ -169,24 +181,14 @@ body{
   border:1px solid var(--border);
   background:#fff;
   font-weight:900;
-  cursor:pointer;
 }
 
-.controls input{
-  width:56px;
-  text-align:center;
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:6px;
-  font-weight:900;
-}
-
-/* ===== SAVE ===== */
-.save{
+/* ===== ACTIONS ===== */
+.actions{
   text-align:right;
 }
 
-.save button{
+.actions button{
   border-radius:14px;
   padding:14px 22px;
   font-weight:900;
@@ -197,14 +199,14 @@ body{
   cursor:pointer;
 }
 
+/* ===== RESPONSIVE ===== */
 @media(max-width:900px){
-  .layout{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
-<div class="page">
 
 <!-- HEADER -->
 <div class="header">
@@ -212,8 +214,8 @@ body{
     <div class="brand">
       <img src="logo.png">
       <div class="brand-text">
-        <strong>Admin</strong>
-        <span>Daily allocation</span>
+        <strong>Admin Dashboard</strong>
+        <span>Daily operations</span>
       </div>
     </div>
     <div class="clock" id="clock"></div>
@@ -221,74 +223,118 @@ body{
 </div>
 
 <div class="wrap">
-  <div class="layout">
 
-    <!-- LEFT -->
-    <div>
-      <div class="side-card">
-        <h3>Staff & date</h3>
-        <label>Staff member</label>
-        <select>
-          <option>Emma</option>
-          <option>Maddy</option>
-          <option>Pepe</option>
-        </select>
-        <label>Date</label>
-        <input type="date">
-      </div>
-
-      <div class="side-card">
-        <h3>Work notes</h3>
-        <textarea placeholder="Notes staff will see today…"></textarea>
-      </div>
-
-      <div class="side-card">
-        <h3>Breaks</h3>
-        <input type="text" placeholder="e.g. Lunch 12:30 – 1:00">
-      </div>
-    </div>
-
-    <!-- RIGHT -->
-    <div>
-
-      <div class="panel">
-        <h3>Allocated work</h3>
-        <div class="grid">
-          <div class="item">
-            <label>Emails</label>
-            <div class="controls">
-              <button>-</button><input value="0"><button>+</button>
-            </div>
-          </div>
-          <div class="item">
-            <label>Unverified</label>
-            <div class="controls">
-              <button>-</button><input value="0"><button>+</button>
-            </div>
-          </div>
-          <div class="item">
-            <label>A2A</label>
-            <div class="controls">
-              <button>-</button><input value="0"><button>+</button>
-            </div>
-          </div>
-          <div class="item">
-            <label>To call</label>
-            <div class="controls">
-              <button>-</button><input value="0"><button>+</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="save">
-        <button>Save allocation</button>
-      </div>
-
-    </div>
-
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active">Overview</button>
+    <button class="tab">Rundown</button>
+    <button class="tab">Allocation</button>
+    <button class="tab">Users</button>
+    <button class="tab">Work Library</button>
   </div>
-</div>
+
+  <!-- OVERVIEW -->
+  <div class="panel">
+    <h3>Staff overview</h3>
+    <div class="grid">
+      <div class="staff-card">
+        <h4>Emma</h4>
+        <div class="status working">Working — started 9:02am</div>
+      </div>
+      <div class="staff-card">
+        <h4>Maddy</h4>
+        <div class="status break">On break — 10:30am</div>
+      </div>
+      <div class="staff-card">
+        <h4>Pepe</h4>
+        <div class="status offline">Not logged in</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RUNDOWN -->
+  <div class="panel">
+    <h3>Rundown</h3>
+    <label>Staff member</label>
+    <select>
+      <option>Emma</option>
+      <option>Maddy</option>
+      <option>Pepe</option>
+    </select>
+    <div class="grid">
+      <div class="item"><strong>Inbound:</strong> 42</div>
+      <div class="item"><strong>Outbound:</strong> 18</div>
+      <div class="item"><strong>Emails:</strong> 63</div>
+    </div>
+  </div>
+
+  <!-- ALLOCATION -->
+  <div class="panel">
+    <h3>Allocation</h3>
+
+    <label>Staff member</label>
+    <select>
+      <option>Emma</option>
+      <option>Maddy</option>
+      <option>Pepe</option>
+    </select>
+
+    <label>Date</label>
+    <input type="date">
+
+    <label>Work notes</label>
+    <textarea placeholder="Notes staff will see today…"></textarea>
+
+    <label>Breaks</label>
+    <input type="text" placeholder="e.g. Lunch 12:30 – 1:00">
+
+    <div class="grid">
+      <div class="item">
+        <label>Emails</label>
+        <div class="controls"><button>-</button><input value="0"><button>+</button></div>
+      </div>
+      <div class="item">
+        <label>Unverified</label>
+        <div class="controls"><button>-</button><input value="0"><button>+</button></div>
+      </div>
+      <div class="item">
+        <label>A2A</label>
+        <div class="controls"><button>-</button><input value="0"><button>+</button></div>
+      </div>
+      <div class="item">
+        <label>To Call</label>
+        <div class="controls"><button>-</button><input value="0"><button>+</button></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button>Save allocation</button>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div class="panel">
+    <h3>Users</h3>
+    <div class="grid">
+      <div class="item">Emma</div>
+      <div class="item">Maddy</div>
+      <div class="item">Pepe</div>
+    </div>
+    <button style="margin-top:14px">Add user</button>
+  </div>
+
+  <!-- WORK LIBRARY -->
+  <div class="panel">
+    <h3>Assigned work library</h3>
+    <div class="grid">
+      <div class="item">Emails</div>
+      <div class="item">Unverified</div>
+      <div class="item">A2A</div>
+      <div class="item">To Call</div>
+    </div>
+    <button style="margin-top:14px">Create new work type</button>
+  </div>
+
 </div>
 
 <script>
