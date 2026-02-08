@@ -25,7 +25,7 @@ body{
   color:var(--text);
 }
 
-/* ===== BACKGROUND (HERO IMAGE) ===== */
+/* ===== HERO BACKGROUND ===== */
 .page{
   min-height:100vh;
   background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
@@ -181,28 +181,21 @@ input, select, textarea{
 
 textarea{min-height:90px}
 
-/* ===== COUNTERS ===== */
-.item{
-  border:1px solid var(--border);
+/* ===== SELECTABLE WORK ===== */
+.work-tile{
+  border:2px solid var(--border);
   border-radius:14px;
-  padding:16px;
-}
-
-.item label{margin-bottom:10px}
-
-.controls{
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-
-.controls button{
-  width:32px;
-  height:32px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:#fff;
+  padding:18px;
+  text-align:center;
   font-weight:900;
+  cursor:pointer;
+  background:#fff;
+}
+
+.work-tile.active{
+  border-color:var(--g0);
+  background:var(--g2);
+  color:var(--g0);
 }
 
 /* ===== ACTION ===== */
@@ -232,7 +225,7 @@ textarea{min-height:90px}
       <img src="logo.png">
       <div class="brand-text">
         <strong>Admin Dashboard</strong>
-        <span>Operations overview</span>
+        <span>Operations</span>
       </div>
     </div>
     <div class="clock" id="clock"></div>
@@ -244,12 +237,13 @@ textarea{min-height:90px}
   <!-- TABS -->
   <div class="tabs">
     <button class="tab active" onclick="showTab('overview')">Overview</button>
+    <button class="tab" onclick="showTab('daily')">Daily Input</button>
     <button class="tab" onclick="showTab('assign')">Assign Work</button>
     <button class="tab" onclick="showTab('users')">Users</button>
     <button class="tab" onclick="showTab('library')">Work Library</button>
   </div>
 
-  <!-- OVERVIEW TAB -->
+  <!-- OVERVIEW -->
   <div id="overview" class="tab-section active">
     <div class="panel">
       <h3>Staff overview</h3>
@@ -258,16 +252,14 @@ textarea{min-height:90px}
           <h4>Emma</h4>
           <div class="meta">Started 9:02am</div>
           <div class="status working">
-            Working<br>
-            Inbound: 22 · Outbound: 10 · Chat: 14 · Email: 31 · Other: 8
+            Inbound 22 · Outbound 10 · Chat 14 · Email 31 · Other 8
           </div>
         </div>
         <div class="staff-card">
           <h4>Maddy</h4>
           <div class="meta">Started 9:05am</div>
           <div class="status break">
-            On break<br>
-            Inbound: 14 · Outbound: 7 · Chat: 9 · Email: 18 · Other: 4
+            Inbound 14 · Outbound 7 · Chat 9 · Email 18 · Other 4
           </div>
         </div>
         <div class="staff-card">
@@ -279,44 +271,62 @@ textarea{min-height:90px}
     </div>
   </div>
 
-  <!-- ASSIGN WORK TAB -->
+  <!-- DAILY INPUT -->
+  <div id="daily" class="tab-section">
+    <div class="panel">
+      <h3>Daily input</h3>
+
+      <label>Date</label>
+      <input type="date" id="dailyDate">
+
+      <h4 style="color:var(--g0);font-weight:900;">Start of day volumes</h4>
+      <div class="grid">
+        <div><label>Emails</label><input type="number" min="0"></div>
+        <div><label>A2A</label><input type="number" min="0"></div>
+        <div><label>Unverified</label><input type="number" min="0"></div>
+      </div>
+
+      <h4 style="margin-top:20px;color:var(--g0);font-weight:900;">End of day results</h4>
+      <div class="grid">
+        <div><label>Missed calls</label><input type="number" min="0"></div>
+        <div><label>Missed chats</label><input type="number" min="0"></div>
+      </div>
+
+      <div class="actions">
+        <button>Save daily input</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSIGN WORK -->
   <div id="assign" class="tab-section">
     <div class="panel">
       <h3>Assign work</h3>
 
       <label>Staff member</label>
-      <select>
-        <option>Emma</option>
-        <option>Maddy</option>
-        <option>Pepe</option>
-      </select>
+      <select><option>Emma</option><option>Maddy</option><option>Pepe</option></select>
 
       <label>Date</label>
-      <input type="date">
+      <input type="date" id="assignDate">
 
       <label>Work notes</label>
-      <textarea placeholder="Appears at top of staff page"></textarea>
+      <textarea placeholder="Appears on staff page"></textarea>
 
-      <label>Breaks</label>
-      <input placeholder="e.g. Morning tea 10:30, Lunch 12:30">
-
+      <label>Breaks (standard)</label>
       <div class="grid">
-        <div class="item">
-          <label>Emails</label>
-          <div class="controls"><button>-</button><input value="0"><button>+</button></div>
-        </div>
-        <div class="item">
-          <label>Unverified</label>
-          <div class="controls"><button>-</button><input value="0"><button>+</button></div>
-        </div>
-        <div class="item">
-          <label>A2A</label>
-          <div class="controls"><button>-</button><input value="0"><button>+</button></div>
-        </div>
-        <div class="item">
-          <label>To Call</label>
-          <div class="controls"><button>-</button><input value="0"><button>+</button></div>
-        </div>
+        <div><strong>Morning break</strong><br>10 min</div>
+        <div><strong>Lunch</strong><br>30 min</div>
+        <div><strong>Afternoon break</strong><br>10 min</div>
+      </div>
+
+      <label style="margin-top:18px;">Assigned work</label>
+      <div class="grid">
+        <div class="work-tile">Inbound Calls</div>
+        <div class="work-tile">Outbound Calls</div>
+        <div class="work-tile">Live Chat</div>
+        <div class="work-tile">Emails</div>
+        <div class="work-tile">A2A</div>
+        <div class="work-tile">Unverified</div>
       </div>
 
       <div class="actions">
@@ -325,28 +335,23 @@ textarea{min-height:90px}
     </div>
   </div>
 
-  <!-- USERS TAB -->
+  <!-- USERS -->
   <div id="users" class="tab-section">
     <div class="panel">
       <h3>Users</h3>
       <div class="grid">
-        <div class="item">Emma</div>
-        <div class="item">Maddy</div>
-        <div class="item">Pepe</div>
+        <div>Emma</div><div>Maddy</div><div>Pepe</div>
       </div>
       <button style="margin-top:14px">Add user</button>
     </div>
   </div>
 
-  <!-- WORK LIBRARY TAB -->
+  <!-- WORK LIBRARY -->
   <div id="library" class="tab-section">
     <div class="panel">
       <h3>Work library</h3>
       <div class="grid">
-        <div class="item">Emails</div>
-        <div class="item">Unverified</div>
-        <div class="item">A2A</div>
-        <div class="item">To Call</div>
+        <div>Emails</div><div>A2A</div><div>Unverified</div><div>Live Chat</div>
       </div>
       <button style="margin-top:14px">Create new work type</button>
     </div>
@@ -368,6 +373,9 @@ function showTab(id){
   document.querySelector(`[onclick="showTab('${id}')"]`).classList.add("active");
   document.getElementById(id).classList.add("active");
 }
+
+document.getElementById("assignDate").valueAsDate = new Date();
+document.getElementById("dailyDate").valueAsDate = new Date();
 </script>
 
 </body>
