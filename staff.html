@@ -85,12 +85,6 @@ body{
   margin-bottom:24px;
 }
 
-.layout{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:24px;
-}
-
 /* PANELS */
 
 .panel{
@@ -154,7 +148,7 @@ body{
   font-weight:900;
 }
 
-/* ADMIN NOTE */
+/* NOTE BOX */
 
 .note-box{
   background:var(--g2);
@@ -163,11 +157,15 @@ body{
   font-size:14px;
 }
 
-/* SUBMIT */
+/* TWO COLUMN WORK LOGGING */
 
-.submit{
-  margin-top:10px;
+.work-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
 }
+
+/* SUBMIT */
 
 .submit button{
   width:100%;
@@ -182,7 +180,7 @@ body{
 }
 
 @media(max-width:900px){
-  .layout{grid-template-columns:1fr}
+  .work-layout{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -206,95 +204,102 @@ body{
 <div class="wrap">
   <div class="hello" id="helloText">Hello</div>
 
-  <div class="layout">
+  <!-- ALLOCATED WORK -->
+  <div class="panel">
+    <h3>Allocated Work</h3>
+    <div class="grid">
+      <div class="item">
+        <label>Amendments</label>
+        <div class="controls">
+          <button onclick="adj('amend',-1)">−</button>
+          <input id="amend" value="0">
+          <button onclick="adj('amend',1)">+</button>
+        </div>
+      </div>
+      <div class="item">
+        <label>Follow-ups</label>
+        <div class="controls">
+          <button onclick="adj('follow',-1)">−</button>
+          <input id="follow" value="0">
+          <button onclick="adj('follow',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!-- LEFT: ACTIVITY METRICS -->
-    <div>
+  <!-- ADMIN NOTES (HIDDEN IF EMPTY) -->
+  <div class="panel" id="adminNotesPanel" style="display:none;">
+    <h3>Admin Notes</h3>
+    <div class="note-box" id="adminNotesText"></div>
+  </div>
 
-      <div class="panel">
-        <h3>Live Interactions</h3>
-        <div class="grid">
-          <div class="item">
-            <label>Inbound Calls</label>
-            <div class="controls">
-              <button onclick="adj('inbound',-1)">−</button>
-              <input id="inbound" value="0">
-              <button onclick="adj('inbound',1)">+</button>
-            </div>
+  <!-- BREAK -->
+  <div class="panel">
+    <h3>Break Allocation</h3>
+    <p>10:30am – 10:45am</p>
+  </div>
+
+  <!-- WORK LOGGING -->
+  <div class="work-layout">
+
+    <div class="panel">
+      <h3>Live Interactions</h3>
+      <div class="grid">
+        <div class="item">
+          <label>Inbound Calls</label>
+          <div class="controls">
+            <button onclick="adj('inbound',-1)">−</button>
+            <input id="inbound" value="0">
+            <button onclick="adj('inbound',1)">+</button>
           </div>
-
-          <div class="item">
-            <label>Outbound Calls</label>
-            <div class="controls">
-              <button onclick="adj('outbound',-1)">−</button>
-              <input id="outbound" value="0">
-              <button onclick="adj('outbound',1)">+</button>
-            </div>
+        </div>
+        <div class="item">
+          <label>Outbound Calls</label>
+          <div class="controls">
+            <button onclick="adj('outbound',-1)">−</button>
+            <input id="outbound" value="0">
+            <button onclick="adj('outbound',1)">+</button>
           </div>
-
-          <div class="item">
-            <label>Live Chat</label>
-            <div class="controls">
-              <button onclick="adj('chat',-1)">−</button>
-              <input id="chat" value="0">
-              <button onclick="adj('chat',1)">+</button>
-            </div>
+        </div>
+        <div class="item">
+          <label>Live Chat</label>
+          <div class="controls">
+            <button onclick="adj('chat',-1)">−</button>
+            <input id="chat" value="0">
+            <button onclick="adj('chat',1)">+</button>
           </div>
         </div>
       </div>
-
-      <div class="panel">
-        <h3>Delinks & Cancellations</h3>
-        <div class="grid">
-          <div class="item">
-            <label>Delinks</label>
-            <div class="controls">
-              <button onclick="adj('delink',-1)">−</button>
-              <input id="delink" value="0">
-              <button onclick="adj('delink',1)">+</button>
-            </div>
-          </div>
-
-          <div class="item">
-            <label>Cancellations</label>
-            <div class="controls">
-              <button onclick="adj('cancel',-1)">−</button>
-              <input id="cancel" value="0">
-              <button onclick="adj('cancel',1)">+</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
 
-    <!-- RIGHT: ADMIN DIRECTION -->
-    <div>
-
-      <div class="panel">
-        <h3>Allocated Work</h3>
-        <p>No allocated work for today.</p>
-      </div>
-
-      <div class="panel">
-        <h3>Admin Notes</h3>
-        <div class="note-box">
-          No notes from admin.
+    <div class="panel">
+      <h3>Delinks & Cancellations</h3>
+      <div class="grid">
+        <div class="item">
+          <label>Delinks</label>
+          <div class="controls">
+            <button onclick="adj('delink',-1)">−</button>
+            <input id="delink" value="0">
+            <button onclick="adj('delink',1)">+</button>
+          </div>
+        </div>
+        <div class="item">
+          <label>Cancellations</label>
+          <div class="controls">
+            <button onclick="adj('cancel',-1)">−</button>
+            <input id="cancel" value="0">
+            <button onclick="adj('cancel',1)">+</button>
+          </div>
         </div>
       </div>
-
-      <div class="panel">
-        <h3>Break Allocation</h3>
-        <p>No scheduled breaks.</p>
-      </div>
-
-      <div class="submit">
-        <button>Submit Work</button>
-      </div>
-
     </div>
 
   </div>
+
+  <div class="submit">
+    <button>Submit Work</button>
+  </div>
+
 </div>
 </div>
 
@@ -314,6 +319,14 @@ function adj(id,d){
   let v=Number(el.value||0)+d;
   if(v<0) v=0;
   el.value=v;
+}
+
+/* Example: only show notes if exists */
+const exampleNote = ""; // admin will populate later
+
+if(exampleNote){
+  document.getElementById("adminNotesText").textContent = exampleNote;
+  document.getElementById("adminNotesPanel").style.display = "block";
 }
 </script>
 
