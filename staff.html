@@ -8,7 +8,6 @@
 <style>
 :root{
   --g0:#094B35;
-  --g1:#03953F;
   --g2:#ECFDF5;
   --text:#111827;
   --muted:#6b7280;
@@ -78,11 +77,36 @@ body{
   padding:36px 24px 60px;
 }
 
+/* TOP ROW */
+
+.top-row{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+  margin-bottom:28px;
+}
+
 .hello{
-  font-size:26px;
+  font-size:24px;
   font-weight:900;
   color:var(--g0);
-  margin-bottom:24px;
+}
+
+.note-pill{
+  font-size:14px;
+  padding:6px 12px;
+  border-radius:999px;
+  background:var(--g2);
+  font-weight:800;
+}
+
+/* LAYOUT */
+
+.layout{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:24px;
 }
 
 /* PANELS */
@@ -91,12 +115,12 @@ body{
   background:rgba(255,255,255,.96);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:22px;
-  margin-bottom:22px;
+  padding:20px;
+  margin-bottom:20px;
 }
 
 .panel h3{
-  margin:0 0 16px 0;
+  margin:0 0 14px 0;
   font-size:16px;
   font-weight:900;
   color:var(--g0);
@@ -106,21 +130,21 @@ body{
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:16px;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;
 }
 
 .item{
   background:#fff;
   border:1px solid var(--border);
   border-radius:14px;
-  padding:16px;
+  padding:14px;
 }
 
 .item label{
   display:block;
   font-weight:900;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
 
 .controls{
@@ -148,23 +172,6 @@ body{
   font-weight:900;
 }
 
-/* NOTE BOX */
-
-.note-box{
-  background:var(--g2);
-  border-radius:12px;
-  padding:14px;
-  font-size:14px;
-}
-
-/* TWO COLUMN WORK LOGGING */
-
-.work-layout{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:24px;
-}
-
 /* SUBMIT */
 
 .submit button{
@@ -180,7 +187,7 @@ body{
 }
 
 @media(max-width:900px){
-  .work-layout{grid-template-columns:1fr}
+  .layout{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -188,8 +195,10 @@ body{
 <body>
 <div class="page">
 
+<!-- HEADER -->
 <div class="header">
   <div class="header-inner">
+
     <div class="brand">
       <img src="logo.png">
       <div class="brand-text">
@@ -197,109 +206,121 @@ body{
         <span>Daily Work Logger</span>
       </div>
     </div>
-    <div class="clock" id="clock"></div>
+
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button onclick="goHome()" style="
+        border-radius:999px;
+        padding:8px 16px;
+        font-weight:900;
+        font-size:13px;
+        border:1px solid #fff;
+        background:transparent;
+        color:#fff;
+        cursor:pointer;">
+        ← Overview
+      </button>
+      <div class="clock" id="clock"></div>
+    </div>
+
   </div>
 </div>
 
 <div class="wrap">
-  <div class="hello" id="helloText">Hello</div>
 
-  <!-- ALLOCATED WORK -->
-  <div class="panel">
-    <h3>Allocated Work</h3>
-    <div class="grid">
-      <div class="item">
-        <label>Amendments</label>
+  <!-- TOP ROW -->
+  <div class="top-row">
+    <div class="hello" id="helloText">Hello</div>
+    <div class="note-pill" id="notePill" style="display:none;"></div>
+  </div>
+
+  <div class="layout">
+
+    <!-- LEFT COLUMN: LIVE INTERACTIONS STACKED -->
+    <div>
+
+      <div class="panel">
+        <h3>Inbound Calls</h3>
         <div class="controls">
-          <button onclick="adj('amend',-1)">−</button>
-          <input id="amend" value="0">
-          <button onclick="adj('amend',1)">+</button>
+          <button onclick="adj('inbound',-1)">−</button>
+          <input id="inbound" value="0">
+          <button onclick="adj('inbound',1)">+</button>
         </div>
       </div>
-      <div class="item">
-        <label>Follow-ups</label>
+
+      <div class="panel">
+        <h3>Outbound Calls</h3>
         <div class="controls">
-          <button onclick="adj('follow',-1)">−</button>
-          <input id="follow" value="0">
-          <button onclick="adj('follow',1)">+</button>
+          <button onclick="adj('outbound',-1)">−</button>
+          <input id="outbound" value="0">
+          <button onclick="adj('outbound',1)">+</button>
         </div>
       </div>
+
+      <div class="panel">
+        <h3>Live Chat</h3>
+        <div class="controls">
+          <button onclick="adj('chat',-1)">−</button>
+          <input id="chat" value="0">
+          <button onclick="adj('chat',1)">+</button>
+        </div>
+      </div>
+
     </div>
-  </div>
 
-  <!-- ADMIN NOTES (HIDDEN IF EMPTY) -->
-  <div class="panel" id="adminNotesPanel" style="display:none;">
-    <h3>Admin Notes</h3>
-    <div class="note-box" id="adminNotesText"></div>
-  </div>
+    <!-- RIGHT COLUMN -->
+    <div>
 
-  <!-- BREAK -->
-  <div class="panel">
-    <h3>Break Allocation</h3>
-    <p>10:30am – 10:45am</p>
-  </div>
-
-  <!-- WORK LOGGING -->
-  <div class="work-layout">
-
-    <div class="panel">
-      <h3>Live Interactions</h3>
-      <div class="grid">
-        <div class="item">
-          <label>Inbound Calls</label>
-          <div class="controls">
-            <button onclick="adj('inbound',-1)">−</button>
-            <input id="inbound" value="0">
-            <button onclick="adj('inbound',1)">+</button>
+      <div class="panel">
+        <h3>Allocated Work</h3>
+        <div class="grid">
+          <div class="item">
+            <label>Amendments</label>
+            <div class="controls">
+              <button onclick="adj('amend',-1)">−</button>
+              <input id="amend" value="0">
+              <button onclick="adj('amend',1)">+</button>
+            </div>
           </div>
-        </div>
-        <div class="item">
-          <label>Outbound Calls</label>
-          <div class="controls">
-            <button onclick="adj('outbound',-1)">−</button>
-            <input id="outbound" value="0">
-            <button onclick="adj('outbound',1)">+</button>
-          </div>
-        </div>
-        <div class="item">
-          <label>Live Chat</label>
-          <div class="controls">
-            <button onclick="adj('chat',-1)">−</button>
-            <input id="chat" value="0">
-            <button onclick="adj('chat',1)">+</button>
+          <div class="item">
+            <label>Follow-ups</label>
+            <div class="controls">
+              <button onclick="adj('follow',-1)">−</button>
+              <input id="follow" value="0">
+              <button onclick="adj('follow',1)">+</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="panel">
-      <h3>Delinks & Cancellations</h3>
-      <div class="grid">
-        <div class="item">
-          <label>Delinks</label>
-          <div class="controls">
-            <button onclick="adj('delink',-1)">−</button>
-            <input id="delink" value="0">
-            <button onclick="adj('delink',1)">+</button>
+      <div class="panel">
+        <h3>Delinks & Cancellations</h3>
+        <div class="grid">
+          <div class="item">
+            <label>Delinks</label>
+            <div class="controls">
+              <button onclick="adj('delink',-1)">−</button>
+              <input id="delink" value="0">
+              <button onclick="adj('delink',1)">+</button>
+            </div>
           </div>
-        </div>
-        <div class="item">
-          <label>Cancellations</label>
-          <div class="controls">
-            <button onclick="adj('cancel',-1)">−</button>
-            <input id="cancel" value="0">
-            <button onclick="adj('cancel',1)">+</button>
+          <div class="item">
+            <label>Cancellations</label>
+            <div class="controls">
+              <button onclick="adj('cancel',-1)">−</button>
+              <input id="cancel" value="0">
+              <button onclick="adj('cancel',1)">+</button>
+            </div>
           </div>
         </div>
       </div>
+
+      <div class="submit">
+        <button>Submit Work</button>
+      </div>
+
     </div>
 
   </div>
-
-  <div class="submit">
-    <button>Submit Work</button>
-  </div>
-
 </div>
 </div>
 
@@ -307,6 +328,10 @@ body{
 const name = localStorage.getItem("currentStaff") || "CSR";
 document.getElementById("staffNameLabel").textContent = name;
 document.getElementById("helloText").textContent = "Hello, " + name;
+
+function goHome(){
+  window.location.href = "index.html";
+}
 
 function tick(){
   document.getElementById("clock").textContent =
@@ -321,12 +346,13 @@ function adj(id,d){
   el.value=v;
 }
 
-/* Example: only show notes if exists */
-const exampleNote = ""; // admin will populate later
+/* Admin note example (leave empty to hide) */
+const exampleNote = ""; 
 
 if(exampleNote){
-  document.getElementById("adminNotesText").textContent = exampleNote;
-  document.getElementById("adminNotesPanel").style.display = "block";
+  const pill = document.getElementById("notePill");
+  pill.textContent = exampleNote;
+  pill.style.display = "inline-block";
 }
 </script>
 
