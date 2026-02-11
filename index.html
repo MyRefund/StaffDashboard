@@ -105,13 +105,6 @@ body{
   padding:48px 56px;
 }
 
-.section-title{
-  font-size:18px;
-  font-weight:900;
-  color:var(--g0);
-  margin-bottom:14px;
-}
-
 /* ================= TABS ================= */
 
 .tabs{
@@ -136,9 +129,22 @@ body{
   color:#fff;
 }
 
-/* ================= STATUS CARDS ================= */
+/* ================= TWO COLUMN STATUS ================= */
 
-.staff-grid{
+.status-columns{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+
+.column-title{
+  font-size:16px;
+  font-weight:900;
+  color:var(--g0);
+  margin-bottom:12px;
+}
+
+.status-list{
   display:flex;
   flex-direction:column;
   gap:12px;
@@ -155,13 +161,6 @@ body{
   margin:0 0 6px 0;
   font-size:14px;
   font-weight:900;
-}
-
-.role{
-  font-size:12px;
-  font-weight:800;
-  color:var(--muted);
-  margin-bottom:6px;
 }
 
 .status{
@@ -193,7 +192,7 @@ body{
   font-weight:700;
 }
 
-/* Start buttons */
+/* Login buttons */
 
 .start-btn{
   background:var(--g0);
@@ -216,13 +215,14 @@ body{
 
 .right{}
 
-/* ================= RESPONSIVE ================= */
-
 @media(max-width:1000px){
   .page{
     grid-template-columns:1fr;
   }
   .right{display:none;}
+  .status-columns{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -247,22 +247,19 @@ body{
 </div>
 
 <div class="page">
-
   <div class="left">
 
-    <!-- Tabs -->
     <div class="tabs">
       <button class="tab active" onclick="switchTab('status', this)">Team Status</button>
       <button class="tab" onclick="switchTab('csr', this)">CSR Login</button>
       <button class="tab" onclick="switchTab('processing', this)">Processing Login</button>
     </div>
 
-    <div id="tabContent" class="staff-grid"></div>
+    <div id="tabContent"></div>
 
   </div>
 
   <div class="right"></div>
-
 </div>
 
 <script>
@@ -274,6 +271,7 @@ function todayHuman(){
 
 document.getElementById("todayLabel").textContent = todayHuman();
 
+/* Master Staff List */
 const STAFF = [
   {name:"Drew", division:"CSR"},
   {name:"Emma", division:"CSR"},
@@ -285,52 +283,85 @@ const STAFF = [
   {name:"Bobbi", division:"Processing"}
 ];
 
+/* Demo Online State (layout only) */
+const ONLINE = {
+  "Emma":"working",
+  "George":"working",
+  "Maddy":"break"
+};
+
 function switchTab(tab, btn){
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
   btn.classList.add("active");
 
-  const container = document.getElementById("tabContent");
-  container.innerHTML = "";
-
-  if(tab === "status"){
-    renderStatus();
-  }
-
-  if(tab === "csr"){
-    renderLogin("CSR");
-  }
-
-  if(tab === "processing"){
-    renderLogin("Processing");
-  }
+  if(tab==="status") renderStatus();
+  if(tab==="csr") renderLogin("CSR");
+  if(tab==="processing") renderLogin("Processing");
 }
 
 function renderStatus(){
   const container = document.getElementById("tabContent");
+  container.innerHTML = "";
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "status-columns";
+
+  const csrCol = document.createElement("div");
+  const procCol = document.createElement("div");
+
+  csrCol.innerHTML = `<div class="column-title">CSR</div><div class="status-list" id="csrList"></div>`;
+  procCol.innerHTML = `<div class="column-title">Processing</div><div class="status-list" id="procList"></div>`;
+
+  wrapper.appendChild(csrCol);
+  wrapper.appendChild(procCol);
+  container.appendChild(wrapper);
+
+  const csrList = document.getElementById("csrList");
+  const procList = document.getElementById("procList");
+
+  let csrCount = 0;
+  let procCount = 0;
 
   STAFF.forEach(person=>{
+    const state = ONLINE[person.name];
+    if(!state) return; // Only show online
+
     const el = document.createElement("div");
-    el.className = "status-card offline";
+    el.className = `status-card ${state}`;
     el.innerHTML = `
       <h3>${person.name}</h3>
-      <div class="role">${person.division}</div>
-      <div class="status offline">
-        <span class="dot"></span>Offline
+      <div class="status ${state}">
+        <span class="dot"></span>${state==="working"?"Working":"On Break"}
       </div>
     `;
-    container.appendChild(el);
+
+    if(person.division==="CSR"){
+      csrList.appendChild(el);
+      csrCount++;
+    } else {
+      procList.appendChild(el);
+      procCount++;
+    }
   });
+
+  if(csrCount===0){
+    csrList.innerHTML = `<div class="status-card offline">No one online</div>`;
+  }
+
+  if(procCount===0){
+    procList.innerHTML = `<div class="status-card offline">No one online</div>`;
+  }
 }
 
 function renderLogin(division){
   const container = document.getElementById("tabContent");
+  container.innerHTML = "";
 
   STAFF.filter(p=>p.division===division).forEach(person=>{
     const el = document.createElement("div");
     el.className = "status-card";
     el.innerHTML = `
       <h3>${person.name}</h3>
-      <div class="role">${division}</div>
       <button class="start-btn">Start Shift</button>
     `;
     container.appendChild(el);
