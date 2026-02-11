@@ -44,9 +44,7 @@ body{
   gap:14px;
 }
 
-.brand img{
-  height:28px;
-}
+.brand img{height:28px;}
 
 .brand-text{
   display:flex;
@@ -68,10 +66,6 @@ body{
 .menu{
   display:flex;
   gap:10px;
-}
-
-.menu a{
-  text-decoration:none;
 }
 
 .menu button{
@@ -98,8 +92,6 @@ body{
   min-height:calc(100vh - 72px);
   background:url("My Refund-Hero Images-02 (1).jpg") center center / cover no-repeat;
 }
-
-/* ================= LEFT CONTENT ================= */
 
 .left{
   padding:48px 56px;
@@ -129,7 +121,7 @@ body{
   color:#fff;
 }
 
-/* ================= TWO COLUMN STATUS ================= */
+/* ================= STATUS ================= */
 
 .status-columns{
   display:grid;
@@ -163,33 +155,6 @@ body{
   font-weight:900;
 }
 
-/* ================= LOGIN GRID ================= */
-
-.login-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-
-.start-btn{
-  background:var(--g0);
-  color:#fff;
-  border:none;
-  border-radius:14px;
-  padding:12px 14px;
-  font-weight:900;
-  font-size:14px;
-  cursor:pointer;
-  text-align:left;
-  width:100%;
-}
-
-.start-btn:hover{
-  background:#0b5c42;
-}
-
-/* ================= STATUS ================= */
-
 .status{
   display:flex;
   align-items:center;
@@ -212,22 +177,36 @@ body{
 .break{color:#92400e}
 .offline{color:#6b7280}
 
-.time{
-  margin-top:6px;
-  font-size:12px;
-  color:var(--muted);
-  font-weight:700;
+/* ================= LOGIN GRID ================= */
+
+.login-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
 }
 
-/* ================= RIGHT ================= */
+.start-btn{
+  background:var(--g0);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  padding:12px 14px;
+  font-weight:900;
+  font-size:14px;
+  cursor:pointer;
+  width:100%;
+}
 
-.right{}
+.start-btn:hover{
+  background:#0b5c42;
+}
+
+/* ================= RESPONSIVE ================= */
 
 @media(max-width:1000px){
   .page{
     grid-template-columns:1fr;
   }
-  .right{display:none;}
   .status-columns{
     grid-template-columns:1fr;
   }
@@ -243,7 +222,7 @@ body{
 <div class="header">
   <div class="header-inner">
     <div class="brand">
-      <img src="logo.png" alt="My Refund">
+      <img src="logo.png">
       <div class="brand-text">
         <strong>Staff Overview</strong>
         <span id="todayLabel"></span>
@@ -269,8 +248,7 @@ body{
     <div id="tabContent"></div>
 
   </div>
-
-  <div class="right"></div>
+  <div></div>
 </div>
 
 <script>
@@ -279,9 +257,9 @@ const TZ = "Pacific/Auckland";
 function todayHuman(){
   return new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
 }
-
 document.getElementById("todayLabel").textContent = todayHuman();
 
+/* STAFF MASTER LIST */
 const STAFF = [
   {name:"Drew", division:"CSR"},
   {name:"Emma", division:"CSR"},
@@ -293,12 +271,7 @@ const STAFF = [
   {name:"Bobbi", division:"Processing"}
 ];
 
-/* Demo Online State */
-const ONLINE = {
-  "Emma":"working",
-  "George":"working",
-  "Maddy":"break"
-};
+/* Tab Switching */
 
 function switchTab(tab, btn){
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
@@ -308,6 +281,8 @@ function switchTab(tab, btn){
   if(tab==="csr") renderLogin("CSR");
   if(tab==="processing") renderLogin("Processing");
 }
+
+/* TEAM STATUS (demo online only) */
 
 function renderStatus(){
   const container = document.getElementById("tabContent");
@@ -326,42 +301,14 @@ function renderStatus(){
   wrapper.appendChild(procCol);
   container.appendChild(wrapper);
 
-  const csrList = document.getElementById("csrList");
-  const procList = document.getElementById("procList");
+  document.getElementById("csrList").innerHTML =
+    `<div class="status-card offline">No one online</div>`;
 
-  let csrCount = 0;
-  let procCount = 0;
-
-  STAFF.forEach(person=>{
-    const state = ONLINE[person.name];
-    if(!state) return;
-
-    const el = document.createElement("div");
-    el.className = `status-card ${state}`;
-    el.innerHTML = `
-      <h3>${person.name}</h3>
-      <div class="status ${state}">
-        <span class="dot"></span>${state==="working"?"Working":"On Break"}
-      </div>
-    `;
-
-    if(person.division==="CSR"){
-      csrList.appendChild(el);
-      csrCount++;
-    } else {
-      procList.appendChild(el);
-      procCount++;
-    }
-  });
-
-  if(csrCount===0){
-    csrList.innerHTML = `<div class="status-card offline">No one online</div>`;
-  }
-
-  if(procCount===0){
-    procList.innerHTML = `<div class="status-card offline">No one online</div>`;
-  }
+  document.getElementById("procList").innerHTML =
+    `<div class="status-card offline">No one online</div>`;
 }
+
+/* LOGIN */
 
 function renderLogin(division){
   const container = document.getElementById("tabContent");
@@ -375,12 +322,27 @@ function renderLogin(division){
     el.className = "status-card";
     el.innerHTML = `
       <h3>${person.name}</h3>
-      <button class="start-btn">Start Shift</button>
+      <button class="start-btn" onclick="startShift('${person.name}','${division}')">
+        Start Shift
+      </button>
     `;
     grid.appendChild(el);
   });
 
   container.appendChild(grid);
+}
+
+/* START SHIFT (ONLY WIRING WE ARE DOING) */
+
+function startShift(name, division){
+  localStorage.setItem("currentStaff", name);
+  localStorage.setItem("currentDivision", division);
+
+  if(division === "CSR"){
+    window.location.href = "staff.html";
+  } else {
+    window.location.href = "processing.html";
+  }
 }
 
 renderStatus();
