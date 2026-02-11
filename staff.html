@@ -38,7 +38,7 @@ body{
 }
 
 .header-inner{
-  max-width:1200px;
+  max-width:1300px;
   margin:0 auto;
   display:flex;
   justify-content:space-between;
@@ -72,7 +72,7 @@ body{
 /* CONTENT */
 
 .wrap{
-  max-width:1200px;
+  max-width:1300px;
   margin:0 auto;
   padding:36px 24px 60px;
 }
@@ -101,11 +101,11 @@ body{
   font-weight:800;
 }
 
-/* LAYOUT */
+/* 3 COLUMN LAYOUT */
 
 .layout{
   display:grid;
-  grid-template-columns:320px 1fr;
+  grid-template-columns:300px 1fr 260px;
   gap:24px;
 }
 
@@ -172,6 +172,20 @@ body{
   font-weight:900;
 }
 
+/* RESOURCE LINKS */
+
+.resource-link{
+  display:block;
+  padding:8px 0;
+  text-decoration:none;
+  font-weight:800;
+  color:var(--g0);
+}
+
+.resource-link:hover{
+  text-decoration:underline;
+}
+
 /* SUBMIT */
 
 .submit button{
@@ -186,8 +200,10 @@ body{
   cursor:pointer;
 }
 
-@media(max-width:900px){
-  .layout{grid-template-columns:1fr}
+@media(max-width:1100px){
+  .layout{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -195,7 +211,6 @@ body{
 <body>
 <div class="page">
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-inner">
 
@@ -227,7 +242,6 @@ body{
 
 <div class="wrap">
 
-  <!-- TOP ROW -->
   <div class="top-row">
     <div class="hello" id="helloText">Hello</div>
     <div class="note-pill" id="notePill" style="display:none;"></div>
@@ -235,7 +249,7 @@ body{
 
   <div class="layout">
 
-    <!-- LEFT COLUMN: LIVE INTERACTIONS STACKED -->
+    <!-- LEFT -->
     <div>
 
       <div class="panel">
@@ -267,7 +281,7 @@ body{
 
     </div>
 
-    <!-- RIGHT COLUMN -->
+    <!-- MIDDLE -->
     <div>
 
       <div class="panel">
@@ -320,6 +334,32 @@ body{
 
     </div>
 
+    <!-- RIGHT: RESOURCES -->
+    <div>
+
+      <div class="panel">
+        <h3>Resources</h3>
+        <a class="resource-link" href="https://docs.google.com/document/d/1YheHUIH1nfFRhrp99I_eG2rXENDGzO8367CVwwTg2Ic/edit?usp=drive_link" target="_blank">
+          Income Confirmation Script
+        </a>
+      </div>
+
+      <div class="panel">
+        <h3>Important Contacts</h3>
+        <div style="font-size:14px;line-height:1.6;">
+          <strong>My Refund</strong><br>
+          0800 80 89 89<br>
+          info@myrefund.co.nz<br>
+          myrefund.co.nz<br><br>
+
+          <strong>IRD</strong><br>
+          ird.govt.nz<br>
+          0800 227 774
+        </div>
+      </div>
+
+    </div>
+
   </div>
 </div>
 </div>
@@ -344,15 +384,6 @@ function adj(id,d){
   let v=Number(el.value||0)+d;
   if(v<0) v=0;
   el.value=v;
-}
-
-/* Admin note example (leave empty to hide) */
-const exampleNote = ""; 
-
-if(exampleNote){
-  const pill = document.getElementById("notePill");
-  pill.textContent = exampleNote;
-  pill.style.display = "inline-block";
 }
 </script>
 
