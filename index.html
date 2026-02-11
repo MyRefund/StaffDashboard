@@ -112,34 +112,33 @@ body{
   margin-bottom:14px;
 }
 
-/* Start buttons */
+/* ================= TABS ================= */
 
-.start-list{
+.tabs{
   display:flex;
-  flex-direction:column;
-  gap:12px;
-  margin-bottom:36px;
+  gap:10px;
+  margin-bottom:28px;
 }
 
-.start-btn{
+.tab{
+  border-radius:999px;
+  padding:8px 16px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid var(--g0);
+  background:#fff;
+  color:var(--g0);
+  cursor:pointer;
+}
+
+.tab.active{
   background:var(--g0);
   color:#fff;
-  border:none;
-  border-radius:14px;
-  padding:14px 18px;
-  font-weight:900;
-  font-size:15px;
-  cursor:pointer;
-  text-align:left;
 }
 
-.start-btn:hover{
-  background:#0b5c42;
-}
+/* ================= STATUS CARDS ================= */
 
-/* Status cards */
-
-.status-list{
+.staff-grid{
   display:flex;
   flex-direction:column;
   gap:12px;
@@ -156,6 +155,13 @@ body{
   margin:0 0 6px 0;
   font-size:14px;
   font-weight:900;
+}
+
+.role{
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+  margin-bottom:6px;
 }
 
 .status{
@@ -187,11 +193,28 @@ body{
   font-weight:700;
 }
 
+/* Start buttons */
+
+.start-btn{
+  background:var(--g0);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  padding:12px 14px;
+  font-weight:900;
+  font-size:14px;
+  cursor:pointer;
+  text-align:left;
+  width:100%;
+}
+
+.start-btn:hover{
+  background:#0b5c42;
+}
+
 /* ================= RIGHT ================= */
 
-.right{
-  /* intentionally empty – image only */
-}
+.right{}
 
 /* ================= RESPONSIVE ================= */
 
@@ -206,7 +229,6 @@ body{
 
 <body>
 
-<!-- ================= HEADER ================= -->
 <div class="header">
   <div class="header-inner">
     <div class="brand">
@@ -224,116 +246,98 @@ body{
   </div>
 </div>
 
-<!-- ================= PAGE ================= -->
 <div class="page">
 
-  <!-- LEFT -->
   <div class="left">
 
-    <div class="section-title">Start your day</div>
-    <div class="start-list">
-      <button class="start-btn" onclick="startDay('Emma')">Emma</button>
-      <button class="start-btn" onclick="startDay('Maddy')">Maddy</button>
-      <button class="start-btn" onclick="startDay('Pepe')">Pepe</button>
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('status', this)">Team Status</button>
+      <button class="tab" onclick="switchTab('csr', this)">CSR Login</button>
+      <button class="tab" onclick="switchTab('processing', this)">Processing Login</button>
     </div>
 
-    <div class="section-title">Today’s activity</div>
-    <div id="statusList" class="status-list"></div>
+    <div id="tabContent" class="staff-grid"></div>
 
   </div>
 
-  <!-- RIGHT -->
   <div class="right"></div>
 
 </div>
 
 <script>
-/* ================= CONFIG ================= */
-const REFRESH_MS = 30000;
 const TZ = "Pacific/Auckland";
 
-/* ================= HELPERS ================= */
-function todayISO(){
-  return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
-}
-function nowTime(){
-  return new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",timeZone:TZ});
-}
 function todayHuman(){
   return new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
 }
 
-/* ================= LOGIN ================= */
-function startDay(name){
-  const today = todayISO();
+document.getElementById("todayLabel").textContent = todayHuman();
 
-  let staff = JSON.parse(localStorage.getItem("staffList") || "[]");
-  if(!staff.includes(name)){
-    staff.push(name);
-    localStorage.setItem("staffList", JSON.stringify(staff));
+const STAFF = [
+  {name:"Drew", division:"CSR"},
+  {name:"Emma", division:"CSR"},
+  {name:"Pepe", division:"CSR"},
+  {name:"Maddy", division:"CSR"},
+  {name:"Sophie", division:"CSR"},
+  {name:"George", division:"Processing"},
+  {name:"Merin", division:"Processing"},
+  {name:"Bobbi", division:"Processing"}
+];
+
+function switchTab(tab, btn){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  btn.classList.add("active");
+
+  const container = document.getElementById("tabContent");
+  container.innerHTML = "";
+
+  if(tab === "status"){
+    renderStatus();
   }
 
-  localStorage.setItem("staffStatus_"+name, JSON.stringify({
-    date: today,
-    state: "working",
-    start: nowTime()
-  }));
-
-  localStorage.setItem("currentStaff", name);
-  window.location.href = "staff.html";
-}
-
-/* ================= STATUS ================= */
-function loadStaff(){
-  return JSON.parse(localStorage.getItem("staffList") || "[]");
-}
-
-function loadStatus(name){
-  const today = todayISO();
-  const s = JSON.parse(localStorage.getItem("staffStatus_"+name) || "{}");
-  if(s.date !== today) return {state:"offline"};
-  return s;
-}
-
-function render(){
-  const list = document.getElementById("statusList");
-  list.innerHTML = "";
-
-  const staff = loadStaff();
-
-  if(!staff.length){
-    list.innerHTML = `<div class="status-card">No staff have logged in yet today.</div>`;
-    return;
+  if(tab === "csr"){
+    renderLogin("CSR");
   }
 
-  staff.forEach(name=>{
-    const s = loadStatus(name);
+  if(tab === "processing"){
+    renderLogin("Processing");
+  }
+}
 
-    let cls="offline", label="Not logged in", time="";
-    if(s.state==="working"){
-      cls="working"; label="Working"; time="Started: "+s.start;
-    }
-    if(s.state==="break"){
-      cls="break"; label="On break"; time="Break started: "+s.breakStart;
-    }
+function renderStatus(){
+  const container = document.getElementById("tabContent");
 
+  STAFF.forEach(person=>{
     const el = document.createElement("div");
-    el.className = `status-card ${cls}`;
+    el.className = "status-card offline";
     el.innerHTML = `
-      <h3>${name}</h3>
-      <div class="status ${cls}">
-        <span class="dot"></span>${label}
+      <h3>${person.name}</h3>
+      <div class="role">${person.division}</div>
+      <div class="status offline">
+        <span class="dot"></span>Offline
       </div>
-      ${time?`<div class="time">${time}</div>`:""}
     `;
-    list.appendChild(el);
+    container.appendChild(el);
   });
 }
 
-/* ================= INIT ================= */
-document.getElementById("todayLabel").textContent = todayHuman();
-render();
-setInterval(render, REFRESH_MS);
+function renderLogin(division){
+  const container = document.getElementById("tabContent");
+
+  STAFF.filter(p=>p.division===division).forEach(person=>{
+    const el = document.createElement("div");
+    el.className = "status-card";
+    el.innerHTML = `
+      <h3>${person.name}</h3>
+      <div class="role">${division}</div>
+      <button class="start-btn">Start Shift</button>
+    `;
+    container.appendChild(el);
+  });
+}
+
+renderStatus();
 </script>
 
 </body>
