@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Refund — Staff</title>
+<title>My Refund — CSR Workspace</title>
 
 <style>
 :root{
@@ -25,13 +25,13 @@ body{
   color:var(--text);
 }
 
-/* ===== BACKGROUND ===== */
 .page{
   min-height:100vh;
   background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
+
 .header{
   background:var(--g0);
   color:#fff;
@@ -70,7 +70,8 @@ body{
   font-size:14px;
 }
 
-/* ===== CONTENT ===== */
+/* CONTENT */
+
 .wrap{
   max-width:1200px;
   margin:0 auto;
@@ -84,48 +85,14 @@ body{
   margin-bottom:24px;
 }
 
-/* ===== LAYOUT ===== */
 .layout{
   display:grid;
-  grid-template-columns:320px 1fr;
+  grid-template-columns:1fr 1fr;
   gap:24px;
 }
 
-/* ===== LEFT COLUMN ===== */
-.side-card{
-  background:var(--g0);
-  color:#fff;
-  border-radius:var(--radius);
-  padding:18px;
-  box-shadow:var(--shadow);
-  margin-bottom:18px;
-}
+/* PANELS */
 
-.side-card h3{
-  margin:0 0 10px 0;
-  font-size:14px;
-  font-weight:900;
-}
-
-.side-card p{
-  margin:0;
-  font-size:13px;
-  line-height:1.4;
-  opacity:.95;
-}
-
-.side-card button{
-  margin-top:12px;
-  border:none;
-  border-radius:999px;
-  padding:8px 14px;
-  font-weight:900;
-  background:#fff;
-  color:var(--g0);
-  cursor:pointer;
-}
-
-/* ===== WORK PANELS ===== */
 .panel{
   background:rgba(255,255,255,.96);
   border-radius:var(--radius);
@@ -141,7 +108,8 @@ body{
   color:var(--g0);
 }
 
-/* ===== GRIDS ===== */
+/* GRID */
+
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -161,7 +129,6 @@ body{
   margin-bottom:10px;
 }
 
-/* ===== COUNTERS ===== */
 .controls{
   display:flex;
   align-items:center;
@@ -187,14 +154,25 @@ body{
   font-weight:900;
 }
 
-/* ===== SUBMIT ===== */
+/* ADMIN NOTE */
+
+.note-box{
+  background:var(--g2);
+  border-radius:12px;
+  padding:14px;
+  font-size:14px;
+}
+
+/* SUBMIT */
+
 .submit{
-  margin-top:26px;
+  margin-top:10px;
 }
 
 .submit button{
+  width:100%;
   border-radius:14px;
-  padding:14px 22px;
+  padding:14px;
   font-weight:900;
   font-size:15px;
   border:none;
@@ -203,7 +181,6 @@ body{
   cursor:pointer;
 }
 
-/* ===== RESPONSIVE ===== */
 @media(max-width:900px){
   .layout{grid-template-columns:1fr}
 }
@@ -213,14 +190,13 @@ body{
 <body>
 <div class="page">
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-inner">
     <div class="brand">
       <img src="logo.png">
       <div class="brand-text">
-        <strong id="staffNameLabel">Staff</strong>
-        <span>Work tracker</span>
+        <strong id="staffNameLabel">CSR</strong>
+        <span>Daily Work Logger</span>
       </div>
     </div>
     <div class="clock" id="clock"></div>
@@ -232,49 +208,32 @@ body{
 
   <div class="layout">
 
-    <!-- LEFT COLUMN -->
-    <div>
-      <div class="side-card">
-        <h3>Work Notes</h3>
-        <p>No work notes for today.</p>
-      </div>
-
-      <div class="side-card">
-        <h3>Breaks</h3>
-        <p>No breaks scheduled.</p>
-        <button>Acknowledge break</button>
-      </div>
-
-      <div class="side-card">
-        <h3>Next Shift</h3>
-        <p>Tomorrow<br><strong>9:00am – 5:00pm</strong></p>
-      </div>
-    </div>
-
-    <!-- RIGHT COLUMN -->
+    <!-- LEFT: ACTIVITY METRICS -->
     <div>
 
       <div class="panel">
-        <h3>Live interactions</h3>
+        <h3>Live Interactions</h3>
         <div class="grid">
           <div class="item">
-            <label>Inbound</label>
+            <label>Inbound Calls</label>
             <div class="controls">
               <button onclick="adj('inbound',-1)">−</button>
               <input id="inbound" value="0">
               <button onclick="adj('inbound',1)">+</button>
             </div>
           </div>
+
           <div class="item">
-            <label>Outbound</label>
+            <label>Outbound Calls</label>
             <div class="controls">
               <button onclick="adj('outbound',-1)">−</button>
               <input id="outbound" value="0">
               <button onclick="adj('outbound',1)">+</button>
             </div>
           </div>
+
           <div class="item">
-            <label>Live chat</label>
+            <label>Live Chat</label>
             <div class="controls">
               <button onclick="adj('chat',-1)">−</button>
               <input id="chat" value="0">
@@ -285,12 +244,7 @@ body{
       </div>
 
       <div class="panel">
-        <h3>Allocated work</h3>
-        <p>No allocated work for today.</p>
-      </div>
-
-      <div class="panel">
-        <h3>Delinks & cancellations</h3>
+        <h3>Delinks & Cancellations</h3>
         <div class="grid">
           <div class="item">
             <label>Delinks</label>
@@ -300,6 +254,7 @@ body{
               <button onclick="adj('delink',1)">+</button>
             </div>
           </div>
+
           <div class="item">
             <label>Cancellations</label>
             <div class="controls">
@@ -311,17 +266,40 @@ body{
         </div>
       </div>
 
+    </div>
+
+    <!-- RIGHT: ADMIN DIRECTION -->
+    <div>
+
+      <div class="panel">
+        <h3>Allocated Work</h3>
+        <p>No allocated work for today.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Admin Notes</h3>
+        <div class="note-box">
+          No notes from admin.
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Break Allocation</h3>
+        <p>No scheduled breaks.</p>
+      </div>
+
       <div class="submit">
-        <button>Submit work</button>
+        <button>Submit Work</button>
       </div>
 
     </div>
+
   </div>
 </div>
 </div>
 
 <script>
-const name = localStorage.getItem("currentStaff") || "Staff";
+const name = localStorage.getItem("currentStaff") || "CSR";
 document.getElementById("staffNameLabel").textContent = name;
 document.getElementById("helloText").textContent = "Hello, " + name;
 
