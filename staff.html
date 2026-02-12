@@ -117,14 +117,6 @@ body{
   color:var(--g0);
 }
 
-.note-pill{
-  font-size:14px;
-  padding:6px 12px;
-  border-radius:999px;
-  background:var(--g2);
-  font-weight:800;
-}
-
 /* WORK LOG LAYOUT */
 
 .layout{
@@ -204,20 +196,6 @@ body{
   cursor:pointer;
 }
 
-/* RESOURCE LINKS */
-
-.resource-link{
-  display:block;
-  padding:8px 0;
-  text-decoration:none;
-  font-weight:800;
-  color:var(--g0);
-}
-
-.resource-link:hover{
-  text-decoration:underline;
-}
-
 .hidden{
   display:none;
 }
@@ -266,12 +244,11 @@ body{
 
 <div class="wrap">
 
-  <!-- WORK LOG CONTENT -->
+  <!-- WORK LOG -->
   <div id="workTab">
 
     <div class="top-row">
       <div class="hello" id="helloText">Hello</div>
-      <div class="note-pill" id="notePill" style="display:none;"></div>
     </div>
 
     <div class="layout">
@@ -355,6 +332,20 @@ body{
           </div>
         </div>
 
+        <div class="panel">
+          <h3>Quick Contacts</h3>
+          <div style="font-size:14px;line-height:1.6;">
+            <strong>My Refund</strong><br>
+            0800 80 89 89<br>
+            info@myrefund.co.nz<br>
+            myrefund.co.nz<br><br>
+
+            <strong>IRD</strong><br>
+            ird.govt.nz<br>
+            0800 227 774
+          </div>
+        </div>
+
         <div class="submit">
           <button>Submit Work</button>
         </div>
@@ -364,30 +355,16 @@ body{
     </div>
   </div>
 
-  <!-- RESOURCES CONTENT -->
+  <!-- RESOURCES -->
   <div id="resourcesTab" class="hidden">
 
     <div class="panel">
       <h3>Scripts</h3>
-      <a class="resource-link"
-         href="https://docs.google.com/document/d/1YheHUIH1nfFRhrp99I_eG2rXENDGzO8367CVwwTg2Ic/edit?usp=drive_link"
-         target="_blank">
-        Income Confirmation Script
+      <a href="https://docs.google.com/document/d/1YheHUIH1nfFRhrp99I_eG2rXENDGzO8367CVwwTg2Ic/edit?usp=drive_link"
+         target="_blank"
+         style="font-weight:800;color:var(--g0);text-decoration:none;">
+         Income Confirmation Script
       </a>
-    </div>
-
-    <div class="panel">
-      <h3>Important Contacts</h3>
-      <div style="font-size:14px;line-height:1.6;">
-        <strong>My Refund</strong><br>
-        0800 80 89 89<br>
-        info@myrefund.co.nz<br>
-        myrefund.co.nz<br><br>
-
-        <strong>IRD</strong><br>
-        ird.govt.nz<br>
-        0800 227 774
-      </div>
     </div>
 
   </div>
