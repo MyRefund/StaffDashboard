@@ -33,7 +33,6 @@ body{
   background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
 }
 
-/* HEADER */
 .header{
   background:var(--g0);
   color:#fff;
@@ -72,14 +71,12 @@ body{
   font-size:14px;
 }
 
-/* CONTENT */
 .wrap{
   max-width:1200px;
   margin:0 auto;
   padding:28px 24px 60px;
 }
 
-/* TABS */
 .tabs{
   display:flex;
   gap:8px;
@@ -106,7 +103,6 @@ body{
 .tab-section{display:none}
 .tab-section.active{display:block}
 
-/* PANELS */
 .panel{
   background:rgba(255,255,255,.95);
   border-radius:var(--radius);
@@ -122,33 +118,12 @@ body{
   color:var(--g0);
 }
 
-/* GRID */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:16px;
 }
 
-/* STAFF CARD */
-.staff-card{
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:16px;
-}
-
-.staff-card h4{
-  margin:0 0 6px;
-  font-size:14px;
-  font-weight:900;
-}
-
-.meta{
-  font-size:12px;
-  font-weight:800;
-  color:var(--muted);
-}
-
-/* FORM */
 label{
   display:block;
   font-size:12px;
@@ -167,7 +142,6 @@ input, select, textarea{
 
 textarea{min-height:90px}
 
-/* WORK TILE */
 .work-tile{
   border:2px solid var(--border);
   border-radius:14px;
@@ -176,7 +150,6 @@ textarea{min-height:90px}
   font-weight:900;
   background:#fff;
   cursor:pointer;
-  transition:all .15s ease;
 }
 
 .work-tile.active{
@@ -185,7 +158,6 @@ textarea{min-height:90px}
   color:var(--g0);
 }
 
-/* ACTION */
 .actions{
   text-align:right;
 }
@@ -198,13 +170,66 @@ textarea{min-height:90px}
   border:none;
   font-weight:900;
 }
+
+.staff-card{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+}
+
+.meta{
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+}
+
+.success-message{
+  margin-top:16px;
+  padding:12px 16px;
+  border-radius:12px;
+  background:#ECFDF5;
+  color:#065f46;
+  font-weight:900;
+  display:none;
+}
+
+/* Overview cards */
+.overview-card{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+  background:#fff;
+  cursor:pointer;
+}
+
+.overview-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.overview-summary{
+  font-size:13px;
+  font-weight:800;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+.overview-details{
+  margin-top:12px;
+  font-size:13px;
+  display:none;
+}
+
+.overview-card.expanded .overview-details{
+  display:block;
+}
 </style>
 </head>
 
 <body>
 <div class="page">
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-inner">
     <div class="brand">
@@ -220,7 +245,6 @@ textarea{min-height:90px}
 
 <div class="wrap">
 
-<!-- TABS -->
 <div class="tabs">
   <button class="tab active" onclick="showTab('overview')">Overview</button>
   <button class="tab" onclick="showTab('allocation')">Allocation</button>
@@ -231,17 +255,13 @@ textarea{min-height:90px}
 <!-- OVERVIEW -->
 <div id="overview" class="tab-section active">
   <div class="panel">
-    <h3>Today Overview</h3>
-    <div class="grid">
-      <div class="staff-card">
-        <h4>Emma</h4>
-        <div class="meta">CSR</div>
-      </div>
-      <div class="staff-card">
-        <h4>George</h4>
-        <div class="meta">Processing</div>
-      </div>
-    </div>
+    <h3>CSR Overview</h3>
+    <div id="csrOverview" class="grid"></div>
+  </div>
+
+  <div class="panel">
+    <h3>Processing Overview</h3>
+    <div id="processingOverview" class="grid"></div>
   </div>
 </div>
 
@@ -251,90 +271,119 @@ textarea{min-height:90px}
     <h3>CSR Work Allocation</h3>
 
     <label>CSR Staff Member</label>
-    <select>
-      <option>Emma</option>
-      <option>Drew</option>
-      <option>Pepe</option>
-      <option>Maddy</option>
-      <option>Sophie</option>
-    </select>
+    <select id="allocationStaff" onchange="resetAllocation()"></select>
 
     <label>Date</label>
-    <input type="date">
+    <input type="date" id="allocationDate">
 
     <label>Assigned Work Types</label>
-    <div class="grid">
-      <div class="work-tile" onclick="toggleTile(this)">A2A</div>
-      <div class="work-tile" onclick="toggleTile(this)">Unverified</div>
-      <div class="work-tile" onclick="toggleTile(this)">Emails</div>
-      <div class="work-tile" onclick="toggleTile(this)">INC/C Calling</div>
-      <div class="work-tile" onclick="toggleTile(this)">Question Calling</div>
-      <div class="work-tile" onclick="toggleTile(this)">A2A Calling</div>
-    </div>
+    <div class="grid" id="allocationWorkTiles"></div>
 
-    <label style="margin-top:18px">Notes</label>
-    <textarea></textarea>
+    <label>Notes</label>
+    <textarea id="allocationNotes"></textarea>
 
     <div class="actions">
-      <button>Save Allocation</button>
+      <button onclick="saveAllocation()">Save Allocation</button>
+    </div>
+
+    <div id="allocationSuccess" class="success-message">
+      Allocation saved successfully.
     </div>
   </div>
 </div>
 
 <!-- DAILY ENVIRONMENT -->
 <div id="environment" class="tab-section">
+
   <div class="panel">
-    <h3>Daily Environment</h3>
+    <h3>Start of Day</h3>
 
     <label>Date</label>
-    <input type="date">
+    <input type="date" id="environmentDate">
 
-    <h4 style="color:var(--g0)">Start of Day</h4>
     <div class="grid">
-      <div><label>Emails</label><input type="number"></div>
-      <div><label>A2A</label><input type="number"></div>
-      <div><label>Unverified</label><input type="number"></div>
-    </div>
-
-    <h4 style="color:var(--g0)">End of Day</h4>
-    <div class="grid">
-      <div><label>Missed Calls</label><input type="number"></div>
-      <div><label>Missed Chats</label><input type="number"></div>
+      <div><label>Emails</label><input type="number" id="startEmails"></div>
+      <div><label>A2A</label><input type="number" id="startA2A"></div>
+      <div><label>Unverified</label><input type="number" id="startUnverified"></div>
     </div>
 
     <div class="actions">
-      <button>Save Environment</button>
+      <button id="saveStartBtn" onclick="saveStartOfDay()">Save Start of Day</button>
+    </div>
+
+    <div id="startSavedMsg" class="success-message">
+      Start of Day saved successfully.
     </div>
   </div>
+
+  <div class="panel">
+    <h3>End of Day</h3>
+
+    <div class="grid">
+      <div><label>Missed Calls</label><input type="number" id="endMissedCalls"></div>
+      <div><label>Missed Chats</label><input type="number" id="endMissedChats"></div>
+    </div>
+
+    <div class="actions">
+      <button id="saveEndBtn" onclick="saveEndOfDay()">Save End of Day</button>
+    </div>
+
+    <div id="endSavedMsg" class="success-message">
+      End of Day saved successfully.
+    </div>
+  </div>
+
 </div>
 
 <!-- SETTINGS -->
 <div id="settings" class="tab-section">
+
   <div class="panel">
-    <h3>Users</h3>
-    <div class="grid">
-      <div class="staff-card">Emma — CSR</div>
-      <div class="staff-card">George — Processing</div>
+    <h3>User Management</h3>
+    <div id="userList" class="grid"></div>
+
+    <hr style="margin:24px 0;border:none;border-top:1px solid var(--border);">
+
+    <label>Name</label>
+    <input type="text" id="newUserName">
+
+    <label>Division</label>
+    <select id="newUserDivision">
+      <option value="CSR">CSR</option>
+      <option value="Processing">Processing</option>
+    </select>
+
+    <div class="actions">
+      <button onclick="addUser()">Add User</button>
     </div>
   </div>
 
   <div class="panel">
     <h3>Work Library (CSR)</h3>
-    <div class="grid">
-      <div class="work-tile">A2A</div>
-      <div class="work-tile">Unverified</div>
-      <div class="work-tile">Emails</div>
-      <div class="work-tile">INC/C Calling</div>
-      <div class="work-tile">Question Calling</div>
-      <div class="work-tile">A2A Calling</div>
+    <div id="workList" class="grid"></div>
+
+    <hr style="margin:24px 0;border:none;border-top:1px solid var(--border);">
+
+    <label>Work Name</label>
+    <input type="text" id="newWorkName">
+
+    <div class="actions">
+      <button onclick="addWork()">Add Work Type</button>
     </div>
   </div>
+
 </div>
 
 </div>
 </div>
 
 <script>
+const TZ = "Pacific/Auckland";
+
+function todayISO(){
+  return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
+}
+
 function showTab(id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
@@ -342,15 +391,182 @@ function showTab(id){
   document.getElementById(id).classList.add('active');
 }
 
-function toggleTile(el){
-  el.classList.toggle('active');
-}
-
 function tick(){
   document.getElementById("clock").textContent =
     new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 tick(); setInterval(tick,1000);
+
+/* Mock data */
+let users = [
+  {name:"Emma", division:"CSR", active:true},
+  {name:"Drew", division:"CSR", active:true},
+  {name:"Pepe", division:"CSR", active:true},
+  {name:"Maddy", division:"CSR", active:true},
+  {name:"Sophie", division:"CSR", active:true},
+  {name:"George", division:"Processing", active:true},
+  {name:"Merin", division:"Processing", active:true}
+];
+
+let workTypes = [
+  "A2A","Unverified","Emails",
+  "INC/C Calling","Question Calling","A2A Calling"
+];
+
+/* Render functions */
+function renderUsers(){
+  const list=document.getElementById("userList");
+  list.innerHTML="";
+  users.forEach((u,i)=>{
+    const card=document.createElement("div");
+    card.className="staff-card";
+    card.innerHTML=`
+      <strong>${u.name}</strong><br>
+      <div class="meta">${u.division}</div>
+      <div class="meta">Status: ${u.active?"Active":"Inactive"}</div>
+      <button onclick="toggleUser(${i})">${u.active?"Deactivate":"Reactivate"}</button>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function toggleUser(i){
+  users[i].active=!users[i].active;
+  renderUsers();
+  renderAllocationStaff();
+  renderOverview();
+}
+
+function addUser(){
+  const name=document.getElementById("newUserName").value.trim();
+  const division=document.getElementById("newUserDivision").value;
+  if(!name) return;
+  users.push({name,division,active:true});
+  document.getElementById("newUserName").value="";
+  renderUsers();
+  renderAllocationStaff();
+  renderOverview();
+}
+
+function renderWork(){
+  const list=document.getElementById("workList");
+  list.innerHTML="";
+  workTypes.forEach((w,i)=>{
+    const tile=document.createElement("div");
+    tile.className="work-tile";
+    tile.innerHTML=`${w}<br><button onclick="removeWork(${i})">Remove</button>`;
+    list.appendChild(tile);
+  });
+}
+
+function addWork(){
+  const name=document.getElementById("newWorkName").value.trim();
+  if(!name) return;
+  workTypes.push(name);
+  document.getElementById("newWorkName").value="";
+  renderWork();
+  renderAllocationTiles();
+}
+
+function removeWork(i){
+  workTypes.splice(i,1);
+  renderWork();
+  renderAllocationTiles();
+}
+
+function renderAllocationStaff(){
+  const select=document.getElementById("allocationStaff");
+  select.innerHTML="";
+  users.filter(u=>u.division==="CSR"&&u.active)
+    .forEach(u=>{
+      const opt=document.createElement("option");
+      opt.value=u.name;
+      opt.textContent=u.name;
+      select.appendChild(opt);
+    });
+}
+
+function renderAllocationTiles(){
+  const container=document.getElementById("allocationWorkTiles");
+  container.innerHTML="";
+  workTypes.forEach(w=>{
+    const tile=document.createElement("div");
+    tile.className="work-tile";
+    tile.textContent=w;
+    tile.onclick=()=>tile.classList.toggle("active");
+    container.appendChild(tile);
+  });
+}
+
+function resetAllocation(){
+  document.querySelectorAll('#allocation .work-tile')
+    .forEach(t=>t.classList.remove("active"));
+  document.getElementById("allocationNotes").value="";
+}
+
+function saveAllocation(){
+  document.getElementById("allocationSuccess").style.display="block";
+  setTimeout(()=>document.getElementById("allocationSuccess").style.display="none",2500);
+}
+
+function saveStartOfDay(){
+  document.getElementById("saveStartBtn").disabled=true;
+  document.querySelectorAll("#environment input[id^='start']")
+    .forEach(i=>i.readOnly=true);
+  document.getElementById("startSavedMsg").style.display="block";
+}
+
+function saveEndOfDay(){
+  document.getElementById("saveEndBtn").disabled=true;
+  document.querySelectorAll("#environment input[id^='end']")
+    .forEach(i=>i.readOnly=true);
+  document.getElementById("endSavedMsg").style.display="block";
+}
+
+function renderOverview(){
+  const csr=document.getElementById("csrOverview");
+  const proc=document.getElementById("processingOverview");
+  csr.innerHTML=""; proc.innerHTML="";
+  users.filter(u=>u.active).forEach(u=>{
+    const card=document.createElement("div");
+    card.className="overview-card";
+    if(u.division==="CSR"){
+      card.innerHTML=`
+        <div class="overview-header"><strong>${u.name}</strong> ▼</div>
+        <div class="overview-summary">Inbound 0 · Outbound 0 · Chat 0</div>
+        <div class="overview-details">
+          <div>A2A: 0</div>
+          <div>Unverified: 0</div>
+          <div>Emails: 0</div>
+        </div>`;
+      card.onclick=()=>card.classList.toggle("expanded");
+      csr.appendChild(card);
+    }else{
+      card.innerHTML=`
+        <div class="overview-header"><strong>${u.name}</strong> ▼</div>
+        <div class="overview-summary">Total Output 0</div>
+        <div class="overview-details">
+          <div>Filing: 0</div>
+          <div>Linking: 0</div>
+        </div>`;
+      card.onclick=()=>card.classList.toggle("expanded");
+      proc.appendChild(card);
+    }
+  });
+}
+
+function setTodayDates(){
+  document.getElementById("allocationDate").value=todayISO();
+  document.getElementById("environmentDate").value=todayISO();
+}
+
+/* Init */
+renderUsers();
+renderWork();
+renderAllocationStaff();
+renderAllocationTiles();
+renderOverview();
+setTodayDates();
 </script>
 
 </body>
