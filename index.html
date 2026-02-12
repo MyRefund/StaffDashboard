@@ -24,7 +24,7 @@ body{
   color:var(--text);
 }
 
-/* HEADER */
+/* ===== HEADER ===== */
 .header{
   background:var(--g0);
   color:#fff;
@@ -66,6 +66,11 @@ body{
   font-weight:700;
 }
 
+.menu{
+  display:flex;
+  gap:10px;
+}
+
 .menu button{
   border-radius:999px;
   padding:8px 16px;
@@ -77,7 +82,7 @@ body{
   cursor:pointer;
 }
 
-/* PAGE */
+/* ===== PAGE ===== */
 .page{
   min-height:calc(100vh - 72px);
   background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
@@ -85,7 +90,7 @@ body{
   grid-template-columns:1fr 1fr;
 }
 
-/* COLUMN */
+/* ===== COLUMN ===== */
 .column{
   padding:60px 60px;
 }
@@ -97,7 +102,6 @@ body{
   margin-bottom:20px;
 }
 
-/* BUTTONS */
 .login-list{
   display:flex;
   flex-direction:column;
@@ -120,7 +124,7 @@ body{
   background:#0b5c42;
 }
 
-/* RESPONSIVE */
+/* ===== RESPONSIVE ===== */
 @media(max-width:1000px){
   .page{
     grid-template-columns:1fr;
@@ -143,6 +147,7 @@ body{
 
     <div class="menu">
       <button onclick="goAdmin()">Admin</button>
+      <button onclick="goReports()">Reports</button>
     </div>
   </div>
 </div>
@@ -190,30 +195,28 @@ function nowTime(){
 
 /* CSR LOGIN */
 function startCSR(name){
-  const today = todayISO();
-
   localStorage.setItem("currentStaff", name);
   localStorage.setItem("currentDivision", "CSR");
-  localStorage.setItem("loginDate", today);
+  localStorage.setItem("loginDate", todayISO());
   localStorage.setItem("loginTime", nowTime());
-
   window.location.href = "staff.html";
 }
 
 /* PROCESSING LOGIN */
 function startProcessing(name){
-  const today = todayISO();
-
   localStorage.setItem("currentStaff", name);
   localStorage.setItem("currentDivision", "Processing");
-  localStorage.setItem("loginDate", today);
+  localStorage.setItem("loginDate", todayISO());
   localStorage.setItem("loginTime", nowTime());
-
   window.location.href = "processing.html";
 }
 
 function goAdmin(){
   window.location.href = "admin.html";
+}
+
+function goReports(){
+  window.location.href = "reports.html";
 }
 </script>
 
