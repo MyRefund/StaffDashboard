@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<!-- Prevent browser translation prompt -->
 <meta http-equiv="Content-Language" content="en">
 <meta name="google" content="notranslate">
 
@@ -212,10 +211,8 @@ body{
 <body>
 <div class="page">
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-
     <div class="brand">
       <img src="logo.png">
       <div class="brand-text">
@@ -238,11 +235,9 @@ body{
       </button>
       <div class="clock" id="clock"></div>
     </div>
-
   </div>
 </div>
 
-<!-- TABS -->
 <div class="tabs">
   <button class="tab active" onclick="switchTab('work', this)">Work Log</button>
   <button class="tab" onclick="switchTab('resources', this)">Resources</button>
@@ -250,140 +245,170 @@ body{
 
 <div class="wrap">
 
-  <!-- WORK LOG -->
-  <div id="workTab">
+<div id="workTab">
 
-    <div class="top-row">
-      <div class="hello" id="helloText">Hello</div>
-    </div>
+<div class="top-row">
+  <div class="hello" id="helloText">Hello</div>
+</div>
 
-    <div class="layout">
+<div class="layout">
 
-      <!-- LEFT -->
-      <div>
+<!-- LEFT -->
+<div>
 
-        <div class="panel">
-          <h3>Inbound Calls</h3>
-          <div class="controls">
-            <button onclick="adj('inbound',-1)">−</button>
-            <input id="inbound" value="0">
-            <button onclick="adj('inbound',1)">+</button>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h3>Outbound Calls</h3>
-          <div class="controls">
-            <button onclick="adj('outbound',-1)">−</button>
-            <input id="outbound" value="0">
-            <button onclick="adj('outbound',1)">+</button>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h3>Live Chat</h3>
-          <div class="controls">
-            <button onclick="adj('chat',-1)">−</button>
-            <input id="chat" value="0">
-            <button onclick="adj('chat',1)">+</button>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- MIDDLE -->
-      <div>
-
-        <div class="panel">
-          <h3>Allocated Work</h3>
-          <div class="grid">
-            <div class="item">
-              <label>Amendments</label>
-              <div class="controls">
-                <button onclick="adj('amend',-1)">−</button>
-                <input id="amend" value="0">
-                <button onclick="adj('amend',1)">+</button>
-              </div>
-            </div>
-            <div class="item">
-              <label>Follow-ups</label>
-              <div class="controls">
-                <button onclick="adj('follow',-1)">−</button>
-                <input id="follow" value="0">
-                <button onclick="adj('follow',1)">+</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h3>Delinks & Cancellations</h3>
-          <div class="grid">
-            <div class="item">
-              <label>Delinks</label>
-              <div class="controls">
-                <button onclick="adj('delink',-1)">−</button>
-                <input id="delink" value="0">
-                <button onclick="adj('delink',1)">+</button>
-              </div>
-            </div>
-            <div class="item">
-              <label>Cancellations</label>
-              <div class="controls">
-                <button onclick="adj('cancel',-1)">−</button>
-                <input id="cancel" value="0">
-                <button onclick="adj('cancel',1)">+</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="submit">
-          <button>Submit Work</button>
-        </div>
-
-      </div>
-
-      <!-- RIGHT -->
-      <div>
-
-        <div class="panel">
-          <h3>Quick Contacts</h3>
-          <div style="font-size:14px;line-height:1.6;">
-            <strong>My Refund</strong><br>
-            0800 80 89 89<br>
-            info@myrefund.co.nz<br>
-            myrefund.co.nz<br><br>
-
-            <strong>IRD</strong><br>
-            ird.govt.nz<br>
-            0800 227 774
-          </div>
-        </div>
-
-      </div>
-
-    </div>
+<div class="panel">
+  <h3>Inbound Calls</h3>
+  <div class="controls">
+    <button onclick="adj('inbound',-1)">−</button>
+    <input id="inbound" value="0">
+    <button onclick="adj('inbound',1)">+</button>
   </div>
+</div>
 
-  <!-- RESOURCES -->
-  <div id="resourcesTab" class="hidden">
+<div class="panel">
+  <h3>Outbound Calls</h3>
+  <div class="controls">
+    <button onclick="adj('outbound',-1)">−</button>
+    <input id="outbound" value="0">
+    <button onclick="adj('outbound',1)">+</button>
+  </div>
+</div>
 
-    <div class="panel">
-      <h3>Scripts</h3>
-      <div style="font-weight:800;color:var(--g0);">
-        Income Confirmation Script
+<div class="panel">
+  <h3>Live Chat</h3>
+  <div class="controls">
+    <button onclick="adj('chat',-1)">−</button>
+    <input id="chat" value="0">
+    <button onclick="adj('chat',1)">+</button>
+  </div>
+</div>
+
+</div>
+
+<!-- MIDDLE -->
+<div>
+
+<div class="panel">
+  <h3>Allocated Work</h3>
+  <div class="grid">
+
+    <div class="item">
+      <label>A2A</label>
+      <div class="controls">
+        <button onclick="adj('a2a',-1)">−</button>
+        <input id="a2a" value="0">
+        <button onclick="adj('a2a',1)">+</button>
       </div>
-      <div style="margin-top:8px;font-size:14px;">
-        <a href="https://docs.google.com/document/d/1YheHUIH1nfFRhrp99I_eG2rXENDGzO8367CVwwTg2Ic/edit?usp=drive_link"
-           target="_blank"
-           style="color:var(--g0);text-decoration:none;font-weight:800;">
-           Open Document
-        </a>
+    </div>
+
+    <div class="item">
+      <label>Unverified</label>
+      <div class="controls">
+        <button onclick="adj('unverified',-1)">−</button>
+        <input id="unverified" value="0">
+        <button onclick="adj('unverified',1)">+</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <label>Emails</label>
+      <div class="controls">
+        <button onclick="adj('emails',-1)">−</button>
+        <input id="emails" value="0">
+        <button onclick="adj('emails',1)">+</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <label>INC/C Calling</label>
+      <div class="controls">
+        <button onclick="adj('inccalling',-1)">−</button>
+        <input id="inccalling" value="0">
+        <button onclick="adj('inccalling',1)">+</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <label>Question Calling</label>
+      <div class="controls">
+        <button onclick="adj('questioncalling',-1)">−</button>
+        <input id="questioncalling" value="0">
+        <button onclick="adj('questioncalling',1)">+</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <label>A2A Calling</label>
+      <div class="controls">
+        <button onclick="adj('a2acalling',-1)">−</button>
+        <input id="a2acalling" value="0">
+        <button onclick="adj('a2acalling',1)">+</button>
       </div>
     </div>
 
   </div>
+</div>
+
+<div class="panel">
+  <h3>Delinks & Cancellations</h3>
+  <div class="grid">
+    <div class="item">
+      <label>Delinks</label>
+      <div class="controls">
+        <button onclick="adj('delink',-1)">−</button>
+        <input id="delink" value="0">
+        <button onclick="adj('delink',1)">+</button>
+      </div>
+    </div>
+    <div class="item">
+      <label>Cancellations</label>
+      <div class="controls">
+        <button onclick="adj('cancel',-1)">−</button>
+        <input id="cancel" value="0">
+        <button onclick="adj('cancel',1)">+</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="submit">
+  <button>Submit Work</button>
+</div>
+
+</div>
+
+<!-- RIGHT -->
+<div>
+
+<div class="panel">
+  <h3>Quick Contacts</h3>
+  <div style="font-size:14px;line-height:1.6;">
+    <strong>My Refund</strong><br>
+    0800 80 89 89<br>
+    info@myrefund.co.nz<br>
+    myrefund.co.nz<br><br>
+
+    <strong>IRD</strong><br>
+    ird.govt.nz<br>
+    0800 227 774
+  </div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+<div id="resourcesTab" class="hidden">
+  <div class="panel">
+    <h3>Scripts</h3>
+    <a href="https://docs.google.com/document/d/1YheHUIH1nfFRhrp99I_eG2rXENDGzO8367CVwwTg2Ic/edit?usp=drive_link"
+       target="_blank"
+       style="font-weight:800;color:var(--g0);text-decoration:none;">
+       Income Confirmation Script
+    </a>
+  </div>
+</div>
 
 </div>
 </div>
