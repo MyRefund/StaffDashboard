@@ -1,469 +1,313 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>My Refund — Reports</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>My Refund — Reports</title>
 
-  <style>
-    /* Brand tokens */
-    :root{
-      --g0:#094B35;    /* darkest */
-      --g1:#03953F;    /* green */
-      --g2:#ECFDF5;    /* pale */
-      --g3:#BBF7D0;    /* light */
-      --bg:#f6f7f8;
-      --text:#111827;
-      --muted:#6b7280;
-      --border:#e5e7eb;
-      --shadow:0 10px 25px rgba(0,0,0,.06);
-      --radius:16px;
-    }
+<style>
+:root{
+  --g0:#094B35;
+  --g1:#03953F;
+  --g2:#ECFDF5;
+  --bg:#f6f7f8;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --shadow:0 10px 25px rgba(0,0,0,.06);
+  --radius:16px;
+}
 
-    /* Okta Neue fallback stack */
-    body{
-      margin:0;
-      background:linear-gradient(180deg,var(--g2) 0%, #ffffff 55%, var(--bg) 100%);
-      color:var(--text);
-      font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    }
+body{
+  margin:0;
+  background:linear-gradient(180deg,var(--g2) 0%, #ffffff 55%, var(--bg) 100%);
+  color:var(--text);
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
 
-    .wrap{max-width:1100px;margin:0 auto;padding:18px 18px 42px;}
-    .topbar{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      padding:10px 12px;border-radius:18px;background:#fff;border:1px solid var(--border);
-      box-shadow:0 6px 18px rgba(0,0,0,.04);
-      position:sticky;top:10px;z-index:10;
-    }
-    .brand{
-      display:flex;align-items:center;gap:12px;min-width:220px;
-    }
-    .brand img{
-      height:28px; width:auto; display:block;
-    }
-    .brand .title{
-      display:flex;flex-direction:column;line-height:1.1;
-    }
-    .brand .title strong{color:var(--g0);font-size:14px;}
-    .brand .title span{color:var(--muted);font-size:12px;}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 18px 42px;}
 
-    .controls{
-      display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;justify-content:flex-end;
-    }
-    .field{
-      display:flex;flex-direction:column;gap:6px;
-    }
-    label{font-size:12px;color:var(--muted);font-weight:800;}
-    input[type="date"]{
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:10px 10px;
-      font-size:14px;
-      outline:none;
-      background:#fff;
-      min-width:160px;
-    }
-    input[type="date"]:focus{border-color:rgba(3,149,63,.45); box-shadow:0 0 0 3px rgba(3,149,63,.12);}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:10px 12px;border-radius:18px;background:#fff;border:1px solid var(--border);
+  box-shadow:0 6px 18px rgba(0,0,0,.04);
+  position:sticky;top:10px;z-index:10;
+}
 
-    .btn{
-      border:1px solid var(--g0);
-      background:var(--g0);
-      color:#fff;
-      border-radius:12px;
-      padding:10px 14px;
-      font-weight:900;
-      cursor:pointer;
-      font-size:14px;
-      display:inline-flex;align-items:center;gap:8px;
-      user-select:none;
-    }
-    .btn.secondary{
-      background:#fff;color:var(--g0);
-    }
-    .btn:disabled{opacity:.6;cursor:not-allowed;}
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:8px 10px;border-radius:999px;
-      background:var(--g2);
-      border:1px solid rgba(3,149,63,.18);
-      color:var(--g0);
-      font-weight:900;
-      font-size:12px;
-    }
+.brand{display:flex;align-items:center;gap:12px;}
+.brand img{height:28px;}
+.brand .title strong{color:var(--g0);font-size:14px;}
+.brand .title span{color:var(--muted);font-size:12px;}
 
-    .content{
-      margin-top:16px;
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:16px;
-      align-items:start;
-    }
+.controls{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;
+}
 
-    .card{
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .card .hd{
-      padding:14px 16px;
-      border-bottom:1px solid var(--border);
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-    }
-    .card .hd h2{
-      margin:0;
-      font-size:16px;
-      color:var(--g0);
-    }
-    .card .hd small{color:var(--muted);font-weight:800;}
-    .card .bd{padding:14px 16px;}
+.field{display:flex;flex-direction:column;gap:6px;}
+label{font-size:12px;color:var(--muted);font-weight:800;}
 
-    .context{
-      background:var(--g0);
-      color:#fff;
-      border-radius:18px;
-      padding:14px 16px;
-      font-weight:900;
-      margin-top:14px;
-      box-shadow:0 10px 20px rgba(9,75,53,.15);
-    }
-    .context span{font-weight:700;opacity:.95;}
-    .context .sub{
-      margin-top:6px;
-      font-weight:700;
-      opacity:.9;
-      font-size:13px;
-      line-height:1.35;
-    }
+input[type="date"], select{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px;
+  font-size:14px;
+  background:#fff;
+  min-width:150px;
+}
 
-    table{width:100%;border-collapse:collapse;}
-    th,td{border-bottom:1px solid var(--border);padding:10px 8px;font-size:13px;}
-    th{color:var(--muted);font-weight:900;text-align:left;}
-    td strong{color:var(--g0);}
-    .right{text-align:right;}
-    .muted{color:var(--muted);}
-    .empty{
-      background:var(--g2);
-      border:1px dashed rgba(3,149,63,.35);
-      border-radius:14px;
-      padding:12px 12px;
-      color:var(--g0);
-      font-weight:900;
-    }
+input:focus, select:focus{
+  border-color:rgba(3,149,63,.45);
+  box-shadow:0 0 0 3px rgba(3,149,63,.12);
+  outline:none;
+}
 
-    .stack{display:flex;flex-direction:column;gap:16px;}
-    .split-note{
-      display:flex;gap:10px;flex-wrap:wrap;align-items:center;
-      font-size:12px;color:var(--muted);font-weight:800;
-    }
-    .split-note code{background:#f3f4f6;border:1px solid var(--border);padding:2px 6px;border-radius:8px;}
+.btn{
+  border:1px solid var(--g0);
+  background:var(--g0);
+  color:#fff;
+  border-radius:12px;
+  padding:10px 14px;
+  font-weight:900;
+  cursor:pointer;
+  font-size:14px;
+}
 
-    .spinner{
-      width:14px;height:14px;border-radius:999px;
-      border:2px solid rgba(255,255,255,.45);
-      border-top-color:#fff;
-      animation:spin 1s linear infinite;
-    }
-    @keyframes spin{to{transform:rotate(360deg);}}
+.btn.secondary{
+  background:#fff;color:var(--g0);
+}
 
-    @media (max-width: 980px){
-      .content{grid-template-columns:1fr;}
-      .brand{min-width:auto;}
-      .controls{justify-content:flex-start;}
-    }
-  </style>
+.pill{
+  padding:8px 10px;border-radius:999px;
+  background:var(--g2);
+  border:1px solid rgba(3,149,63,.18);
+  color:var(--g0);
+  font-weight:900;font-size:12px;
+}
+
+.content{
+  margin-top:16px;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:16px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.card .hd{
+  padding:14px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;
+}
+
+.card .hd h2{
+  margin:0;font-size:16px;color:var(--g0);
+}
+
+.card .bd{padding:14px 16px;}
+
+.empty{
+  background:var(--g2);
+  border:1px dashed rgba(3,149,63,.35);
+  border-radius:14px;
+  padding:12px;
+  color:var(--g0);
+  font-weight:900;
+}
+
+table{width:100%;border-collapse:collapse;}
+th,td{border-bottom:1px solid var(--border);padding:10px 8px;font-size:13px;}
+th{color:var(--muted);font-weight:900;text-align:left;}
+.right{text-align:right;}
+
+@media(max-width:980px){
+  .content{grid-template-columns:1fr;}
+}
+</style>
 </head>
 
 <body>
-  <div class="wrap">
+<div class="wrap">
 
-    <div class="topbar">
-      <div class="brand">
-        <!-- Update this path if your repo uses a different logo filename -->
-        <img src="assets/logo.png" alt="My Refund logo" onerror="this.style.display='none';" />
-        <div class="title">
-          <strong>Reports</strong>
-          <span>Team totals + productivity</span>
-        </div>
-      </div>
-
-      <div class="controls">
-        <div class="field">
-          <label for="startDate">Start date</label>
-          <input type="date" id="startDate" />
-        </div>
-        <div class="field">
-          <label for="endDate">End date</label>
-          <input type="date" id="endDate" />
-        </div>
-
-        <button class="btn secondary" id="runBtn" title="Refresh on-screen report">
-          Run report
-        </button>
-
-        <button class="btn" id="pdfBtn" title="Download PDF for selected date range">
-          Download PDF
-        </button>
-
-        <div class="pill" id="statusPill">Ready</div>
-      </div>
+<div class="topbar">
+  <div class="brand">
+    <img src="assets/logo.png" alt="My Refund logo" onerror="this.style.display='none';">
+    <div class="title">
+      <strong>Reports</strong>
+      <span>Team totals + productivity</span>
     </div>
-
-    <div class="context">
-      Friendly heads-up: <span>choose your dates</span> then run the report.
-      <div class="sub">
-        The PDF matches the same date range and includes team totals + individual productivity.
-      </div>
-    </div>
-
-    <div class="content">
-      <!-- LEFT: Team totals -->
-      <div class="card">
-        <div class="hd">
-          <h2>Team totals</h2>
-          <small id="teamRangeLabel">No period selected</small>
-        </div>
-        <div class="bd" id="teamTotalsArea">
-          <div class="empty">No data yet for this period</div>
-        </div>
-      </div>
-
-      <!-- RIGHT: Productivity -->
-      <div class="stack">
-        <div class="card">
-          <div class="hd">
-            <h2>Individual productivity</h2>
-            <small id="prodRangeLabel">No period selected</small>
-          </div>
-          <div class="bd" id="productivityArea">
-            <div class="empty">No shift data yet for this period</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="hd">
-            <h2>Notes</h2>
-            <small>How to read this</small>
-          </div>
-          <div class="bd">
-            <div class="split-note">
-              <span><strong style="color:var(--g0);">Avg interaction time</strong> = minutes worked ÷ total interactions</span>
-              <span><strong style="color:var(--g0);">Interactions/hr</strong> = total interactions ÷ hours worked</span>
-              <span class="muted">Time zone: <code>Pacific/Auckland</code></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
+  <div class="controls">
+
+    <div class="field">
+      <label>Start date</label>
+      <input type="date" id="startDate">
+    </div>
+
+    <div class="field">
+      <label>End date</label>
+      <input type="date" id="endDate">
+    </div>
+
+    <div class="field">
+      <label>Division</label>
+      <select id="divisionFilter">
+        <option value="All">All</option>
+        <option value="CSR">CSR</option>
+        <option value="Processing">Processing</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Work type</label>
+      <select id="workFilter"></select>
+    </div>
+
+    <button class="btn secondary" id="runBtn">Run report</button>
+    <button class="btn" id="pdfBtn">Download PDF</button>
+
+    <div class="pill" id="statusPill">Ready</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="card">
+    <div class="hd">
+      <h2>Team totals</h2>
+      <small id="teamRangeLabel">No period selected</small>
+    </div>
+    <div class="bd" id="teamTotalsArea">
+      <div class="empty">No data yet</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="hd">
+      <h2>Individual productivity</h2>
+      <small id="prodRangeLabel">No period selected</small>
+    </div>
+    <div class="bd" id="productivityArea">
+      <div class="empty">No data yet</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
 <script>
-/* =========================================================
-   CONFIG (LOCKED)
-========================================================= */
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec";
+const WEB_APP_URL="https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec";
+const DATA_ACTION="report";
+const PDF_ACTION="pdf";
+const TZ="Pacific/Auckland";
 
-/* For on-screen report data, the Web App must support:
-   GET ?action=report&start=YYYY-MM-DD&end=YYYY-MM-DD
-   returning JSON:
-   {
-     "teamTotals":[{"work":"Emails","starting":140,"completed":100,"remaining":40}, ...],
-     "staffStats":[{"name":"Alex","hours":"7.50","interactions":120,"avgTime":"3.75","rate":"16.00"}, ...]
-   }
+/* Mock dynamic work library */
+const CSR_WORK=["A2A","Unverified","Emails","INC/C Calling","Question Calling","A2A Calling"];
+const PROCESSING_WORK=["Filing","Linking","Linked Review","Inbox","Existing Review","Processing Review","Miscellaneous"];
 
-   If your Apps Script already has this (from earlier), this page will just work.
-*/
-const DATA_ACTION = "report";
-const PDF_ACTION = "pdf";
-const TZ = "Pacific/Auckland";
+const startEl=document.getElementById("startDate");
+const endEl=document.getElementById("endDate");
+const divisionFilter=document.getElementById("divisionFilter");
+const workFilter=document.getElementById("workFilter");
+const runBtn=document.getElementById("runBtn");
+const pdfBtn=document.getElementById("pdfBtn");
+const statusPill=document.getElementById("statusPill");
+const teamTotalsArea=document.getElementById("teamTotalsArea");
+const productivityArea=document.getElementById("productivityArea");
+const teamRangeLabel=document.getElementById("teamRangeLabel");
+const prodRangeLabel=document.getElementById("prodRangeLabel");
 
-/* =========================================================
-   DOM
-========================================================= */
-const startEl = document.getElementById("startDate");
-const endEl   = document.getElementById("endDate");
-const runBtn  = document.getElementById("runBtn");
-const pdfBtn  = document.getElementById("pdfBtn");
-const statusPill = document.getElementById("statusPill");
-
-const teamRangeLabel = document.getElementById("teamRangeLabel");
-const prodRangeLabel = document.getElementById("prodRangeLabel");
-
-const teamTotalsArea = document.getElementById("teamTotalsArea");
-const productivityArea = document.getElementById("productivityArea");
-
-/* =========================================================
-   HELPERS
-========================================================= */
 function nzTodayISO(){
-  return new Date().toLocaleDateString("en-CA",{ timeZone: TZ });
-}
-function setStatus(text, loading=false){
-  statusPill.textContent = text;
-  statusPill.style.background = loading ? "rgba(3,149,63,.12)" : "var(--g2)";
-  statusPill.style.borderColor = loading ? "rgba(3,149,63,.25)" : "rgba(3,149,63,.18)";
-}
-function fmtRange(start,end){
-  return `${start} to ${end}`;
-}
-function esc(s){
-  return String(s).replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[m]));
-}
-function num(n){
-  const x = Number(n);
-  return Number.isFinite(x) ? x : 0;
-}
-function buildTeamTable(rows){
-  if(!rows || !rows.length){
-    teamTotalsArea.innerHTML = `<div class="empty">No data yet for this period</div>`;
-    return;
-  }
-  const html = `
-    <table>
-      <thead>
-        <tr>
-          <th>Work type</th>
-          <th class="right">Starting</th>
-          <th class="right">Completed</th>
-          <th class="right">Remaining</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows.map(r => `
-          <tr>
-            <td><strong>${esc(r.work)}</strong></td>
-            <td class="right">${num(r.starting)}</td>
-            <td class="right">${num(r.completed)}</td>
-            <td class="right">${num(r.remaining)}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-  `;
-  teamTotalsArea.innerHTML = html;
-}
-function buildProdTable(rows){
-  if(!rows || !rows.length){
-    productivityArea.innerHTML = `<div class="empty">No shift data yet for this period</div>`;
-    return;
-  }
-  const html = `
-    <table>
-      <thead>
-        <tr>
-          <th>Staff</th>
-          <th class="right">Hours</th>
-          <th class="right">Interactions</th>
-          <th class="right">Avg time (min)</th>
-          <th class="right">Interactions/hr</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows.map(r => `
-          <tr>
-            <td><strong>${esc(r.name)}</strong></td>
-            <td class="right">${esc(r.hours)}</td>
-            <td class="right">${num(r.interactions)}</td>
-            <td class="right">${esc(r.avgTime)}</td>
-            <td class="right">${esc(r.rate)}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-  `;
-  productivityArea.innerHTML = html;
+  return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
 }
 
-/* =========================================================
-   FETCH REPORT DATA
-========================================================= */
+function setStatus(text){statusPill.textContent=text;}
+
+function populateWorkFilter(){
+  const division=divisionFilter.value;
+  workFilter.innerHTML=`<option value="All">All Work</option>`;
+  let list=[];
+  if(division==="CSR") list=CSR_WORK;
+  else if(division==="Processing") list=PROCESSING_WORK;
+  else list=[...CSR_WORK,...PROCESSING_WORK];
+  list.forEach(w=>{
+    const opt=document.createElement("option");
+    opt.value=w;
+    opt.textContent=w;
+    workFilter.appendChild(opt);
+  });
+}
+
+function buildEmptyMessage(){
+  const division=divisionFilter.value;
+  const work=workFilter.value;
+  const start=startEl.value;
+  const end=endEl.value;
+  let divText=division==="All"?"work":division+" work";
+  let workText=work==="All"?"":` of type '${work}'`;
+  return `No ${divText}${workText} found for ${start} to ${end}.`;
+}
+
+function buildTable(area,rows,headers){
+  if(!rows||!rows.length){
+    area.innerHTML=`<div class="empty">${buildEmptyMessage()}</div>`;
+    return;
+  }
+  const thead=headers.map(h=>`<th>${h}</th>`).join("");
+  const tbody=rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("");
+  area.innerHTML=`<table><thead><tr>${thead}</tr></thead><tbody>${tbody}</tbody></table>`;
+}
+
 async function fetchReport(start,end){
-  const url = `${WEB_APP_URL}?action=${encodeURIComponent(DATA_ACTION)}&start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`;
-
-  // If your Web App is configured with "Anyone" access, this will succeed cross-origin.
-  const res = await fetch(url, { method:"GET" });
-
-  // Expect JSON
-  const text = await res.text();
-  let json = null;
-  try{
-    json = JSON.parse(text);
-  }catch(e){
-    // show a helpful message instead of failing silently
-    throw new Error("Reports endpoint did not return JSON. If you haven’t added action=report in Apps Script yet, tell me and I’ll send it.");
-  }
-  return json;
+  const division=divisionFilter.value;
+  const work=workFilter.value;
+  const url=`${WEB_APP_URL}?action=${DATA_ACTION}&start=${start}&end=${end}&division=${division}&work=${work}`;
+  const res=await fetch(url);
+  return await res.json();
 }
 
-/* =========================================================
-   ACTIONS
-========================================================= */
 async function runReport(){
-  const start = startEl.value;
-  const end = endEl.value;
-
-  if(!start || !end){
-    alert("Please select both a start and end date.");
-    return;
-  }
-
-  teamRangeLabel.textContent = fmtRange(start,end);
-  prodRangeLabel.textContent = fmtRange(start,end);
-
-  setStatus("Loading…", true);
-  runBtn.disabled = true;
-  pdfBtn.disabled = true;
-  runBtn.innerHTML = `<span class="spinner"></span> Running…`;
-
+  const start=startEl.value;
+  const end=endEl.value;
+  if(!start||!end){alert("Select both dates");return;}
+  teamRangeLabel.textContent=`${start} to ${end}`;
+  prodRangeLabel.textContent=`${start} to ${end}`;
+  setStatus("Loading…");
   try{
-    const data = await fetchReport(start,end);
-
-    // Expected keys: teamTotals + staffStats
-    buildTeamTable(data.teamTotals || []);
-    buildProdTable(data.staffStats || []);
-
+    const data=await fetchReport(start,end);
+    buildTable(teamTotalsArea,data.teamTotals||[],["Work","Starting","Completed","Remaining"]);
+    buildTable(productivityArea,data.staffStats||[],["Staff","Hours","Interactions","Avg time","Rate"]);
     setStatus("Up to date");
-  }catch(err){
-    console.error(err);
-    teamTotalsArea.innerHTML = `<div class="empty">Couldn’t load report data. ${esc(err.message)}</div>`;
-    productivityArea.innerHTML = `<div class="empty">Couldn’t load productivity. ${esc(err.message)}</div>`;
-    setStatus("Needs attention");
-  }finally{
-    runBtn.disabled = false;
-    pdfBtn.disabled = false;
-    runBtn.textContent = "Run report";
+  }catch(e){
+    teamTotalsArea.innerHTML=`<div class="empty">${buildEmptyMessage()}</div>`;
+    productivityArea.innerHTML=`<div class="empty">${buildEmptyMessage()}</div>`;
+    setStatus("Error");
   }
 }
 
 function downloadPdf(){
-  const start = startEl.value;
-  const end = endEl.value;
-
-  if(!start || !end){
-    alert("Please select both a start and end date.");
-    return;
-  }
-
-  const url = `${WEB_APP_URL}?action=${encodeURIComponent(PDF_ACTION)}&start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`;
-  window.open(url, "_blank");
+  const start=startEl.value;
+  const end=endEl.value;
+  const division=divisionFilter.value;
+  const work=workFilter.value;
+  const url=`${WEB_APP_URL}?action=${PDF_ACTION}&start=${start}&end=${end}&division=${division}&work=${work}`;
+  window.open(url,"_blank");
 }
 
-/* =========================================================
-   INIT
-========================================================= */
 (function init(){
-  const today = nzTodayISO();
-  startEl.value = today;
-  endEl.value = today;
-
-  runBtn.addEventListener("click", runReport);
-  pdfBtn.addEventListener("click", downloadPdf);
-
-  // Optional: load immediately on open (friendly)
+  const today=nzTodayISO();
+  startEl.value=today;
+  endEl.value=today;
+  populateWorkFilter();
+  divisionFilter.addEventListener("change",populateWorkFilter);
+  runBtn.addEventListener("click",runReport);
+  pdfBtn.addEventListener("click",downloadPdf);
   runReport();
 })();
 </script>
