@@ -1,115 +1,173 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Language" content="en">
+<meta name="google" content="notranslate">
+
 <title>My Refund — Reports</title>
 
 <style>
 :root{
   --g0:#094B35;
-  --g1:#03953F;
   --g2:#ECFDF5;
-  --bg:#f6f7f8;
   --text:#111827;
   --muted:#6b7280;
   --border:#e5e7eb;
-  --shadow:0 10px 25px rgba(0,0,0,.06);
   --radius:16px;
+  --shadow:0 14px 40px rgba(0,0,0,.18);
 }
+
+*{box-sizing:border-box}
 
 body{
   margin:0;
-  background:linear-gradient(180deg,var(--g2) 0%, #ffffff 55%, var(--bg) 100%);
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color:var(--text);
-  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
 
-.wrap{max-width:1100px;margin:0 auto;padding:18px 18px 42px;}
-
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:10px 12px;border-radius:18px;background:#fff;border:1px solid var(--border);
-  box-shadow:0 6px 18px rgba(0,0,0,.04);
-  position:sticky;top:10px;z-index:10;
+/* ===== PAGE BACKGROUND ===== */
+.page{
+  min-height:100vh;
+  background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
 }
 
-.brand{display:flex;align-items:center;gap:12px;}
-.brand img{height:28px;}
-.brand .title strong{color:var(--g0);font-size:14px;}
-.brand .title span{color:var(--muted);font-size:12px;}
-
-.controls{
-  display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;
-}
-
-.field{display:flex;flex-direction:column;gap:6px;}
-label{font-size:12px;color:var(--muted);font-weight:800;}
-
-input[type="date"], select{
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:10px;
-  font-size:14px;
-  background:#fff;
-  min-width:150px;
-}
-
-input:focus, select:focus{
-  border-color:rgba(3,149,63,.45);
-  box-shadow:0 0 0 3px rgba(3,149,63,.12);
-  outline:none;
-}
-
-.btn{
-  border:1px solid var(--g0);
+/* ===== HEADER ===== */
+.header{
   background:var(--g0);
   color:#fff;
-  border-radius:12px;
-  padding:10px 14px;
+  padding:14px 24px;
+}
+
+.header-inner{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.brand img{height:26px}
+
+.brand-text strong{
+  font-size:15px;
   font-weight:900;
-  cursor:pointer;
-  font-size:14px;
 }
 
-.btn.secondary{
-  background:#fff;color:var(--g0);
+.brand-text span{
+  font-size:12px;
+  opacity:.9;
+  font-weight:700;
 }
 
-.pill{
-  padding:8px 10px;border-radius:999px;
-  background:var(--g2);
-  border:1px solid rgba(3,149,63,.18);
-  color:var(--g0);
-  font-weight:900;font-size:12px;
+.menu{
+  display:flex;
+  gap:10px;
 }
 
-.content{
-  margin-top:16px;
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-  gap:16px;
-}
-
-.card{
+.menu button{
+  border-radius:999px;
+  padding:8px 16px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid #fff;
   background:#fff;
-  border:1px solid var(--border);
+  color:var(--g0);
+  cursor:pointer;
+}
+
+/* ===== CONTENT WRAP ===== */
+.wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:28px 24px 60px;
+}
+
+/* ===== FILTER BAR PANEL ===== */
+.panel{
+  background:rgba(255,255,255,.95);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  overflow:hidden;
+  padding:22px;
+  margin-bottom:24px;
 }
 
-.card .hd{
-  padding:14px 16px;
+.panel h3{
+  margin:0 0 18px;
+  font-size:16px;
+  font-weight:900;
+  color:var(--g0);
+}
+
+/* ===== FILTER GRID ===== */
+.filter-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:16px;
+  align-items:end;
+}
+
+label{
+  display:block;
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+input, select{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-weight:700;
+}
+
+button.primary{
+  padding:12px 18px;
+  border-radius:12px;
+  border:none;
+  background:var(--g0);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+
+button.secondary{
+  padding:12px 18px;
+  border-radius:12px;
+  border:1px solid var(--g0);
+  background:#fff;
+  color:var(--g0);
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* ===== TABLE ===== */
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td{
   border-bottom:1px solid var(--border);
-  display:flex;justify-content:space-between;
+  padding:10px 8px;
+  font-size:13px;
 }
 
-.card .hd h2{
-  margin:0;font-size:16px;color:var(--g0);
+th{
+  color:var(--muted);
+  font-weight:900;
+  text-align:left;
 }
 
-.card .bd{padding:14px 16px;}
+.right{text-align:right}
 
 .empty{
   background:var(--g2);
@@ -119,83 +177,80 @@ input:focus, select:focus{
   color:var(--g0);
   font-weight:900;
 }
-
-table{width:100%;border-collapse:collapse;}
-th,td{border-bottom:1px solid var(--border);padding:10px 8px;font-size:13px;}
-th{color:var(--muted);font-weight:900;text-align:left;}
-.right{text-align:right;}
-
-@media(max-width:980px){
-  .content{grid-template-columns:1fr;}
-}
 </style>
 </head>
 
 <body>
-<div class="wrap">
+<div class="page">
 
-<div class="topbar">
-  <div class="brand">
-    <img src="assets/logo.png" alt="My Refund logo" onerror="this.style.display='none';">
-    <div class="title">
-      <strong>Reports</strong>
-      <span>Team totals + productivity</span>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="logo.png">
+      <div class="brand-text">
+        <strong>Reports</strong>
+        <span>Team totals & productivity</span>
+      </div>
     </div>
-  </div>
-
-  <div class="controls">
-
-    <div class="field">
-      <label>Start date</label>
-      <input type="date" id="startDate">
+    <div class="menu">
+      <button onclick="goHome()">Home</button>
+      <button onclick="goAdmin()">Admin</button>
     </div>
-
-    <div class="field">
-      <label>End date</label>
-      <input type="date" id="endDate">
-    </div>
-
-    <div class="field">
-      <label>Division</label>
-      <select id="divisionFilter">
-        <option value="All">All</option>
-        <option value="CSR">CSR</option>
-        <option value="Processing">Processing</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Work type</label>
-      <select id="workFilter"></select>
-    </div>
-
-    <button class="btn secondary" id="runBtn">Run report</button>
-    <button class="btn" id="pdfBtn">Download PDF</button>
-
-    <div class="pill" id="statusPill">Ready</div>
   </div>
 </div>
 
-<div class="content">
+<div class="wrap">
 
-  <div class="card">
-    <div class="hd">
-      <h2>Team totals</h2>
-      <small id="teamRangeLabel">No period selected</small>
-    </div>
-    <div class="bd" id="teamTotalsArea">
-      <div class="empty">No data yet</div>
+  <!-- FILTERS -->
+  <div class="panel">
+    <h3>Filters</h3>
+
+    <div class="filter-grid">
+      <div>
+        <label>Start date</label>
+        <input type="date" id="startDate">
+      </div>
+
+      <div>
+        <label>End date</label>
+        <input type="date" id="endDate">
+      </div>
+
+      <div>
+        <label>Division</label>
+        <select id="divisionFilter">
+          <option value="All">All</option>
+          <option value="CSR">CSR</option>
+          <option value="Processing">Processing</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Work type</label>
+        <select id="workFilter"></select>
+      </div>
+
+      <div>
+        <button class="secondary" onclick="runReport()">Run report</button>
+      </div>
+
+      <div>
+        <button class="primary" onclick="downloadPdf()">Download PDF</button>
+      </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="hd">
-      <h2>Individual productivity</h2>
-      <small id="prodRangeLabel">No period selected</small>
-    </div>
-    <div class="bd" id="productivityArea">
-      <div class="empty">No data yet</div>
-    </div>
+  <!-- TEAM TOTALS -->
+  <div class="panel">
+    <h3>Team totals</h3>
+    <div id="teamTotalsArea" class="empty">No data yet</div>
+  </div>
+
+  <!-- PRODUCTIVITY -->
+  <div class="panel">
+    <h3>Individual productivity</h3>
+    <div id="productivityArea" class="empty">No data yet</div>
   </div>
 
 </div>
@@ -203,11 +258,8 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 
 <script>
 const WEB_APP_URL="https://script.google.com/macros/s/AKfycbxrteoDa30Q_uz2-O4j_HE_agEpsCl7LlnPTghyWktDp2VXykkSHjoAqeZ4Jiz3nnYJ/exec";
-const DATA_ACTION="report";
-const PDF_ACTION="pdf";
 const TZ="Pacific/Auckland";
 
-/* Mock dynamic work library */
 const CSR_WORK=["A2A","Unverified","Emails","INC/C Calling","Question Calling","A2A Calling"];
 const PROCESSING_WORK=["Filing","Linking","Linked Review","Inbox","Existing Review","Processing Review","Miscellaneous"];
 
@@ -215,19 +267,10 @@ const startEl=document.getElementById("startDate");
 const endEl=document.getElementById("endDate");
 const divisionFilter=document.getElementById("divisionFilter");
 const workFilter=document.getElementById("workFilter");
-const runBtn=document.getElementById("runBtn");
-const pdfBtn=document.getElementById("pdfBtn");
-const statusPill=document.getElementById("statusPill");
-const teamTotalsArea=document.getElementById("teamTotalsArea");
-const productivityArea=document.getElementById("productivityArea");
-const teamRangeLabel=document.getElementById("teamRangeLabel");
-const prodRangeLabel=document.getElementById("prodRangeLabel");
 
 function nzTodayISO(){
   return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
 }
-
-function setStatus(text){statusPill.textContent=text;}
 
 function populateWorkFilter(){
   const division=divisionFilter.value;
@@ -236,6 +279,7 @@ function populateWorkFilter(){
   if(division==="CSR") list=CSR_WORK;
   else if(division==="Processing") list=PROCESSING_WORK;
   else list=[...CSR_WORK,...PROCESSING_WORK];
+
   list.forEach(w=>{
     const opt=document.createElement("option");
     opt.value=w;
@@ -254,41 +298,9 @@ function buildEmptyMessage(){
   return `No ${divText}${workText} found for ${start} to ${end}.`;
 }
 
-function buildTable(area,rows,headers){
-  if(!rows||!rows.length){
-    area.innerHTML=`<div class="empty">${buildEmptyMessage()}</div>`;
-    return;
-  }
-  const thead=headers.map(h=>`<th>${h}</th>`).join("");
-  const tbody=rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("");
-  area.innerHTML=`<table><thead><tr>${thead}</tr></thead><tbody>${tbody}</tbody></table>`;
-}
-
-async function fetchReport(start,end){
-  const division=divisionFilter.value;
-  const work=workFilter.value;
-  const url=`${WEB_APP_URL}?action=${DATA_ACTION}&start=${start}&end=${end}&division=${division}&work=${work}`;
-  const res=await fetch(url);
-  return await res.json();
-}
-
 async function runReport(){
-  const start=startEl.value;
-  const end=endEl.value;
-  if(!start||!end){alert("Select both dates");return;}
-  teamRangeLabel.textContent=`${start} to ${end}`;
-  prodRangeLabel.textContent=`${start} to ${end}`;
-  setStatus("Loading…");
-  try{
-    const data=await fetchReport(start,end);
-    buildTable(teamTotalsArea,data.teamTotals||[],["Work","Starting","Completed","Remaining"]);
-    buildTable(productivityArea,data.staffStats||[],["Staff","Hours","Interactions","Avg time","Rate"]);
-    setStatus("Up to date");
-  }catch(e){
-    teamTotalsArea.innerHTML=`<div class="empty">${buildEmptyMessage()}</div>`;
-    productivityArea.innerHTML=`<div class="empty">${buildEmptyMessage()}</div>`;
-    setStatus("Error");
-  }
+  document.getElementById("teamTotalsArea").innerHTML=`<div class="empty">${buildEmptyMessage()}</div>`;
+  document.getElementById("productivityArea").innerHTML=`<div class="empty">${buildEmptyMessage()}</div>`;
 }
 
 function downloadPdf(){
@@ -296,9 +308,12 @@ function downloadPdf(){
   const end=endEl.value;
   const division=divisionFilter.value;
   const work=workFilter.value;
-  const url=`${WEB_APP_URL}?action=${PDF_ACTION}&start=${start}&end=${end}&division=${division}&work=${work}`;
+  const url=`${WEB_APP_URL}?action=pdf&start=${start}&end=${end}&division=${division}&work=${work}`;
   window.open(url,"_blank");
 }
+
+function goHome(){window.location.href="index.html";}
+function goAdmin(){window.location.href="admin.html";}
 
 (function init(){
   const today=nzTodayISO();
@@ -306,9 +321,6 @@ function downloadPdf(){
   endEl.value=today;
   populateWorkFilter();
   divisionFilter.addEventListener("change",populateWorkFilter);
-  runBtn.addEventListener("click",runReport);
-  pdfBtn.addEventListener("click",downloadPdf);
-  runReport();
 })();
 </script>
 </body>
