@@ -142,6 +142,13 @@ body{
   gap:14px;
 }
 
+/* subtle allocated work highlight */
+.allocated-grid{
+  background:#f9fafb;
+  padding:14px;
+  border-radius:14px;
+}
+
 .item{
   background:#fff;
   border:1px solid var(--border);
@@ -203,10 +210,8 @@ body{
 <body>
 <div class="page">
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-inner">
-
     <div class="brand">
       <img src="logo.png">
       <div class="brand-text">
@@ -229,11 +234,9 @@ body{
       </button>
       <div class="clock" id="clock"></div>
     </div>
-
   </div>
 </div>
 
-<!-- TABS -->
 <div class="tabs">
   <button class="tab active" onclick="switchTab('work', this)">Work Log</button>
   <button class="tab" onclick="switchTab('resources', this)">Resources</button>
@@ -241,208 +244,195 @@ body{
 
 <div class="wrap">
 
-  <!-- WORK LOG -->
-  <div id="workTab">
+<div id="workTab">
 
-    <div class="top-row">
-      <div class="hello" id="helloText">Hello</div>
-    </div>
+<div class="top-row">
+  <div class="hello" id="helloText">Hello</div>
+</div>
 
-    <div class="layout">
+<div class="layout">
 
-      <!-- LEFT COLUMN -->
-      <div>
+<!-- LEFT -->
+<div>
 
-        <div class="panel">
-          <h3>Inbound Calls</h3>
-          <div class="controls">
-            <button onclick="adj('inbound',-1)">−</button>
-            <input id="inbound" value="0">
-            <button onclick="adj('inbound',1)">+</button>
-          </div>
+<div class="panel">
+  <h3>Inbound Calls</h3>
+  <div class="controls">
+    <button onclick="adj('inbound',-1)">−</button>
+    <input id="inbound" value="0">
+    <button onclick="adj('inbound',1)">+</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Outbound Calls (Total)</h3>
+  <div class="controls">
+    <button onclick="adjManualOutbound(-1)">−</button>
+    <input id="outbound" value="0" readonly style="background:#f3f4f6;">
+    <button onclick="adjManualOutbound(1)">+</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Live Chat</h3>
+  <div class="controls">
+    <button onclick="adj('chat',-1)">−</button>
+    <input id="chat" value="0">
+    <button onclick="adj('chat',1)">+</button>
+  </div>
+</div>
+
+</div>
+
+<!-- MIDDLE -->
+<div>
+
+<div class="panel">
+  <h3>Allocated Work</h3>
+
+  <div class="allocated-grid">
+    <div class="grid">
+
+      <div class="item">
+        <label>A2A</label>
+        <div class="controls">
+          <button onclick="adj('a2a',-1)">−</button>
+          <input id="a2a" value="0">
+          <button onclick="adj('a2a',1)">+</button>
         </div>
-
-        <div class="panel">
-          <h3>Outbound Calls</h3>
-          <div class="controls">
-            <button onclick="adjManualOutbound(-1)">−</button>
-            <input id="outbound" value="0" readonly style="background:#f3f4f6;">
-            <button onclick="adjManualOutbound(1)">+</button>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h3>Live Chat</h3>
-          <div class="controls">
-            <button onclick="adj('chat',-1)">−</button>
-            <input id="chat" value="0">
-            <button onclick="adj('chat',1)">+</button>
-          </div>
-        </div>
-
       </div>
 
-      <!-- MIDDLE COLUMN -->
-      <div>
-
-        <div class="panel">
-          <h3>Allocated Work</h3>
-          <div class="grid">
-
-            <div class="item">
-              <label>A2A</label>
-              <div class="controls">
-                <button onclick="adj('a2a',-1)">−</button>
-                <input id="a2a" value="0">
-                <button onclick="adj('a2a',1)">+</button>
-              </div>
-            </div>
-
-            <div class="item">
-              <label>Unverified</label>
-              <div class="controls">
-                <button onclick="adj('unverified',-1)">−</button>
-                <input id="unverified" value="0">
-                <button onclick="adj('unverified',1)">+</button>
-              </div>
-            </div>
-
-            <div class="item">
-              <label>Emails</label>
-              <div class="controls">
-                <button onclick="adj('emails',-1)">−</button>
-                <input id="emails" value="0">
-                <button onclick="adj('emails',1)">+</button>
-              </div>
-            </div>
-
-            <div class="item">
-              <label>INC/C Calling</label>
-              <div class="controls">
-                <button onclick="adjCalling('inccalling',-1)">−</button>
-                <input id="inccalling" value="0">
-                <button onclick="adjCalling('inccalling',1)">+</button>
-              </div>
-            </div>
-
-            <div class="item">
-              <label>Question Calling</label>
-              <div class="controls">
-                <button onclick="adjCalling('questioncalling',-1)">−</button>
-                <input id="questioncalling" value="0">
-                <button onclick="adjCalling('questioncalling',1)">+</button>
-              </div>
-            </div>
-
-            <div class="item">
-              <label>A2A Calling</label>
-              <div class="controls">
-                <button onclick="adjCalling('a2acalling',-1)">−</button>
-                <input id="a2acalling" value="0">
-                <button onclick="adjCalling('a2acalling',1)">+</button>
-              </div>
-            </div>
-
-          </div>
+      <div class="item">
+        <label>Unverified</label>
+        <div class="controls">
+          <button onclick="adj('unverified',-1)">−</button>
+          <input id="unverified" value="0">
+          <button onclick="adj('unverified',1)">+</button>
         </div>
-
-        <div class="panel">
-          <h3>Delinks & Cancellations</h3>
-          <div class="grid">
-            <div class="item">
-              <label>Delinks</label>
-              <div class="controls">
-                <button onclick="adj('delink',-1)">−</button>
-                <input id="delink" value="0">
-                <button onclick="adj('delink',1)">+</button>
-              </div>
-            </div>
-            <div class="item">
-              <label>Cancellations</label>
-              <div class="controls">
-                <button onclick="adj('cancel',-1)">−</button>
-                <input id="cancel" value="0">
-                <button onclick="adj('cancel',1)">+</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="submit">
-          <button>Submit Work</button>
-        </div>
-
       </div>
 
-      <!-- RIGHT COLUMN -->
-      <div>
-        <div class="panel">
-          <h3>Quick Contacts</h3>
-          <div style="font-size:14px;line-height:1.6;">
-            <strong>My Refund</strong><br>
-            0800 80 89 89<br>
-            info@myrefund.co.nz<br>
-            myrefund.co.nz<br><br>
+      <div class="item">
+        <label>Emails</label>
+        <div class="controls">
+          <button onclick="adj('emails',-1)">−</button>
+          <input id="emails" value="0">
+          <button onclick="adj('emails',1)">+</button>
+        </div>
+      </div>
 
-            <strong>IRD</strong><br>
-            ird.govt.nz<br>
-            0800 227 774
-          </div>
+      <div class="item">
+        <label>INC/C Calling</label>
+        <div class="controls">
+          <button onclick="adjCalling('inccalling',-1)">−</button>
+          <input id="inccalling" value="0">
+          <button onclick="adjCalling('inccalling',1)">+</button>
+        </div>
+      </div>
+
+      <div class="item">
+        <label>Question Calling</label>
+        <div class="controls">
+          <button onclick="adjCalling('questioncalling',-1)">−</button>
+          <input id="questioncalling" value="0">
+          <button onclick="adjCalling('questioncalling',1)">+</button>
+        </div>
+      </div>
+
+      <div class="item">
+        <label>A2A Calling</label>
+        <div class="controls">
+          <button onclick="adjCalling('a2acalling',-1)">−</button>
+          <input id="a2acalling" value="0">
+          <button onclick="adjCalling('a2acalling',1)">+</button>
         </div>
       </div>
 
     </div>
   </div>
+</div>
 
-  <!-- RESOURCES -->
-  <div id="resourcesTab" class="hidden">
-    <div class="panel">
-      <h3>Scripts</h3>
-      <a href="https://docs.google.com/document/d/1YheHUIH1nfFRhrp99I_eG2rXENDGzO8367CVwwTg2Ic/edit?usp=drive_link"
-         target="_blank"
-         style="font-weight:800;color:var(--g0);text-decoration:none;">
-         Income Confirmation Script
-      </a>
+<div class="panel">
+  <h3>Delinks & Cancellations</h3>
+  <div class="grid">
+    <div class="item">
+      <label>Delinks</label>
+      <div class="controls">
+        <button onclick="adj('delink',-1)">−</button>
+        <input id="delink" value="0">
+        <button onclick="adj('delink',1)">+</button>
+      </div>
+    </div>
+    <div class="item">
+      <label>Cancellations</label>
+      <div class="controls">
+        <button onclick="adj('cancel',-1)">−</button>
+        <input id="cancel" value="0">
+        <button onclick="adj('cancel',1)">+</button>
+      </div>
     </div>
   </div>
+</div>
+
+<div class="submit">
+  <button>Submit & Finish Day</button>
+</div>
+
+</div>
+
+<!-- RIGHT -->
+<div>
+<div class="panel">
+  <h3>Quick Contacts</h3>
+  <div style="font-size:14px;line-height:1.6;">
+    <strong>My Refund</strong><br>
+    0800 80 89 89<br>
+    info@myrefund.co.nz<br>
+    myrefund.co.nz<br><br>
+
+    <strong>IRD</strong><br>
+    ird.govt.nz<br>
+    0800 227 774
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id="resourcesTab" class="hidden">
+  <div class="panel">
+    <h3>Scripts</h3>
+    <a href="https://docs.google.com/document/d/1YheHUIH1nfFRhrp99I_eG2rXENDGzO8367CVwwTg2Ic/edit?usp=drive_link"
+       target="_blank"
+       style="font-weight:800;color:var(--g0);text-decoration:none;">
+       Income Confirmation Script
+    </a>
+  </div>
+</div>
 
 </div>
 </div>
 
 <script>
-/* ===== STAFF NAME ===== */
 const name = localStorage.getItem("currentStaff") || "CSR";
 document.getElementById("staffNameLabel").textContent = name;
 document.getElementById("helloText").textContent = "Hello, " + name;
 
-/* ===== NAV ===== */
-function goHome(){
-  window.location.href = "index.html";
-}
+function goHome(){ window.location.href = "index.html"; }
 
-/* ===== TABS ===== */
 function switchTab(tab, btn){
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
   btn.classList.add("active");
-
-  document.getElementById("workTab").classList.add("hidden");
-  document.getElementById("resourcesTab").classList.add("hidden");
-
-  if(tab==="work"){
-    document.getElementById("workTab").classList.remove("hidden");
-  } else {
-    document.getElementById("resourcesTab").classList.remove("hidden");
-  }
+  document.getElementById("workTab").classList.toggle("hidden", tab!=="work");
+  document.getElementById("resourcesTab").classList.toggle("hidden", tab!=="resources");
 }
 
-/* ===== CLOCK ===== */
 function tick(){
   document.getElementById("clock").textContent =
     new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 tick(); setInterval(tick,1000);
 
-/* ===== COUNTERS ===== */
 function adj(id,d){
   const el=document.getElementById(id);
   let v=Number(el.value||0)+d;
@@ -450,7 +440,6 @@ function adj(id,d){
   el.value=v;
 }
 
-/* Outbound is: manualOutbound + calling categories */
 let manualOutbound = 0;
 
 function adjManualOutbound(d){
@@ -459,7 +448,7 @@ function adjManualOutbound(d){
   updateOutbound();
 }
 
-function adjCalling(id, d){
+function adjCalling(id,d){
   const el=document.getElementById(id);
   let v=Number(el.value||0)+d;
   if(v<0) v=0;
@@ -471,7 +460,6 @@ function updateOutbound(){
   const inc = Number(document.getElementById("inccalling").value||0);
   const q = Number(document.getElementById("questioncalling").value||0);
   const a2a = Number(document.getElementById("a2acalling").value||0);
-
   document.getElementById("outbound").value = manualOutbound + inc + q + a2a;
 }
 </script>
