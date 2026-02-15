@@ -40,8 +40,16 @@ body{margin:0;font-family:"Okta Neue",system-ui;color:var(--text);}
 
 .panel{background:rgba(255,255,255,.96);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:20px;}
 .panel h3{margin:0 0 14px;font-size:18px;font-weight:900;color:var(--g0);}
-
 .fee-panel{border-top:6px solid var(--g0);}
+
+.banner{
+  background:#fff3cd;
+  border-left:6px solid #f0ad4e;
+  padding:12px 16px;
+  margin-bottom:20px;
+  font-weight:800;
+  border-radius:12px;
+}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
 .item{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;}
@@ -74,8 +82,6 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 }
 
 .hidden{display:none;}
-.locked{opacity:.6;pointer-events:none;}
-
 @media(max-width:1100px){.layout{grid-template-columns:1fr}}
 </style>
 </head>
@@ -104,7 +110,8 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 <div class="wrap">
 <div id="workTab">
 
-<!-- Greeting -->
+<div id="warningBanner" class="banner hidden"></div>
+
 <div style="margin-bottom:28px;">
   <div style="font-size:24px;font-weight:900;color:var(--g0);">
     Hello, <span id="helloName"></span>
@@ -119,7 +126,6 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 <!-- LEFT -->
 <div>
 
-<!-- Processing Output -->
 <div class="panel">
 <h3>Processing Output</h3>
 <div class="grid">
@@ -133,7 +139,6 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 </div>
 </div>
 
-<!-- Fee Logging -->
 <div class="panel fee-panel">
 <h3>Return Fee Logging</h3>
 <div class="button-grid">
@@ -154,7 +159,6 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 </div>
 </div>
 
-<!-- Collapsible Log -->
 <div class="panel fee-panel">
 <div class="collapsible-header" onclick="toggleLog()">
 <span>Today’s Fee Entries (<span id="entryCount">0</span> total · showing last 200)</span>
@@ -168,7 +172,6 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 </div>
 </div>
 
-<!-- Total -->
 <div class="panel fee-panel">
 <div class="total-box">
 Total Fees Today: $<span id="totalFees">0.00</span>
@@ -181,19 +184,12 @@ Total Fees Today: $<span id="totalFees">0.00</span>
 
 </div>
 
-<!-- RIGHT -->
 <div>
 <div class="panel">
 <h3>Quick Contacts</h3>
-<div style="font-size:14px;line-height:1.6;">
-<strong>My Refund</strong><br>
 0800 80 89 89<br>
 info@myrefund.co.nz<br>
-myrefund.co.nz<br><br>
-<strong>IRD</strong><br>
-ird.govt.nz<br>
-0800 227 774
-</div>
+myrefund.co.nz
 </div>
 </div>
 
@@ -212,43 +208,97 @@ ird.govt.nz<br>
 
 <script>
 const TZ="Pacific/Auckland";
+const name=localStorage.getItem("currentStaff")||"Processing";
+const todayISO=new Date().toLocaleDateString("en-CA",{timeZone:TZ});
+const storageKey=`processing_${name}_${todayISO}`;
 let entries=[];
 let submitted=false;
 let currentType=null;
 
-const name=localStorage.getItem("currentStaff")||"Processing";
 document.getElementById("staffNameLabel").textContent=name;
 document.getElementById("helloName").textContent=name;
-document.getElementById("todayDate").textContent=new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
+document.getElementById("todayDate").textContent=
+new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
 
 function cleanAmount(v){return parseFloat(v.replace(/[$, ]/g,''));}
 
+function saveState(){
+localStorage.setItem(storageKey,JSON.stringify({
+entries,
+submitted,
+counters:{
+filing:filing.value,
+linking:linking.value,
+linkedreview:linkedreview.value,
+inbox:inbox.value,
+existingreview:existingreview.value,
+processingreview:processingreview.value,
+misc:misc.value
+}
+}));
+}
+
+function loadState(){
+const saved=localStorage.getItem(storageKey);
+if(saved){
+const state=JSON.parse(saved);
+entries=state.entries||[];
+submitted=state.submitted||false;
+for(let k in state.counters){
+document.getElementById(k).value=state.counters[k];
+}
+if(submitted) lockPage();
+}
+renderLog(); updateTotal();
+checkYesterday();
+}
+
+function checkYesterday(){
+const yesterday=new Date(Date.now()-86400000)
+.toLocaleDateString("en-CA",{timeZone:TZ});
+const yesterdayKey=`processing_${name}_${yesterday}`;
+const old=localStorage.getItem(yesterdayKey);
+if(old){
+const data=JSON.parse(old);
+if(!data.submitted){
+const banner=document.getElementById("warningBanner");
+banner.textContent="Yesterday was not submitted. Please notify Admin if required.";
+banner.classList.remove("hidden");
+}
+}
+}
+
+function lockPage(){
+submitted=true;
+document.querySelectorAll("button").forEach(b=>{
+if(!b.classList.contains("tab")) b.disabled=true;
+});
+}
+
 function toggleLog(){
-const container=document.getElementById("logContainer");
-const icon=document.getElementById("toggleIcon");
-container.classList.toggle("hidden");
-icon.textContent=container.classList.contains("hidden")?"▼":"▲";
+logContainer.classList.toggle("hidden");
+toggleIcon.textContent=logContainer.classList.contains("hidden")?"▼":"▲";
 }
 
 function renderLog(){
-const tbody=document.getElementById("logTable");
-tbody.innerHTML="";
+logTable.innerHTML="";
 const visible=entries.slice(-200);
 visible.forEach((e,i)=>{
-const realIndex=entries.length-visible.length+i;
-const row=document.createElement("tr");
-row.innerHTML=`<td>${e.time}</td>
+const index=entries.length-visible.length+i;
+logTable.innerHTML+=`<tr>
+<td>${e.time}</td>
 <td>${e.type}</td>
 <td>$${e.fee.toFixed(2)}</td>
-<td>${!submitted?'<button onclick="editEntry('+realIndex+')">✎</button> <button onclick="deleteEntry('+realIndex+')">✕</button>':''}</td>`;
-tbody.appendChild(row);
+<td>${!submitted?`<button onclick="editEntry(${index})">✎</button>
+<button onclick="deleteEntry(${index})">✕</button>`:''}</td>
+</tr>`;
 });
-document.getElementById("entryCount").textContent=entries.length;
+entryCount.textContent=entries.length;
 }
 
 function updateTotal(){
-const total=entries.reduce((sum,e)=>sum+e.fee,0);
-document.getElementById("totalFees").textContent=total.toFixed(2);
+totalFees.textContent=
+entries.reduce((s,e)=>s+e.fee,0).toFixed(2);
 }
 
 function selectType(e,type){
@@ -256,105 +306,92 @@ if(submitted)return;
 currentType=type;
 document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
 e.target.classList.add("active");
-document.getElementById("inputSection").classList.remove("hidden");
-document.getElementById("receiptLabel").classList.toggle("hidden", type!=="REB");
+inputSection.classList.remove("hidden");
+receiptLabel.classList.toggle("hidden",type!=="REB");
 }
 
 function autoAdd(type){
 if(submitted)return;
-entries.push({type,amount:null,fee:39.10,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
-renderLog(); updateTotal();
+entries.push({type,fee:39.10,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
+renderLog();updateTotal();saveState();
 }
 
 function calculateFee(type,R){
 if(type==="ITA"){
-let base=(R*0.11)+34.50;
-let withGST=base*1.15;
+let f=(R*0.11+34.5)*1.15;
 if(R<39.68)return R;
-if(withGST>345)return 345;
-return withGST;
+return f>345?345:f;
 }
 if(type==="IR3"){
-let base=(R*0.11)+49.50;
-let withGST=base*1.15;
+let f=(R*0.11+49.5)*1.15;
 if(R<56.93)return R;
-if(withGST>402.50)return 402.50;
-return withGST;
+return f>402.5?402.5:f;
 }
 if(type==="REB"){
-let tier;
-if(R<500)tier=45.99;
-else if(R<2000)tier=68.99;
-else tier=91.99;
-if(document.getElementById("receiptAssist").checked)tier+=6.89;
-if(R<tier)return R;
-return tier;
+let tier=R<500?45.99:R<2000?68.99:91.99;
+if(receiptAssist.checked)tier+=6.89;
+return R<tier?R:tier;
 }
 return 0;
 }
 
 function addEntry(){
 if(submitted||!currentType)return;
-let amt=document.getElementById("amountInput").value;
-if(!amt)return;
-let R=cleanAmount(amt);
+let R=cleanAmount(amountInput.value);
+if(!R)return;
 let fee=calculateFee(currentType,R);
-entries.push({type:currentType,amount:R,fee:fee,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
-if(currentType==="ITA"||currentType==="IR3"||currentType==="REB"){adj('filing',1);}
-document.getElementById("amountInput").value="";
-renderLog(); updateTotal();
+entries.push({type:currentType,fee,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
+if(["ITA","IR3","REB"].includes(currentType)) adj('filing',1);
+amountInput.value="";
+renderLog();updateTotal();saveState();
 }
 
-function editEntry(index){
+function editEntry(i){
 if(submitted)return;
-let newVal=prompt("Enter new amount:");
-if(!newVal)return;
-let R=cleanAmount(newVal);
-entries[index].amount=R;
-entries[index].fee=calculateFee(entries[index].type,R);
-renderLog(); updateTotal();
+let v=prompt("Enter new amount:");
+if(!v)return;
+let R=cleanAmount(v);
+entries[i].fee=calculateFee(entries[i].type,R);
+renderLog();updateTotal();saveState();
 }
 
-function deleteEntry(index){
+function deleteEntry(i){
 if(submitted)return;
-const entry=entries[index];
-if(entry.type==="ITA"||entry.type==="IR3"||entry.type==="REB"){adj('filing',-1);}
-entries.splice(index,1);
-renderLog(); updateTotal();
+if(["ITA","IR3","REB"].includes(entries[i].type)) adj('filing',-1);
+entries.splice(i,1);
+renderLog();updateTotal();saveState();
+}
+
+function adj(id,d){
+let el=document.getElementById(id);
+el.value=Math.max(0,Number(el.value||0)+d);
+saveState();
 }
 
 function submitDay(){
 if(submitted)return;
 if(!confirm("Submit day? This cannot be edited."))return;
-submitted=true;
-renderLog();
+lockPage();saveState();
 alert("Day submitted.");
 }
 
-document.getElementById("amountInput").addEventListener("keydown",function(e){
+amountInput.addEventListener("keydown",e=>{
 if(e.key==="Enter") addEntry();
 });
-
-function adj(id,d){
-const el=document.getElementById(id);
-let v=Number(el.value||0)+d;
-if(v<0)v=0;
-el.value=v;
-}
 
 function switchTab(tab,btn){
 document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
 btn.classList.add("active");
-document.getElementById("workTab").classList.toggle("hidden",tab!=="work");
-document.getElementById("resourcesTab").classList.toggle("hidden",tab!=="resources");
+workTab.classList.toggle("hidden",tab!=="work");
+resourcesTab.classList.toggle("hidden",tab!=="resources");
 }
 
 function tick(){
-document.getElementById("clock").textContent=
-new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+clock.textContent=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
-tick(); setInterval(tick,1000);
-</script>
+tick();setInterval(tick,1000);
 
+loadState();
+</script>
 </body>
 </html>
