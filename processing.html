@@ -20,10 +20,9 @@
 }
 
 *{box-sizing:border-box}
-body{margin:0;font-family:"Okta Neue", system-ui;color:var(--text);}
-.page{min-height:100vh;background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;}
+body{margin:0;font-family:"Okta Neue",system-ui;color:var(--text);}
+.page{min-height:100vh;background:url("My Refund-Hero Images-02 (1).jpg") center/cover no-repeat;}
 
-/* HEADER */
 .header{background:var(--g0);color:#fff;padding:14px 24px;}
 .header-inner{max-width:1300px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
 .brand{display:flex;align-items:center;gap:14px;}
@@ -42,7 +41,6 @@ body{margin:0;font-family:"Okta Neue", system-ui;color:var(--text);}
 .panel{background:rgba(255,255,255,.96);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:20px;}
 .panel h3{margin:0 0 14px;font-size:18px;font-weight:900;color:var(--g0);}
 
-/* GREEN STRIP */
 .fee-panel{border-top:6px solid var(--g0);}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
@@ -66,6 +64,14 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 .total-box{background:var(--g2);border-radius:12px;padding:14px;font-weight:900;font-size:18px;text-align:right;}
 
 .submit button{width:100%;border-radius:14px;padding:14px;font-weight:900;font-size:15px;border:none;background:var(--g0);color:#fff;cursor:pointer;}
+
+.collapsible-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+  font-weight:900;
+}
 
 .hidden{display:none;}
 .locked{opacity:.6;pointer-events:none;}
@@ -102,46 +108,23 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 <!-- LEFT -->
 <div>
 
-<!-- EXISTING PROCESSING OUTPUT -->
+<!-- Processing Output -->
 <div class="panel">
 <h3>Processing Output</h3>
 <div class="grid">
-
-<div class="item"><label>Filing</label>
-<div class="controls"><button onclick="adj('filing',-1)">−</button><input id="filing" value="0"><button onclick="adj('filing',1)">+</button></div>
-</div>
-
-<div class="item"><label>Linking</label>
-<div class="controls"><button onclick="adj('linking',-1)">−</button><input id="linking" value="0"><button onclick="adj('linking',1)">+</button></div>
-</div>
-
-<div class="item"><label>Linked Review</label>
-<div class="controls"><button onclick="adj('linkedreview',-1)">−</button><input id="linkedreview" value="0"><button onclick="adj('linkedreview',1)">+</button></div>
-</div>
-
-<div class="item"><label>Inbox</label>
-<div class="controls"><button onclick="adj('inbox',-1)">−</button><input id="inbox" value="0"><button onclick="adj('inbox',1)">+</button></div>
-</div>
-
-<div class="item"><label>Existing Review</label>
-<div class="controls"><button onclick="adj('existingreview',-1)">−</button><input id="existingreview" value="0"><button onclick="adj('existingreview',1)">+</button></div>
-</div>
-
-<div class="item"><label>Processing Review</label>
-<div class="controls"><button onclick="adj('processingreview',-1)">−</button><input id="processingreview" value="0"><button onclick="adj('processingreview',1)">+</button></div>
-</div>
-
-<div class="item"><label>Miscellaneous</label>
-<div class="controls"><button onclick="adj('misc',-1)">−</button><input id="misc" value="0"><button onclick="adj('misc',1)">+</button></div>
-</div>
-
+<div class="item"><label>Filing</label><div class="controls"><button onclick="adj('filing',-1)">−</button><input id="filing" value="0"><button onclick="adj('filing',1)">+</button></div></div>
+<div class="item"><label>Linking</label><div class="controls"><button onclick="adj('linking',-1)">−</button><input id="linking" value="0"><button onclick="adj('linking',1)">+</button></div></div>
+<div class="item"><label>Linked Review</label><div class="controls"><button onclick="adj('linkedreview',-1)">−</button><input id="linkedreview" value="0"><button onclick="adj('linkedreview',1)">+</button></div></div>
+<div class="item"><label>Inbox</label><div class="controls"><button onclick="adj('inbox',-1)">−</button><input id="inbox" value="0"><button onclick="adj('inbox',1)">+</button></div></div>
+<div class="item"><label>Existing Review</label><div class="controls"><button onclick="adj('existingreview',-1)">−</button><input id="existingreview" value="0"><button onclick="adj('existingreview',1)">+</button></div></div>
+<div class="item"><label>Processing Review</label><div class="controls"><button onclick="adj('processingreview',-1)">−</button><input id="processingreview" value="0"><button onclick="adj('processingreview',1)">+</button></div></div>
+<div class="item"><label>Miscellaneous</label><div class="controls"><button onclick="adj('misc',-1)">−</button><input id="misc" value="0"><button onclick="adj('misc',1)">+</button></div></div>
 </div>
 </div>
 
-<!-- FEE ENGINE -->
+<!-- Fee Logging -->
 <div class="panel fee-panel">
 <h3>Return Fee Logging</h3>
-
 <div class="button-grid">
 <button class="type-btn" onclick="selectType(event,'ITA')">ITA</button>
 <button class="type-btn" onclick="selectType(event,'IR3')">IR3</button>
@@ -152,7 +135,7 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 </div>
 
 <div id="inputSection" class="hidden">
-<input type="number" id="amountInput" placeholder="Enter amount">
+<input type="text" id="amountInput" placeholder="Enter amount">
 <label id="receiptLabel" class="hidden">
 <input type="checkbox" id="receiptAssist"> Add receipt assistance
 </label>
@@ -160,18 +143,21 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 </div>
 </div>
 
-<!-- FEE LOG -->
+<!-- Collapsible Log -->
 <div class="panel fee-panel">
-<h3>Today’s Fee Entries</h3>
+<div class="collapsible-header" onclick="toggleLog()">
+<span>Today’s Fee Entries (<span id="entryCount">0</span> total · showing last 200)</span>
+<span id="toggleIcon">▼</span>
+</div>
+<div id="logContainer" class="hidden">
 <table>
-<thead>
-<tr><th>Time</th><th>Type</th><th>Fee</th><th></th></tr>
-</thead>
+<thead><tr><th>Time</th><th>Type</th><th>Fee</th><th></th></tr></thead>
 <tbody id="logTable"></tbody>
 </table>
 </div>
+</div>
 
-<!-- TOTAL -->
+<!-- Total -->
 <div class="panel fee-panel">
 <div class="total-box">
 Total Fees Today: $<span id="totalFees">0.00</span>
@@ -214,22 +200,39 @@ ird.govt.nz<br>
 </div>
 
 <script>
-let currentType=null;
-let totalFees=0;
+let entries=[];
 let submitted=false;
+let currentType=null;
 
-function switchTab(tab, btn){
-document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-btn.classList.add("active");
-document.getElementById("workTab").classList.toggle("hidden", tab!=="work");
-document.getElementById("resourcesTab").classList.toggle("hidden", tab!=="resources");
+function cleanAmount(v){
+return parseFloat(v.replace(/[$, ]/g,''));
 }
 
-function adj(id,d){
-const el=document.getElementById(id);
-let v=Number(el.value||0)+d;
-if(v<0)v=0;
-el.value=v;
+function toggleLog(){
+const container=document.getElementById("logContainer");
+const icon=document.getElementById("toggleIcon");
+container.classList.toggle("hidden");
+icon.textContent=container.classList.contains("hidden")?"▼":"▲";
+}
+
+function renderLog(){
+const tbody=document.getElementById("logTable");
+tbody.innerHTML="";
+const visible=entries.slice(-200);
+visible.forEach((e,i)=>{
+const row=document.createElement("tr");
+row.innerHTML=`<td>${e.time}</td>
+<td>${e.type}</td>
+<td>$${e.fee.toFixed(2)}</td>
+<td>${!submitted?'<button onclick="editEntry('+ (entries.length-visible.length+i) +')">✎</button>':''}</td>`;
+tbody.appendChild(row);
+});
+document.getElementById("entryCount").textContent=entries.length;
+}
+
+function updateTotal(){
+const total=entries.reduce((sum,e)=>sum+e.fee,0);
+document.getElementById("totalFees").textContent=total.toFixed(2);
 }
 
 function selectType(e,type){
@@ -238,17 +241,16 @@ currentType=type;
 document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
 e.target.classList.add("active");
 document.getElementById("inputSection").classList.remove("hidden");
-document.getElementById("amountInput").value="";
 document.getElementById("receiptLabel").classList.toggle("hidden", type!=="REB");
 }
 
 function autoAdd(type){
 if(submitted)return;
-addLog(type,39.10);
+entries.push({type,amount:null,fee:39.10,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
+renderLog(); updateTotal();
 }
 
-function calculateFee(type,amount){
-let R=parseFloat(amount);
+function calculateFee(type,R){
 if(type==="ITA"){
 let base=(R*0.11)+34.50;
 let withGST=base*1.15;
@@ -279,41 +281,47 @@ function addEntry(){
 if(submitted||!currentType)return;
 let amt=document.getElementById("amountInput").value;
 if(!amt)return;
-let fee=calculateFee(currentType,amt);
-addLog(currentType,fee);
+let R=cleanAmount(amt);
+let fee=calculateFee(currentType,R);
+entries.push({type:currentType,amount:R,fee:fee,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
 document.getElementById("amountInput").value="";
+renderLog(); updateTotal();
 }
 
-function addLog(type,fee){
-fee=Math.round(fee*100)/100;
-let time=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"});
-let row=document.createElement("tr");
-row.innerHTML=`<td>${time}</td><td>${type}</td><td>$${fee.toFixed(2)}</td>
-<td><button onclick="deleteRow(this,${fee})">✕</button></td>`;
-document.getElementById("logTable").appendChild(row);
-totalFees+=fee;
-updateTotal();
-}
-
-function deleteRow(btn,fee){
+function editEntry(index){
 if(submitted)return;
-btn.parentElement.parentElement.remove();
-totalFees-=fee;
-updateTotal();
-}
-
-function updateTotal(){
-document.getElementById("totalFees").textContent=totalFees.toFixed(2);
+let newVal=prompt("Enter new amount:");
+if(!newVal)return;
+let R=cleanAmount(newVal);
+entries[index].amount=R;
+entries[index].fee=calculateFee(entries[index].type,R);
+renderLog(); updateTotal();
 }
 
 function submitDay(){
 if(submitted)return;
-if(!confirm("Are you sure you want to submit your day? This cannot be edited."))return;
+if(!confirm("Submit day? This cannot be edited."))return;
 submitted=true;
-document.querySelectorAll("button").forEach(b=>{
-if(!b.classList.contains("submit-btn"))b.disabled=true;
+renderLog();
+alert("Day submitted.");
+}
+
+document.getElementById("amountInput").addEventListener("keydown",function(e){
+if(e.key==="Enter") addEntry();
 });
-alert("Day submitted successfully.");
+
+function adj(id,d){
+const el=document.getElementById(id);
+let v=Number(el.value||0)+d;
+if(v<0)v=0;
+el.value=v;
+}
+
+function switchTab(tab,btn){
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+btn.classList.add("active");
+document.getElementById("workTab").classList.toggle("hidden",tab!=="work");
+document.getElementById("resourcesTab").classList.toggle("hidden",tab!=="resources");
 }
 
 function tick(){
