@@ -12,24 +12,18 @@
 :root{
   --g0:#094B35;
   --g2:#ECFDF5;
+  --border:#e5e7eb;
   --text:#111827;
   --muted:#6b7280;
-  --border:#e5e7eb;
   --radius:16px;
   --shadow:0 12px 32px rgba(0,0,0,.14);
 }
-
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color:var(--text);
-}
-
-.page{
-  min-height:100vh;
-  background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
+  background:#f9fafb;
 }
 
 /* HEADER */
@@ -38,45 +32,22 @@ body{
   color:#fff;
   padding:14px 24px;
 }
-
 .header-inner{
-  max-width:1300px;
+  max-width:1400px;
   margin:0 auto;
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
-
 .brand{
   display:flex;
-  align-items:center;
   gap:14px;
-}
-
-.brand img{height:26px}
-
-.brand-text{
-  display:flex;
-  flex-direction:column;
-  line-height:1.1;
-}
-.brand-text strong{
-  font-size:15px;
-  font-weight:900;
-}
-.brand-text span{
-  font-size:12px;
-  opacity:.9;
-  font-weight:700;
-}
-
-.header-right{
-  display:flex;
   align-items:center;
-  gap:12px;
 }
-
-.header-btn{
+.brand img{height:26px}
+.brand-text strong{font-weight:900;font-size:15px}
+.brand-text span{font-size:12px;opacity:.9;font-weight:700}
+.dashboard-btn{
   border-radius:999px;
   padding:8px 16px;
   font-weight:900;
@@ -87,1018 +58,287 @@ body{
   cursor:pointer;
 }
 
-.clock{
-  font-weight:900;
-  font-size:14px;
-  margin-left:6px;
-}
-
-/* CONTENT */
-.wrap{
-  max-width:1300px;
-  margin:0 auto;
-  padding:22px 24px 60px;
-}
-
 /* LAYOUT */
-.shell{
+.container{
+  max-width:1400px;
+  margin:0 auto;
+  padding:30px 24px 60px;
   display:grid;
-  grid-template-columns:320px 1fr;
+  grid-template-columns:260px 1fr;
   gap:24px;
-  align-items:start;
 }
 
-.panel{
-  background:rgba(255,255,255,.96);
+/* FILTER PANEL */
+.filters{
+  background:#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:18px;
-  margin-bottom:20px;
+  padding:20px;
 }
-
-.panel h3{
-  margin:0 0 14px 0;
-  font-size:16px;
-  font-weight:900;
+.filters h3{
+  margin:0 0 16px;
   color:var(--g0);
-}
-
-.small{
-  font-size:12px;
-  color:var(--muted);
-  font-weight:800;
-}
-
-hr.sep{
-  border:none;
-  border-top:1px solid var(--border);
-  margin:14px 0;
-}
-
-.btn{
-  width:100%;
-  border-radius:14px;
-  padding:12px 14px;
   font-weight:900;
-  font-size:14px;
+}
+.filters label{
+  font-size:12px;
+  font-weight:900;
+  display:block;
+  margin-top:12px;
+}
+.filters input,
+.filters select{
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  margin-top:6px;
+}
+.run-btn{
+  margin-top:18px;
+  width:100%;
+  padding:12px;
   border:none;
+  border-radius:12px;
   background:var(--g0);
   color:#fff;
+  font-weight:900;
   cursor:pointer;
 }
-.btn.secondary{
-  background:#fff;
-  color:var(--g0);
-  border:1px solid var(--g0);
-}
-.btn-row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.field label{
-  display:block;
-  font-size:12px;
-  font-weight:900;
-  color:var(--muted);
-  margin-bottom:6px;
-}
-.field input[type="date"]{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  font-weight:800;
-}
-.field input[type="date"]:focus{
-  outline:none;
-  border-color:rgba(3,149,63,.45);
-  box-shadow:0 0 0 3px rgba(3,149,63,.12);
-}
-
-.checklist{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.chk{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:900;
-  font-size:13px;
-}
-.chk input{transform:scale(1.05)}
-.pillrow{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.pill{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 10px;
-  border-radius:999px;
-  background:var(--g2);
-  border:1px solid rgba(3,149,63,.18);
-  color:var(--g0);
-  font-weight:900;
-  font-size:12px;
-}
-
-/* Collapsible filters */
-.filters-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-.collapse-btn{
-  border-radius:999px;
-  padding:8px 12px;
-  font-weight:900;
-  font-size:12px;
-  border:1px solid var(--border);
-  background:#fff;
-  color:var(--g0);
-  cursor:pointer;
-}
-.filters.collapsed .filters-body{display:none}
-.filters.collapsed{padding-bottom:14px}
 
 /* MAIN */
-.main-top{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-bottom:12px;
-}
-
-.title{
+.main{
   display:flex;
   flex-direction:column;
-  gap:6px;
-}
-.title strong{
-  font-size:22px;
-  font-weight:900;
-  color:var(--g0);
-}
-.title span{
-  font-weight:900;
-  color:var(--muted);
-  font-size:13px;
+  gap:24px;
 }
 
-.cards{
+/* SUMMARY CARDS */
+.summary-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
-  gap:14px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
 }
-.card{
-  background:rgba(255,255,255,.96);
+.summary-card{
+  background:#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:16px;
+  padding:20px;
 }
-.card .k{
-  font-size:12px;
+.summary-card h4{
+  margin:0;
+  font-size:13px;
   font-weight:900;
   color:var(--muted);
 }
-.card .v{
-  margin-top:6px;
-  font-size:22px;
+.summary-card .value{
+  margin-top:8px;
+  font-size:28px;
   font-weight:900;
   color:var(--g0);
 }
-.card .s{
+.live-indicator{
+  font-size:11px;
+  font-weight:900;
   margin-top:6px;
-  font-size:12px;
-  font-weight:800;
-  color:var(--muted);
+  color:#16a34a;
 }
 
-.table{
+/* TABLES */
+.panel{
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+}
+.panel h3{
+  margin:0 0 14px;
+  font-weight:900;
+  color:var(--g0);
+}
+table{
   width:100%;
   border-collapse:collapse;
 }
-.table th,.table td{
+th,td{
   padding:10px 8px;
   border-bottom:1px solid var(--border);
   font-size:13px;
-  font-weight:800;
 }
-.table th{
+th{
+  text-align:left;
   color:var(--muted);
   font-weight:900;
-  text-align:left;
 }
+td strong{color:var(--g0)}
 .right{text-align:right}
-.muted{color:var(--muted)}
-.empty{
-  background:var(--g2);
-  border:1px dashed rgba(3,149,63,.35);
-  border-radius:14px;
-  padding:12px;
-  color:var(--g0);
-  font-weight:900;
-}
 
-@media(max-width:1100px){
-  .shell{grid-template-columns:1fr}
+@media(max-width:1000px){
+  .container{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
-<div class="page">
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-inner">
-      <div class="brand">
-        <img src="logo.png" alt="My Refund">
-        <div class="brand-text">
-          <strong>Reports</strong>
-          <span>Team totals + productivity</span>
-        </div>
-      </div>
-
-      <div class="header-right">
-        <button class="header-btn" onclick="goHome()">← Dashboard</button>
-        <div class="clock" id="clock"></div>
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="logo.png">
+      <div class="brand-text">
+        <strong>Executive Reports</strong>
+        <span>Operational overview & revenue performance</span>
       </div>
     </div>
+    <button class="dashboard-btn" onclick="goHome()">← Dashboard</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- FILTER PANEL -->
+  <div class="filters">
+    <h3>Filters</h3>
+
+    <label>Date From</label>
+    <input type="date" id="startDate">
+
+    <label>Date To</label>
+    <input type="date" id="endDate">
+
+    <label>Division</label>
+    <select id="divisionFilter" multiple>
+      <option value="CSR">CSR</option>
+      <option value="Processing">Processing</option>
+    </select>
+
+    <label>Staff</label>
+    <select id="staffFilter" multiple></select>
+
+    <label>Work Type</label>
+    <select id="workFilter" multiple></select>
+
+    <button class="run-btn" onclick="runReport()">Run Report</button>
   </div>
 
-  <div class="wrap">
-    <div class="shell">
+  <!-- MAIN CONTENT -->
+  <div class="main">
 
-      <!-- LEFT: FILTERS -->
-      <div class="panel filters" id="filtersPanel">
-        <div class="filters-head">
-          <h3 style="margin:0;color:var(--g0);">Filters</h3>
-          <button class="collapse-btn" id="collapseBtn">Collapse</button>
-        </div>
+    <!-- SUMMARY -->
+    <div class="summary-grid">
 
-        <div class="filters-body">
-
-          <div class="field" style="margin-top:12px;">
-            <label>Start date</label>
-            <input type="date" id="startDate">
-          </div>
-
-          <div class="field">
-            <label>End date</label>
-            <input type="date" id="endDate">
-          </div>
-
-          <hr class="sep">
-
-          <div class="small" style="margin-bottom:8px;">Division (multi-select)</div>
-          <div class="checklist" id="divisionList"></div>
-
-          <hr class="sep">
-
-          <div class="small" style="margin-bottom:8px;">Staff (multi-select)</div>
-          <div class="pillrow" style="margin-bottom:10px;">
-            <span class="pill" style="cursor:pointer;" onclick="selectAll('staff',true)">Select all</span>
-            <span class="pill" style="cursor:pointer;" onclick="selectAll('staff',false)">Clear</span>
-          </div>
-          <div class="checklist" id="staffList" style="max-height:220px; overflow:auto; padding-right:6px;"></div>
-
-          <hr class="sep">
-
-          <div class="small" style="margin-bottom:8px;">Work types (multi-select)</div>
-          <div class="pillrow" style="margin-bottom:10px;">
-            <span class="pill" style="cursor:pointer;" onclick="selectAll('work',true)">Select all</span>
-            <span class="pill" style="cursor:pointer;" onclick="selectAll('work',false)">Clear</span>
-          </div>
-          <div class="checklist" id="workList" style="max-height:240px; overflow:auto; padding-right:6px;"></div>
-
-          <hr class="sep">
-
-          <div class="small" style="margin-bottom:8px;">Fee types (multi-select)</div>
-          <div class="pillrow" style="margin-bottom:10px;">
-            <span class="pill" style="cursor:pointer;" onclick="selectAll('fee',true)">Select all</span>
-            <span class="pill" style="cursor:pointer;" onclick="selectAll('fee',false)">Clear</span>
-          </div>
-          <div class="checklist" id="feeList"></div>
-
-          <hr class="sep">
-
-          <div class="checklist">
-            <label class="chk">
-              <input type="checkbox" id="showEnvironment" checked>
-              Include daily environment (start/end of day)
-            </label>
-          </div>
-
-          <div style="margin-top:14px;" class="btn-row">
-            <button class="btn secondary" onclick="resetToToday()">Reset to today</button>
-            <button class="btn" onclick="runReport()">Run report</button>
-          </div>
-
-          <div style="margin-top:10px;">
-            <button class="btn" onclick="downloadPdf()">Download PDF</button>
-          </div>
-
-          <div id="statusPill" class="pill" style="margin-top:14px; width:fit-content;">Live (this device)</div>
-
-          <div class="small" style="margin-top:10px; line-height:1.45;">
-            Default is today + all filters selected. This report reads whatever data exists on <strong>this PC</strong> (until backend is added).
-          </div>
-
-        </div>
+      <div class="summary-card">
+        <h4>Client Touchpoints</h4>
+        <div class="value" id="touchpointsTotal">0</div>
+        <div class="live-indicator">Live Today</div>
       </div>
 
-      <!-- RIGHT: RESULTS -->
-      <div>
-
-        <div class="main-top">
-          <div class="title">
-            <strong id="rangeTitle">Live report</strong>
-            <span id="rangeSubtitle">Today · All divisions · All staff · All work</span>
-          </div>
-        </div>
-
-        <div class="cards" id="summaryCards"></div>
-
-        <div class="panel">
-          <h3>CSR totals (by work type)</h3>
-          <div id="csrTotalsArea"><div class="empty">No CSR data found for this period (on this device).</div></div>
-        </div>
-
-        <div class="panel">
-          <h3>Processing totals (by work type)</h3>
-          <div id="processingTotalsArea"><div class="empty">No Processing data found for this period (on this device).</div></div>
-        </div>
-
-        <div class="panel">
-          <h3>Fees totals (by fee type)</h3>
-          <div id="feesTotalsArea"><div class="empty">No fee entries found for this period (on this device).</div></div>
-        </div>
-
-        <div class="panel">
-          <h3>Staff breakdown</h3>
-          <div id="staffBreakdownArea"><div class="empty">No staff rows to display for this filter set.</div></div>
-        </div>
-
-        <div class="panel" id="environmentPanel">
-          <h3>Daily environment</h3>
-          <div class="small" style="margin:-6px 0 10px;">Start-of-day + end-of-day inputs (placeholder until backend is wired).</div>
-          <div id="environmentArea"><div class="empty">No daily environment entries found for this period (on this device).</div></div>
-        </div>
-
+      <div class="summary-card">
+        <h4>Returns Processed</h4>
+        <div class="value" id="processingTotal">0</div>
+        <div class="live-indicator">Live Today</div>
       </div>
+
+      <div class="summary-card">
+        <h4>Revenue (Fees)</h4>
+        <div class="value" id="feeTotal">$0</div>
+        <div class="live-indicator">Live Today</div>
+      </div>
+
+      <div class="summary-card">
+        <h4>Active Staff Logged</h4>
+        <div class="value" id="staffCount">0</div>
+        <div class="live-indicator">Live Today</div>
+      </div>
+
     </div>
-  </div>
 
+    <!-- CSR BREAKDOWN -->
+    <div class="panel">
+      <h3>CSR Activity Breakdown</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Staff</th>
+            <th class="right">Inbound</th>
+            <th class="right">Outbound</th>
+            <th class="right">Chat</th>
+            <th class="right">Emails</th>
+          </tr>
+        </thead>
+        <tbody id="csrTable"></tbody>
+      </table>
+    </div>
+
+    <!-- PROCESSING BREAKDOWN -->
+    <div class="panel">
+      <h3>Processing Output Breakdown</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Staff</th>
+            <th class="right">Total Output</th>
+            <th class="right">Total Fees</th>
+          </tr>
+        </thead>
+        <tbody id="processingTable"></tbody>
+      </table>
+    </div>
+
+  </div>
 </div>
 
 <script>
-/* ================= CONFIG ================= */
-const TZ = "Pacific/Auckland";
-
-/* Hard-coded staff lists (as per current system) */
-const STAFF = [
-  {name:"Drew", division:"CSR"},
-  {name:"Emma", division:"CSR"},
-  {name:"Pepe", division:"CSR"},
-  {name:"Maddy", division:"CSR"},
-  {name:"Sophie", division:"CSR"},
-  {name:"George", division:"Processing"},
-  {name:"Merin", division:"Processing"},
-  {name:"Bobbi", division:"Processing"}
-];
-
-/* CSR work fields */
-const CSR_WORK = [
-  {id:"inbound", label:"Inbound Calls"},
-  {id:"outbound", label:"Outbound Calls"},
-  {id:"chat", label:"Live Chat"},
-  {id:"a2a", label:"A2A"},
-  {id:"unverified", label:"Unverified"},
-  {id:"emails", label:"Emails"},
-  {id:"inccalling", label:"INC/C Calling"},
-  {id:"questioncalling", label:"Question Calling"},
-  {id:"a2acalling", label:"A2A Calling"},
-  {id:"delink", label:"Delinks"},
-  {id:"cancel", label:"Cancellations"}
-];
-
-/* Processing work fields */
-const PROC_WORK = [
-  {id:"filing", label:"Filing"},
-  {id:"linking", label:"Linking"},
-  {id:"linkedreview", label:"Linked Review"},
-  {id:"inbox", label:"Inbox"},
-  {id:"existingreview", label:"Existing Review"},
-  {id:"processingreview", label:"Processing Review"},
-  {id:"misc", label:"Miscellaneous"}
-];
-
-/* Fee types */
-const FEE_TYPES = [
-  {id:"ITA", label:"ITA"},
-  {id:"IR3", label:"IR3"},
-  {id:"REB", label:"REB"},
-  {id:"AA", label:"AA"},
-  {id:"R3P", label:"R3P"},
-  {id:"OP", label:"OP"}
-];
-
-/* ================= DOM ================= */
-const startDateEl = document.getElementById("startDate");
-const endDateEl = document.getElementById("endDate");
-
-const divisionListEl = document.getElementById("divisionList");
-const staffListEl = document.getElementById("staffList");
-const workListEl = document.getElementById("workList");
-const feeListEl = document.getElementById("feeList");
-
-const summaryCardsEl = document.getElementById("summaryCards");
-const csrTotalsArea = document.getElementById("csrTotalsArea");
-const processingTotalsArea = document.getElementById("processingTotalsArea");
-const feesTotalsArea = document.getElementById("feesTotalsArea");
-const staffBreakdownArea = document.getElementById("staffBreakdownArea");
-const environmentPanel = document.getElementById("environmentPanel");
-const environmentArea = document.getElementById("environmentArea");
-
-const rangeTitle = document.getElementById("rangeTitle");
-const rangeSubtitle = document.getElementById("rangeSubtitle");
-
-const filtersPanel = document.getElementById("filtersPanel");
-const collapseBtn = document.getElementById("collapseBtn");
-const showEnvironmentEl = document.getElementById("showEnvironment");
-
-/* ================= HELPERS ================= */
-function nzTodayISO(){
-  return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
-}
-function nzHuman(dISO){
-  const [y,m,dd]=dISO.split("-").map(Number);
-  const dt = new Date(Date.UTC(y,m-1,dd));
-  return dt.toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
-}
-function esc(s){
-  return String(s).replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[m]));
-}
-function num(n){
-  const x = Number(n);
-  return Number.isFinite(x) ? x : 0;
-}
-function money(n){
-  const x = Number(n);
-  return (Number.isFinite(x)?x:0).toLocaleString("en-NZ",{style:"currency",currency:"NZD"});
-}
-function dateToInt(iso){ return Number(iso.replaceAll("-","")); }
-function eachDay(startISO,endISO){
-  const out=[];
-  let cur = startISO;
-  while(dateToInt(cur) <= dateToInt(endISO)){
-    out.push(cur);
-    const [y,m,d]=cur.split("-").map(Number);
-    const dt = new Date(Date.UTC(y,m-1,d));
-    dt.setUTCDate(dt.getUTCDate()+1);
-    const ny=dt.getUTCFullYear();
-    const nm=String(dt.getUTCMonth()+1).padStart(2,"0");
-    const nd=String(dt.getUTCDate()).padStart(2,"0");
-    cur=`${ny}-${nm}-${nd}`;
-  }
-  return out;
-}
-
-/* ================= FILTER UI BUILD ================= */
-function buildFilters(){
-  // Division (multi)
-  divisionListEl.innerHTML = `
-    <label class="chk"><input type="checkbox" data-kind="division" value="CSR" checked> CSR</label>
-    <label class="chk"><input type="checkbox" data-kind="division" value="Processing" checked> Processing</label>
-  `;
-
-  // Staff (multi)
-  staffListEl.innerHTML = "";
-  STAFF.forEach(s=>{
-    const row=document.createElement("label");
-    row.className="chk";
-    row.innerHTML = `<input type="checkbox" data-kind="staff" value="${esc(s.name)}" checked> ${esc(s.name)} <span class="muted" style="font-weight:900;">(${esc(s.division)})</span>`;
-    staffListEl.appendChild(row);
-  });
-
-  // Work types (multi) — show all, but filters will respect division selection
-  workListEl.innerHTML = "";
-  const allWork = [
-    ...CSR_WORK.map(w=>({group:"CSR",...w})),
-    ...PROC_WORK.map(w=>({group:"Processing",...w}))
-  ];
-  allWork.forEach(w=>{
-    const row=document.createElement("label");
-    row.className="chk";
-    row.innerHTML = `<input type="checkbox" data-kind="work" value="${esc(w.group)}::${esc(w.id)}" checked> ${esc(w.label)} <span class="muted" style="font-weight:900;">(${esc(w.group)})</span>`;
-    workListEl.appendChild(row);
-  });
-
-  // Fee types
-  feeListEl.innerHTML = "";
-  FEE_TYPES.forEach(f=>{
-    const row=document.createElement("label");
-    row.className="chk";
-    row.innerHTML = `<input type="checkbox" data-kind="fee" value="${esc(f.id)}" checked> ${esc(f.label)}`;
-    feeListEl.appendChild(row);
-  });
-}
-
-function getChecked(kind){
-  return Array.from(document.querySelectorAll(`input[data-kind="${kind}"]:checked`)).map(x=>x.value);
-}
-
-function selectAll(kind,on){
-  document.querySelectorAll(`input[data-kind="${kind}"]`).forEach(x=>x.checked=on);
-}
-
-function resetToToday(){
-  const t=nzTodayISO();
-  startDateEl.value=t;
-  endDateEl.value=t;
-  // Keep selections, just rerun
-  runReport();
-}
-
-/* ================= LOCAL DATA READ =================
-   NOTE: Until backend exists, this only reads data stored on THIS PC.
-   CSR keys expected: csr_<Name>_<YYYY-MM-DD>
-   Processing keys: processing_<Name>_<YYYY-MM-DD> OR proc_<Name>_<YYYY-MM-DD>
-   Fee keys (best-effort): may be inside processing object as data.fees, or keys like fees_<Name>_<YYYY-MM-DD>
-==================================================== */
-function readCSR(name, dateISO){
-  const key = `csr_${name}_${dateISO}`;
-  const raw = localStorage.getItem(key);
-  if(!raw) return null;
-  try{
-    const d = JSON.parse(raw);
-    const c = (d && d.counters) ? d.counters : d; // accept either
-    return {
-      name, division:"CSR",
-      counters: {
-        inbound:num(c?.inbound),
-        outbound:num(c?.outbound),
-        chat:num(c?.chat),
-        a2a:num(c?.a2a),
-        unverified:num(c?.unverified),
-        emails:num(c?.emails),
-        inccalling:num(c?.inccalling),
-        questioncalling:num(c?.questioncalling),
-        a2acalling:num(c?.a2acalling),
-        delink:num(c?.delink),
-        cancel:num(c?.cancel),
-      }
-    };
-  }catch(e){ return null; }
-}
-
-function readProcessing(name, dateISO){
-  const keys = [`processing_${name}_${dateISO}`, `proc_${name}_${dateISO}`];
-  let raw=null, used=null;
-  for(const k of keys){
-    const r=localStorage.getItem(k);
-    if(r){ raw=r; used=k; break; }
-  }
-  if(!raw) return null;
-  try{
-    const d = JSON.parse(raw);
-    const c = (d && d.counters) ? d.counters : d;
-    // fees can be: d.fees = [{type:"ITA", fee: 39.10}, ...] or similar
-    const fees = Array.isArray(d?.fees) ? d.fees : (Array.isArray(d?.feeEntries)?d.feeEntries:[]);
-    return {
-      name, division:"Processing",
-      counters:{
-        filing:num(c?.filing),
-        linking:num(c?.linking),
-        linkedreview:num(c?.linkedreview),
-        inbox:num(c?.inbox),
-        existingreview:num(c?.existingreview),
-        processingreview:num(c?.processingreview),
-        misc:num(c?.misc),
-      },
-      fees: fees.map(x=>({
-        type: String(x.type||x.feeType||"").toUpperCase().trim(),
-        fee: num(x.fee ?? x.amount ?? x.totalFee ?? 0)
-      })).filter(x=>x.type)
-    };
-  }catch(e){ return null; }
-}
-
-// Optional environment read (placeholder schema)
-function readEnvironment(dateISO){
-  const raw = localStorage.getItem(`env_${dateISO}`);
-  if(!raw) return null;
-  try{ return JSON.parse(raw); }catch(e){ return null; }
-}
-
-/* ================= REPORT BUILD ================= */
-function runReport(){
-  const start = startDateEl.value;
-  const end = endDateEl.value;
-  if(!start || !end){
-    alert("Please select a start and end date.");
-    return;
-  }
-  if(dateToInt(start) > dateToInt(end)){
-    alert("Start date must be before end date.");
-    return;
-  }
-
-  const divisions = getChecked("division");           // ["CSR","Processing"]
-  const staffSel = new Set(getChecked("staff"));      // names
-  const workSel = new Set(getChecked("work"));        // "CSR::inbound"
-  const feeSel = new Set(getChecked("fee"));          // "ITA"...
-  const includeEnv = !!showEnvironmentEl.checked;
-
-  // Update title/subtitle
-  const days = eachDay(start,end);
-  rangeTitle.textContent = (start===end) ? `Live report — ${nzHuman(start)}` : `Report — ${start} to ${end}`;
-  const divLabel = divisions.length===2 ? "All divisions" : (divisions[0]||"None");
-  rangeSubtitle.textContent = `${(start===end)?"Today":"Selected period"} · ${divLabel} · Multi-filters`;
-
-  // Collect rows
-  const csrRows=[];
-  const procRows=[];
-  const envRows=[];
-
-  days.forEach(d=>{
-    if(divisions.includes("CSR")){
-      STAFF.filter(s=>s.division==="CSR" && staffSel.has(s.name)).forEach(s=>{
-        const row = readCSR(s.name,d);
-        if(row) csrRows.push({date:d, ...row});
-      });
-    }
-    if(divisions.includes("Processing")){
-      STAFF.filter(s=>s.division==="Processing" && staffSel.has(s.name)).forEach(s=>{
-        const row = readProcessing(s.name,d);
-        if(row) procRows.push({date:d, ...row});
-      });
-    }
-    if(includeEnv){
-      const env = readEnvironment(d);
-      if(env) envRows.push({date:d, ...env});
-    }
-  });
-
-  // Build summary
-  const csrInteractionsTotal = csrRows.reduce((acc,r)=>acc + (r.counters.inbound + r.counters.outbound + r.counters.chat), 0);
-  const procOutputTotal = procRows.reduce((acc,r)=>acc + Object.values(r.counters).reduce((a,b)=>a+num(b),0), 0);
-
-  const feesTotal = procRows.reduce((acc,r)=>{
-    const t = (r.fees||[]).reduce((a,x)=>a + (feeSel.size? (feeSel.has(x.type)?x.fee:0) : x.fee),0);
-    return acc + t;
-  },0);
-
-  const csrStaffCount = new Set(csrRows.map(r=>r.name)).size;
-  const procStaffCount = new Set(procRows.map(r=>r.name)).size;
-
-  summaryCardsEl.innerHTML = "";
-  summaryCardsEl.appendChild(makeCard("CSR interactions (total)", csrInteractionsTotal, "Inbound + Outbound + Live Chat"));
-  summaryCardsEl.appendChild(makeCard("Processing output (total)", procOutputTotal, "All processing counters"));
-  summaryCardsEl.appendChild(makeCard("Total fees (processing)", money(feesTotal), "Filtered by fee type"));
-  summaryCardsEl.appendChild(makeCard("Active staff (this report)", csrStaffCount + procStaffCount, `CSR: ${csrStaffCount} · Processing: ${procStaffCount}`));
-
-  // CSR totals by work type (respect work filter)
-  const csrTotals = {};
-  CSR_WORK.forEach(w=>{ csrTotals[w.id]=0; });
-  csrRows.forEach(r=>{
-    CSR_WORK.forEach(w=>{
-      const key = `CSR::${w.id}`;
-      if(workSel.has(key)){
-        csrTotals[w.id] += num(r.counters[w.id]);
-      }
-    });
-  });
-  renderTotalsTable(csrTotalsArea, CSR_WORK, csrTotals, workSel, "CSR");
-
-  // Processing totals by work type
-  const procTotals = {};
-  PROC_WORK.forEach(w=>{ procTotals[w.id]=0; });
-  procRows.forEach(r=>{
-    PROC_WORK.forEach(w=>{
-      const key = `Processing::${w.id}`;
-      if(workSel.has(key)){
-        procTotals[w.id] += num(r.counters[w.id]);
-      }
-    });
-  });
-  renderTotalsTable(processingTotalsArea, PROC_WORK, procTotals, workSel, "Processing");
-
-  // Fees totals by fee type
-  const feeTotals = {};
-  FEE_TYPES.forEach(f=>{ feeTotals[f.id]=0; });
-  procRows.forEach(r=>{
-    (r.fees||[]).forEach(x=>{
-      const t = String(x.type||"").toUpperCase().trim();
-      if(!t) return;
-      if(feeSel.size && !feeSel.has(t)) return;
-      if(feeTotals[t] == null) feeTotals[t]=0;
-      feeTotals[t] += num(x.fee);
-    });
-  });
-  renderFeesTable(feesTotalsArea, feeTotals, feeSel);
-
-  // Staff breakdown (by staff, sums)
-  renderStaffBreakdown(staffBreakdownArea, csrRows, procRows, workSel, feeSel);
-
-  // Environment panel toggle
-  environmentPanel.style.display = includeEnv ? "block" : "none";
-  if(includeEnv){
-    renderEnvironment(environmentArea, envRows);
-  }
-
-  // Status pill
-  document.getElementById("statusPill").textContent = "Live (this device) · Updated";
-}
-
-function makeCard(label, value, sub){
-  const d=document.createElement("div");
-  d.className="card";
-  d.innerHTML = `
-    <div class="k">${esc(label)}</div>
-    <div class="v">${esc(value)}</div>
-    <div class="s">${esc(sub)}</div>
-  `;
-  return d;
-}
-
-function renderTotalsTable(targetEl, defs, totalsObj, workSel, group){
-  const any = defs.some(w=>workSel.has(`${group}::${w.id}`) && num(totalsObj[w.id])>0);
-  const selectedCount = defs.filter(w=>workSel.has(`${group}::${w.id}`)).length;
-
-  if(!selectedCount){
-    targetEl.innerHTML = `<div class="empty">No ${esc(group)} work types selected.</div>`;
-    return;
-  }
-
-  if(!any){
-    // still show table (so management can see structure), but zeros
-  }
-
-  targetEl.innerHTML = `
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Work type</th>
-          <th class="right">Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${defs.filter(w=>workSel.has(`${group}::${w.id}`)).map(w=>`
-          <tr>
-            <td><strong style="color:var(--g0);">${esc(w.label)}</strong></td>
-            <td class="right">${num(totalsObj[w.id])}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-  `;
-}
-
-function renderFeesTable(targetEl, feeTotals, feeSel){
-  const rows = FEE_TYPES
-    .filter(f=>feeSel.size ? feeSel.has(f.id) : true)
-    .map(f=>({id:f.id,label:f.label,total:num(feeTotals[f.id])}));
-
-  if(!rows.length){
-    targetEl.innerHTML = `<div class="empty">No fee types selected.</div>`;
-    return;
-  }
-
-  const any = rows.some(r=>r.total>0);
-  targetEl.innerHTML = `
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Fee type</th>
-          <th class="right">Total fees</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows.map(r=>`
-          <tr>
-            <td><strong style="color:var(--g0);">${esc(r.label)}</strong></td>
-            <td class="right">${money(r.total)}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-    ${any ? "" : `<div class="small" style="margin-top:10px;">No fee entries found in this range (on this device).</div>`}
-  `;
-}
-
-function renderStaffBreakdown(targetEl, csrRows, procRows, workSel, feeSel){
-  // Build per-staff aggregates
-  const staffMap = new Map(); // name -> {division, csr:{}, proc:{}, fees}
-  function ensure(name, division){
-    if(!staffMap.has(name)) staffMap.set(name, {name, division, csr:{}, proc:{}, fees:0});
-    return staffMap.get(name);
-  }
-
-  csrRows.forEach(r=>{
-    const s=ensure(r.name,"CSR");
-    CSR_WORK.forEach(w=>{
-      if(workSel.has(`CSR::${w.id}`)){
-        s.csr[w.id]=(s.csr[w.id]||0)+num(r.counters[w.id]);
-      }
-    });
-  });
-
-  procRows.forEach(r=>{
-    const s=ensure(r.name,"Processing");
-    PROC_WORK.forEach(w=>{
-      if(workSel.has(`Processing::${w.id}`)){
-        s.proc[w.id]=(s.proc[w.id]||0)+num(r.counters[w.id]);
-      }
-    });
-    const feeSum = (r.fees||[]).reduce((a,x)=>{
-      const t=String(x.type||"").toUpperCase().trim();
-      if(feeSel.size && !feeSel.has(t)) return a;
-      return a + num(x.fee);
-    },0);
-    s.fees += feeSum;
-  });
-
-  const rows = Array.from(staffMap.values())
-    .sort((a,b)=>a.division.localeCompare(b.division) || a.name.localeCompare(b.name));
-
-  if(!rows.length){
-    targetEl.innerHTML = `<div class="empty">No staff rows to display for this filter set.</div>`;
-    return;
-  }
-
-  // Columns: Staff, Division, CSR interactions (if CSR), Processing output (if Processing), Fees (if Processing)
-  targetEl.innerHTML = `
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Staff</th>
-          <th>Division</th>
-          <th class="right">CSR interactions</th>
-          <th class="right">Processing output</th>
-          <th class="right">Fees</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows.map(r=>{
-          const csrInt = (r.csr.inbound||0) + (r.csr.outbound||0) + (r.csr.chat||0);
-          const procOut = Object.values(r.proc).reduce((a,b)=>a+num(b),0);
-          return `
-            <tr>
-              <td><strong style="color:var(--g0);">${esc(r.name)}</strong></td>
-              <td>${esc(r.division)}</td>
-              <td class="right">${r.division==="CSR" ? csrInt : "—"}</td>
-              <td class="right">${r.division==="Processing" ? procOut : "—"}</td>
-              <td class="right">${r.division==="Processing" ? money(r.fees) : "—"}</td>
-            </tr>
-          `;
-        }).join("")}
-      </tbody>
-    </table>
-    <div class="small" style="margin-top:10px;">
-      CSR interactions = inbound + outbound + live chat (within selected work filters).
-    </div>
-  `;
-}
-
-function renderEnvironment(targetEl, envRows){
-  if(!envRows.length){
-    targetEl.innerHTML = `<div class="empty">No daily environment entries found for this period (on this device).</div>`;
-    return;
-  }
-  // Flexible render (placeholder)
-  targetEl.innerHTML = `
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th class="right">Start Emails</th>
-          <th class="right">Start A2A</th>
-          <th class="right">Start Unverified</th>
-          <th class="right">End Missed Calls</th>
-          <th class="right">End Missed Chats</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${envRows.map(r=>`
-          <tr>
-            <td><strong style="color:var(--g0);">${esc(r.date)}</strong></td>
-            <td class="right">${num(r.startEmails)}</td>
-            <td class="right">${num(r.startA2A)}</td>
-            <td class="right">${num(r.startUnverified)}</td>
-            <td class="right">${num(r.endMissedCalls)}</td>
-            <td class="right">${num(r.endMissedChats)}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-  `;
-}
-
-/* ================= PDF =================
-   For now, this prints whatever is on-screen (filtered).
-   Later, we can swap this to backend PDF generation.
-====================================== */
-function downloadPdf(){
-  // Ensure it reflects current filters: use current rendered DOM
-  const w = window.open("", "_blank");
-  if(!w){ alert("Popup blocked. Please allow popups for PDF printing."); return; }
-
-  const html = `
-    <!doctype html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <title>My Refund — Report</title>
-      <style>
-        body{font-family: Arial, sans-serif; padding:20px; color:#111;}
-        h1{margin:0 0 6px 0;}
-        .muted{color:#666; font-size:12px; margin-bottom:16px;}
-        table{width:100%; border-collapse:collapse; margin:14px 0;}
-        th,td{border-bottom:1px solid #ddd; padding:8px; font-size:12px; text-align:left;}
-        th{color:#444;}
-        .right{text-align:right;}
-        .cardrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0 18px;}
-        .card{border:1px solid #ddd; border-radius:10px; padding:10px;}
-        .k{color:#666; font-weight:700; font-size:11px;}
-        .v{font-weight:900; font-size:18px; margin-top:6px;}
-      </style>
-    </head>
-    <body>
-      <h1>My Refund — Report</h1>
-      <div class="muted">${esc(rangeTitle.textContent)} · ${esc(rangeSubtitle.textContent)}</div>
-
-      <div class="cardrow">
-        ${Array.from(summaryCardsEl.querySelectorAll(".card")).map(c=>{
-          const k=c.querySelector(".k")?.textContent||"";
-          const v=c.querySelector(".v")?.textContent||"";
-          return `<div class="card"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`;
-        }).join("")}
-      </div>
-
-      <h2>CSR totals</h2>
-      ${csrTotalsArea.innerHTML}
-
-      <h2>Processing totals</h2>
-      ${processingTotalsArea.innerHTML}
-
-      <h2>Fees totals</h2>
-      ${feesTotalsArea.innerHTML}
-
-      <h2>Staff breakdown</h2>
-      ${staffBreakdownArea.innerHTML}
-
-      ${showEnvironmentEl.checked ? `<h2>Daily environment</h2>${environmentArea.innerHTML}` : ``}
-
-      <script>
-        window.onload = function(){ window.print(); };
-      <\/script>
-    </body>
-    </html>
-  `;
-  w.document.open();
-  w.document.write(html);
-  w.document.close();
-}
-
-/* ================= NAV ================= */
 function goHome(){ window.location.href="index.html"; }
 
-/* ================= UI: collapse ================= */
-collapseBtn.addEventListener("click", ()=>{
-  filtersPanel.classList.toggle("collapsed");
-  collapseBtn.textContent = filtersPanel.classList.contains("collapsed") ? "Expand" : "Collapse";
-});
+/* DEFAULT TODAY */
+const today = new Date().toISOString().split("T")[0];
+document.getElementById("startDate").value = today;
+document.getElementById("endDate").value = today;
 
-/* ================= CLOCK ================= */
-function tick(){
-  document.getElementById("clock").textContent =
-    new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+/* MOCK DATA FOR DESIGN PHASE */
+function runReport(){
+
+  // Summary
+  document.getElementById("touchpointsTotal").textContent = 432;
+  document.getElementById("processingTotal").textContent = 189;
+  document.getElementById("feeTotal").textContent = "$12,480";
+  document.getElementById("staffCount").textContent = 11;
+
+  // CSR Table
+  document.getElementById("csrTable").innerHTML = `
+    <tr>
+      <td><strong>Drew</strong></td>
+      <td class="right">42</td>
+      <td class="right">21</td>
+      <td class="right">16</td>
+      <td class="right">33</td>
+    </tr>
+    <tr>
+      <td><strong>Emma</strong></td>
+      <td class="right">38</td>
+      <td class="right">18</td>
+      <td class="right">14</td>
+      <td class="right">29</td>
+    </tr>
+  `;
+
+  // Processing Table
+  document.getElementById("processingTable").innerHTML = `
+    <tr>
+      <td><strong>George</strong></td>
+      <td class="right">62</td>
+      <td class="right">$4,820</td>
+    </tr>
+    <tr>
+      <td><strong>Merin</strong></td>
+      <td class="right">55</td>
+      <td class="right">$3,950</td>
+    </tr>
+  `;
 }
-tick(); setInterval(tick,1000);
 
-/* ================= INIT ================= */
-(function init(){
-  buildFilters();
-  const t=nzTodayISO();
-  startDateEl.value=t;
-  endDateEl.value=t;
-
-  // Default = live data (today) and auto-run
-  runReport();
-})();
+runReport(); // load default
 </script>
 
 </body>
