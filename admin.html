@@ -118,44 +118,52 @@ body{
   color:var(--g0);
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;
+/* Roster styles */
+
+.roster-subtabs{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
 }
 
-label{
-  display:block;
-  font-size:12px;
-  font-weight:900;
-  margin-bottom:6px;
-}
-
-input, select, textarea{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  margin-bottom:14px;
-  font-weight:700;
-}
-
-textarea{min-height:90px}
-
-.work-tile{
-  border:2px solid var(--border);
-  border-radius:14px;
-  padding:16px;
-  text-align:center;
-  font-weight:900;
+.subtab{
+  padding:8px 14px;
+  border-radius:999px;
+  border:1px solid var(--g0);
   background:#fff;
+  font-weight:900;
   cursor:pointer;
 }
 
-.work-tile.active{
-  border-color:var(--g0);
-  background:var(--g2);
-  color:var(--g0);
+.subtab.active{
+  background:var(--g0);
+  color:#fff;
+}
+
+.roster-card{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:18px;
+  background:#fff;
+}
+
+.day-row{
+  display:grid;
+  grid-template-columns:120px 1fr 1fr 1fr 1fr;
+  gap:10px;
+  margin-bottom:10px;
+  align-items:center;
+}
+
+.day-row input{
+  padding:6px;
+  border-radius:8px;
+  border:1px solid var(--border);
+}
+
+.toggle-row{
+  margin-bottom:18px;
 }
 
 .actions{
@@ -163,66 +171,13 @@ textarea{min-height:90px}
 }
 
 .actions button{
-  padding:14px 22px;
-  border-radius:14px;
+  padding:12px 18px;
+  border-radius:12px;
   background:var(--g0);
   color:#fff;
   border:none;
   font-weight:900;
-}
-
-.staff-card{
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:16px;
-}
-
-.meta{
-  font-size:12px;
-  font-weight:800;
-  color:var(--muted);
-}
-
-.success-message{
-  margin-top:16px;
-  padding:12px 16px;
-  border-radius:12px;
-  background:#ECFDF5;
-  color:#065f46;
-  font-weight:900;
-  display:none;
-}
-
-/* Overview cards */
-.overview-card{
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:16px;
-  background:#fff;
   cursor:pointer;
-}
-
-.overview-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.overview-summary{
-  font-size:13px;
-  font-weight:800;
-  color:var(--muted);
-  margin-top:6px;
-}
-
-.overview-details{
-  margin-top:12px;
-  font-size:13px;
-  display:none;
-}
-
-.overview-card.expanded .overview-details{
-  display:block;
 }
 </style>
 </head>
@@ -249,127 +204,33 @@ textarea{min-height:90px}
   <button class="tab active" onclick="showTab('overview')">Overview</button>
   <button class="tab" onclick="showTab('allocation')">Allocation</button>
   <button class="tab" onclick="showTab('environment')">Daily Environment</button>
+  <button class="tab" onclick="showTab('roster')">Roster</button>
   <button class="tab" onclick="showTab('settings')">Settings</button>
 </div>
 
-<!-- OVERVIEW -->
-<div id="overview" class="tab-section active">
-  <div class="panel">
-    <h3>CSR Overview</h3>
-    <div id="csrOverview" class="grid"></div>
-  </div>
+<!-- ROSTER TAB -->
+<div id="roster" class="tab-section">
 
   <div class="panel">
-    <h3>Processing Overview</h3>
-    <div id="processingOverview" class="grid"></div>
-  </div>
-</div>
+    <h3>Weekly Roster</h3>
 
-<!-- ALLOCATION -->
-<div id="allocation" class="tab-section">
-  <div class="panel">
-    <h3>CSR Work Allocation</h3>
+    <label>Week Starting (Monday)</label>
+    <input type="date" id="weekStart">
 
-    <label>CSR Staff Member</label>
-    <select id="allocationStaff" onchange="resetAllocation()"></select>
-
-    <label>Date</label>
-    <input type="date" id="allocationDate">
-
-    <label>Assigned Work Types</label>
-    <div class="grid" id="allocationWorkTiles"></div>
-
-    <label>Notes</label>
-    <textarea id="allocationNotes"></textarea>
-
-    <div class="actions">
-      <button onclick="saveAllocation()">Save Allocation</button>
+    <div class="toggle-row">
+      <label>
+        <input type="checkbox" id="toggleWeekend" onchange="toggleWeekend()"> 
+        Show Weekend
+      </label>
     </div>
 
-    <div id="allocationSuccess" class="success-message">
-      Allocation saved successfully.
-    </div>
-  </div>
-</div>
-
-<!-- DAILY ENVIRONMENT -->
-<div id="environment" class="tab-section">
-
-  <div class="panel">
-    <h3>Start of Day</h3>
-
-    <label>Date</label>
-    <input type="date" id="environmentDate">
-
-    <div class="grid">
-      <div><label>Emails</label><input type="number" id="startEmails"></div>
-      <div><label>A2A</label><input type="number" id="startA2A"></div>
-      <div><label>Unverified</label><input type="number" id="startUnverified"></div>
+    <div class="roster-subtabs">
+      <button class="subtab active" onclick="switchRoster('CSR', this)">CSR</button>
+      <button class="subtab" onclick="switchRoster('Processing', this)">Processing</button>
     </div>
 
-    <div class="actions">
-      <button id="saveStartBtn" onclick="saveStartOfDay()">Save Start of Day</button>
-    </div>
+    <div id="rosterContainer"></div>
 
-    <div id="startSavedMsg" class="success-message">
-      Start of Day saved successfully.
-    </div>
-  </div>
-
-  <div class="panel">
-    <h3>End of Day</h3>
-
-    <div class="grid">
-      <div><label>Missed Calls</label><input type="number" id="endMissedCalls"></div>
-      <div><label>Missed Chats</label><input type="number" id="endMissedChats"></div>
-    </div>
-
-    <div class="actions">
-      <button id="saveEndBtn" onclick="saveEndOfDay()">Save End of Day</button>
-    </div>
-
-    <div id="endSavedMsg" class="success-message">
-      End of Day saved successfully.
-    </div>
-  </div>
-
-</div>
-
-<!-- SETTINGS -->
-<div id="settings" class="tab-section">
-
-  <div class="panel">
-    <h3>User Management</h3>
-    <div id="userList" class="grid"></div>
-
-    <hr style="margin:24px 0;border:none;border-top:1px solid var(--border);">
-
-    <label>Name</label>
-    <input type="text" id="newUserName">
-
-    <label>Division</label>
-    <select id="newUserDivision">
-      <option value="CSR">CSR</option>
-      <option value="Processing">Processing</option>
-    </select>
-
-    <div class="actions">
-      <button onclick="addUser()">Add User</button>
-    </div>
-  </div>
-
-  <div class="panel">
-    <h3>Work Library (CSR)</h3>
-    <div id="workList" class="grid"></div>
-
-    <hr style="margin:24px 0;border:none;border-top:1px solid var(--border);">
-
-    <label>Work Name</label>
-    <input type="text" id="newWorkName">
-
-    <div class="actions">
-      <button onclick="addWork()">Add Work Type</button>
-    </div>
   </div>
 
 </div>
@@ -397,176 +258,71 @@ function tick(){
 }
 tick(); setInterval(tick,1000);
 
-/* Mock data */
+/* Mock users */
 let users = [
-  {name:"Emma", division:"CSR", active:true},
-  {name:"Drew", division:"CSR", active:true},
-  {name:"Pepe", division:"CSR", active:true},
-  {name:"Maddy", division:"CSR", active:true},
-  {name:"Sophie", division:"CSR", active:true},
-  {name:"George", division:"Processing", active:true},
-  {name:"Merin", division:"Processing", active:true}
+  {name:"Emma", division:"CSR"},
+  {name:"Drew", division:"CSR"},
+  {name:"Pepe", division:"CSR"},
+  {name:"Maddy", division:"CSR"},
+  {name:"Sophie", division:"CSR"},
+  {name:"George", division:"Processing"},
+  {name:"Merin", division:"Processing"}
 ];
 
-let workTypes = [
-  "A2A","Unverified","Emails",
-  "INC/C Calling","Question Calling","A2A Calling"
-];
+let currentRosterDivision = "CSR";
 
-/* Render functions */
-function renderUsers(){
-  const list=document.getElementById("userList");
-  list.innerHTML="";
-  users.forEach((u,i)=>{
-    const card=document.createElement("div");
-    card.className="staff-card";
-    card.innerHTML=`
-      <strong>${u.name}</strong><br>
-      <div class="meta">${u.division}</div>
-      <div class="meta">Status: ${u.active?"Active":"Inactive"}</div>
-      <button onclick="toggleUser(${i})">${u.active?"Deactivate":"Reactivate"}</button>
-    `;
-    list.appendChild(card);
-  });
+function switchRoster(div, btn){
+  document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  currentRosterDivision = div;
+  renderRoster();
 }
 
-function toggleUser(i){
-  users[i].active=!users[i].active;
-  renderUsers();
-  renderAllocationStaff();
-  renderOverview();
+function toggleWeekend(){
+  renderRoster();
 }
 
-function addUser(){
-  const name=document.getElementById("newUserName").value.trim();
-  const division=document.getElementById("newUserDivision").value;
-  if(!name) return;
-  users.push({name,division,active:true});
-  document.getElementById("newUserName").value="";
-  renderUsers();
-  renderAllocationStaff();
-  renderOverview();
-}
+function renderRoster(){
+  const container = document.getElementById("rosterContainer");
+  container.innerHTML = "";
 
-function renderWork(){
-  const list=document.getElementById("workList");
-  list.innerHTML="";
-  workTypes.forEach((w,i)=>{
-    const tile=document.createElement("div");
-    tile.className="work-tile";
-    tile.innerHTML=`${w}<br><button onclick="removeWork(${i})">Remove</button>`;
-    list.appendChild(tile);
-  });
-}
+  const showWeekend = document.getElementById("toggleWeekend").checked;
 
-function addWork(){
-  const name=document.getElementById("newWorkName").value.trim();
-  if(!name) return;
-  workTypes.push(name);
-  document.getElementById("newWorkName").value="";
-  renderWork();
-  renderAllocationTiles();
-}
+  const days = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+  if(showWeekend){
+    days.push("Saturday","Sunday");
+  }
 
-function removeWork(i){
-  workTypes.splice(i,1);
-  renderWork();
-  renderAllocationTiles();
-}
-
-function renderAllocationStaff(){
-  const select=document.getElementById("allocationStaff");
-  select.innerHTML="";
-  users.filter(u=>u.division==="CSR"&&u.active)
+  users.filter(u=>u.division===currentRosterDivision)
     .forEach(u=>{
-      const opt=document.createElement("option");
-      opt.value=u.name;
-      opt.textContent=u.name;
-      select.appendChild(opt);
+      const card = document.createElement("div");
+      card.className="roster-card";
+      card.innerHTML=`<strong>${u.name}</strong>`;
+      
+      days.forEach(day=>{
+        const row=document.createElement("div");
+        row.className="day-row";
+        row.innerHTML=`
+          <div><strong>${day}</strong></div>
+          <input type="time" placeholder="Start">
+          <input type="time" placeholder="End">
+          <input type="time" placeholder="Lunch">
+          <input type="time" placeholder="Break">
+        `;
+        card.appendChild(row);
+      });
+
+      const actions=document.createElement("div");
+      actions.className="actions";
+      actions.innerHTML=`<button>Save Week</button>`;
+      card.appendChild(actions);
+
+      container.appendChild(card);
     });
 }
 
-function renderAllocationTiles(){
-  const container=document.getElementById("allocationWorkTiles");
-  container.innerHTML="";
-  workTypes.forEach(w=>{
-    const tile=document.createElement("div");
-    tile.className="work-tile";
-    tile.textContent=w;
-    tile.onclick=()=>tile.classList.toggle("active");
-    container.appendChild(tile);
-  });
-}
-
-function resetAllocation(){
-  document.querySelectorAll('#allocation .work-tile')
-    .forEach(t=>t.classList.remove("active"));
-  document.getElementById("allocationNotes").value="";
-}
-
-function saveAllocation(){
-  document.getElementById("allocationSuccess").style.display="block";
-  setTimeout(()=>document.getElementById("allocationSuccess").style.display="none",2500);
-}
-
-function saveStartOfDay(){
-  document.getElementById("saveStartBtn").disabled=true;
-  document.querySelectorAll("#environment input[id^='start']")
-    .forEach(i=>i.readOnly=true);
-  document.getElementById("startSavedMsg").style.display="block";
-}
-
-function saveEndOfDay(){
-  document.getElementById("saveEndBtn").disabled=true;
-  document.querySelectorAll("#environment input[id^='end']")
-    .forEach(i=>i.readOnly=true);
-  document.getElementById("endSavedMsg").style.display="block";
-}
-
-function renderOverview(){
-  const csr=document.getElementById("csrOverview");
-  const proc=document.getElementById("processingOverview");
-  csr.innerHTML=""; proc.innerHTML="";
-  users.filter(u=>u.active).forEach(u=>{
-    const card=document.createElement("div");
-    card.className="overview-card";
-    if(u.division==="CSR"){
-      card.innerHTML=`
-        <div class="overview-header"><strong>${u.name}</strong> ▼</div>
-        <div class="overview-summary">Inbound 0 · Outbound 0 · Chat 0</div>
-        <div class="overview-details">
-          <div>A2A: 0</div>
-          <div>Unverified: 0</div>
-          <div>Emails: 0</div>
-        </div>`;
-      card.onclick=()=>card.classList.toggle("expanded");
-      csr.appendChild(card);
-    }else{
-      card.innerHTML=`
-        <div class="overview-header"><strong>${u.name}</strong> ▼</div>
-        <div class="overview-summary">Total Output 0</div>
-        <div class="overview-details">
-          <div>Filing: 0</div>
-          <div>Linking: 0</div>
-        </div>`;
-      card.onclick=()=>card.classList.toggle("expanded");
-      proc.appendChild(card);
-    }
-  });
-}
-
-function setTodayDates(){
-  document.getElementById("allocationDate").value=todayISO();
-  document.getElementById("environmentDate").value=todayISO();
-}
-
-/* Init */
-renderUsers();
-renderWork();
-renderAllocationStaff();
-renderAllocationTiles();
-renderOverview();
-setTodayDates();
+document.getElementById("weekStart").value=todayISO();
+renderRoster();
 </script>
 
 </body>
