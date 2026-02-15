@@ -18,6 +18,7 @@
   --radius:16px;
   --shadow:0 12px 32px rgba(0,0,0,.12);
 }
+
 *{box-sizing:border-box}
 body{
   margin:0;
@@ -45,8 +46,14 @@ body{
   align-items:center;
 }
 .brand img{height:26px}
+.brand-text{display:flex;flex-direction:column;line-height:1.1}
 .brand-text strong{font-weight:900;font-size:15px}
 .brand-text span{font-size:12px;opacity:.9;font-weight:700}
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
 .dashboard-btn{
   border-radius:999px;
   padding:8px 16px;
@@ -57,6 +64,7 @@ body{
   color:#fff;
   cursor:pointer;
 }
+.clock{font-weight:900;font-size:14px}
 
 /* TOP FILTER BAR */
 .topbar{
@@ -68,7 +76,7 @@ body{
   box-shadow:var(--shadow);
   display:flex;
   flex-wrap:wrap;
-  gap:16px;
+  gap:14px;
   align-items:flex-end;
 }
 
@@ -77,18 +85,16 @@ body{
   flex-direction:column;
   font-size:12px;
   font-weight:900;
+  min-width:160px;
 }
-
-.field input,
-.field select{
+.field input{
   margin-top:6px;
-  padding:8px;
-  border-radius:8px;
+  padding:8px 10px;
+  border-radius:10px;
   border:1px solid var(--border);
-  min-width:150px;
-  font-weight:700;
+  font-weight:800;
+  background:#fff;
 }
-
 button.primary{
   padding:10px 18px;
   border-radius:12px;
@@ -98,7 +104,6 @@ button.primary{
   font-weight:900;
   cursor:pointer;
 }
-
 button.secondary{
   padding:10px 18px;
   border-radius:12px;
@@ -116,29 +121,117 @@ button.secondary{
   font-size:12px;
   font-weight:900;
   color:var(--g0);
+  border:1px solid rgba(9,75,53,.12);
 }
 
-/* MAIN CONTENT */
+/* Multi-select dropdown (checkbox style) */
+.mselect{
+  position:relative;
+  margin-top:6px;
+}
+.mselect-btn{
+  width:100%;
+  text-align:left;
+  padding:9px 10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-weight:900;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+}
+.mselect-btn span{
+  font-weight:800;
+  color:var(--text);
+  font-size:13px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.chev{opacity:.7;font-weight:900}
+.mselect-panel{
+  position:absolute;
+  left:0; right:0;
+  top:calc(100% + 8px);
+  z-index:50;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  padding:10px;
+  display:none;
+}
+.mselect.open .mselect-panel{display:block}
+.mselect-search{
+  width:100%;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-weight:800;
+  margin-bottom:10px;
+}
+.mselect-list{
+  max-height:240px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.mopt{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  border-radius:10px;
+  cursor:pointer;
+}
+.mopt:hover{background:#f3f4f6}
+.mopt input{transform:scale(1.05)}
+.mopt strong{font-size:13px}
+.mselect-actions{
+  display:flex;
+  gap:10px;
+  justify-content:space-between;
+  margin-top:10px;
+}
+.smallbtn{
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:10px;
+  padding:8px 10px;
+  font-weight:900;
+  cursor:pointer;
+  font-size:12px;
+}
+.smallbtn.primary{
+  border-color:var(--g0);
+  color:var(--g0);
+}
+
+/* CONTENT */
 .content{
   max-width:1400px;
-  margin:24px auto 60px;
+  margin:20px auto 60px;
   padding:0 16px;
   display:flex;
   flex-direction:column;
-  gap:24px;
+  gap:18px;
 }
 
 /* SUMMARY */
 .summary-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:16px;
 }
 .summary-card{
   background:#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:20px;
+  padding:18px 18px 16px;
 }
 .summary-card h4{
   margin:0;
@@ -146,34 +239,67 @@ button.secondary{
   font-weight:900;
   color:var(--muted);
 }
-.summary-card .value{
-  margin-top:8px;
+.summary-main{
+  margin-top:10px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:10px;
+}
+.summary-value{
   font-size:28px;
   font-weight:900;
   color:var(--g0);
+  line-height:1;
 }
-.summary-card .sub{
-  font-size:11px;
+.delta{
+  font-size:12px;
   font-weight:900;
-  color:#16a34a;
-  margin-top:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:#fff;
+  white-space:nowrap;
 }
+.delta.up{color:#065f46;background:#ecfdf5;border-color:rgba(6,95,70,.18)}
+.delta.down{color:#7c2d12;background:#fff7ed;border-color:rgba(124,45,18,.18)}
+.summary-sub{
+  margin-top:10px;
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-weight:900;
+  font-size:12px;
+}
+.summary-sub strong{color:var(--g0)}
 
-/* TABLES */
+/* PANELS */
 .panel{
   background:#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:20px;
+  padding:18px;
 }
 .panel h3{
-  margin:0 0 14px;
+  margin:0 0 12px;
   font-weight:900;
   color:var(--g0);
+  font-size:16px;
 }
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+@media(max-width:980px){
+  .grid2{grid-template-columns:1fr}
+}
+
+.table-wrap{overflow:auto}
 table{
   width:100%;
   border-collapse:collapse;
+  min-width:720px;
 }
 th,td{
   padding:10px 8px;
@@ -187,6 +313,39 @@ th{
 }
 td strong{color:var(--g0)}
 .right{text-align:right}
+.small-muted{color:var(--muted);font-weight:800;font-size:12px}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  font-size:12px;
+  font-weight:900;
+  color:var(--g0);
+  background:var(--g2);
+}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#16a34a;
+}
+.dot.warn{background:#f59e0b}
+.dot.bad{background:#dc2626}
+
+/* Divider line inside panels */
+.hr{
+  height:1px;background:var(--border);margin:14px 0;
+}
+
+/* Footer note */
+.note{
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+  line-height:1.5;
+}
+.note strong{color:var(--g0)}
 </style>
 </head>
 
@@ -195,13 +354,17 @@ td strong{color:var(--g0)}
 <div class="header">
   <div class="header-inner">
     <div class="brand">
-      <img src="logo.png">
+      <img src="logo.png" alt="My Refund">
       <div class="brand-text">
-        <strong>Executive Reports</strong>
-        <span>Operational overview & revenue performance</span>
+        <strong>Reports</strong>
+        <span>Live overview + filters</span>
       </div>
     </div>
-    <button class="dashboard-btn" onclick="goHome()">← Dashboard</button>
+
+    <div class="header-right">
+      <button class="dashboard-btn" onclick="goHome()">← Dashboard</button>
+      <div class="clock" id="clock"></div>
+    </div>
   </div>
 </div>
 
@@ -218,25 +381,27 @@ td strong{color:var(--g0)}
     <input type="date" id="endDate">
   </div>
 
-  <div class="field">
+  <div class="field" style="min-width:200px;">
     Division
-    <select id="divisionFilter" multiple>
-      <option value="CSR">CSR</option>
-      <option value="Processing">Processing</option>
-    </select>
+    <div class="mselect" data-ms="division"></div>
   </div>
 
-  <div class="field">
+  <div class="field" style="min-width:220px;">
     Staff
-    <select id="staffFilter" multiple></select>
+    <div class="mselect" data-ms="staff"></div>
   </div>
 
-  <div class="field">
+  <div class="field" style="min-width:240px;">
     Work Type
-    <select id="workFilter" multiple></select>
+    <div class="mselect" data-ms="work"></div>
   </div>
 
-  <button class="primary" onclick="runReport()">Run Report</button>
+  <div class="field" style="min-width:220px;">
+    Fee Type
+    <div class="mselect" data-ms="fee"></div>
+  </div>
+
+  <button class="primary" id="runBtn" onclick="runReport()">Run Report</button>
   <button class="secondary" onclick="downloadPDF()">Download PDF</button>
 
   <div class="status-pill" id="statusPill">Live Today</div>
@@ -246,119 +411,897 @@ td strong{color:var(--g0)}
 <!-- CONTENT -->
 <div class="content">
 
-  <!-- SUMMARY -->
+  <!-- EXEC SNAPSHOT -->
   <div class="summary-grid">
-
     <div class="summary-card">
       <h4>Client Touchpoints</h4>
-      <div class="value" id="touchpointsTotal">0</div>
-      <div class="sub">Live Data</div>
+      <div class="summary-main">
+        <div class="summary-value" id="touchpointsToday">0</div>
+        <div class="delta" id="touchpointsDelta">—</div>
+      </div>
+      <div class="summary-sub">
+        <span>Yesterday: <strong id="touchpointsYday">0</strong></span>
+        <span class="small-muted">CSR only</span>
+      </div>
     </div>
 
     <div class="summary-card">
       <h4>Returns Processed</h4>
-      <div class="value" id="processingTotal">0</div>
-      <div class="sub">Live Data</div>
+      <div class="summary-main">
+        <div class="summary-value" id="returnsToday">0</div>
+        <div class="delta" id="returnsDelta">—</div>
+      </div>
+      <div class="summary-sub">
+        <span>Yesterday: <strong id="returnsYday">0</strong></span>
+        <span class="small-muted">Processing only</span>
+      </div>
     </div>
 
     <div class="summary-card">
       <h4>Revenue (Fees)</h4>
-      <div class="value" id="feeTotal">$0</div>
-      <div class="sub">Live Data</div>
+      <div class="summary-main">
+        <div class="summary-value" id="feesToday">$0</div>
+        <div class="delta" id="feesDelta">—</div>
+      </div>
+      <div class="summary-sub">
+        <span>Yesterday: <strong id="feesYday">$0</strong></span>
+        <span class="small-muted">Processing only</span>
+      </div>
     </div>
 
     <div class="summary-card">
       <h4>Active Staff Logged</h4>
-      <div class="value" id="staffCount">0</div>
-      <div class="sub">Live Data</div>
+      <div class="summary-main">
+        <div class="summary-value" id="activeStaffToday">0</div>
+        <div class="delta" id="activeDelta">—</div>
+      </div>
+      <div class="summary-sub">
+        <span>Yesterday: <strong id="activeStaffYday">0</strong></span>
+        <span class="small-muted">All</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIVISION SNAPSHOT -->
+  <div class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;">
+      <h3 style="margin:0;">Division snapshot</h3>
+      <div class="badge"><span class="dot"></span><span id="rangeLabel">Today</span></div>
+    </div>
+    <div class="hr"></div>
+
+    <div class="grid2">
+      <div class="panel" style="box-shadow:none;border:1px solid var(--border);">
+        <h3 style="font-size:15px;margin:0 0 10px;">CSR</h3>
+        <div class="summary-sub" style="margin-top:0;">
+          <span>Touchpoints: <strong id="csrTouchpoints">0</strong></span>
+          <span>Outbound: <strong id="csrOutbound">0</strong></span>
+        </div>
+        <div class="summary-sub" style="margin-top:8px;">
+          <span>Inbound: <strong id="csrInbound">0</strong></span>
+          <span>Chat: <strong id="csrChat">0</strong></span>
+        </div>
+      </div>
+
+      <div class="panel" style="box-shadow:none;border:1px solid var(--border);">
+        <h3 style="font-size:15px;margin:0 0 10px;">Processing</h3>
+        <div class="summary-sub" style="margin-top:0;">
+          <span>Total output: <strong id="procOutput">0</strong></span>
+          <span>Fees: <strong id="procFees">$0</strong></span>
+        </div>
+        <div class="summary-sub" style="margin-top:8px;">
+          <span>Fee entries: <strong id="procFeeEntries">0</strong></span>
+          <span class="small-muted">All fee types</span>
+        </div>
+      </div>
     </div>
 
+    <div class="hr"></div>
+    <div class="note">
+      <strong>How to read:</strong> CSR touchpoints = inbound + outbound + chat. Processing total output = sum of all output counters. Fees are totals from fee entries.
+    </div>
   </div>
 
-  <!-- CSR TABLE -->
-  <div class="panel">
-    <h3>CSR Activity Breakdown</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Staff</th>
-          <th class="right">Inbound</th>
-          <th class="right">Outbound</th>
-          <th class="right">Chat</th>
-          <th class="right">Emails</th>
-        </tr>
-      </thead>
-      <tbody id="csrTable"></tbody>
-    </table>
+  <!-- STAFF RANKINGS -->
+  <div class="grid2">
+    <div class="panel">
+      <h3>CSR staff ranking</h3>
+      <div class="small-muted" style="margin-bottom:10px;">Sorted by total touchpoints (inbound + outbound + chat)</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Staff</th>
+              <th class="right">Touchpoints</th>
+              <th class="right">Inbound</th>
+              <th class="right">Outbound</th>
+              <th class="right">Chat</th>
+              <th class="right">Emails</th>
+            </tr>
+          </thead>
+          <tbody id="csrRankBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Processing staff ranking</h3>
+      <div class="small-muted" style="margin-bottom:10px;">Sorted by total fees (then output)</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Staff</th>
+              <th class="right">Fees</th>
+              <th class="right">Fee entries</th>
+              <th class="right">Total output</th>
+            </tr>
+          </thead>
+          <tbody id="procRankBody"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <!-- PROCESSING TABLE -->
+  <!-- FULL DETAIL TABLES -->
   <div class="panel">
-    <h3>Processing Output Breakdown</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Staff</th>
-          <th class="right">Total Output</th>
-          <th class="right">Total Fees</th>
-        </tr>
-      </thead>
-      <tbody id="processingTable"></tbody>
-    </table>
+    <h3>CSR full breakdown</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Staff</th>
+            <th class="right">Inbound</th>
+            <th class="right">Outbound</th>
+            <th class="right">Chat</th>
+            <th class="right">Emails</th>
+            <th class="right">A2A</th>
+            <th class="right">Unverified</th>
+            <th class="right">INC/C</th>
+            <th class="right">Question</th>
+            <th class="right">A2A Calling</th>
+            <th class="right">Delinks</th>
+            <th class="right">Cancels</th>
+          </tr>
+        </thead>
+        <tbody id="csrFullBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Processing full breakdown</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Staff</th>
+            <th class="right">Filing</th>
+            <th class="right">Linking</th>
+            <th class="right">Linked Review</th>
+            <th class="right">Inbox</th>
+            <th class="right">Existing Review</th>
+            <th class="right">Processing Review</th>
+            <th class="right">Misc</th>
+            <th class="right">Total output</th>
+            <th class="right">Fees</th>
+            <th class="right">Fee entries</th>
+          </tr>
+        </thead>
+        <tbody id="procFullBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Fee breakdown by type</h3>
+    <div class="small-muted" style="margin-bottom:10px;">Includes only fee entries in the selected period + filters</div>
+    <div class="table-wrap">
+      <table style="min-width:520px;">
+        <thead>
+          <tr>
+            <th>Fee type</th>
+            <th class="right">Entries</th>
+            <th class="right">Total fees</th>
+          </tr>
+        </thead>
+        <tbody id="feeTypeBody"></tbody>
+        <tfoot>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td class="right"><strong id="feeTypeTotalEntries">0</strong></td>
+            <td class="right"><strong id="feeTypeTotalFees">$0</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
   </div>
 
 </div>
 
 <script>
+/* ===========================
+   NAV / CLOCK
+=========================== */
 function goHome(){ window.location.href="index.html"; }
 
-const today = new Date().toISOString().split("T")[0];
-document.getElementById("startDate").value = today;
-document.getElementById("endDate").value = today;
+(function tick(){
+  document.getElementById("clock").textContent =
+    new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+  setTimeout(tick,1000);
+})();
 
-/* MOCK DATA FOR DESIGN PHASE */
+/* ===========================
+   DATE DEFAULTS
+=========================== */
+const TZ = "Pacific/Auckland";
+function nzISO(d=new Date()){
+  return d.toLocaleDateString("en-CA",{timeZone:TZ});
+}
+function addDaysISO(iso,delta){
+  const [y,m,dd]=iso.split("-").map(Number);
+  const dt=new Date(Date.UTC(y,m-1,dd));
+  dt.setUTCDate(dt.getUTCDate()+delta);
+  // Convert to NZ "day" ISO again
+  return nzISO(new Date(dt));
+}
+const todayISO = nzISO();
+document.getElementById("startDate").value = todayISO;
+document.getElementById("endDate").value = todayISO;
+
+/* ===========================
+   MOCK DATA (DESIGN PHASE)
+   - Replace with backend later.
+=========================== */
+const STAFF = {
+  CSR: ["Drew","Emma","Pepe","Maddy","Sophie"],
+  Processing: ["George","Merin","Maddy","Sophie","Bobbi"]
+};
+
+const WORK_TYPES = [
+  // CSR
+  "Inbound","Outbound","Chat","Emails","A2A","Unverified","INC/C Calling","Question Calling","A2A Calling","Delinks","Cancellations",
+  // Processing outputs
+  "Filing","Linking","Linked Review","Inbox","Existing Review","Processing Review","Miscellaneous"
+];
+
+const FEE_TYPES = ["ITA","IR3","REB","AA","R3P","OP"]; // (BY types withheld as per your note)
+
+function money(n){
+  const v = Number(n)||0;
+  return "$" + v.toLocaleString("en-NZ",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function pctChange(today, yday){
+  const t = Number(today)||0;
+  const y = Number(yday)||0;
+  if(y===0 && t===0) return {text:"—", cls:""};
+  if(y===0 && t>0) return {text:"+∞", cls:"up"};
+  const p = ((t-y)/y)*100;
+  const sign = p>0?"+":"";
+  return {text:`${sign}${p.toFixed(0)}%`, cls: p>=0 ? "up" : "down"};
+}
+
+/* Build a deterministic-ish mock day (so refresh looks consistent-ish) */
+function seededRand(seed){
+  let x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+function hashStr(s){
+  let h=0;
+  for(let i=0;i<s.length;i++) h=(h*31 + s.charCodeAt(i))>>>0;
+  return h;
+}
+
+function makeMockDay(iso){
+  const seedBase = hashStr("myrefund_"+iso);
+  const csrRows = STAFF.CSR.map((name, idx)=>{
+    const seed = seedBase + hashStr("csr_"+name) + idx*17;
+    const inbound = Math.floor(20 + seededRand(seed+1)*35);
+    const manualOutbound = Math.floor(5 + seededRand(seed+2)*20);
+    const incc = Math.floor(seededRand(seed+3)*10);
+    const qc = Math.floor(seededRand(seed+4)*10);
+    const a2ac = Math.floor(seededRand(seed+5)*10);
+    const outbound = manualOutbound + incc + qc + a2ac;
+    const chat = Math.floor(8 + seededRand(seed+6)*25);
+    const emails = Math.floor(15 + seededRand(seed+7)*35);
+    const a2a = Math.floor(seededRand(seed+8)*20);
+    const unverified = Math.floor(seededRand(seed+9)*18);
+    const delink = Math.floor(seededRand(seed+10)*6);
+    const cancel = Math.floor(seededRand(seed+11)*4);
+
+    return {
+      division:"CSR",
+      name,
+      inbound, outbound, chat, emails,
+      a2a, unverified,
+      inccalling: incc, questioncalling: qc, a2acalling: a2ac,
+      delink, cancel
+    };
+  });
+
+  const procRows = STAFF.Processing.map((name, idx)=>{
+    const seed = seedBase + hashStr("proc_"+name) + idx*23;
+    const filing = Math.floor(10 + seededRand(seed+1)*40);
+    const linking = Math.floor(8 + seededRand(seed+2)*30);
+    const linkedreview = Math.floor(4 + seededRand(seed+3)*18);
+    const inbox = Math.floor(4 + seededRand(seed+4)*18);
+    const existingreview = Math.floor(3 + seededRand(seed+5)*16);
+    const processingreview = Math.floor(3 + seededRand(seed+6)*16);
+    const misc = Math.floor(seededRand(seed+7)*10);
+
+    // Fee entries volume
+    const feeEntries = Math.floor(10 + seededRand(seed+8)*45);
+
+    // Fee totals per type
+    const feeByType = {};
+    let feeTotal = 0;
+    FEE_TYPES.forEach((t, j)=>{
+      // skew: ITA + IR3 heavier, others lighter
+      const base = (t==="ITA"||t==="IR3") ? 1.0 : 0.5;
+      const entries = Math.max(0, Math.floor(seededRand(seed + 20 + j)*feeEntries*base/2));
+      // per-entry fees average
+      const avg = (t==="ITA") ? 85 : (t==="IR3") ? 105 : (t==="REB") ? 60 : 39.10;
+      const total = Math.round((entries*avg*(0.8 + seededRand(seed + 60 + j)*0.6))*100)/100;
+      feeByType[t] = { entries, total };
+      feeTotal += total;
+    });
+
+    // normalize feeEntries to sum of type entries (roughly)
+    const sumEntries = Object.values(feeByType).reduce((a,b)=>a+b.entries,0);
+    const finalEntries = Math.max(0, sumEntries);
+
+    const totalOutput = filing + linking + linkedreview + inbox + existingreview + processingreview + misc;
+
+    return {
+      division:"Processing",
+      name,
+      filing, linking, linkedreview, inbox, existingreview, processingreview, misc,
+      totalOutput,
+      feeTotal: Math.round(feeTotal*100)/100,
+      feeEntries: finalEntries,
+      feeByType
+    };
+  });
+
+  return { csrRows, procRows };
+}
+
+/* ===========================
+   MULTISELECT COMPONENT
+=========================== */
+const msState = {
+  division: new Set(["CSR","Processing"]),
+  staff: new Set(),
+  work: new Set(),
+  fee: new Set()
+};
+
+function buildMultiSelect(el, key, options){
+  el.classList.add("mselect");
+  el.innerHTML = `
+    <button type="button" class="mselect-btn" aria-haspopup="listbox">
+      <span id="ms_label_${key}">All</span>
+      <span class="chev">▼</span>
+    </button>
+    <div class="mselect-panel">
+      <input class="mselect-search" placeholder="Search…" />
+      <div class="mselect-list" role="listbox"></div>
+      <div class="mselect-actions">
+        <button type="button" class="smallbtn" data-act="clear">Clear</button>
+        <button type="button" class="smallbtn" data-act="all">Select all</button>
+        <button type="button" class="smallbtn primary" data-act="apply">Apply</button>
+      </div>
+    </div>
+  `;
+
+  const btn = el.querySelector(".mselect-btn");
+  const panel = el.querySelector(".mselect-panel");
+  const list = el.querySelector(".mselect-list");
+  const search = el.querySelector(".mselect-search");
+  const label = el.querySelector(`#ms_label_${key}`);
+
+  // default selected: if msState already has things, use it; else select all by default for division, empty (all) for others
+  const selected = msState[key];
+
+  function renderList(filter=""){
+    const f = filter.trim().toLowerCase();
+    list.innerHTML = "";
+    options
+      .filter(o => !f || o.toLowerCase().includes(f))
+      .forEach(o=>{
+        const row=document.createElement("div");
+        row.className="mopt";
+        row.innerHTML = `
+          <input type="checkbox" ${selected.has(o) ? "checked":""}>
+          <strong>${o}</strong>
+        `;
+        row.onclick = (e)=>{
+          // ignore double toggle from clicking checkbox itself
+          if(e.target.tagName.toLowerCase() !== "input"){
+            const cb = row.querySelector("input");
+            cb.checked = !cb.checked;
+          }
+          const cb = row.querySelector("input");
+          if(cb.checked) selected.add(o); else selected.delete(o);
+        };
+        row.querySelector("input").onchange = ()=>{
+          const cb = row.querySelector("input");
+          if(cb.checked) selected.add(o); else selected.delete(o);
+        };
+        list.appendChild(row);
+      });
+  }
+
+  function updateLabel(){
+    if(selected.size===0) { label.textContent = "All"; return; }
+    if(selected.size===options.length) { label.textContent = "All"; return; }
+    const arr = Array.from(selected);
+    label.textContent = arr.length===1 ? arr[0] : `${arr.length} selected`;
+  }
+
+  btn.onclick = ()=>{
+    // close others
+    document.querySelectorAll(".mselect.open").forEach(x=>{
+      if(x!==el) x.classList.remove("open");
+    });
+    el.classList.toggle("open");
+    search.value="";
+    renderList("");
+    updateLabel();
+    if(el.classList.contains("open")) setTimeout(()=>search.focus(),0);
+  };
+
+  search.oninput = ()=>renderList(search.value);
+
+  el.querySelector('[data-act="clear"]').onclick = (e)=>{
+    e.preventDefault();
+    selected.clear();
+    renderList(search.value);
+  };
+  el.querySelector('[data-act="all"]').onclick = (e)=>{
+    e.preventDefault();
+    options.forEach(o=>selected.add(o));
+    renderList(search.value);
+  };
+  el.querySelector('[data-act="apply"]').onclick = (e)=>{
+    e.preventDefault();
+    el.classList.remove("open");
+    updateLabel();
+    // live run is nice for management
+    runReport();
+  };
+
+  // close on outside click
+  document.addEventListener("click",(ev)=>{
+    if(!el.contains(ev.target)) el.classList.remove("open");
+  });
+
+  // initial render label
+  options.forEach(o=>{
+    // For staff/work/fee we default to "All" (empty set means All)
+    // For division we default already set above.
+  });
+  updateLabel();
+}
+
+function refreshStaffOptions(){
+  // staff options depend on division filter
+  const divisions = msState.division.size ? Array.from(msState.division) : ["CSR","Processing"];
+  const staff = [];
+  divisions.forEach(d=>{
+    (STAFF[d]||[]).forEach(n=>{
+      if(!staff.includes(n)) staff.push(n);
+    });
+  });
+  staff.sort((a,b)=>a.localeCompare(b));
+  return staff;
+}
+
+function refreshWorkOptions(){
+  // show relevant work types for selected division(s)
+  const divisions = msState.division.size ? Array.from(msState.division) : ["CSR","Processing"];
+  const work = [];
+  const csrWork = ["Inbound","Outbound","Chat","Emails","A2A","Unverified","INC/C Calling","Question Calling","A2A Calling","Delinks","Cancellations"];
+  const procWork = ["Filing","Linking","Linked Review","Inbox","Existing Review","Processing Review","Miscellaneous"];
+
+  divisions.forEach(d=>{
+    (d==="CSR"?csrWork:procWork).forEach(w=>{ if(!work.includes(w)) work.push(w); });
+  });
+  return work;
+}
+
+/* ===========================
+   REPORT BUILD (UI-only)
+=========================== */
+function setStatus(text){
+  document.getElementById("statusPill").textContent = text;
+}
+
+function getFilterSet(key, options){
+  // empty set => all
+  const s = msState[key];
+  if(!s || s.size===0) return new Set(options);
+  // if selected all, still treat as all
+  if(s.size===options.length) return new Set(options);
+  return new Set(Array.from(s));
+}
+
+function applyFilters(data){
+  const divisions = getFilterSet("division", ["CSR","Processing"]);
+  const staffOptions = refreshStaffOptions();
+  const staffSet = getFilterSet("staff", staffOptions);
+  const workOptions = refreshWorkOptions();
+  const workSet = getFilterSet("work", workOptions);
+  const feeSet = getFilterSet("fee", FEE_TYPES);
+
+  // CSR filter
+  let csr = data.csrRows.filter(r => divisions.has("CSR") && staffSet.has(r.name));
+  // Processing filter
+  let proc = data.procRows.filter(r => divisions.has("Processing") && staffSet.has(r.name));
+
+  // Work filter (if they choose only processing work, csr may appear empty and that's fine)
+  // We apply work filter by keeping staff rows (since row includes multiple fields).
+  // Here: if work filter excludes all CSR fields, we still keep row but totals will later include only selected fields.
+  return { csr, proc, workSet, feeSet, divisions };
+}
+
+function sumCSR(row, workSet){
+  const map = {
+    "Inbound": row.inbound,
+    "Outbound": row.outbound,
+    "Chat": row.chat,
+    "Emails": row.emails,
+    "A2A": row.a2a,
+    "Unverified": row.unverified,
+    "INC/C Calling": row.inccalling,
+    "Question Calling": row.questioncalling,
+    "A2A Calling": row.a2acalling,
+    "Delinks": row.delink,
+    "Cancellations": row.cancel
+  };
+  const out = {};
+  Object.keys(map).forEach(k=>{
+    out[k] = workSet.has(k) ? (Number(map[k])||0) : 0;
+  });
+  return out;
+}
+
+function sumProc(row, workSet, feeSet){
+  const map = {
+    "Filing": row.filing,
+    "Linking": row.linking,
+    "Linked Review": row.linkedreview,
+    "Inbox": row.inbox,
+    "Existing Review": row.existingreview,
+    "Processing Review": row.processingreview,
+    "Miscellaneous": row.misc
+  };
+  const out = {};
+  Object.keys(map).forEach(k=>{
+    out[k] = workSet.has(k) ? (Number(map[k])||0) : 0;
+  });
+
+  // Fee totals filtered by fee type
+  let entries = 0, total = 0;
+  feeSet.forEach(t=>{
+    const ft = row.feeByType[t] || {entries:0,total:0};
+    entries += Number(ft.entries)||0;
+    total += Number(ft.total)||0;
+  });
+
+  return { out, feeEntries: entries, feeTotal: Math.round(total*100)/100 };
+}
+
+function formatDelta(el, today, yday, isMoney=false){
+  const t = Number(today)||0;
+  const y = Number(yday)||0;
+  const p = pctChange(t,y);
+  el.classList.remove("up","down");
+  if(p.cls) el.classList.add(p.cls);
+  el.textContent = p.text;
+}
+
 function runReport(){
-  document.getElementById("touchpointsTotal").textContent = 432;
-  document.getElementById("processingTotal").textContent = 189;
-  document.getElementById("feeTotal").textContent = "$12,480";
-  document.getElementById("staffCount").textContent = 11;
+  setStatus("Loading…");
 
-  document.getElementById("csrTable").innerHTML = `
-    <tr>
-      <td><strong>Drew</strong></td>
-      <td class="right">42</td>
-      <td class="right">21</td>
-      <td class="right">16</td>
-      <td class="right">33</td>
-    </tr>
-    <tr>
-      <td><strong>Emma</strong></td>
-      <td class="right">38</td>
-      <td class="right">18</td>
-      <td class="right">14</td>
-      <td class="right">29</td>
-    </tr>
-  `;
+  const start = document.getElementById("startDate").value || todayISO;
+  const end = document.getElementById("endDate").value || todayISO;
+  const isToday = (start===todayISO && end===todayISO);
 
-  document.getElementById("processingTable").innerHTML = `
+  document.getElementById("rangeLabel").textContent = isToday ? "Today (live)" : `${start} → ${end}`;
+
+  // For design phase, we show a single-day view (start date) as the primary.
+  // Backend will aggregate ranges properly later.
+  const day = start;
+  const yday = addDaysISO(day,-1);
+
+  // Mock day data
+  const todayData = makeMockDay(day);
+  const ydayData = makeMockDay(yday);
+
+  // Refresh option lists (so management can filter quickly)
+  const staffOptions = refreshStaffOptions();
+  const workOptions = refreshWorkOptions();
+
+  // Apply filters
+  const tFiltered = applyFilters(todayData);
+  const yFiltered = applyFilters(ydayData);
+
+  // CSR totals (respect work filter)
+  let csrInbound=0, csrOutbound=0, csrChat=0, csrEmails=0;
+  let csrTouchpoints=0;
+
+  tFiltered.csr.forEach(r=>{
+    const s = sumCSR(r, tFiltered.workSet);
+    csrInbound += s["Inbound"];
+    csrOutbound += s["Outbound"];
+    csrChat += s["Chat"];
+    csrEmails += s["Emails"];
+    csrTouchpoints += (s["Inbound"] + s["Outbound"] + s["Chat"]);
+  });
+
+  // CSR yesterday touchpoints
+  let csrTouchY=0;
+  yFiltered.csr.forEach(r=>{
+    const s = sumCSR(r, yFiltered.workSet);
+    csrTouchY += (s["Inbound"] + s["Outbound"] + s["Chat"]);
+  });
+
+  // Processing totals (respect work + fee filter)
+  let procOutput=0, procFees=0, procFeeEntries=0;
+  tFiltered.proc.forEach(r=>{
+    const sp = sumProc(r, tFiltered.workSet, tFiltered.feeSet);
+    procOutput += (sp.out["Filing"]+sp.out["Linking"]+sp.out["Linked Review"]+sp.out["Inbox"]+sp.out["Existing Review"]+sp.out["Processing Review"]+sp.out["Miscellaneous"]);
+    procFees += sp.feeTotal;
+    procFeeEntries += sp.feeEntries;
+  });
+  procFees = Math.round(procFees*100)/100;
+
+  // Processing yesterday
+  let procOutputY=0, procFeesY=0, procEntriesY=0;
+  yFiltered.proc.forEach(r=>{
+    const sp = sumProc(r, yFiltered.workSet, yFiltered.feeSet);
+    procOutputY += (sp.out["Filing"]+sp.out["Linking"]+sp.out["Linked Review"]+sp.out["Inbox"]+sp.out["Existing Review"]+sp.out["Processing Review"]+sp.out["Miscellaneous"]);
+    procFeesY += sp.feeTotal;
+    procEntriesY += sp.feeEntries;
+  });
+  procFeesY = Math.round(procFeesY*100)/100;
+
+  // Active staff logged (today = count of any activity)
+  function activeCount(filtered){
+    let n=0;
+    filtered.csr.forEach(r=>{
+      const s = sumCSR(r, filtered.workSet);
+      const total = Object.values(s).reduce((a,b)=>a+Number(b||0),0);
+      if(total>0) n++;
+    });
+    filtered.proc.forEach(r=>{
+      const sp = sumProc(r, filtered.workSet, filtered.feeSet);
+      const outTotal = Object.values(sp.out).reduce((a,b)=>a+Number(b||0),0);
+      if(outTotal>0 || sp.feeEntries>0) n++;
+    });
+    return n;
+  }
+  const activeToday = activeCount(tFiltered);
+  const activeYday = activeCount(yFiltered);
+
+  // Update top summary
+  document.getElementById("touchpointsToday").textContent = csrTouchpoints.toLocaleString("en-NZ");
+  document.getElementById("touchpointsYday").textContent = csrTouchY.toLocaleString("en-NZ");
+  formatDelta(document.getElementById("touchpointsDelta"), csrTouchpoints, csrTouchY);
+
+  document.getElementById("returnsToday").textContent = procOutput.toLocaleString("en-NZ");
+  document.getElementById("returnsYday").textContent = procOutputY.toLocaleString("en-NZ");
+  formatDelta(document.getElementById("returnsDelta"), procOutput, procOutputY);
+
+  document.getElementById("feesToday").textContent = money(procFees);
+  document.getElementById("feesYday").textContent = money(procFeesY);
+  formatDelta(document.getElementById("feesDelta"), procFees, procFeesY);
+
+  document.getElementById("activeStaffToday").textContent = activeToday.toLocaleString("en-NZ");
+  document.getElementById("activeStaffYday").textContent = activeYday.toLocaleString("en-NZ");
+  formatDelta(document.getElementById("activeDelta"), activeToday, activeYday);
+
+  // Division snapshot
+  document.getElementById("csrTouchpoints").textContent = csrTouchpoints.toLocaleString("en-NZ");
+  document.getElementById("csrInbound").textContent = csrInbound.toLocaleString("en-NZ");
+  document.getElementById("csrOutbound").textContent = csrOutbound.toLocaleString("en-NZ");
+  document.getElementById("csrChat").textContent = csrChat.toLocaleString("en-NZ");
+
+  document.getElementById("procOutput").textContent = procOutput.toLocaleString("en-NZ");
+  document.getElementById("procFees").textContent = money(procFees);
+  document.getElementById("procFeeEntries").textContent = procFeeEntries.toLocaleString("en-NZ");
+
+  // CSR rank + full
+  const csrRank = tFiltered.csr.map(r=>{
+    const s = sumCSR(r, tFiltered.workSet);
+    const tp = s["Inbound"] + s["Outbound"] + s["Chat"];
+    return {
+      name:r.name,
+      touchpoints:tp,
+      inbound:s["Inbound"],
+      outbound:s["Outbound"],
+      chat:s["Chat"],
+      emails:s["Emails"],
+      a2a:s["A2A"],
+      unverified:s["Unverified"],
+      incc:s["INC/C Calling"],
+      qc:s["Question Calling"],
+      a2ac:s["A2A Calling"],
+      delink:s["Delinks"],
+      cancel:s["Cancellations"]
+    };
+  }).sort((a,b)=>b.touchpoints-a.touchpoints);
+
+  document.getElementById("csrRankBody").innerHTML = csrRank.map((r,i)=>`
     <tr>
-      <td><strong>George</strong></td>
-      <td class="right">62</td>
-      <td class="right">$4,820</td>
+      <td>${i+1}</td>
+      <td><strong>${r.name}</strong></td>
+      <td class="right"><strong>${r.touchpoints.toLocaleString("en-NZ")}</strong></td>
+      <td class="right">${r.inbound.toLocaleString("en-NZ")}</td>
+      <td class="right">${r.outbound.toLocaleString("en-NZ")}</td>
+      <td class="right">${r.chat.toLocaleString("en-NZ")}</td>
+      <td class="right">${r.emails.toLocaleString("en-NZ")}</td>
     </tr>
+  `).join("") || `<tr><td colspan="7" class="small-muted">No CSR data for current filters.</td></tr>`;
+
+  document.getElementById("csrFullBody").innerHTML = csrRank.map(r=>`
     <tr>
-      <td><strong>Merin</strong></td>
-      <td class="right">55</td>
-      <td class="right">$3,950</td>
+      <td><strong>${r.name}</strong></td>
+      <td class="right">${r.inbound}</td>
+      <td class="right">${r.outbound}</td>
+      <td class="right">${r.chat}</td>
+      <td class="right">${r.emails}</td>
+      <td class="right">${r.a2a}</td>
+      <td class="right">${r.unverified}</td>
+      <td class="right">${r.incc}</td>
+      <td class="right">${r.qc}</td>
+      <td class="right">${r.a2ac}</td>
+      <td class="right">${r.delink}</td>
+      <td class="right">${r.cancel}</td>
     </tr>
-  `;
+  `).join("") || `<tr><td colspan="12" class="small-muted">No CSR data for current filters.</td></tr>`;
+
+  // Processing rank + full
+  const procRank = tFiltered.proc.map(r=>{
+    const sp = sumProc(r, tFiltered.workSet, tFiltered.feeSet);
+    const outTotal = Object.values(sp.out).reduce((a,b)=>a+Number(b||0),0);
+    return {
+      name:r.name,
+      filing:sp.out["Filing"],
+      linking:sp.out["Linking"],
+      linkedreview:sp.out["Linked Review"],
+      inbox:sp.out["Inbox"],
+      existingreview:sp.out["Existing Review"],
+      processingreview:sp.out["Processing Review"],
+      misc:sp.out["Miscellaneous"],
+      totalOutput: outTotal,
+      fees: sp.feeTotal,
+      entries: sp.feeEntries
+    };
+  }).sort((a,b)=>{
+    if(b.fees!==a.fees) return b.fees-a.fees;
+    return b.totalOutput-a.totalOutput;
+  });
+
+  document.getElementById("procRankBody").innerHTML = procRank.map((r,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td><strong>${r.name}</strong></td>
+      <td class="right"><strong>${money(r.fees)}</strong></td>
+      <td class="right">${r.entries.toLocaleString("en-NZ")}</td>
+      <td class="right">${r.totalOutput.toLocaleString("en-NZ")}</td>
+    </tr>
+  `).join("") || `<tr><td colspan="5" class="small-muted">No Processing data for current filters.</td></tr>`;
+
+  document.getElementById("procFullBody").innerHTML = procRank.map(r=>`
+    <tr>
+      <td><strong>${r.name}</strong></td>
+      <td class="right">${r.filing}</td>
+      <td class="right">${r.linking}</td>
+      <td class="right">${r.linkedreview}</td>
+      <td class="right">${r.inbox}</td>
+      <td class="right">${r.existingreview}</td>
+      <td class="right">${r.processingreview}</td>
+      <td class="right">${r.misc}</td>
+      <td class="right"><strong>${r.totalOutput}</strong></td>
+      <td class="right"><strong>${money(r.fees)}</strong></td>
+      <td class="right">${r.entries}</td>
+    </tr>
+  `).join("") || `<tr><td colspan="11" class="small-muted">No Processing data for current filters.</td></tr>`;
+
+  // Fee breakdown by type
+  const feeTotals = {};
+  FEE_TYPES.forEach(t=>feeTotals[t]={entries:0,total:0});
+
+  // Only Processing contains fee entries in current design
+  tFiltered.proc.forEach(r=>{
+    const feeSet = tFiltered.feeSet;
+    feeSet.forEach(t=>{
+      const ft = r.feeByType[t] || {entries:0,total:0};
+      feeTotals[t].entries += Number(ft.entries)||0;
+      feeTotals[t].total += Number(ft.total)||0;
+    });
+  });
+
+  let totalEntries = 0, totalFees = 0;
+  const feeRowsHtml = FEE_TYPES.map(t=>{
+    const v = feeTotals[t];
+    totalEntries += v.entries;
+    totalFees += v.total;
+    return `
+      <tr>
+        <td><strong>${t}</strong></td>
+        <td class="right">${v.entries.toLocaleString("en-NZ")}</td>
+        <td class="right">${money(Math.round(v.total*100)/100)}</td>
+      </tr>
+    `;
+  }).join("");
+
+  document.getElementById("feeTypeBody").innerHTML = feeRowsHtml;
+  document.getElementById("feeTypeTotalEntries").textContent = totalEntries.toLocaleString("en-NZ");
+  document.getElementById("feeTypeTotalFees").textContent = money(Math.round(totalFees*100)/100);
+
+  // Update status pill
+  setStatus(isToday ? "Live Today" : "Filtered period");
 }
 
+/* ===========================
+   PDF (placeholder until wiring)
+=========================== */
 function downloadPDF(){
-  alert("PDF will match current filters (backend wiring next phase).");
+  alert("PDF will match the current filters when backend wiring is added.");
 }
 
-runReport();
+/* ===========================
+   INIT MULTISELECTS
+=========================== */
+(function init(){
+  const msDiv = document.querySelector('[data-ms="division"]');
+  const msStaff = document.querySelector('[data-ms="staff"]');
+  const msWork = document.querySelector('[data-ms="work"]');
+  const msFee = document.querySelector('[data-ms="fee"]');
+
+  buildMultiSelect(msDiv, "division", ["CSR","Processing"]);
+
+  // staff/work depend on division selection, so rebuild them when division changes
+  function rebuildStaffWork(){
+    // clear previous selected values if they’re no longer valid
+    const staffOpts = refreshStaffOptions();
+    const workOpts = refreshWorkOptions();
+
+    // prune selections to valid options (but keep empty as All)
+    Array.from(msState.staff).forEach(v=>{ if(!staffOpts.includes(v)) msState.staff.delete(v); });
+    Array.from(msState.work).forEach(v=>{ if(!workOpts.includes(v)) msState.work.delete(v); });
+
+    // rebuild UI blocks
+    msStaff.innerHTML = "";
+    msWork.innerHTML = "";
+    buildMultiSelect(msStaff, "staff", staffOpts);
+    buildMultiSelect(msWork, "work", workOpts);
+  }
+
+  // fee (independent)
+  buildMultiSelect(msFee, "fee", FEE_TYPES);
+
+  // initial staff/work build
+  rebuildStaffWork();
+
+  // Hook division apply to rebuild staff/work (quick and robust: watch for clicks on apply button inside division)
+  msDiv.addEventListener("click",(e)=>{
+    const btn = e.target.closest('[data-act="apply"]');
+    if(btn){
+      // after apply, rebuild
+      setTimeout(()=>rebuildStaffWork(),0);
+    }
+  });
+
+  // run once on load (default live today)
+  runReport();
+})();
 </script>
 
 </body>
