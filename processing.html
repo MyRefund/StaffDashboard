@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <meta http-equiv="Content-Language" content="en">
 <meta name="google" content="notranslate">
 
@@ -21,182 +20,57 @@
 }
 
 *{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color:var(--text);
-}
-
-.page{
-  min-height:100vh;
-  background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
-}
+body{margin:0;font-family:"Okta Neue", system-ui;color:var(--text);}
+.page{min-height:100vh;background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;}
 
 /* HEADER */
-.header{
-  background:var(--g0);
-  color:#fff;
-  padding:14px 24px;
-}
-
-.header-inner{
-  max-width:1300px;
-  margin:0 auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
+.header{background:var(--g0);color:#fff;padding:14px 24px;}
+.header-inner{max-width:1300px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.brand{display:flex;align-items:center;gap:14px;}
 .brand img{height:26px}
+.brand-text strong{font-size:15px;font-weight:900;}
+.brand-text span{font-size:12px;opacity:.9;font-weight:700;}
+.clock{font-weight:900;font-size:14px;}
 
-.brand-text strong{
-  font-size:15px;
-  font-weight:900;
-}
+.tabs{background:#fff;padding:12px 24px;display:flex;gap:10px;border-bottom:1px solid var(--border);}
+.tab{border-radius:999px;padding:8px 16px;font-weight:900;font-size:13px;border:1px solid var(--g0);background:#fff;color:var(--g0);cursor:pointer;}
+.tab.active{background:var(--g0);color:#fff;}
 
-.brand-text span{
-  font-size:12px;
-  opacity:.9;
-  font-weight:700;
-}
+.wrap{max-width:1300px;margin:0 auto;padding:36px 24px 60px;}
+.layout{display:grid;grid-template-columns:1fr 260px;gap:24px;}
 
-.clock{
-  font-weight:900;
-  font-size:14px;
-}
+.panel{background:rgba(255,255,255,.96);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:20px;}
+.panel h3{margin:0 0 14px;font-size:18px;font-weight:900;color:var(--g0);}
 
-/* TABS */
-.tabs{
-  background:#fff;
-  padding:12px 24px;
-  display:flex;
-  gap:10px;
-  border-bottom:1px solid var(--border);
-}
+/* GREEN STRIP */
+.fee-panel{border-top:6px solid var(--g0);}
 
-.tab{
-  border-radius:999px;
-  padding:8px 16px;
-  font-weight:900;
-  font-size:13px;
-  border:1px solid var(--g0);
-  background:#fff;
-  color:var(--g0);
-  cursor:pointer;
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
+.item{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;}
+.item label{display:block;font-weight:900;margin-bottom:8px;}
+.controls{display:flex;align-items:center;gap:6px;}
+.controls button{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer;}
+.controls input{width:56px;text-align:center;border:1px solid var(--border);border-radius:8px;padding:6px;font-weight:900;}
 
-.tab.active{
-  background:var(--g0);
-  color:#fff;
-}
+.button-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:16px;}
+.type-btn{border-radius:12px;padding:10px;font-weight:900;border:2px solid var(--g0);background:#fff;color:var(--g0);cursor:pointer;}
+.type-btn.active{background:var(--g0);color:#fff;}
 
-/* CONTENT */
-.wrap{
-  max-width:1300px;
-  margin:0 auto;
-  padding:36px 24px 60px;
-}
+input{padding:10px;border-radius:10px;border:1px solid var(--border);font-weight:700;}
+.add-btn{padding:10px 16px;border:none;border-radius:12px;background:var(--g0);color:#fff;font-weight:900;cursor:pointer;}
 
-.top-row{
-  margin-bottom:28px;
-}
+table{width:100%;border-collapse:collapse;}
+th,td{border-bottom:1px solid var(--border);padding:8px;font-size:13px;}
+th{color:var(--muted);font-weight:900;text-align:left;}
 
-.hello{
-  font-size:24px;
-  font-weight:900;
-  color:var(--g0);
-}
+.total-box{background:var(--g2);border-radius:12px;padding:14px;font-weight:900;font-size:18px;text-align:right;}
 
-/* LAYOUT */
-.layout{
-  display:grid;
-  grid-template-columns:1fr 260px;
-  gap:24px;
-}
+.submit button{width:100%;border-radius:14px;padding:14px;font-weight:900;font-size:15px;border:none;background:var(--g0);color:#fff;cursor:pointer;}
 
-.panel{
-  background:rgba(255,255,255,.96);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:20px;
-  margin-bottom:20px;
-}
+.hidden{display:none;}
+.locked{opacity:.6;pointer-events:none;}
 
-.panel h3{
-  margin:0 0 14px 0;
-  font-size:18px;
-  font-weight:900;
-  color:var(--g0);
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:14px;
-}
-
-.item{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-}
-
-.item label{
-  display:block;
-  font-weight:900;
-  margin-bottom:8px;
-}
-
-.controls{
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-
-.controls button{
-  width:32px;
-  height:32px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:#fff;
-  font-weight:900;
-  cursor:pointer;
-}
-
-.controls input{
-  width:56px;
-  text-align:center;
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:6px;
-  font-weight:900;
-}
-
-.submit button{
-  width:100%;
-  border-radius:14px;
-  padding:14px;
-  font-weight:900;
-  font-size:15px;
-  border:none;
-  background:var(--g0);
-  color:#fff;
-  cursor:pointer;
-}
-
-.hidden{display:none}
-
-@media(max-width:1100px){
-  .layout{grid-template-columns:1fr}
-}
+@media(max-width:1100px){.layout{grid-template-columns:1fr}}
 </style>
 </head>
 
@@ -204,123 +78,108 @@ body{
 <div class="page">
 
 <div class="header">
-  <div class="header-inner">
-    <div class="brand">
-      <img src="logo.png">
-      <div class="brand-text">
-        <strong id="staffNameLabel">Processing</strong>
-        <span>Daily Work Logger</span>
-      </div>
-    </div>
-
-    <div style="display:flex;align-items:center;gap:14px;">
-      <button onclick="goHome()" style="
-        border-radius:999px;
-        padding:8px 16px;
-        font-weight:900;
-        font-size:13px;
-        border:1px solid #fff;
-        background:transparent;
-        color:#fff;
-        cursor:pointer;">
-        ← Overview
-      </button>
-      <div class="clock" id="clock"></div>
-    </div>
-  </div>
+<div class="header-inner">
+<div class="brand">
+<img src="logo.png">
+<div class="brand-text">
+<strong id="staffNameLabel">Processing</strong>
+<span>Daily Work Logger</span>
+</div>
+</div>
+<div class="clock" id="clock"></div>
+</div>
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="switchTab('work', this)">Work Log</button>
-  <button class="tab" onclick="switchTab('resources', this)">Resources</button>
+<button class="tab active" onclick="switchTab('work', this)">Work Log</button>
+<button class="tab" onclick="switchTab('resources', this)">Resources</button>
 </div>
 
 <div class="wrap">
-
 <div id="workTab">
-
-<div class="top-row">
-  <div class="hello" id="helloText">Hello</div>
-</div>
-
 <div class="layout">
 
-<!-- MAIN -->
+<!-- LEFT -->
 <div>
 
+<!-- EXISTING PROCESSING OUTPUT -->
 <div class="panel">
-  <h3>Processing Output</h3>
+<h3>Processing Output</h3>
+<div class="grid">
 
-  <div class="grid">
+<div class="item"><label>Filing</label>
+<div class="controls"><button onclick="adj('filing',-1)">−</button><input id="filing" value="0"><button onclick="adj('filing',1)">+</button></div>
+</div>
 
-    <div class="item">
-      <label>Filing</label>
-      <div class="controls">
-        <button onclick="adj('filing',-1)">−</button>
-        <input id="filing" value="0">
-        <button onclick="adj('filing',1)">+</button>
-      </div>
-    </div>
+<div class="item"><label>Linking</label>
+<div class="controls"><button onclick="adj('linking',-1)">−</button><input id="linking" value="0"><button onclick="adj('linking',1)">+</button></div>
+</div>
 
-    <div class="item">
-      <label>Linking</label>
-      <div class="controls">
-        <button onclick="adj('linking',-1)">−</button>
-        <input id="linking" value="0">
-        <button onclick="adj('linking',1)">+</button>
-      </div>
-    </div>
+<div class="item"><label>Linked Review</label>
+<div class="controls"><button onclick="adj('linkedreview',-1)">−</button><input id="linkedreview" value="0"><button onclick="adj('linkedreview',1)">+</button></div>
+</div>
 
-    <div class="item">
-      <label>Linked Review</label>
-      <div class="controls">
-        <button onclick="adj('linkedreview',-1)">−</button>
-        <input id="linkedreview" value="0">
-        <button onclick="adj('linkedreview',1)">+</button>
-      </div>
-    </div>
+<div class="item"><label>Inbox</label>
+<div class="controls"><button onclick="adj('inbox',-1)">−</button><input id="inbox" value="0"><button onclick="adj('inbox',1)">+</button></div>
+</div>
 
-    <div class="item">
-      <label>Inbox</label>
-      <div class="controls">
-        <button onclick="adj('inbox',-1)">−</button>
-        <input id="inbox" value="0">
-        <button onclick="adj('inbox',1)">+</button>
-      </div>
-    </div>
+<div class="item"><label>Existing Review</label>
+<div class="controls"><button onclick="adj('existingreview',-1)">−</button><input id="existingreview" value="0"><button onclick="adj('existingreview',1)">+</button></div>
+</div>
 
-    <div class="item">
-      <label>Existing Review</label>
-      <div class="controls">
-        <button onclick="adj('existingreview',-1)">−</button>
-        <input id="existingreview" value="0">
-        <button onclick="adj('existingreview',1)">+</button>
-      </div>
-    </div>
+<div class="item"><label>Processing Review</label>
+<div class="controls"><button onclick="adj('processingreview',-1)">−</button><input id="processingreview" value="0"><button onclick="adj('processingreview',1)">+</button></div>
+</div>
 
-    <div class="item">
-      <label>Processing Review</label>
-      <div class="controls">
-        <button onclick="adj('processingreview',-1)">−</button>
-        <input id="processingreview" value="0">
-        <button onclick="adj('processingreview',1)">+</button>
-      </div>
-    </div>
+<div class="item"><label>Miscellaneous</label>
+<div class="controls"><button onclick="adj('misc',-1)">−</button><input id="misc" value="0"><button onclick="adj('misc',1)">+</button></div>
+</div>
 
-    <div class="item">
-      <label>Miscellaneous</label>
-      <div class="controls">
-        <button onclick="adj('misc',-1)">−</button>
-        <input id="misc" value="0">
-        <button onclick="adj('misc',1)">+</button>
-      </div>
-    </div>
+</div>
+</div>
 
-  </div>
+<!-- FEE ENGINE -->
+<div class="panel fee-panel">
+<h3>Return Fee Logging</h3>
+
+<div class="button-grid">
+<button class="type-btn" onclick="selectType(event,'ITA')">ITA</button>
+<button class="type-btn" onclick="selectType(event,'IR3')">IR3</button>
+<button class="type-btn" onclick="selectType(event,'REB')">REB</button>
+<button class="type-btn" onclick="autoAdd('AA')">AA</button>
+<button class="type-btn" onclick="autoAdd('R3P')">R3P</button>
+<button class="type-btn" onclick="autoAdd('OP')">OP</button>
+</div>
+
+<div id="inputSection" class="hidden">
+<input type="number" id="amountInput" placeholder="Enter amount">
+<label id="receiptLabel" class="hidden">
+<input type="checkbox" id="receiptAssist"> Add receipt assistance
+</label>
+<button class="add-btn" onclick="addEntry()">Add</button>
+</div>
+</div>
+
+<!-- FEE LOG -->
+<div class="panel fee-panel">
+<h3>Today’s Fee Entries</h3>
+<table>
+<thead>
+<tr><th>Time</th><th>Type</th><th>Fee</th><th></th></tr>
+</thead>
+<tbody id="logTable"></tbody>
+</table>
+</div>
+
+<!-- TOTAL -->
+<div class="panel fee-panel">
+<div class="total-box">
+Total Fees Today: $<span id="totalFees">0.00</span>
+</div>
 </div>
 
 <div class="submit">
-  <button>Submit & Finish Day</button>
+<button onclick="submitDay()">Submit & Finish Day</button>
 </div>
 
 </div>
@@ -328,17 +187,16 @@ body{
 <!-- RIGHT -->
 <div>
 <div class="panel">
-  <h3>Quick Contacts</h3>
-  <div style="font-size:14px;line-height:1.6;">
-    <strong>My Refund</strong><br>
-    0800 80 89 89<br>
-    info@myrefund.co.nz<br>
-    myrefund.co.nz<br><br>
-
-    <strong>IRD</strong><br>
-    ird.govt.nz<br>
-    0800 227 774
-  </div>
+<h3>Quick Contacts</h3>
+<div style="font-size:14px;line-height:1.6;">
+<strong>My Refund</strong><br>
+0800 80 89 89<br>
+info@myrefund.co.nz<br>
+myrefund.co.nz<br><br>
+<strong>IRD</strong><br>
+ird.govt.nz<br>
+0800 227 774
+</div>
 </div>
 </div>
 
@@ -346,41 +204,123 @@ body{
 </div>
 
 <div id="resourcesTab" class="hidden">
-  <div class="panel">
-    <h3>Resources</h3>
-    <p>No resources added yet.</p>
-  </div>
+<div class="panel">
+<h3>Resources</h3>
+<p>No resources added yet.</p>
+</div>
 </div>
 
 </div>
 </div>
 
 <script>
-const name = localStorage.getItem("currentStaff") || "Processing";
-document.getElementById("staffNameLabel").textContent = name;
-document.getElementById("helloText").textContent = "Hello, " + name;
-
-function goHome(){ window.location.href = "index.html"; }
+let currentType=null;
+let totalFees=0;
+let submitted=false;
 
 function switchTab(tab, btn){
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  btn.classList.add("active");
-  document.getElementById("workTab").classList.toggle("hidden", tab!=="work");
-  document.getElementById("resourcesTab").classList.toggle("hidden", tab!=="resources");
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+btn.classList.add("active");
+document.getElementById("workTab").classList.toggle("hidden", tab!=="work");
+document.getElementById("resourcesTab").classList.toggle("hidden", tab!=="resources");
+}
+
+function adj(id,d){
+const el=document.getElementById(id);
+let v=Number(el.value||0)+d;
+if(v<0)v=0;
+el.value=v;
+}
+
+function selectType(e,type){
+if(submitted)return;
+currentType=type;
+document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
+e.target.classList.add("active");
+document.getElementById("inputSection").classList.remove("hidden");
+document.getElementById("amountInput").value="";
+document.getElementById("receiptLabel").classList.toggle("hidden", type!=="REB");
+}
+
+function autoAdd(type){
+if(submitted)return;
+addLog(type,39.10);
+}
+
+function calculateFee(type,amount){
+let R=parseFloat(amount);
+if(type==="ITA"){
+let base=(R*0.11)+34.50;
+let withGST=base*1.15;
+if(R<39.68)return R;
+if(withGST>345)return 345;
+return withGST;
+}
+if(type==="IR3"){
+let base=(R*0.11)+49.50;
+let withGST=base*1.15;
+if(R<56.93)return R;
+if(withGST>402.50)return 402.50;
+return withGST;
+}
+if(type==="REB"){
+let tier;
+if(R<500)tier=45.99;
+else if(R<2000)tier=68.99;
+else tier=91.99;
+if(document.getElementById("receiptAssist").checked)tier+=6.89;
+if(R<tier)return R;
+return tier;
+}
+return 0;
+}
+
+function addEntry(){
+if(submitted||!currentType)return;
+let amt=document.getElementById("amountInput").value;
+if(!amt)return;
+let fee=calculateFee(currentType,amt);
+addLog(currentType,fee);
+document.getElementById("amountInput").value="";
+}
+
+function addLog(type,fee){
+fee=Math.round(fee*100)/100;
+let time=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"});
+let row=document.createElement("tr");
+row.innerHTML=`<td>${time}</td><td>${type}</td><td>$${fee.toFixed(2)}</td>
+<td><button onclick="deleteRow(this,${fee})">✕</button></td>`;
+document.getElementById("logTable").appendChild(row);
+totalFees+=fee;
+updateTotal();
+}
+
+function deleteRow(btn,fee){
+if(submitted)return;
+btn.parentElement.parentElement.remove();
+totalFees-=fee;
+updateTotal();
+}
+
+function updateTotal(){
+document.getElementById("totalFees").textContent=totalFees.toFixed(2);
+}
+
+function submitDay(){
+if(submitted)return;
+if(!confirm("Are you sure you want to submit your day? This cannot be edited."))return;
+submitted=true;
+document.querySelectorAll("button").forEach(b=>{
+if(!b.classList.contains("submit-btn"))b.disabled=true;
+});
+alert("Day submitted successfully.");
 }
 
 function tick(){
-  document.getElementById("clock").textContent =
-    new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+document.getElementById("clock").textContent=
+new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 tick(); setInterval(tick,1000);
-
-function adj(id,d){
-  const el=document.getElementById(id);
-  let v=Number(el.value||0)+d;
-  if(v<0) v=0;
-  el.value=v;
-}
 </script>
 
 </body>
