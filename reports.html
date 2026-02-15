@@ -16,14 +16,14 @@
   --text:#111827;
   --muted:#6b7280;
   --radius:16px;
-  --shadow:0 12px 32px rgba(0,0,0,.14);
+  --shadow:0 12px 32px rgba(0,0,0,.12);
 }
 *{box-sizing:border-box}
 body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color:var(--text);
   background:#f9fafb;
+  color:var(--text);
 }
 
 /* HEADER */
@@ -58,62 +58,77 @@ body{
   cursor:pointer;
 }
 
-/* LAYOUT */
-.container{
+/* TOP FILTER BAR */
+.topbar{
   max-width:1400px;
-  margin:0 auto;
-  padding:30px 24px 60px;
-  display:grid;
-  grid-template-columns:260px 1fr;
-  gap:24px;
-}
-
-/* FILTER PANEL */
-.filters{
+  margin:20px auto 0;
+  padding:16px;
   background:#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:20px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:flex-end;
 }
-.filters h3{
-  margin:0 0 16px;
-  color:var(--g0);
-  font-weight:900;
-}
-.filters label{
+
+.field{
+  display:flex;
+  flex-direction:column;
   font-size:12px;
   font-weight:900;
-  display:block;
-  margin-top:12px;
 }
-.filters input,
-.filters select{
-  width:100%;
+
+.field input,
+.field select{
+  margin-top:6px;
   padding:8px;
   border-radius:8px;
   border:1px solid var(--border);
-  margin-top:6px;
+  min-width:150px;
+  font-weight:700;
 }
-.run-btn{
-  margin-top:18px;
-  width:100%;
-  padding:12px;
-  border:none;
+
+button.primary{
+  padding:10px 18px;
   border-radius:12px;
   background:var(--g0);
   color:#fff;
+  border:none;
   font-weight:900;
   cursor:pointer;
 }
 
-/* MAIN */
-.main{
+button.secondary{
+  padding:10px 18px;
+  border-radius:12px;
+  background:#fff;
+  border:1px solid var(--g0);
+  color:var(--g0);
+  font-weight:900;
+  cursor:pointer;
+}
+
+.status-pill{
+  padding:8px 12px;
+  border-radius:999px;
+  background:var(--g2);
+  font-size:12px;
+  font-weight:900;
+  color:var(--g0);
+}
+
+/* MAIN CONTENT */
+.content{
+  max-width:1400px;
+  margin:24px auto 60px;
+  padding:0 16px;
   display:flex;
   flex-direction:column;
   gap:24px;
 }
 
-/* SUMMARY CARDS */
+/* SUMMARY */
 .summary-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -137,11 +152,11 @@ body{
   font-weight:900;
   color:var(--g0);
 }
-.live-indicator{
+.summary-card .sub{
   font-size:11px;
   font-weight:900;
-  margin-top:6px;
   color:#16a34a;
+  margin-top:6px;
 }
 
 /* TABLES */
@@ -172,10 +187,6 @@ th{
 }
 td strong{color:var(--g0)}
 .right{text-align:right}
-
-@media(max-width:1000px){
-  .container{grid-template-columns:1fr}
-}
 </style>
 </head>
 
@@ -194,118 +205,124 @@ td strong{color:var(--g0)}
   </div>
 </div>
 
-<div class="container">
+<!-- FILTER BAR -->
+<div class="topbar">
 
-  <!-- FILTER PANEL -->
-  <div class="filters">
-    <h3>Filters</h3>
-
-    <label>Date From</label>
+  <div class="field">
+    Date From
     <input type="date" id="startDate">
+  </div>
 
-    <label>Date To</label>
+  <div class="field">
+    Date To
     <input type="date" id="endDate">
+  </div>
 
-    <label>Division</label>
+  <div class="field">
+    Division
     <select id="divisionFilter" multiple>
       <option value="CSR">CSR</option>
       <option value="Processing">Processing</option>
     </select>
+  </div>
 
-    <label>Staff</label>
+  <div class="field">
+    Staff
     <select id="staffFilter" multiple></select>
+  </div>
 
-    <label>Work Type</label>
+  <div class="field">
+    Work Type
     <select id="workFilter" multiple></select>
-
-    <button class="run-btn" onclick="runReport()">Run Report</button>
   </div>
 
-  <!-- MAIN CONTENT -->
-  <div class="main">
+  <button class="primary" onclick="runReport()">Run Report</button>
+  <button class="secondary" onclick="downloadPDF()">Download PDF</button>
 
-    <!-- SUMMARY -->
-    <div class="summary-grid">
+  <div class="status-pill" id="statusPill">Live Today</div>
 
-      <div class="summary-card">
-        <h4>Client Touchpoints</h4>
-        <div class="value" id="touchpointsTotal">0</div>
-        <div class="live-indicator">Live Today</div>
-      </div>
+</div>
 
-      <div class="summary-card">
-        <h4>Returns Processed</h4>
-        <div class="value" id="processingTotal">0</div>
-        <div class="live-indicator">Live Today</div>
-      </div>
+<!-- CONTENT -->
+<div class="content">
 
-      <div class="summary-card">
-        <h4>Revenue (Fees)</h4>
-        <div class="value" id="feeTotal">$0</div>
-        <div class="live-indicator">Live Today</div>
-      </div>
+  <!-- SUMMARY -->
+  <div class="summary-grid">
 
-      <div class="summary-card">
-        <h4>Active Staff Logged</h4>
-        <div class="value" id="staffCount">0</div>
-        <div class="live-indicator">Live Today</div>
-      </div>
-
+    <div class="summary-card">
+      <h4>Client Touchpoints</h4>
+      <div class="value" id="touchpointsTotal">0</div>
+      <div class="sub">Live Data</div>
     </div>
 
-    <!-- CSR BREAKDOWN -->
-    <div class="panel">
-      <h3>CSR Activity Breakdown</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Staff</th>
-            <th class="right">Inbound</th>
-            <th class="right">Outbound</th>
-            <th class="right">Chat</th>
-            <th class="right">Emails</th>
-          </tr>
-        </thead>
-        <tbody id="csrTable"></tbody>
-      </table>
+    <div class="summary-card">
+      <h4>Returns Processed</h4>
+      <div class="value" id="processingTotal">0</div>
+      <div class="sub">Live Data</div>
     </div>
 
-    <!-- PROCESSING BREAKDOWN -->
-    <div class="panel">
-      <h3>Processing Output Breakdown</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Staff</th>
-            <th class="right">Total Output</th>
-            <th class="right">Total Fees</th>
-          </tr>
-        </thead>
-        <tbody id="processingTable"></tbody>
-      </table>
+    <div class="summary-card">
+      <h4>Revenue (Fees)</h4>
+      <div class="value" id="feeTotal">$0</div>
+      <div class="sub">Live Data</div>
+    </div>
+
+    <div class="summary-card">
+      <h4>Active Staff Logged</h4>
+      <div class="value" id="staffCount">0</div>
+      <div class="sub">Live Data</div>
     </div>
 
   </div>
+
+  <!-- CSR TABLE -->
+  <div class="panel">
+    <h3>CSR Activity Breakdown</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Staff</th>
+          <th class="right">Inbound</th>
+          <th class="right">Outbound</th>
+          <th class="right">Chat</th>
+          <th class="right">Emails</th>
+        </tr>
+      </thead>
+      <tbody id="csrTable"></tbody>
+    </table>
+  </div>
+
+  <!-- PROCESSING TABLE -->
+  <div class="panel">
+    <h3>Processing Output Breakdown</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Staff</th>
+          <th class="right">Total Output</th>
+          <th class="right">Total Fees</th>
+        </tr>
+      </thead>
+      <tbody id="processingTable"></tbody>
+    </table>
+  </div>
+
 </div>
 
 <script>
 function goHome(){ window.location.href="index.html"; }
 
-/* DEFAULT TODAY */
 const today = new Date().toISOString().split("T")[0];
 document.getElementById("startDate").value = today;
 document.getElementById("endDate").value = today;
 
 /* MOCK DATA FOR DESIGN PHASE */
 function runReport(){
-
-  // Summary
   document.getElementById("touchpointsTotal").textContent = 432;
   document.getElementById("processingTotal").textContent = 189;
   document.getElementById("feeTotal").textContent = "$12,480";
   document.getElementById("staffCount").textContent = 11;
 
-  // CSR Table
   document.getElementById("csrTable").innerHTML = `
     <tr>
       <td><strong>Drew</strong></td>
@@ -323,7 +340,6 @@ function runReport(){
     </tr>
   `;
 
-  // Processing Table
   document.getElementById("processingTable").innerHTML = `
     <tr>
       <td><strong>George</strong></td>
@@ -338,7 +354,11 @@ function runReport(){
   `;
 }
 
-runReport(); // load default
+function downloadPDF(){
+  alert("PDF will match current filters (backend wiring next phase).");
+}
+
+runReport();
 </script>
 
 </body>
