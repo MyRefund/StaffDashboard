@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <meta http-equiv="Content-Language" content="en">
 <meta name="google" content="notranslate">
 
@@ -24,7 +23,7 @@ body{
   color:var(--text);
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .header{
   background:var(--g0);
   color:#fff;
@@ -45,9 +44,7 @@ body{
   gap:14px;
 }
 
-.brand img{
-  height:28px;
-}
+.brand img{ height:28px; }
 
 .brand-text{
   display:flex;
@@ -82,7 +79,7 @@ body{
   cursor:pointer;
 }
 
-/* ===== PAGE ===== */
+/* PAGE */
 .page{
   min-height:calc(100vh - 72px);
   background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
@@ -90,9 +87,8 @@ body{
   grid-template-columns:1fr 1fr;
 }
 
-/* ===== COLUMN ===== */
 .column{
-  padding:60px 60px;
+  padding:60px;
 }
 
 .section-title{
@@ -124,11 +120,8 @@ body{
   background:#0b5c42;
 }
 
-/* ===== RESPONSIVE ===== */
 @media(max-width:1000px){
-  .page{
-    grid-template-columns:1fr;
-  }
+  .page{ grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -154,10 +147,9 @@ body{
 
 <div class="page">
 
-  <!-- CSR COLUMN -->
+  <!-- CSR -->
   <div class="column">
     <div class="section-title">CSR Login</div>
-
     <div class="login-list">
       <button class="login-btn" onclick="startCSR('Drew')">Drew</button>
       <button class="login-btn" onclick="startCSR('Emma')">Emma</button>
@@ -167,10 +159,9 @@ body{
     </div>
   </div>
 
-  <!-- PROCESSING COLUMN -->
+  <!-- PROCESSING -->
   <div class="column">
     <div class="section-title">Processing Login</div>
-
     <div class="login-list">
       <button class="login-btn" onclick="startProcessing('George')">George</button>
       <button class="login-btn" onclick="startProcessing('Merin')">Merin</button>
@@ -193,28 +184,34 @@ function nowTime(){
   return new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",timeZone:TZ});
 }
 
-/* CSR LOGIN */
+/* ===== CSR LOGIN ===== */
 function startCSR(name){
   localStorage.setItem("currentStaff", name);
   localStorage.setItem("currentDivision", "CSR");
   localStorage.setItem("loginDate", todayISO());
   localStorage.setItem("loginTime", nowTime());
+
+  // IMPORTANT: Must match your CSR page filename
   window.location.href = "staff.html";
 }
 
-/* PROCESSING LOGIN */
+/* ===== PROCESSING LOGIN ===== */
 function startProcessing(name){
   localStorage.setItem("currentStaff", name);
   localStorage.setItem("currentDivision", "Processing");
   localStorage.setItem("loginDate", todayISO());
   localStorage.setItem("loginTime", nowTime());
+
+  // IMPORTANT: Must match your Processing page filename
   window.location.href = "processing.html";
 }
 
+/* ===== ADMIN ===== */
 function goAdmin(){
   window.location.href = "admin.html";
 }
 
+/* ===== REPORTS ===== */
 function goReports(){
   window.location.href = "reports.html";
 }
