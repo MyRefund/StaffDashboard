@@ -103,6 +103,17 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 
 <div class="wrap">
 <div id="workTab">
+
+<!-- Greeting -->
+<div style="margin-bottom:28px;">
+  <div style="font-size:24px;font-weight:900;color:var(--g0);">
+    Hello, <span id="helloName"></span>
+  </div>
+  <div style="margin-top:6px;font-size:13px;font-weight:800;color:var(--muted);">
+    <span id="todayDate"></span> • Division: Processing
+  </div>
+</div>
+
 <div class="layout">
 
 <!-- LEFT -->
@@ -200,13 +211,17 @@ ird.govt.nz<br>
 </div>
 
 <script>
+const TZ="Pacific/Auckland";
 let entries=[];
 let submitted=false;
 let currentType=null;
 
-function cleanAmount(v){
-return parseFloat(v.replace(/[$, ]/g,''));
-}
+const name=localStorage.getItem("currentStaff")||"Processing";
+document.getElementById("staffNameLabel").textContent=name;
+document.getElementById("helloName").textContent=name;
+document.getElementById("todayDate").textContent=new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
+
+function cleanAmount(v){return parseFloat(v.replace(/[$, ]/g,''));}
 
 function toggleLog(){
 const container=document.getElementById("logContainer");
@@ -220,11 +235,12 @@ const tbody=document.getElementById("logTable");
 tbody.innerHTML="";
 const visible=entries.slice(-200);
 visible.forEach((e,i)=>{
+const realIndex=entries.length-visible.length+i;
 const row=document.createElement("tr");
 row.innerHTML=`<td>${e.time}</td>
 <td>${e.type}</td>
 <td>$${e.fee.toFixed(2)}</td>
-<td>${!submitted?'<button onclick="editEntry('+ (entries.length-visible.length+i) +')">✎</button>':''}</td>`;
+<td>${!submitted?'<button onclick="editEntry('+realIndex+')">✎</button> <button onclick="deleteEntry('+realIndex+')">✕</button>':''}</td>`;
 tbody.appendChild(row);
 });
 document.getElementById("entryCount").textContent=entries.length;
@@ -284,6 +300,7 @@ if(!amt)return;
 let R=cleanAmount(amt);
 let fee=calculateFee(currentType,R);
 entries.push({type:currentType,amount:R,fee:fee,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
+if(currentType==="ITA"||currentType==="IR3"||currentType==="REB"){adj('filing',1);}
 document.getElementById("amountInput").value="";
 renderLog(); updateTotal();
 }
@@ -295,6 +312,14 @@ if(!newVal)return;
 let R=cleanAmount(newVal);
 entries[index].amount=R;
 entries[index].fee=calculateFee(entries[index].type,R);
+renderLog(); updateTotal();
+}
+
+function deleteEntry(index){
+if(submitted)return;
+const entry=entries[index];
+if(entry.type==="ITA"||entry.type==="IR3"||entry.type==="REB"){adj('filing',-1);}
+entries.splice(index,1);
 renderLog(); updateTotal();
 }
 
