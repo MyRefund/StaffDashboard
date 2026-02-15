@@ -1,468 +1,134 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<meta http-equiv="Content-Language" content="en">
-<meta name="google" content="notranslate">
-
-<title>My Refund — CSR Workspace</title>
-
-<style>
-:root{
-  --g0:#094B35;
-  --g2:#ECFDF5;
-  --text:#111827;
-  --muted:#6b7280;
-  --border:#e5e7eb;
-  --radius:16px;
-  --shadow:0 12px 32px rgba(0,0,0,.14);
-}
-
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color:var(--text);
-}
-
-.page{
-  min-height:100vh;
-  background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
-}
-
-/* HEADER */
-.header{
-  background:var(--g0);
-  color:#fff;
-  padding:14px 24px;
-}
-
-.header-inner{
-  max-width:1300px;
-  margin:0 auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.brand img{height:26px}
-
-.brand-text strong{
-  font-size:15px;
-  font-weight:900;
-}
-
-.brand-text span{
-  font-size:12px;
-  opacity:.9;
-  font-weight:700;
-}
-
-.clock{
-  font-weight:900;
-  font-size:14px;
-}
-
-/* TABS */
-.tabs{
-  background:#fff;
-  padding:12px 24px;
-  display:flex;
-  gap:10px;
-  border-bottom:1px solid var(--border);
-}
-
-.tab{
-  border-radius:999px;
-  padding:8px 16px;
-  font-weight:900;
-  font-size:13px;
-  border:1px solid var(--g0);
-  background:#fff;
-  color:var(--g0);
-  cursor:pointer;
-}
-
-.tab.active{
-  background:var(--g0);
-  color:#fff;
-}
-
-/* CONTENT */
-.wrap{
-  max-width:1300px;
-  margin:0 auto;
-  padding:36px 24px 60px;
-}
-
-.top-row{
-  margin-bottom:28px;
-}
-
-.hello{
-  font-size:24px;
-  font-weight:900;
-  color:var(--g0);
-}
-
-/* WORK LOG LAYOUT */
-.layout{
-  display:grid;
-  grid-template-columns:300px 1fr 260px;
-  gap:24px;
-}
-
-.panel{
-  background:rgba(255,255,255,.96);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:20px;
-  margin-bottom:20px;
-}
-
-.panel h3{
-  margin:0 0 14px 0;
-  font-size:16px;
-  font-weight:900;
-  color:var(--g0);
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:14px;
-}
-
-/* subtle allocated work highlight */
-.allocated-grid{
-  background:#f9fafb;
-  padding:14px;
-  border-radius:14px;
-}
-
-.item{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-}
-
-.item label{
-  display:block;
-  font-weight:900;
-  margin-bottom:8px;
-}
-
-.controls{
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-
-.controls button{
-  width:32px;
-  height:32px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:#fff;
-  font-weight:900;
-  cursor:pointer;
-}
-
-.controls input{
-  width:56px;
-  text-align:center;
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:6px;
-  font-weight:900;
-}
-
-.submit button{
-  width:100%;
-  border-radius:14px;
-  padding:14px;
-  font-weight:900;
-  font-size:15px;
-  border:none;
-  background:var(--g0);
-  color:#fff;
-  cursor:pointer;
-}
-
-.hidden{display:none}
-
-@media(max-width:1100px){
-  .layout{grid-template-columns:1fr}
-}
-</style>
-</head>
-
-<body>
-<div class="page">
-
-<div class="header">
-  <div class="header-inner">
-    <div class="brand">
-      <img src="logo.png">
-      <div class="brand-text">
-        <strong id="staffNameLabel">CSR</strong>
-        <span>Daily Work Logger</span>
-      </div>
-    </div>
-
-    <div style="display:flex;align-items:center;gap:14px;">
-      <button onclick="goHome()" style="
-        border-radius:999px;
-        padding:8px 16px;
-        font-weight:900;
-        font-size:13px;
-        border:1px solid #fff;
-        background:transparent;
-        color:#fff;
-        cursor:pointer;">
-        ← Overview
-      </button>
-      <div class="clock" id="clock"></div>
-    </div>
-  </div>
-</div>
-
-<div class="tabs">
-  <button class="tab active" onclick="switchTab('work', this)">Work Log</button>
-  <button class="tab" onclick="switchTab('resources', this)">Resources</button>
-</div>
-
-<div class="wrap">
-
-<div id="workTab">
-
-<div class="top-row">
-  <div class="hello" id="helloText">Hello</div>
-</div>
-
-<div class="layout">
-
-<!-- LEFT -->
-<div>
-
-<div class="panel">
-  <h3>Inbound Calls</h3>
-  <div class="controls">
-    <button onclick="adj('inbound',-1)">−</button>
-    <input id="inbound" value="0">
-    <button onclick="adj('inbound',1)">+</button>
-  </div>
-</div>
-
-<div class="panel">
-  <h3>Outbound Calls (Total)</h3>
-  <div class="controls">
-    <button onclick="adjManualOutbound(-1)">−</button>
-    <input id="outbound" value="0" readonly style="background:#f3f4f6;">
-    <button onclick="adjManualOutbound(1)">+</button>
-  </div>
-</div>
-
-<div class="panel">
-  <h3>Live Chat</h3>
-  <div class="controls">
-    <button onclick="adj('chat',-1)">−</button>
-    <input id="chat" value="0">
-    <button onclick="adj('chat',1)">+</button>
-  </div>
-</div>
-
-</div>
-
-<!-- MIDDLE -->
-<div>
-
-<div class="panel">
-  <h3>Allocated Work</h3>
-
-  <div class="allocated-grid">
-    <div class="grid">
-
-      <div class="item">
-        <label>A2A</label>
-        <div class="controls">
-          <button onclick="adj('a2a',-1)">−</button>
-          <input id="a2a" value="0">
-          <button onclick="adj('a2a',1)">+</button>
-        </div>
-      </div>
-
-      <div class="item">
-        <label>Unverified</label>
-        <div class="controls">
-          <button onclick="adj('unverified',-1)">−</button>
-          <input id="unverified" value="0">
-          <button onclick="adj('unverified',1)">+</button>
-        </div>
-      </div>
-
-      <div class="item">
-        <label>Emails</label>
-        <div class="controls">
-          <button onclick="adj('emails',-1)">−</button>
-          <input id="emails" value="0">
-          <button onclick="adj('emails',1)">+</button>
-        </div>
-      </div>
-
-      <div class="item">
-        <label>INC/C Calling</label>
-        <div class="controls">
-          <button onclick="adjCalling('inccalling',-1)">−</button>
-          <input id="inccalling" value="0">
-          <button onclick="adjCalling('inccalling',1)">+</button>
-        </div>
-      </div>
-
-      <div class="item">
-        <label>Question Calling</label>
-        <div class="controls">
-          <button onclick="adjCalling('questioncalling',-1)">−</button>
-          <input id="questioncalling" value="0">
-          <button onclick="adjCalling('questioncalling',1)">+</button>
-        </div>
-      </div>
-
-      <div class="item">
-        <label>A2A Calling</label>
-        <div class="controls">
-          <button onclick="adjCalling('a2acalling',-1)">−</button>
-          <input id="a2acalling" value="0">
-          <button onclick="adjCalling('a2acalling',1)">+</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div class="panel">
-  <h3>Delinks & Cancellations</h3>
-  <div class="grid">
-    <div class="item">
-      <label>Delinks</label>
-      <div class="controls">
-        <button onclick="adj('delink',-1)">−</button>
-        <input id="delink" value="0">
-        <button onclick="adj('delink',1)">+</button>
-      </div>
-    </div>
-    <div class="item">
-      <label>Cancellations</label>
-      <div class="controls">
-        <button onclick="adj('cancel',-1)">−</button>
-        <input id="cancel" value="0">
-        <button onclick="adj('cancel',1)">+</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="submit">
-  <button>Submit & Finish Day</button>
-</div>
-
-</div>
-
-<!-- RIGHT -->
-<div>
-<div class="panel">
-  <h3>Quick Contacts</h3>
-  <div style="font-size:14px;line-height:1.6;">
-    <strong>My Refund</strong><br>
-    0800 80 89 89<br>
-    info@myrefund.co.nz<br>
-    myrefund.co.nz<br><br>
-
-    <strong>IRD</strong><br>
-    ird.govt.nz<br>
-    0800 227 774
-  </div>
-</div>
-</div>
-
-</div>
-</div>
-
-<div id="resourcesTab" class="hidden">
-  <div class="panel">
-    <h3>Scripts</h3>
-    <a href="https://docs.google.com/document/d/1YheHUIH1nfFRhrp99I_eG2rXENDGzO8367CVwwTg2Ic/edit?usp=drive_link"
-       target="_blank"
-       style="font-weight:800;color:var(--g0);text-decoration:none;">
-       Income Confirmation Script
-    </a>
-  </div>
-</div>
-
-</div>
-</div>
-
 <script>
-const name = localStorage.getItem("currentStaff") || "CSR";
-document.getElementById("staffNameLabel").textContent = name;
-document.getElementById("helloText").textContent = "Hello, " + name;
+const TZ="Pacific/Auckland";
+const name=localStorage.getItem("currentStaff")||"CSR";
+const todayISO=new Date().toLocaleDateString("en-CA",{timeZone:TZ});
+const storageKey=`csr_${name}_${todayISO}`;
 
-function goHome(){ window.location.href = "index.html"; }
+let manualOutbound=0;
+let submitted=false;
 
-function switchTab(tab, btn){
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  btn.classList.add("active");
-  document.getElementById("workTab").classList.toggle("hidden", tab!=="work");
-  document.getElementById("resourcesTab").classList.toggle("hidden", tab!=="resources");
+document.getElementById("staffNameLabel").textContent=name;
+document.getElementById("helloText").textContent="Hello, "+name;
+
+/* ================= SAVE / LOAD ================= */
+
+function saveState(){
+  const data={
+    submitted,
+    manualOutbound,
+    counters:{
+      inbound:inbound.value,
+      chat:chat.value,
+      outbound:outbound.value,
+      a2a:a2a.value,
+      unverified:unverified.value,
+      emails:emails.value,
+      inccalling:inccalling.value,
+      questioncalling:questioncalling.value,
+      a2acalling:a2acalling.value,
+      delink:delink.value,
+      cancel:cancel.value
+    }
+  };
+  localStorage.setItem(storageKey,JSON.stringify(data));
 }
 
-function tick(){
-  document.getElementById("clock").textContent =
-    new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+function loadState(){
+  const saved=localStorage.getItem(storageKey);
+  if(!saved) return;
+
+  const data=JSON.parse(saved);
+  submitted=data.submitted||false;
+  manualOutbound=data.manualOutbound||0;
+
+  for(let k in data.counters){
+    if(document.getElementById(k)){
+      document.getElementById(k).value=data.counters[k];
+    }
+  }
+
+  if(submitted) lockPage();
+  updateOutbound();
 }
-tick(); setInterval(tick,1000);
+
+function lockPage(){
+  submitted=true;
+  document.querySelectorAll("button").forEach(b=>{
+    if(!b.classList.contains("tab")) b.disabled=true;
+  });
+}
+
+/* ================= RESET CHECK ================= */
+
+function checkNewDay(){
+  const yesterday=new Date(Date.now()-86400000)
+    .toLocaleDateString("en-CA",{timeZone:TZ});
+  const oldKey=`csr_${name}_${yesterday}`;
+  const old=localStorage.getItem(oldKey);
+  if(old){
+    const d=JSON.parse(old);
+    if(!d.submitted){
+      console.warn("Yesterday not submitted.");
+    }
+  }
+}
+
+/* ================= COUNTERS ================= */
 
 function adj(id,d){
+  if(submitted) return;
   const el=document.getElementById(id);
   let v=Number(el.value||0)+d;
-  if(v<0) v=0;
+  if(v<0)v=0;
   el.value=v;
+  saveState();
 }
 
-let manualOutbound = 0;
-
 function adjManualOutbound(d){
-  manualOutbound += d;
-  if(manualOutbound < 0) manualOutbound = 0;
+  if(submitted) return;
+  manualOutbound+=d;
+  if(manualOutbound<0)manualOutbound=0;
   updateOutbound();
+  saveState();
 }
 
 function adjCalling(id,d){
+  if(submitted) return;
   const el=document.getElementById(id);
   let v=Number(el.value||0)+d;
-  if(v<0) v=0;
+  if(v<0)v=0;
   el.value=v;
   updateOutbound();
+  saveState();
 }
 
 function updateOutbound(){
-  const inc = Number(document.getElementById("inccalling").value||0);
-  const q = Number(document.getElementById("questioncalling").value||0);
-  const a2a = Number(document.getElementById("a2acalling").value||0);
-  document.getElementById("outbound").value = manualOutbound + inc + q + a2a;
+  const inc=Number(inccalling.value||0);
+  const q=Number(questioncalling.value||0);
+  const a2aCall=Number(a2acalling.value||0);
+  outbound.value=manualOutbound+inc+q+a2aCall;
 }
-</script>
 
-</body>
-</html>
+/* ================= SUBMIT ================= */
+
+document.querySelector(".submit button").onclick=function(){
+  if(submitted) return;
+  if(!confirm("Submit & Finish Day? This cannot be edited.")) return;
+  lockPage();
+  saveState();
+  alert("Day submitted.");
+};
+
+/* ================= CLOCK ================= */
+
+function tick(){
+  clock.textContent=
+    new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+}
+tick();setInterval(tick,1000);
+
+/* ================= INIT ================= */
+
+checkNewDay();
+loadState();
+</script>
