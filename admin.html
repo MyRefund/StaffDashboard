@@ -103,6 +103,7 @@ body{
   display:flex;
   gap:8px;
   margin-bottom:24px;
+  flex-wrap:wrap;
 }
 
 .tab{
@@ -140,18 +141,30 @@ body{
 }
 
 .notice{
-  padding:16px;
+  padding:14px;
   border-radius:12px;
   background:#fef3c7;
   color:#92400e;
   font-weight:900;
+  margin-bottom:16px;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:16px;
 }
+
+input, select, textarea{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  margin-bottom:14px;
+  font-weight:700;
+}
+
+textarea{min-height:90px}
 
 .staff-card{
   border:1px solid var(--border);
@@ -159,24 +172,12 @@ body{
   padding:16px;
   background:#fff;
 }
-
-.staff-card strong{
-  display:block;
-  margin-bottom:6px;
-}
-
-.meta{
-  font-size:13px;
-  font-weight:800;
-  color:var(--muted);
-}
 </style>
 </head>
 
 <body>
 <div class="page">
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-inner">
     <div class="brand">
@@ -186,7 +187,6 @@ body{
         <span>Operations dashboard</span>
       </div>
     </div>
-
     <div class="header-right">
       <button class="dashboard-btn" onclick="goDashboard()">← Dashboard</button>
       <div class="clock" id="clock"></div>
@@ -196,10 +196,10 @@ body{
 
 <div class="wrap">
 
-<!-- TABS -->
 <div class="tabs">
   <button class="tab active" onclick="showTab('allocation')">Allocation</button>
   <button class="tab" onclick="showTab('environment')">Daily Environment</button>
+  <button class="tab" onclick="showTab('roster')">Roster</button>
   <button class="tab" onclick="showTab('settings')">Settings</button>
 </div>
 
@@ -207,10 +207,24 @@ body{
 <div id="allocation" class="tab-section active">
   <div class="panel">
     <h3>CSR Work Allocation</h3>
+
     <div class="notice">
-      🚧 This section is currently under construction.  
-      Work allocation logic will be connected in Phase 2.
+      🚧 Under Construction – Allocation logic not yet connected to backend.
     </div>
+
+    <label>CSR Staff Member</label>
+    <select>
+      <option>Emma</option>
+      <option>Drew</option>
+      <option>Maddy</option>
+      <option>Sophie</option>
+    </select>
+
+    <label>Date</label>
+    <input type="date">
+
+    <label>Assigned Work</label>
+    <textarea placeholder="Example: A2A, Emails, INC/C Calling"></textarea>
   </div>
 </div>
 
@@ -218,16 +232,67 @@ body{
 <div id="environment" class="tab-section">
   <div class="panel">
     <h3>Start of Day</h3>
+
     <label>Date</label>
-    <input type="date" id="envDate">
+    <input type="date">
+
+    <div class="grid">
+      <div>
+        <label>Emails</label>
+        <input type="number">
+      </div>
+      <div>
+        <label>A2A</label>
+        <input type="number">
+      </div>
+      <div>
+        <label>Unverified</label>
+        <input type="number">
+      </div>
+    </div>
   </div>
 
   <div class="panel">
     <h3>End of Day</h3>
-    <label>Missed Calls</label>
-    <input type="number">
-    <label>Missed Chats</label>
-    <input type="number">
+
+    <div class="grid">
+      <div>
+        <label>Missed Calls</label>
+        <input type="number">
+      </div>
+      <div>
+        <label>Missed Chats</label>
+        <input type="number">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROSTER -->
+<div id="roster" class="tab-section">
+  <div class="panel">
+    <h3>Weekly Roster (Example View)</h3>
+
+    <div class="notice">
+      🚧 Under Construction – Roster visualisation and backend sync coming in Phase 2.
+    </div>
+
+    <label>Week Starting (Monday)</label>
+    <input type="date">
+
+    <div class="grid">
+      <div class="staff-card">
+        <strong>Emma</strong>
+        <div style="color:var(--muted);font-weight:800;">Monday–Friday 9:00am–5:00pm</div>
+        <div style="color:var(--muted);font-weight:800;">Breaks: 10:00 · 12:30 · 3:00</div>
+      </div>
+
+      <div class="staff-card">
+        <strong>Drew</strong>
+        <div style="color:var(--muted);font-weight:800;">Monday–Friday 9:00am–5:00pm</div>
+        <div style="color:var(--muted);font-weight:800;">Breaks: 10:10 · 12:40 · 3:10</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -236,10 +301,35 @@ body{
   <div class="panel">
     <h3>Staff List</h3>
 
-    <div class="grid" id="staffList"></div>
+    <div class="grid">
+      <div class="staff-card">
+        <strong>Emma</strong>
+        <div style="color:var(--muted);font-weight:800;">CSR</div>
+      </div>
+      <div class="staff-card">
+        <strong>Drew</strong>
+        <div style="color:var(--muted);font-weight:800;">CSR</div>
+      </div>
+      <div class="staff-card">
+        <strong>Maddy</strong>
+        <div style="color:var(--muted);font-weight:800;">CSR</div>
+      </div>
+      <div class="staff-card">
+        <strong>Sophie</strong>
+        <div style="color:var(--muted);font-weight:800;">CSR</div>
+      </div>
+      <div class="staff-card">
+        <strong>George</strong>
+        <div style="color:var(--muted);font-weight:800;">Processing</div>
+      </div>
+      <div class="staff-card">
+        <strong>Merin</strong>
+        <div style="color:var(--muted);font-weight:800;">Processing</div>
+      </div>
+    </div>
 
     <div style="margin-top:18px; font-size:13px; color:var(--muted); font-weight:800;">
-      To add or remove staff, update the Admin file directly.
+      Staff are currently hard-coded for system stability.
     </div>
   </div>
 </div>
@@ -248,32 +338,6 @@ body{
 </div>
 
 <script>
-
-/* HARD-CODED STAFF (SOURCE OF TRUTH) */
-let users = [
-  {name:"Emma", division:"CSR"},
-  {name:"Drew", division:"CSR"},
-  {name:"Maddy", division:"CSR"},
-  {name:"Sophie", division:"CSR"},
-  {name:"George", division:"Processing"},
-  {name:"Merin", division:"Processing"}
-];
-
-function renderStaff(){
-  const list = document.getElementById("staffList");
-  list.innerHTML = "";
-
-  users.forEach(u=>{
-    const card = document.createElement("div");
-    card.className = "staff-card";
-    card.innerHTML = `
-      <strong>${u.name}</strong>
-      <div class="meta">Division: ${u.division}</div>
-    `;
-    list.appendChild(card);
-  });
-}
-
 function showTab(id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
@@ -282,7 +346,7 @@ function showTab(id){
 }
 
 function goDashboard(){
-  window.location.href = "index.html";
+  window.location.href="index.html";
 }
 
 function tick(){
@@ -290,9 +354,6 @@ function tick(){
     new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 tick(); setInterval(tick,1000);
-
-renderStaff();
-
 </script>
 
 </body>
