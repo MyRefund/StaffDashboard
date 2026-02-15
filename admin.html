@@ -3,10 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <meta http-equiv="Content-Language" content="en">
 <meta name="google" content="notranslate">
-
 <title>My Refund — Admin</title>
 
 <style>
@@ -21,7 +19,6 @@
 }
 
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -54,22 +51,9 @@ body{
 }
 
 .brand img{height:26px}
-
-.brand-text strong{
-  font-size:15px;
-  font-weight:900;
-}
-
-.brand-text span{
-  font-size:12px;
-  opacity:.9;
-  font-weight:700;
-}
-
-.clock{
-  font-weight:900;
-  font-size:14px;
-}
+.brand-text strong{font-size:15px;font-weight:900;}
+.brand-text span{font-size:12px;opacity:.9;font-weight:700;}
+.clock{font-weight:900;font-size:14px;}
 
 .wrap{
   max-width:1200px;
@@ -81,7 +65,6 @@ body{
   display:flex;
   gap:8px;
   margin-bottom:24px;
-  flex-wrap:wrap;
 }
 
 .tab{
@@ -97,7 +80,6 @@ body{
 .tab.active{
   background:var(--g0);
   color:#fff;
-  border-color:var(--g0);
 }
 
 .tab-section{display:none}
@@ -118,7 +100,7 @@ body{
   color:var(--g0);
 }
 
-/* Roster styles */
+/* Roster */
 
 .roster-subtabs{
   display:flex;
@@ -143,185 +125,220 @@ body{
 .roster-card{
   border:1px solid var(--border);
   border-radius:14px;
-  padding:18px;
-  margin-bottom:18px;
+  padding:16px;
+  margin-bottom:16px;
   background:#fff;
+}
+
+.roster-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+  font-weight:900;
 }
 
 .day-row{
   display:grid;
-  grid-template-columns:120px 1fr 1fr 1fr 1fr;
-  gap:10px;
-  margin-bottom:10px;
+  grid-template-columns:110px repeat(6,1fr);
+  gap:6px;
+  margin-top:6px;
   align-items:center;
 }
 
-.day-row input{
+.day-row input, .day-row select{
   padding:6px;
   border-radius:8px;
   border:1px solid var(--border);
+  font-size:12px;
 }
 
-.toggle-row{
-  margin-bottom:18px;
+.day-row.off{
+  opacity:.5;
 }
 
-.actions{
-  text-align:right;
+.timeline{
+  margin-top:20px;
 }
 
-.actions button{
-  padding:12px 18px;
+.timeline-day{
+  margin-bottom:20px;
+}
+
+.timeline-track{
+  position:relative;
+  height:24px;
+  background:#f3f4f6;
+  border-radius:12px;
+  margin-top:6px;
+}
+
+.block{
+  position:absolute;
+  height:100%;
   border-radius:12px;
   background:var(--g0);
-  color:#fff;
-  border:none;
-  font-weight:900;
-  cursor:pointer;
+}
+
+.block.lunch{
+  background:#03953F;
 }
 </style>
 </head>
 
 <body>
 <div class="page">
-
 <div class="header">
-  <div class="header-inner">
-    <div class="brand">
-      <img src="logo.png">
-      <div class="brand-text">
-        <strong>Admin</strong>
-        <span>Operations dashboard</span>
-      </div>
-    </div>
-    <div class="clock" id="clock"></div>
-  </div>
+<div class="header-inner">
+<div class="brand">
+<img src="logo.png">
+<div class="brand-text">
+<strong>Admin</strong>
+<span>Operations dashboard</span>
+</div>
+</div>
+<div class="clock" id="clock"></div>
+</div>
 </div>
 
 <div class="wrap">
 
 <div class="tabs">
-  <button class="tab active" onclick="showTab('overview')">Overview</button>
-  <button class="tab" onclick="showTab('allocation')">Allocation</button>
-  <button class="tab" onclick="showTab('environment')">Daily Environment</button>
-  <button class="tab" onclick="showTab('roster')">Roster</button>
-  <button class="tab" onclick="showTab('settings')">Settings</button>
+<button class="tab active" onclick="showTab('roster')">Roster</button>
 </div>
 
-<!-- ROSTER TAB -->
-<div id="roster" class="tab-section">
+<div id="roster" class="tab-section active">
+<div class="panel">
 
-  <div class="panel">
-    <h3>Weekly Roster</h3>
+<h3>Weekly Roster</h3>
 
-    <label>Week Starting (Monday)</label>
-    <input type="date" id="weekStart">
+<label>Week Starting (Monday)</label>
+<input type="date" id="weekStart">
 
-    <div class="toggle-row">
-      <label>
-        <input type="checkbox" id="toggleWeekend" onchange="toggleWeekend()"> 
-        Show Weekend
-      </label>
-    </div>
+<label style="margin-left:20px;">
+<input type="checkbox" id="toggleWeekend" onchange="renderRoster()"> Show Weekend
+</label>
 
-    <div class="roster-subtabs">
-      <button class="subtab active" onclick="switchRoster('CSR', this)">CSR</button>
-      <button class="subtab" onclick="switchRoster('Processing', this)">Processing</button>
-    </div>
+<div class="roster-subtabs">
+<button class="subtab active" onclick="switchDivision('CSR', this)">CSR</button>
+<button class="subtab" onclick="switchDivision('Processing', this)">Processing</button>
+</div>
 
-    <div id="rosterContainer"></div>
+<div id="timelineContainer" class="timeline"></div>
 
-  </div>
+<div id="rosterContainer"></div>
 
+</div>
 </div>
 
 </div>
 </div>
 
 <script>
-const TZ = "Pacific/Auckland";
+const TZ="Pacific/Auckland";
 
-function todayISO(){
-  return new Date().toLocaleDateString("en-CA",{timeZone:TZ});
+function tick(){
+  document.getElementById("clock").textContent =
+  new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
+tick(); setInterval(tick,1000);
 
 function showTab(id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
-  document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
   document.getElementById(id).classList.add('active');
 }
 
-function tick(){
-  document.getElementById("clock").textContent =
-    new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
-}
-tick(); setInterval(tick,1000);
-
-/* Mock users */
-let users = [
-  {name:"Emma", division:"CSR"},
-  {name:"Drew", division:"CSR"},
-  {name:"Pepe", division:"CSR"},
-  {name:"Maddy", division:"CSR"},
-  {name:"Sophie", division:"CSR"},
-  {name:"George", division:"Processing"},
-  {name:"Merin", division:"Processing"}
+let users=[
+{name:"Emma",division:"CSR"},
+{name:"Drew",division:"CSR"},
+{name:"Maddy",division:"CSR"},
+{name:"Sophie",division:"CSR"},
+{name:"George",division:"Processing"},
+{name:"Merin",division:"Processing"}
 ];
 
-let currentRosterDivision = "CSR";
+let currentDivision="CSR";
 
-function switchRoster(div, btn){
+function switchDivision(div,btn){
   document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
-  currentRosterDivision = div;
-  renderRoster();
-}
-
-function toggleWeekend(){
+  currentDivision=div;
   renderRoster();
 }
 
 function renderRoster(){
-  const container = document.getElementById("rosterContainer");
-  container.innerHTML = "";
+  const container=document.getElementById("rosterContainer");
+  const timeline=document.getElementById("timelineContainer");
+  container.innerHTML="";
+  timeline.innerHTML="";
 
-  const showWeekend = document.getElementById("toggleWeekend").checked;
+  const showWeekend=document.getElementById("toggleWeekend").checked;
+  let days=["Monday","Tuesday","Wednesday","Thursday","Friday"];
+  if(showWeekend) days.push("Saturday","Sunday");
 
-  const days = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
-  if(showWeekend){
-    days.push("Saturday","Sunday");
-  }
+  days.forEach(day=>{
+    const dayDiv=document.createElement("div");
+    dayDiv.className="timeline-day";
+    dayDiv.innerHTML=`<strong>${day}</strong>
+    <div class="timeline-track"></div>`;
+    timeline.appendChild(dayDiv);
+  });
 
-  users.filter(u=>u.division===currentRosterDivision)
-    .forEach(u=>{
-      const card = document.createElement("div");
-      card.className="roster-card";
-      card.innerHTML=`<strong>${u.name}</strong>`;
-      
-      days.forEach(day=>{
-        const row=document.createElement("div");
-        row.className="day-row";
-        row.innerHTML=`
-          <div><strong>${day}</strong></div>
-          <input type="time" placeholder="Start">
-          <input type="time" placeholder="End">
-          <input type="time" placeholder="Lunch">
-          <input type="time" placeholder="Break">
-        `;
-        card.appendChild(row);
+  users.filter(u=>u.division===currentDivision).forEach((u,index)=>{
+    const card=document.createElement("div");
+    card.className="roster-card";
+
+    const header=document.createElement("div");
+    header.className="roster-header";
+    header.innerHTML=`${u.name} ▼`;
+    card.appendChild(header);
+
+    const body=document.createElement("div");
+
+    days.forEach(day=>{
+      const row=document.createElement("div");
+      row.className="day-row";
+      row.innerHTML=`
+      <div>${day}</div>
+      <input type="time" class="start">
+      <input type="time" class="end">
+      <input type="time" class="b1">
+      <input type="time" class="lunch">
+      <input type="time" class="b2">
+      <select class="status">
+        <option value="Working">Working</option>
+        <option value="Off">Off</option>
+        <option value="Sick">Sick</option>
+        <option value="Annual">Annual</option>
+      </select>
+      `;
+
+      row.querySelectorAll("input,select").forEach(el=>{
+        el.addEventListener("change",updateTimeline);
       });
 
-      const actions=document.createElement("div");
-      actions.className="actions";
-      actions.innerHTML=`<button>Save Week</button>`;
-      card.appendChild(actions);
-
-      container.appendChild(card);
+      body.appendChild(row);
     });
+
+    card.appendChild(body);
+
+    header.onclick=()=>{
+      body.style.display=body.style.display==="none"?"block":"none";
+    };
+
+    container.appendChild(card);
+  });
 }
 
-document.getElementById("weekStart").value=todayISO();
+function updateTimeline(){
+  // For now simple refresh
+  console.log("Timeline would update dynamically here.");
+}
+
+document.getElementById("weekStart").value =
+new Date().toLocaleDateString("en-CA",{timeZone:TZ});
+
 renderRoster();
 </script>
 
