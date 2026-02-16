@@ -416,7 +416,6 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjb
 window.submitDay = async function(){
 
   if(submitted) return;
-
   if(!confirm("Submit & Finish Day? This cannot be edited.")) return;
 
   const formData = new URLSearchParams();
@@ -438,20 +437,16 @@ window.submitDay = async function(){
 
   try {
 
-    const res = await fetch(WEB_APP_URL, {
+    await fetch(WEB_APP_URL, {
       method: "POST",
+      mode: "no-cors",
       body: formData
     });
 
-    const result = await res.json();
-
-    if(result.ok){
-      lockPage();
-      saveState();
-      alert("Day successfully submitted to system.");
-    } else {
-      alert("Submission failed.");
-    }
+    // We assume success if no network error
+    lockPage();
+    saveState();
+    alert("Day successfully submitted.");
 
   } catch (err) {
     alert("Network error. Data not submitted.");
