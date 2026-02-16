@@ -420,20 +420,21 @@ window.submitDay = async function(){
   if(!confirm("Submit & Finish Day? This cannot be edited.")) return;
 
   const formData = new URLSearchParams();
+
   formData.append("action", "submitCSR");
   formData.append("date", todayISO);
   formData.append("staff", name);
   formData.append("Inbound", inbound.value);
   formData.append("Outbound", outbound.value);
   formData.append("Chat", chat.value);
-  formData.append("Emails", 0);
-  formData.append("A2A", 0);
-  formData.append("Unverified", 0);
-  formData.append("INC_C_Calling", 0);
-  formData.append("Question_Calling", 0);
-  formData.append("A2A_Calling", 0);
-  formData.append("Delinks", 0);
-  formData.append("Cancellations", 0);
+  formData.append("Emails", emails.value);
+  formData.append("A2A", a2a.value);
+  formData.append("Unverified", unverified.value);
+  formData.append("INC_C_Calling", inccalling.value);
+  formData.append("Question_Calling", questioncalling.value);
+  formData.append("A2A_Calling", a2acalling.value);
+  formData.append("Delinks", delink.value);
+  formData.append("Cancellations", cancel.value);
 
   try {
 
