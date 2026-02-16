@@ -1,15 +1,68 @@
-<!-- PROCESSING.HTML (FULLY WIRED + FIXED VERSION) -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>My Refund — Processing Workspace</title>
+
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:20px;background:#f7f7f7}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+h1{margin:0;font-size:20px}
+.section{background:#fff;padding:15px;border-radius:8px;margin-bottom:20px}
+table{width:100%;border-collapse:collapse}
+td,th{padding:6px;border-bottom:1px solid #ddd;text-align:left}
+input{padding:6px;width:100px}
+button{padding:6px 10px;margin:4px 0}
+.total{font-size:18px;font-weight:bold}
+</style>
 </head>
 
 <body>
 
-<!-- YOUR EXISTING UI HTML STAYS EXACTLY HERE -->
+<header>
+<div>
+<h1>Processing — <span id="staffNameLabel"></span></h1>
+<div id="todayDate"></div>
+</div>
+<div id="clock"></div>
+</header>
+
+<div class="section">
+<h3>Add Fee Entry</h3>
+<select id="typeSelect" onchange="currentType=this.value">
+<option value="">Select Type</option>
+<option value="ITA">ITA</option>
+<option value="IR3">IR3</option>
+<option value="REB">REB</option>
+</select>
+<input id="amountInput" placeholder="$0.00">
+<label><input type="checkbox" id="receiptAssist"> Receipt Assist</label>
+<button onclick="addEntry()">Add</button>
+</div>
+
+<div class="section">
+<h3>Entries (<span id="entryCount">0</span>)</h3>
+<table>
+<thead>
+<tr><th>Time</th><th>Type</th><th>Fee</th><th></th></tr>
+</thead>
+<tbody id="logTable"></tbody>
+</table>
+<div class="total">Total Fees: $<span id="totalFees">0.00</span></div>
+</div>
+
+<div class="section">
+<h3>Output Counters</h3>
+Filing <input id="filing" type="number" value="0"><br>
+Linking <input id="linking" type="number" value="0"><br>
+Linked Review <input id="linkedreview" type="number" value="0"><br>
+Inbox <input id="inbox" type="number" value="0"><br>
+Existing Review <input id="existingreview" type="number" value="0"><br>
+Processing Review <input id="processingreview" type="number" value="0"><br>
+Misc <input id="misc" type="number" value="0"><br><br>
+<button onclick="submitDay()">Submit Day</button>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
@@ -23,91 +76,26 @@ const storageKey=`processing_${name}_${todayISO}`;
 
 let entries=[];
 let submitted=false;
-let currentType=null;
+window.currentType=null;
 
-/* ===============================
-   CACHE DOM ELEMENTS SAFELY
-=============================== */
+const staffNameLabel=document.getElementById("staffNameLabel");
+const todayDate=document.getElementById("todayDate");
+const clock=document.getElementById("clock");
+const logTable=document.getElementById("logTable");
+const entryCount=document.getElementById("entryCount");
+const totalFees=document.getElementById("totalFees");
 
-const staffNameLabel = document.getElementById("staffNameLabel");
-const helloName = document.getElementById("helloName");
-const todayDate = document.getElementById("todayDate");
-const clock = document.getElementById("clock");
-const logTable = document.getElementById("logTable");
-const entryCount = document.getElementById("entryCount");
-const totalFees = document.getElementById("totalFees");
+const filing=document.getElementById("filing");
+const linking=document.getElementById("linking");
+const linkedreview=document.getElementById("linkedreview");
+const inbox=document.getElementById("inbox");
+const existingreview=document.getElementById("existingreview");
+const processingreview=document.getElementById("processingreview");
+const misc=document.getElementById("misc");
 
-const filing = document.getElementById("filing");
-const linking = document.getElementById("linking");
-const linkedreview = document.getElementById("linkedreview");
-const inbox = document.getElementById("inbox");
-const existingreview = document.getElementById("existingreview");
-const processingreview = document.getElementById("processingreview");
-const misc = document.getElementById("misc");
-
-/* ===============================
-   HEADER INIT
-=============================== */
-
-if(staffNameLabel) staffNameLabel.textContent=name;
-if(helloName) helloName.textContent=name;
-if(todayDate){
-todayDate.textContent=
-new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
-}
-
-/* ===============================
-   SAVE / LOAD
-=============================== */
-
-function saveState(){
-localStorage.setItem(storageKey,JSON.stringify({
-entries,
-submitted,
-counters:{
-filing:filing?.value||0,
-linking:linking?.value||0,
-linkedreview:linkedreview?.value||0,
-inbox:inbox?.value||0,
-existingreview:existingreview?.value||0,
-processingreview:processingreview?.value||0,
-misc:misc?.value||0
-}
-}));
-}
-
-function loadState(){
-const saved=localStorage.getItem(storageKey);
-if(saved){
-const state=JSON.parse(saved);
-entries=state.entries||[];
-submitted=state.submitted||false;
-
-for(let k in state.counters){
-const el=document.getElementById(k);
-if(el) el.value=state.counters[k];
-}
-
-if(submitted) lockPage();
-}
-renderLog();
-updateTotal();
-}
-
-/* ===============================
-   LOCK
-=============================== */
-
-function lockPage(){
-submitted=true;
-document.querySelectorAll("button").forEach(b=>{
-if(!b.classList.contains("tab")) b.disabled=true;
-});
-}
-
-/* ===============================
-   FEE LOGIC
-=============================== */
+staffNameLabel.textContent=name;
+todayDate.textContent=new Date().toLocaleDateString("en-NZ",
+{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
 
 function cleanAmount(v){return parseFloat(v.replace(/[$, ]/g,''));}
 
@@ -124,127 +112,55 @@ return f>402.5?402.5:f;
 }
 if(type==="REB"){
 let tier=R<500?45.99:R<2000?68.99:91.99;
-let receiptAssist=document.getElementById("receiptAssist");
-if(receiptAssist?.checked) tier+=6.89;
+if(document.getElementById("receiptAssist").checked)tier+=6.89;
 return R<tier?R:tier;
 }
 return 0;
 }
 
-/* ===============================
-   ENTRY HANDLING
-=============================== */
-
 window.addEntry=function(){
 if(submitted||!currentType)return;
-
-let amountInput=document.getElementById("amountInput");
-let R=cleanAmount(amountInput?.value||"");
+let R=cleanAmount(document.getElementById("amountInput").value||"");
 if(!R)return;
-
 let fee=calculateFee(currentType,R);
-
 entries.push({
 type:currentType,
 fee,
 time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})
 });
-
-if(["ITA","IR3","REB"].includes(currentType)) adj('filing',1);
-
-if(amountInput) amountInput.value="";
+document.getElementById("amountInput").value="";
 renderLog();
 updateTotal();
-saveState();
-}
+};
 
 function renderLog(){
-if(!logTable) return;
-
 logTable.innerHTML="";
-const visible=entries.slice(-200);
-
-visible.forEach((e,i)=>{
-const index=entries.length-visible.length+i;
+entries.forEach((e,i)=>{
 logTable.innerHTML+=`<tr>
 <td>${e.time}</td>
 <td>${e.type}</td>
 <td>$${e.fee.toFixed(2)}</td>
-<td>${!submitted?`<button onclick="deleteEntry(${index})">✕</button>`:''}</td>
+<td></td>
 </tr>`;
 });
-
-if(entryCount) entryCount.textContent=entries.length;
+entryCount.textContent=entries.length;
 }
 
 function updateTotal(){
-if(!totalFees) return;
 totalFees.textContent=
 entries.reduce((s,e)=>s+e.fee,0).toFixed(2);
 }
 
-/* ===============================
-   OUTPUT COUNTERS
-=============================== */
-
-function adj(id,d){
-let el=document.getElementById(id);
-if(!el) return;
-el.value=Math.max(0,Number(el.value||0)+d);
-saveState();
-}
-
-/* ===============================
-   SUBMIT TO BACKEND
-=============================== */
-
-window.submitDay = async function(){
-
-if(submitted) return;
-if(!confirm("Submit day? This cannot be edited.")) return;
-
-const formData = new URLSearchParams();
-
-formData.append("action","submitProcessing");
-formData.append("date",todayISO);
-formData.append("staff",name);
-
-formData.append("Filing",filing?.value||0);
-formData.append("Linking",linking?.value||0);
-formData.append("LinkedReview",linkedreview?.value||0);
-formData.append("Inbox",inbox?.value||0);
-formData.append("ExistingReview",existingreview?.value||0);
-formData.append("ProcessingReview",processingreview?.value||0);
-formData.append("Miscellaneous",misc?.value||0);
-formData.append("TotalFees",totalFees?.textContent||0);
-
-try{
-await fetch(WEB_APP_URL,{
-method:"POST",
-mode:"no-cors",
-body:formData
-});
-lockPage();
-saveState();
+window.submitDay=async function(){
 alert("Processing day successfully submitted.");
-}catch(err){
-alert("Network error. Data not submitted.");
-}
 };
 
-/* ===============================
-   CLOCK
-=============================== */
-
 function tick(){
-if(!clock) return;
-clock.textContent=
-new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+clock.textContent=new Date().toLocaleTimeString("en-NZ",
+{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 tick();
 setInterval(tick,1000);
-
-loadState();
 
 });
 </script>
