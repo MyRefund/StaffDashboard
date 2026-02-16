@@ -9,241 +9,718 @@
 
 <style>
 :root{
---g0:#094B35;
---g2:#ECFDF5;
---text:#111827;
---muted:#6b7280;
---border:#e5e7eb;
---radius:16px;
---shadow:0 12px 32px rgba(0,0,0,.14);
+  --g0:#094B35;
+  --g2:#ECFDF5;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --radius:16px;
+  --shadow:0 12px 32px rgba(0,0,0,.14);
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:"Okta Neue",system-ui;color:var(--text);}
-.page{min-height:100vh;background:url("My Refund-Hero Images-02 (1).jpg") center/cover no-repeat;}
-.header{background:var(--g0);color:#fff;padding:14px 24px;}
-.header-inner{max-width:1300px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
-.brand{display:flex;align-items:center;gap:14px;}
+body{
+  margin:0;
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+}
+.page{
+  min-height:100vh;
+  background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
+}
+
+/* HEADER */
+.header{
+  background:var(--g0);
+  color:#fff;
+  padding:14px 24px;
+}
+.header-inner{
+  max-width:1300px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
 .brand img{height:26px}
-.brand-text strong{font-size:15px;font-weight:900;}
-.brand-text span{font-size:12px;opacity:.9;font-weight:700;}
-.clock{font-weight:900;font-size:14px;}
-.tabs{background:#fff;padding:12px 24px;display:flex;gap:10px;border-bottom:1px solid var(--border);}
-.tab{border-radius:999px;padding:8px 16px;font-weight:900;font-size:13px;border:1px solid var(--g0);background:#fff;color:var(--g0);cursor:pointer;}
+.brand-text strong{
+  font-size:15px;
+  font-weight:900;
+}
+.brand-text span{
+  font-size:12px;
+  opacity:.9;
+  font-weight:700;
+}
+.clock{font-weight:900;font-size:14px}
+
+/* TABS */
+.tabs{
+  background:#fff;
+  padding:12px 24px;
+  display:flex;
+  gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.tab{
+  border-radius:999px;
+  padding:8px 16px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid var(--g0);
+  background:#fff;
+  color:var(--g0);
+  cursor:pointer;
+}
 .tab.active{background:var(--g0);color:#fff;}
-.wrap{max-width:1300px;margin:0 auto;padding:36px 24px 60px;}
-.layout{display:grid;grid-template-columns:1fr 260px;gap:24px;}
-.panel{background:rgba(255,255,255,.96);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:20px;}
-.panel h3{margin:0 0 14px;font-size:18px;font-weight:900;color:var(--g0);}
+
+.wrap{
+  max-width:1300px;
+  margin:0 auto;
+  padding:36px 24px 60px;
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:1fr 260px;
+  gap:24px;
+}
+.panel{
+  background:rgba(255,255,255,.96);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+  margin-bottom:20px;
+}
+.panel h3{
+  margin:0 0 14px 0;
+  font-size:18px;
+  font-weight:900;
+  color:var(--g0);
+}
 .fee-panel{border-top:6px solid var(--g0);}
-.banner{background:#fff3cd;border-left:6px solid #f0ad4e;padding:12px 16px;margin-bottom:20px;font-weight:800;border-radius:12px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
-.item{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;}
-.item label{display:block;font-weight:900;margin-bottom:8px;}
-.controls{display:flex;align-items:center;gap:6px;}
-.controls button{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer;}
-.controls input{width:56px;text-align:center;border:1px solid var(--border);border-radius:8px;padding:6px;font-weight:900;}
-.button-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:16px;}
-.type-btn{border-radius:12px;padding:10px;font-weight:900;border:2px solid var(--g0);background:#fff;color:var(--g0);cursor:pointer;}
+
+.banner{
+  background:#fff3cd;
+  border-left:6px solid #f0ad4e;
+  padding:12px 16px;
+  margin-bottom:20px;
+  font-weight:800;
+  border-radius:12px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;
+}
+.item{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+}
+.item label{
+  display:block;
+  font-weight:900;
+  margin-bottom:8px;
+}
+.controls{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.controls button{
+  width:32px;height:32px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+.controls input{
+  width:56px;
+  text-align:center;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:6px;
+  font-weight:900;
+}
+
+.button-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:12px;
+  margin-bottom:16px;
+}
+.type-btn{
+  border-radius:12px;
+  padding:10px;
+  font-weight:900;
+  border:2px solid var(--g0);
+  background:#fff;
+  color:var(--g0);
+  cursor:pointer;
+}
 .type-btn.active{background:var(--g0);color:#fff;}
-input{padding:10px;border-radius:10px;border:1px solid var(--border);font-weight:700;}
-.add-btn{padding:10px 16px;border:none;border-radius:12px;background:var(--g0);color:#fff;font-weight:900;cursor:pointer;}
+
+input{
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-weight:700;
+  width:100%;
+}
+
+.add-btn{
+  margin-top:10px;
+  padding:10px 16px;
+  border:none;
+  border-radius:12px;
+  background:var(--g0);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+
 table{width:100%;border-collapse:collapse;}
 th,td{border-bottom:1px solid var(--border);padding:8px;font-size:13px;}
 th{color:var(--muted);font-weight:900;text-align:left;}
-.total-box{background:var(--g2);border-radius:12px;padding:14px;font-weight:900;font-size:18px;text-align:right;}
-.submit button{width:100%;border-radius:14px;padding:14px;font-weight:900;font-size:15px;border:none;background:var(--g0);color:#fff;cursor:pointer;}
-.collapsible-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:900;}
+
+.total-box{
+  background:var(--g2);
+  border-radius:12px;
+  padding:14px;
+  font-weight:900;
+  font-size:18px;
+  text-align:right;
+}
+
+.submit button{
+  width:100%;
+  border-radius:14px;
+  padding:14px;
+  font-weight:900;
+  font-size:15px;
+  border:none;
+  background:var(--g0);
+  color:#fff;
+  cursor:pointer;
+}
+
+.collapsible-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+  font-weight:900;
+}
 .hidden{display:none;}
-@media(max-width:1100px){.layout{grid-template-columns:1fr}}
+
+@media(max-width:1100px){
+  .layout{grid-template-columns:1fr}
+}
 </style>
 </head>
 
 <body>
 <div class="page">
 
-<div class="header">
-<div class="header-inner">
-<div class="brand">
-<img src="logo.png">
-<div class="brand-text">
-<strong id="staffNameLabel">Processing</strong>
-<span>Daily Work Logger</span>
-</div>
-</div>
-<div class="clock" id="clock"></div>
-</div>
-</div>
+  <div class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <img src="logo.png">
+        <div class="brand-text">
+          <strong id="staffNameLabel">Processing</strong>
+          <span>Daily Work Logger</span>
+        </div>
+      </div>
+      <div class="clock" id="clock"></div>
+    </div>
+  </div>
 
-<div class="tabs">
-<button class="tab active" onclick="switchTab('work', this)">Work Log</button>
-<button class="tab" onclick="switchTab('resources', this)">Resources</button>
-</div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('work', this)">Work Log</button>
+    <button class="tab" onclick="switchTab('resources', this)">Resources</button>
+  </div>
 
-<div class="wrap">
-<div id="workTab">
+  <div class="wrap">
+    <div id="workTab">
 
-<div id="warningBanner" class="banner hidden"></div>
+      <div id="warningBanner" class="banner hidden"></div>
 
-<div style="margin-bottom:28px;">
-<div style="font-size:24px;font-weight:900;color:var(--g0);">
-Hello, <span id="helloName"></span>
-</div>
-<div style="margin-top:6px;font-size:13px;font-weight:800;color:var(--muted);">
-<span id="todayDate"></span> • Division: Processing
-</div>
-</div>
+      <div style="margin-bottom:28px;">
+        <div style="font-size:24px;font-weight:900;color:var(--g0);">
+          Hello, <span id="helloName"></span>
+        </div>
+        <div style="margin-top:6px;font-size:13px;font-weight:800;color:var(--muted);">
+          <span id="todayDate"></span> • Division: Processing
+        </div>
+      </div>
 
-<div class="layout">
-<div>
+      <div class="layout">
 
-<div class="panel fee-panel">
-<h3>Return Fee Logging</h3>
+        <!-- LEFT -->
+        <div>
 
-<div class="button-grid">
-<button class="type-btn" onclick="selectType(event,'ITA')">ITA</button>
-<button class="type-btn" onclick="selectType(event,'IR3')">IR3</button>
-<button class="type-btn" onclick="selectType(event,'REB')">REB</button>
-<button class="type-btn" onclick="autoAdd('AA')">AA</button>
-<button class="type-btn" onclick="autoAdd('R3P')">R3P</button>
-<button class="type-btn" onclick="autoAdd('OP')">OP</button>
-</div>
+          <div class="panel">
+            <h3>Processing Output</h3>
+            <div class="grid">
 
-<div id="inputSection" class="hidden">
-<input type="text" id="amountInput" placeholder="Refund Amount">
-<label id="receiptLabel" class="hidden">
-<input type="checkbox" id="receiptAssist"> Add receipt assistance
-</label>
-<button class="add-btn" onclick="addEntry()">Add</button>
-</div>
-</div>
+              <div class="item">
+                <label>Filing</label>
+                <div class="controls">
+                  <button onclick="adj('filing',-1)">−</button>
+                  <input id="filing" value="0">
+                  <button onclick="adj('filing',1)">+</button>
+                </div>
+              </div>
 
-<div class="panel fee-panel">
-<div class="collapsible-header" onclick="toggleLog()">
-<span>Today’s Fee Entries (<span id="entryCount">0</span>)</span>
-<span id="toggleIcon">▼</span>
-</div>
-<div id="logContainer" class="hidden">
-<table>
-<thead><tr><th>Time</th><th>Type</th><th>Fee</th><th></th></tr></thead>
-<tbody id="logTable"></tbody>
-</table>
-</div>
-</div>
+              <div class="item">
+                <label>Linking</label>
+                <div class="controls">
+                  <button onclick="adj('linking',-1)">−</button>
+                  <input id="linking" value="0">
+                  <button onclick="adj('linking',1)">+</button>
+                </div>
+              </div>
 
-<div class="panel fee-panel">
-<div class="total-box">
-Total Fees Today: $<span id="totalFees">0.00</span>
-</div>
-</div>
+              <div class="item">
+                <label>Linked Review</label>
+                <div class="controls">
+                  <button onclick="adj('linkedreview',-1)">−</button>
+                  <input id="linkedreview" value="0">
+                  <button onclick="adj('linkedreview',1)">+</button>
+                </div>
+              </div>
 
-<div class="submit">
-<button onclick="submitDay()">Submit & Finish Day</button>
-</div>
+              <div class="item">
+                <label>Inbox</label>
+                <div class="controls">
+                  <button onclick="adj('inbox',-1)">−</button>
+                  <input id="inbox" value="0">
+                  <button onclick="adj('inbox',1)">+</button>
+                </div>
+              </div>
 
-</div>
-</div>
-</div>
+              <div class="item">
+                <label>Existing Review</label>
+                <div class="controls">
+                  <button onclick="adj('existingreview',-1)">−</button>
+                  <input id="existingreview" value="0">
+                  <button onclick="adj('existingreview',1)">+</button>
+                </div>
+              </div>
+
+              <div class="item">
+                <label>Processing Review</label>
+                <div class="controls">
+                  <button onclick="adj('processingreview',-1)">−</button>
+                  <input id="processingreview" value="0">
+                  <button onclick="adj('processingreview',1)">+</button>
+                </div>
+              </div>
+
+              <div class="item">
+                <label>Miscellaneous</label>
+                <div class="controls">
+                  <button onclick="adj('misc',-1)">−</button>
+                  <input id="misc" value="0">
+                  <button onclick="adj('misc',1)">+</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="panel fee-panel">
+            <h3>Return Fee Logging</h3>
+
+            <div class="button-grid">
+              <button class="type-btn" onclick="selectType(event,'ITA')">ITA</button>
+              <button class="type-btn" onclick="selectType(event,'IR3')">IR3</button>
+              <button class="type-btn" onclick="selectType(event,'REB')">REB</button>
+              <button class="type-btn" onclick="autoAdd('AA')">AA</button>
+              <button class="type-btn" onclick="autoAdd('R3P')">R3P</button>
+              <button class="type-btn" onclick="autoAdd('OP')">OP</button>
+            </div>
+
+            <div id="inputSection" class="hidden">
+              <input type="text" id="amountInput" placeholder="Refund Amount">
+              <label id="receiptLabel" class="hidden" style="display:block;margin-top:10px;font-weight:800;color:var(--muted);">
+                <input type="checkbox" id="receiptAssist"> Add receipt assistance
+              </label>
+              <button class="add-btn" onclick="addEntry()">Add</button>
+            </div>
+          </div>
+
+          <div class="panel fee-panel">
+            <div class="collapsible-header" onclick="toggleLog()">
+              <span>Today’s Fee Entries (<span id="entryCount">0</span> total · showing last 200)</span>
+              <span id="toggleIcon">▼</span>
+            </div>
+
+            <div id="logContainer" class="hidden">
+              <table>
+                <thead>
+                  <tr><th>Time</th><th>Type</th><th>Fee</th><th></th></tr>
+                </thead>
+                <tbody id="logTable"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel fee-panel">
+            <div class="total-box">
+              Total Fees Today: $<span id="totalFees">0.00</span>
+            </div>
+          </div>
+
+          <div class="submit">
+            <button onclick="submitDay()">Submit & Finish Day</button>
+          </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div>
+          <div class="panel">
+            <h3>Quick Contacts</h3>
+            <strong>My Refund</strong><br>
+            0800 80 89 89<br>
+            info@myrefund.co.nz<br>
+            myrefund.co.nz<br><br>
+            <strong>IRD</strong><br>
+            ird.govt.nz<br>
+            0800 227 774
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="resourcesTab" class="hidden">
+      <div class="panel">
+        <h3>Resources</h3>
+        <p>No resources added yet.</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-const WEB_APP_URL="https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
-const TZ="Pacific/Auckland";
-const name=localStorage.getItem("currentStaff")||"Processing";
-const todayISO=new Date().toLocaleDateString("en-CA",{timeZone:TZ});
-const storageKey=`processing_${name}_${todayISO}`;
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
+  const TZ = "Pacific/Auckland";
+  const name = localStorage.getItem("currentStaff") || "Processing";
+  const todayISO = new Date().toLocaleDateString("en-CA", { timeZone: TZ });
+  const storageKey = `processing_${name}_${todayISO}`;
 
-let entries=[];
-let submitted=false;
-let currentType=null;
+  let entries = [];
+  let submitted = false;
+  let currentType = null;
 
-/* HEADER */
-staffNameLabel.textContent=name;
-helloName.textContent=name;
-todayDate.textContent=new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
+  /* HEADER INIT */
+  document.getElementById("staffNameLabel").textContent = name;
+  document.getElementById("helloName").textContent = name;
+  document.getElementById("todayDate").textContent =
+    new Date().toLocaleDateString("en-NZ", { weekday:"long", day:"numeric", month:"long", year:"numeric", timeZone: TZ });
 
-/* ENTER KEY SUPPORT */
-amountInput.addEventListener("keydown", function(e){
-if(e.key==="Enter"){
-e.preventDefault();
-addEntry();
-}
-});
+  /* ENTER KEY ADDS ENTRY */
+  const amountInput = document.getElementById("amountInput");
+  amountInput.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+      e.preventDefault();
+      window.addEntry();
+    }
+  });
 
-/* GLOBAL FUNCTIONS */
+  /* SAVE / LOAD */
+  function saveState(){
+    localStorage.setItem(storageKey, JSON.stringify({
+      entries,
+      submitted,
+      counters:{
+        filing: filing.value,
+        linking: linking.value,
+        linkedreview: linkedreview.value,
+        inbox: inbox.value,
+        existingreview: existingreview.value,
+        processingreview: processingreview.value,
+        misc: misc.value
+      }
+    }));
+  }
 
-window.selectType=function(e,type){
-if(submitted)return;
-currentType=type;
-document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
-e.target.classList.add("active");
-inputSection.classList.remove("hidden");
-receiptLabel.classList.toggle("hidden",type!=="REB");
-amountInput.focus();
-};
+  function loadState(){
+    const saved = localStorage.getItem(storageKey);
+    if(saved){
+      const state = JSON.parse(saved);
+      entries = state.entries || [];
+      submitted = state.submitted || false;
 
-window.autoAdd=function(type){
-if(submitted)return;
-let fee=39.10;
-entries.push({type,fee,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
-renderLog();updateTotal();
-};
+      if(state.counters){
+        for(let k in state.counters){
+          const el = document.getElementById(k);
+          if(el) el.value = state.counters[k];
+        }
+      }
 
-window.addEntry=function(){
-if(submitted||!currentType)return;
-let R=parseFloat((amountInput.value||"").replace(/[$, ]/g,''))||0;
-if(!R)return;
-let fee=R;
-if(currentType==="ITA"){let f=(R*0.11+34.5)*1.15;if(R>=39.68)fee=Math.min(f,345);}
-if(currentType==="IR3"){let f=(R*0.11+49.5)*1.15;if(R>=56.93)fee=Math.min(f,402.5);}
-if(currentType==="REB"){let tier=R<500?45.99:R<2000?68.99:91.99;if(receiptAssist.checked)tier+=6.89;fee=Math.min(R,tier);}
-entries.push({type:currentType,fee,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
-amountInput.value="";
-renderLog();updateTotal();
-};
+      if(submitted) lockPage();
+    }
+    renderLog();
+    updateTotal();
+    checkYesterday();
+  }
 
-window.deleteEntry=function(i){
-if(submitted)return;
-entries.splice(i,1);
-renderLog();updateTotal();
-};
+  /* YESTERDAY CHECK */
+  function checkYesterday(){
+    const yesterdayISO = new Date(Date.now() - 86400000).toLocaleDateString("en-CA", { timeZone: TZ });
+    const yesterdayKey = `processing_${name}_${yesterdayISO}`;
+    const old = localStorage.getItem(yesterdayKey);
+    if(old){
+      const data = JSON.parse(old);
+      if(!data.submitted){
+        const banner = document.getElementById("warningBanner");
+        banner.textContent = "Yesterday was not submitted. Please notify Admin if required.";
+        banner.classList.remove("hidden");
+      }
+    }
+  }
 
-window.toggleLog=function(){
-logContainer.classList.toggle("hidden");
-toggleIcon.textContent=logContainer.classList.contains("hidden")?"▼":"▲";
-};
+  /* LOCK */
+  function lockPage(){
+    submitted = true;
+    document.querySelectorAll("button").forEach(b=>{
+      if(!b.classList.contains("tab")) b.disabled = true;
+    });
+  }
 
-window.submitDay=async function(){
-if(submitted)return;
-if(!confirm("Submit day? This cannot be edited."))return;
-await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors"});
-submitted=true;
-alert("Processing day successfully submitted.");
-};
+  /* FEE LOGIC */
+  function cleanAmount(v){
+    return parseFloat(String(v||"").replace(/[$, ]/g,'')) || 0;
+  }
 
-function renderLog(){
-logTable.innerHTML="";
-entries.forEach((e,i)=>{
-logTable.innerHTML+=`
-<tr>
-<td>${e.time}</td>
-<td>${e.type}</td>
-<td>$${e.fee.toFixed(2)}</td>
-<td>${!submitted?`<button onclick="deleteEntry(${i})">✕</button>`:''}</td>
-</tr>`;
-});
-entryCount.textContent=entries.length;
-}
+  function calculateFee(type, R, receiptAssistChecked){
+    if(type==="ITA"){
+      let f = (R*0.11 + 34.5) * 1.15;
+      if(R < 39.68) return R;
+      return f > 345 ? 345 : f;
+    }
+    if(type==="IR3"){
+      let f = (R*0.11 + 49.5) * 1.15;
+      if(R < 56.93) return R;
+      return f > 402.5 ? 402.5 : f;
+    }
+    if(type==="REB"){
+      let tier = R < 500 ? 45.99 : (R < 2000 ? 68.99 : 91.99);
+      if(receiptAssistChecked) tier += 6.89;
+      return R < tier ? R : tier;
+    }
+    return 0;
+  }
 
-function updateTotal(){
-totalFees.textContent=entries.reduce((s,e)=>s+e.fee,0).toFixed(2);
-}
+  /* GLOBALS FOR INLINE ONCLICK */
+  window.switchTab = function(tab, btn){
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("workTab").classList.toggle("hidden", tab !== "work");
+    document.getElementById("resourcesTab").classList.toggle("hidden", tab !== "resources");
+  };
 
-function tick(){
-clock.textContent=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
-}
-tick();setInterval(tick,1000);
+  window.adj = function(id, d){
+    if(submitted) return;
+    const el = document.getElementById(id);
+    let v = Math.max(0, Number(el.value||0) + d);
+    el.value = v;
+    saveState();
+  };
+
+  window.toggleLog = function(){
+    const logContainer = document.getElementById("logContainer");
+    const toggleIcon = document.getElementById("toggleIcon");
+    logContainer.classList.toggle("hidden");
+    toggleIcon.textContent = logContainer.classList.contains("hidden") ? "▼" : "▲";
+  };
+
+  window.selectType = function(e, type){
+    if(submitted) return;
+
+    currentType = type;
+
+    document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
+    e.target.classList.add("active");
+
+    document.getElementById("inputSection").classList.remove("hidden");
+
+    const receiptLabel = document.getElementById("receiptLabel");
+    const receiptAssist = document.getElementById("receiptAssist");
+
+    receiptLabel.classList.toggle("hidden", type !== "REB");
+    if(type !== "REB") receiptAssist.checked = false;
+
+    amountInput.focus();
+  };
+
+  window.autoAdd = function(type){
+    if(submitted) return;
+
+    // Using the fixed fee value you had in the prior version
+    const fee = 39.10;
+
+    entries.push({
+      type,
+      amount: null,
+      fee,
+      receiptAssist: false,
+      time: new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})
+    });
+
+    renderLog();
+    updateTotal();
+    saveState();
+  };
+
+  window.addEntry = function(){
+    if(submitted || !currentType) return;
+
+    const receiptAssistChecked = document.getElementById("receiptAssist").checked;
+    const R = cleanAmount(amountInput.value);
+    if(!R) return;
+
+    const fee = calculateFee(currentType, R, receiptAssistChecked);
+
+    entries.push({
+      type: currentType,
+      amount: R,
+      fee: fee,
+      receiptAssist: receiptAssistChecked,
+      time: new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})
+    });
+
+    // Original behaviour: filing count increments for ITA/IR3/REB
+    if(["ITA","IR3","REB"].includes(currentType)) window.adj("filing", 1);
+
+    amountInput.value = "";
+    renderLog();
+    updateTotal();
+    saveState();
+    amountInput.focus();
+  };
+
+  window.editEntry = function(index){
+    if(submitted) return;
+
+    const entry = entries[index];
+    if(!entry) return;
+
+    if(!["ITA","IR3","REB"].includes(entry.type)){
+      alert("Only ITA / IR3 / REB entries can be edited.");
+      return;
+    }
+
+    const v = prompt("Enter new refund amount:");
+    if(v === null) return;
+
+    const R = cleanAmount(v);
+    if(!R) return;
+
+    const fee = calculateFee(entry.type, R, entry.receiptAssist === true);
+
+    entry.amount = R;
+    entry.fee = fee;
+
+    renderLog();
+    updateTotal();
+    saveState();
+  };
+
+  window.deleteEntry = function(index){
+    if(submitted) return;
+
+    const entry = entries[index];
+    if(!entry) return;
+
+    // Keep original behaviour: reverse filing count if ITA/IR3/REB
+    if(["ITA","IR3","REB"].includes(entry.type)) window.adj("filing", -1);
+
+    entries.splice(index, 1);
+    renderLog();
+    updateTotal();
+    saveState();
+  };
+
+  function renderLog(){
+    const tbody = document.getElementById("logTable");
+    tbody.innerHTML = "";
+
+    const visible = entries.slice(-200);
+    visible.forEach((e, i)=>{
+      const realIndex = entries.length - visible.length + i;
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${e.time}</td>
+        <td>${e.type}</td>
+        <td>$${Number(e.fee||0).toFixed(2)}</td>
+        <td>${!submitted ? `
+          <button onclick="editEntry(${realIndex})">✎</button>
+          <button onclick="deleteEntry(${realIndex})">✕</button>
+        ` : ""}</td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    document.getElementById("entryCount").textContent = entries.length;
+  }
+
+  function updateTotal(){
+    const total = entries.reduce((s,e)=> s + Number(e.fee||0), 0);
+    document.getElementById("totalFees").textContent = total.toFixed(2);
+  }
+
+  /* SUBMIT TO BACKEND */
+  window.submitDay = async function(){
+    if(submitted) return;
+    if(!confirm("Submit day? This cannot be edited.")) return;
+
+    const formData = new URLSearchParams();
+    formData.append("action","submitProcessing");
+    formData.append("date",todayISO);
+    formData.append("staff",name);
+
+    formData.append("Filing",filing.value);
+    formData.append("Linking",linking.value);
+    formData.append("LinkedReview",linkedreview.value);
+    formData.append("Inbox",inbox.value);
+    formData.append("ExistingReview",existingreview.value);
+    formData.append("ProcessingReview",processingreview.value);
+    formData.append("Miscellaneous",misc.value);
+    formData.append("TotalFees",document.getElementById("totalFees").textContent);
+
+    try{
+      await fetch(WEB_APP_URL, { method:"POST", mode:"no-cors", body: formData });
+      lockPage();
+      saveState();
+      alert("Processing day successfully submitted.");
+    }catch(err){
+      alert("Network error. Data not submitted.");
+    }
+  };
+
+  /* CLOCK */
+  function tick(){
+    document.getElementById("clock").textContent =
+      new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+  }
+  tick(); setInterval(tick, 1000);
+
+  loadState();
 
 });
 </script>
