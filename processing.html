@@ -1,18 +1,19 @@
-<!-- PROCESSING.HTML (FULLY WIRED VERSION) -->
+<!-- PROCESSING.HTML (FULLY WIRED + FIXED VERSION) -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>My Refund — Processing Workspace</title>
-<!-- (Your full CSS remains exactly as you sent — unchanged for clarity) -->
 </head>
 
 <body>
-<!-- KEEP ALL YOUR EXISTING HTML EXACTLY AS YOU PROVIDED ABOVE -->
-<!-- NOTHING IN YOUR UI HAS BEEN REMOVED -->
+
+<!-- YOUR EXISTING UI HTML STAYS EXACTLY HERE -->
 
 <script>
+document.addEventListener("DOMContentLoaded", function(){
+
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
 
 const TZ="Pacific/Auckland";
@@ -25,13 +26,35 @@ let submitted=false;
 let currentType=null;
 
 /* ===============================
+   CACHE DOM ELEMENTS SAFELY
+=============================== */
+
+const staffNameLabel = document.getElementById("staffNameLabel");
+const helloName = document.getElementById("helloName");
+const todayDate = document.getElementById("todayDate");
+const clock = document.getElementById("clock");
+const logTable = document.getElementById("logTable");
+const entryCount = document.getElementById("entryCount");
+const totalFees = document.getElementById("totalFees");
+
+const filing = document.getElementById("filing");
+const linking = document.getElementById("linking");
+const linkedreview = document.getElementById("linkedreview");
+const inbox = document.getElementById("inbox");
+const existingreview = document.getElementById("existingreview");
+const processingreview = document.getElementById("processingreview");
+const misc = document.getElementById("misc");
+
+/* ===============================
    HEADER INIT
 =============================== */
 
-document.getElementById("staffNameLabel").textContent=name;
-document.getElementById("helloName").textContent=name;
-document.getElementById("todayDate").textContent=
+if(staffNameLabel) staffNameLabel.textContent=name;
+if(helloName) helloName.textContent=name;
+if(todayDate){
+todayDate.textContent=
 new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
+}
 
 /* ===============================
    SAVE / LOAD
@@ -42,13 +65,13 @@ localStorage.setItem(storageKey,JSON.stringify({
 entries,
 submitted,
 counters:{
-filing:filing.value,
-linking:linking.value,
-linkedreview:linkedreview.value,
-inbox:inbox.value,
-existingreview:existingreview.value,
-processingreview:processingreview.value,
-misc:misc.value
+filing:filing?.value||0,
+linking:linking?.value||0,
+linkedreview:linkedreview?.value||0,
+inbox:inbox?.value||0,
+existingreview:existingreview?.value||0,
+processingreview:processingreview?.value||0,
+misc:misc?.value||0
 }
 }));
 }
@@ -59,9 +82,12 @@ if(saved){
 const state=JSON.parse(saved);
 entries=state.entries||[];
 submitted=state.submitted||false;
+
 for(let k in state.counters){
-document.getElementById(k).value=state.counters[k];
+const el=document.getElementById(k);
+if(el) el.value=state.counters[k];
 }
+
 if(submitted) lockPage();
 }
 renderLog();
@@ -80,7 +106,7 @@ if(!b.classList.contains("tab")) b.disabled=true;
 }
 
 /* ===============================
-   FEE LOGIC (UNCHANGED)
+   FEE LOGIC
 =============================== */
 
 function cleanAmount(v){return parseFloat(v.replace(/[$, ]/g,''));}
@@ -98,7 +124,8 @@ return f>402.5?402.5:f;
 }
 if(type==="REB"){
 let tier=R<500?45.99:R<2000?68.99:91.99;
-if(receiptAssist.checked)tier+=6.89;
+let receiptAssist=document.getElementById("receiptAssist");
+if(receiptAssist?.checked) tier+=6.89;
 return R<tier?R:tier;
 }
 return 0;
@@ -108,10 +135,13 @@ return 0;
    ENTRY HANDLING
 =============================== */
 
-function addEntry(){
+window.addEntry=function(){
 if(submitted||!currentType)return;
-let R=cleanAmount(amountInput.value);
+
+let amountInput=document.getElementById("amountInput");
+let R=cleanAmount(amountInput?.value||"");
 if(!R)return;
+
 let fee=calculateFee(currentType,R);
 
 entries.push({
@@ -122,15 +152,18 @@ time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})
 
 if(["ITA","IR3","REB"].includes(currentType)) adj('filing',1);
 
-amountInput.value="";
+if(amountInput) amountInput.value="";
 renderLog();
 updateTotal();
 saveState();
 }
 
 function renderLog(){
+if(!logTable) return;
+
 logTable.innerHTML="";
 const visible=entries.slice(-200);
+
 visible.forEach((e,i)=>{
 const index=entries.length-visible.length+i;
 logTable.innerHTML+=`<tr>
@@ -140,10 +173,12 @@ logTable.innerHTML+=`<tr>
 <td>${!submitted?`<button onclick="deleteEntry(${index})">✕</button>`:''}</td>
 </tr>`;
 });
-entryCount.textContent=entries.length;
+
+if(entryCount) entryCount.textContent=entries.length;
 }
 
 function updateTotal(){
+if(!totalFees) return;
 totalFees.textContent=
 entries.reduce((s,e)=>s+e.fee,0).toFixed(2);
 }
@@ -154,6 +189,7 @@ entries.reduce((s,e)=>s+e.fee,0).toFixed(2);
 
 function adj(id,d){
 let el=document.getElementById(id);
+if(!el) return;
 el.value=Math.max(0,Number(el.value||0)+d);
 saveState();
 }
@@ -167,46 +203,33 @@ window.submitDay = async function(){
 if(submitted) return;
 if(!confirm("Submit day? This cannot be edited.")) return;
 
-const totalOutput =
-Number(filing.value||0)+
-Number(linking.value||0)+
-Number(linkedreview.value||0)+
-Number(inbox.value||0)+
-Number(existingreview.value||0)+
-Number(processingreview.value||0)+
-Number(misc.value||0);
-
 const formData = new URLSearchParams();
 
 formData.append("action","submitProcessing");
 formData.append("date",todayISO);
 formData.append("staff",name);
 
-formData.append("Filing",filing.value);
-formData.append("Linking",linking.value);
-formData.append("LinkedReview",linkedreview.value);
-formData.append("Inbox",inbox.value);
-formData.append("ExistingReview",existingreview.value);
-formData.append("ProcessingReview",processingreview.value);
-formData.append("Miscellaneous",misc.value);
-formData.append("TotalFees",totalFees.textContent);
+formData.append("Filing",filing?.value||0);
+formData.append("Linking",linking?.value||0);
+formData.append("LinkedReview",linkedreview?.value||0);
+formData.append("Inbox",inbox?.value||0);
+formData.append("ExistingReview",existingreview?.value||0);
+formData.append("ProcessingReview",processingreview?.value||0);
+formData.append("Miscellaneous",misc?.value||0);
+formData.append("TotalFees",totalFees?.textContent||0);
 
 try{
-
 await fetch(WEB_APP_URL,{
 method:"POST",
 mode:"no-cors",
 body:formData
 });
-
 lockPage();
 saveState();
 alert("Processing day successfully submitted.");
-
 }catch(err){
 alert("Network error. Data not submitted.");
 }
-
 };
 
 /* ===============================
@@ -214,12 +237,17 @@ alert("Network error. Data not submitted.");
 =============================== */
 
 function tick(){
+if(!clock) return;
 clock.textContent=
 new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
-tick();setInterval(tick,1000);
+tick();
+setInterval(tick,1000);
 
 loadState();
+
+});
 </script>
+
 </body>
 </html>
