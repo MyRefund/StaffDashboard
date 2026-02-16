@@ -80,8 +80,8 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 </div>
 
 <div class="wrap">
-
 <div id="workTab">
+
 <div id="warningBanner" class="banner hidden"></div>
 
 <div style="margin-bottom:28px;">
@@ -94,21 +94,7 @@ Hello, <span id="helloName"></span>
 </div>
 
 <div class="layout">
-
 <div>
-
-<div class="panel">
-<h3>Processing Output</h3>
-<div class="grid">
-<div class="item"><label>Filing</label><div class="controls"><button onclick="adj('filing',-1)">−</button><input id="filing" value="0"><button onclick="adj('filing',1)">+</button></div></div>
-<div class="item"><label>Linking</label><div class="controls"><button onclick="adj('linking',-1)">−</button><input id="linking" value="0"><button onclick="adj('linking',1)">+</button></div></div>
-<div class="item"><label>Linked Review</label><div class="controls"><button onclick="adj('linkedreview',-1)">−</button><input id="linkedreview" value="0"><button onclick="adj('linkedreview',1)">+</button></div></div>
-<div class="item"><label>Inbox</label><div class="controls"><button onclick="adj('inbox',-1)">−</button><input id="inbox" value="0"><button onclick="adj('inbox',1)">+</button></div></div>
-<div class="item"><label>Existing Review</label><div class="controls"><button onclick="adj('existingreview',-1)">−</button><input id="existingreview" value="0"><button onclick="adj('existingreview',1)">+</button></div></div>
-<div class="item"><label>Processing Review</label><div class="controls"><button onclick="adj('processingreview',-1)">−</button><input id="processingreview" value="0"><button onclick="adj('processingreview',1)">+</button></div></div>
-<div class="item"><label>Miscellaneous</label><div class="controls"><button onclick="adj('misc',-1)">−</button><input id="misc" value="0"><button onclick="adj('misc',1)">+</button></div></div>
-</div>
-</div>
 
 <div class="panel fee-panel">
 <h3>Return Fee Logging</h3>
@@ -123,7 +109,7 @@ Hello, <span id="helloName"></span>
 </div>
 
 <div id="inputSection" class="hidden">
-<input type="text" id="amountInput" placeholder="Enter amount">
+<input type="text" id="amountInput" placeholder="Refund Amount">
 <label id="receiptLabel" class="hidden">
 <input type="checkbox" id="receiptAssist"> Add receipt assistance
 </label>
@@ -155,27 +141,7 @@ Total Fees Today: $<span id="totalFees">0.00</span>
 </div>
 
 </div>
-
-<div>
-<div class="panel">
-<h3>Quick Contacts</h3>
-0800 80 89 89<br>
-info@myrefund.co.nz<br>
-myrefund.co.nz
 </div>
-</div>
-</div>
-
-</div>
-</div>
-
-<div id="resourcesTab" class="hidden">
-<div class="panel">
-<h3>Resources</h3>
-<p>No resources added yet.</p>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -197,12 +163,15 @@ staffNameLabel.textContent=name;
 helloName.textContent=name;
 todayDate.textContent=new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
 
+/* ENTER KEY SUPPORT */
+amountInput.addEventListener("keydown", function(e){
+if(e.key==="Enter"){
+e.preventDefault();
+addEntry();
+}
+});
+
 /* GLOBAL FUNCTIONS */
-window.adj=function(id,d){
-let el=document.getElementById(id);
-el.value=Math.max(0,Number(el.value||0)+d);
-saveState();
-};
 
 window.selectType=function(e,type){
 if(submitted)return;
@@ -211,13 +180,14 @@ document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
 e.target.classList.add("active");
 inputSection.classList.remove("hidden");
 receiptLabel.classList.toggle("hidden",type!=="REB");
+amountInput.focus();
 };
 
 window.autoAdd=function(type){
 if(submitted)return;
 let fee=39.10;
 entries.push({type,fee,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
-renderLog();updateTotal();saveState();
+renderLog();updateTotal();
 };
 
 window.addEntry=function(){
@@ -229,15 +199,14 @@ if(currentType==="ITA"){let f=(R*0.11+34.5)*1.15;if(R>=39.68)fee=Math.min(f,345)
 if(currentType==="IR3"){let f=(R*0.11+49.5)*1.15;if(R>=56.93)fee=Math.min(f,402.5);}
 if(currentType==="REB"){let tier=R<500?45.99:R<2000?68.99:91.99;if(receiptAssist.checked)tier+=6.89;fee=Math.min(R,tier);}
 entries.push({type:currentType,fee,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
-if(["ITA","IR3","REB"].includes(currentType)) adj('filing',1);
 amountInput.value="";
-renderLog();updateTotal();saveState();
+renderLog();updateTotal();
 };
 
 window.deleteEntry=function(i){
 if(submitted)return;
 entries.splice(i,1);
-renderLog();updateTotal();saveState();
+renderLog();updateTotal();
 };
 
 window.toggleLog=function(){
@@ -245,31 +214,10 @@ logContainer.classList.toggle("hidden");
 toggleIcon.textContent=logContainer.classList.contains("hidden")?"▼":"▲";
 };
 
-window.switchTab=function(tab,btn){
-document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-btn.classList.add("active");
-workTab.classList.toggle("hidden",tab!=="work");
-resourcesTab.classList.toggle("hidden",tab!=="resources");
-};
-
 window.submitDay=async function(){
 if(submitted)return;
 if(!confirm("Submit day? This cannot be edited."))return;
-
-const formData=new URLSearchParams();
-formData.append("action","submitProcessing");
-formData.append("date",todayISO);
-formData.append("staff",name);
-formData.append("Filing",filing.value);
-formData.append("Linking",linking.value);
-formData.append("LinkedReview",linkedreview.value);
-formData.append("Inbox",inbox.value);
-formData.append("ExistingReview",existingreview.value);
-formData.append("ProcessingReview",processingreview.value);
-formData.append("Miscellaneous",misc.value);
-formData.append("TotalFees",totalFees.textContent);
-
-await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:formData});
+await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors"});
 submitted=true;
 alert("Processing day successfully submitted.");
 };
@@ -291,21 +239,6 @@ entryCount.textContent=entries.length;
 function updateTotal(){
 totalFees.textContent=entries.reduce((s,e)=>s+e.fee,0).toFixed(2);
 }
-
-function saveState(){
-localStorage.setItem(storageKey,JSON.stringify({entries,submitted}));
-}
-
-function loadState(){
-const saved=localStorage.getItem(storageKey);
-if(saved){
-const data=JSON.parse(saved);
-entries=data.entries||[];
-submitted=data.submitted||false;
-}
-renderLog();updateTotal();
-}
-loadState();
 
 function tick(){
 clock.textContent=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
