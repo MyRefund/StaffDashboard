@@ -702,6 +702,7 @@ document.addEventListener("DOMContentLoaded", function(){
     formData.append("ProcessingReview",processingreview.value);
     formData.append("Miscellaneous",misc.value);
     formData.append("TotalFees",document.getElementById("totalFees").textContent);
+    formData.append("feeEntries", JSON.stringify(entries));
 
     try{
       await fetch(WEB_APP_URL, { method:"POST", mode:"no-cors", body: formData });
