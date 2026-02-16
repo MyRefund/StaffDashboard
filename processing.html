@@ -9,8 +9,154 @@
 </head>
 
 <body>
-<!-- KEEP ALL YOUR EXISTING HTML EXACTLY AS YOU PROVIDED ABOVE -->
-<!-- NOTHING IN YOUR UI HAS BEEN REMOVED -->
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <strong id="staffNameLabel">Processing</strong>
+      </div>
+      <div class="clock" id="clock"></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- Greeting -->
+    <div class="hello">
+      Hello, <span id="helloName"></span>
+    </div>
+    <div class="subline">
+      <span id="todayDate"></span> · Division: Processing
+    </div>
+
+    <div class="layout">
+
+      <!-- LEFT COLUMN -->
+      <div>
+
+        <!-- Filing Counter -->
+        <div class="panel">
+          <h3>Filing</h3>
+          <div class="controls">
+            <button onclick="adj('filing',-1)">−</button>
+            <input id="filing" value="0">
+            <button onclick="adj('filing',1)">+</button>
+          </div>
+        </div>
+
+        <!-- Linking -->
+        <div class="panel">
+          <h3>Linking</h3>
+          <div class="controls">
+            <button onclick="adj('linking',-1)">−</button>
+            <input id="linking" value="0">
+            <button onclick="adj('linking',1)">+</button>
+          </div>
+        </div>
+
+        <!-- Linked Review -->
+        <div class="panel">
+          <h3>Linked Review</h3>
+          <div class="controls">
+            <button onclick="adj('linkedreview',-1)">−</button>
+            <input id="linkedreview" value="0">
+            <button onclick="adj('linkedreview',1)">+</button>
+          </div>
+        </div>
+
+        <!-- Inbox -->
+        <div class="panel">
+          <h3>Inbox</h3>
+          <div class="controls">
+            <button onclick="adj('inbox',-1)">−</button>
+            <input id="inbox" value="0">
+            <button onclick="adj('inbox',1)">+</button>
+          </div>
+        </div>
+
+        <!-- Existing Review -->
+        <div class="panel">
+          <h3>Existing Review</h3>
+          <div class="controls">
+            <button onclick="adj('existingreview',-1)">−</button>
+            <input id="existingreview" value="0">
+            <button onclick="adj('existingreview',1)">+</button>
+          </div>
+        </div>
+
+        <!-- Processing Review -->
+        <div class="panel">
+          <h3>Processing Review</h3>
+          <div class="controls">
+            <button onclick="adj('processingreview',-1)">−</button>
+            <input id="processingreview" value="0">
+            <button onclick="adj('processingreview',1)">+</button>
+          </div>
+        </div>
+
+        <!-- Misc -->
+        <div class="panel">
+          <h3>Misc</h3>
+          <div class="controls">
+            <button onclick="adj('misc',-1)">−</button>
+            <input id="misc" value="0">
+            <button onclick="adj('misc',1)">+</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MIDDLE COLUMN -->
+      <div>
+
+        <!-- Add Entry -->
+        <div class="panel">
+          <h3>Add Fee Entry</h3>
+          <select onchange="currentType=this.value">
+            <option value="">Select Type</option>
+            <option value="ITA">ITA</option>
+            <option value="IR3">IR3</option>
+            <option value="REB">REB</option>
+          </select>
+          <input id="amountInput" placeholder="$0.00">
+          <label><input type="checkbox" id="receiptAssist"> Receipt Assist</label>
+          <button onclick="addEntry()">Add</button>
+        </div>
+
+        <!-- Log -->
+        <div class="panel">
+          <h3>Entries (<span id="entryCount">0</span>)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Fee</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="logTable"></tbody>
+          </table>
+        </div>
+
+        <!-- Total -->
+        <div class="panel">
+          <h3>Total Fees</h3>
+          $<span id="totalFees">0.00</span>
+        </div>
+
+        <!-- Submit -->
+        <div class="panel">
+          <button onclick="submitDay()">Submit & Finish Day</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
