@@ -427,12 +427,52 @@ function updateOutbound(){
   outbound.value=manualOutbound+inc+q+a2aCall;
 }
 
-window.submitDay=function(){
-  if(submitted)return;
-  if(!confirm("Submit & Finish Day? This cannot be edited."))return;
-  lockPage();
-  saveState();
-  alert("Day submitted.");
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyt2gn-P_9kjYpWjQytcs9G_vVAi9ZidRpH0PL0yzyIj8iuZsV090TROv2D0eO8CetC/exec";
+
+window.submitDay = async function(){
+
+  if(submitted) return;
+
+  if(!confirm("Submit & Finish Day? This cannot be edited.")) return;
+
+  const payload = {
+    action: "submitCSR",
+    date: todayISO,
+    staff: name,
+    Inbound: inbound.value,
+    Outbound: outbound.value,
+    Chat: chat.value,
+    Emails: 0,
+    A2A: 0,
+    Unverified: 0,
+    INC_C_Calling: 0,
+    Question_Calling: 0,
+    A2A_Calling: 0,
+    Delinks: 0,
+    Cancellations: 0
+  };
+
+  try {
+
+    const res = await fetch(WEB_APP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await res.json();
+
+    if(result.ok){
+      lockPage();
+      saveState();
+      alert("Day successfully submitted to system.");
+    } else {
+      alert("Submission failed: " + result.error);
+    }
+
+  } catch (err) {
+    alert("Network error. Data not submitted.");
+  }
 };
 
 loadState();
