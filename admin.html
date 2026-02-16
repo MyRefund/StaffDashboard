@@ -18,15 +18,12 @@
   --radius:16px;
   --shadow:0 14px 40px rgba(0,0,0,.18);
 }
-
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color:var(--text);
 }
-
 .page{
   min-height:100vh;
   background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
@@ -38,7 +35,6 @@ body{
   color:#fff;
   padding:14px 24px;
 }
-
 .header-inner{
   max-width:1200px;
   margin:0 auto;
@@ -46,32 +42,26 @@ body{
   justify-content:space-between;
   align-items:center;
 }
-
 .brand{
   display:flex;
   align-items:center;
   gap:14px;
 }
-
 .brand img{height:26px}
-
 .brand-text strong{
   font-size:15px;
   font-weight:900;
 }
-
 .brand-text span{
   font-size:12px;
   opacity:.9;
   font-weight:700;
 }
-
 .header-right{
   display:flex;
   align-items:center;
   gap:14px;
 }
-
 .dashboard-btn{
   border-radius:999px;
   padding:8px 16px;
@@ -82,11 +72,9 @@ body{
   color:#fff;
   cursor:pointer;
 }
-
 .dashboard-btn:hover{
   background:rgba(255,255,255,.15);
 }
-
 .clock{
   font-weight:900;
   font-size:14px;
@@ -98,14 +86,12 @@ body{
   margin:0 auto;
   padding:28px 24px 60px;
 }
-
 .tabs{
   display:flex;
   gap:8px;
   margin-bottom:24px;
   flex-wrap:wrap;
 }
-
 .tab{
   padding:8px 16px;
   border-radius:999px;
@@ -115,16 +101,13 @@ body{
   font-size:13px;
   cursor:pointer;
 }
-
 .tab.active{
   background:var(--g0);
   color:#fff;
   border-color:var(--g0);
 }
-
 .tab-section{display:none}
 .tab-section.active{display:block}
-
 .panel{
   background:rgba(255,255,255,.95);
   border-radius:var(--radius);
@@ -132,14 +115,12 @@ body{
   padding:22px;
   margin-bottom:24px;
 }
-
 .panel h3{
   margin:0 0 18px;
   font-size:16px;
   font-weight:900;
   color:var(--g0);
 }
-
 .notice{
   padding:14px;
   border-radius:12px;
@@ -148,13 +129,11 @@ body{
   font-weight:900;
   margin-bottom:16px;
 }
-
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:16px;
 }
-
 input, select, textarea{
   width:100%;
   padding:10px;
@@ -163,9 +142,7 @@ input, select, textarea{
   margin-bottom:14px;
   font-weight:700;
 }
-
 textarea{min-height:90px}
-
 .staff-card{
   border:1px solid var(--border);
   border-radius:14px;
@@ -203,51 +180,26 @@ textarea{min-height:90px}
   <button class="tab" onclick="showTab('settings')">Settings</button>
 </div>
 
-<!-- ALLOCATION -->
-<div id="allocation" class="tab-section active">
-  <div class="panel">
-    <h3>CSR Work Allocation</h3>
-
-    <div class="notice">
-      🚧 Under Construction – Allocation logic not yet connected to backend.
-    </div>
-
-    <label>CSR Staff Member</label>
-    <select>
-      <option>Emma</option>
-      <option>Drew</option>
-      <option>Maddy</option>
-      <option>Sophie</option>
-    </select>
-
-    <label>Date</label>
-    <input type="date">
-
-    <label>Assigned Work</label>
-    <textarea placeholder="Example: A2A, Emails, INC/C Calling"></textarea>
-  </div>
-</div>
-
 <!-- DAILY ENVIRONMENT -->
 <div id="environment" class="tab-section">
   <div class="panel">
     <h3>Start of Day</h3>
 
     <label>Date</label>
-    <input type="date">
+    <input type="date" id="env_date">
 
     <div class="grid">
       <div>
         <label>Emails</label>
-        <input type="number">
+        <input type="number" id="env_start_emails">
       </div>
       <div>
         <label>A2A</label>
-        <input type="number">
+        <input type="number" id="env_start_a2a">
       </div>
       <div>
         <label>Unverified</label>
-        <input type="number">
+        <input type="number" id="env_start_unverified">
       </div>
     </div>
   </div>
@@ -258,79 +210,20 @@ textarea{min-height:90px}
     <div class="grid">
       <div>
         <label>Missed Calls</label>
-        <input type="number">
+        <input type="number" id="env_end_calls">
       </div>
       <div>
         <label>Missed Chats</label>
-        <input type="number">
+        <input type="number" id="env_end_chats">
       </div>
     </div>
   </div>
-</div>
 
-<!-- ROSTER -->
-<div id="roster" class="tab-section">
   <div class="panel">
-    <h3>Weekly Roster (Example View)</h3>
-
-    <div class="notice">
-      🚧 Under Construction – Roster visualisation and backend sync coming in Phase 2.
-    </div>
-
-    <label>Week Starting (Monday)</label>
-    <input type="date">
-
-    <div class="grid">
-      <div class="staff-card">
-        <strong>Emma</strong>
-        <div style="color:var(--muted);font-weight:800;">Monday–Friday 9:00am–5:00pm</div>
-        <div style="color:var(--muted);font-weight:800;">Breaks: 10:00 · 12:30 · 3:00</div>
-      </div>
-
-      <div class="staff-card">
-        <strong>Drew</strong>
-        <div style="color:var(--muted);font-weight:800;">Monday–Friday 9:00am–5:00pm</div>
-        <div style="color:var(--muted);font-weight:800;">Breaks: 10:10 · 12:40 · 3:10</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- SETTINGS -->
-<div id="settings" class="tab-section">
-  <div class="panel">
-    <h3>Staff List</h3>
-
-    <div class="grid">
-      <div class="staff-card">
-        <strong>Emma</strong>
-        <div style="color:var(--muted);font-weight:800;">CSR</div>
-      </div>
-      <div class="staff-card">
-        <strong>Drew</strong>
-        <div style="color:var(--muted);font-weight:800;">CSR</div>
-      </div>
-      <div class="staff-card">
-        <strong>Maddy</strong>
-        <div style="color:var(--muted);font-weight:800;">CSR</div>
-      </div>
-      <div class="staff-card">
-        <strong>Sophie</strong>
-        <div style="color:var(--muted);font-weight:800;">CSR</div>
-      </div>
-      <div class="staff-card">
-        <strong>George</strong>
-        <div style="color:var(--muted);font-weight:800;">Processing</div>
-      </div>
-      <div class="staff-card">
-        <strong>Merin</strong>
-        <div style="color:var(--muted);font-weight:800;">Processing</div>
-      </div>
-    </div>
-
-    <div style="margin-top:18px; font-size:13px; color:var(--muted); font-weight:800;">
-      Staff are currently hard-coded for system stability.
-    </div>
+    <button onclick="submitEnvironment()" 
+            style="width:100%;border-radius:14px;padding:14px;font-weight:900;font-size:15px;border:none;background:var(--g0);color:#fff;cursor:pointer;">
+      Submit Daily Environment
+    </button>
   </div>
 </div>
 
@@ -338,6 +231,35 @@ textarea{min-height:90px}
 </div>
 
 <script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
+
+function submitEnvironment(){
+
+  const date = document.getElementById("env_date").value;
+
+  if(!date){
+    alert("Please select a date.");
+    return;
+  }
+
+  const formData = new URLSearchParams();
+  formData.append("action","submitEnvironment");
+  formData.append("date", date);
+  formData.append("Start_Emails", document.getElementById("env_start_emails").value || 0);
+  formData.append("Start_A2A", document.getElementById("env_start_a2a").value || 0);
+  formData.append("Start_Unverified", document.getElementById("env_start_unverified").value || 0);
+  formData.append("End_Missed_Calls", document.getElementById("env_end_calls").value || 0);
+  formData.append("End_Missed_Chats", document.getElementById("env_end_chats").value || 0);
+
+  fetch(WEB_APP_URL,{
+    method:"POST",
+    mode:"no-cors",
+    body:formData
+  });
+
+  alert("Daily environment logged successfully.");
+}
+
 function showTab(id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-section').forEach(s=>s.classList.remove('active'));
