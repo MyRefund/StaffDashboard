@@ -80,8 +80,8 @@ th{color:var(--muted);font-weight:900;text-align:left;}
 </div>
 
 <div class="wrap">
-<div id="workTab">
 
+<div id="workTab">
 <div id="warningBanner" class="banner hidden"></div>
 
 <div style="margin-bottom:28px;">
@@ -112,10 +112,14 @@ Hello, <span id="helloName"></span>
 
 <div class="panel fee-panel">
 <h3>Return Fee Logging</h3>
+
 <div class="button-grid">
 <button class="type-btn" onclick="selectType(event,'ITA')">ITA</button>
 <button class="type-btn" onclick="selectType(event,'IR3')">IR3</button>
 <button class="type-btn" onclick="selectType(event,'REB')">REB</button>
+<button class="type-btn" onclick="autoAdd('AA')">AA</button>
+<button class="type-btn" onclick="autoAdd('R3P')">R3P</button>
+<button class="type-btn" onclick="autoAdd('OP')">OP</button>
 </div>
 
 <div id="inputSection" class="hidden">
@@ -160,6 +164,7 @@ info@myrefund.co.nz<br>
 myrefund.co.nz
 </div>
 </div>
+</div>
 
 </div>
 </div>
@@ -193,13 +198,14 @@ helloName.textContent=name;
 todayDate.textContent=new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
 
 /* GLOBAL FUNCTIONS */
-
 window.adj=function(id,d){
 let el=document.getElementById(id);
 el.value=Math.max(0,Number(el.value||0)+d);
+saveState();
 };
 
 window.selectType=function(e,type){
+if(submitted)return;
 currentType=type;
 document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
 e.target.classList.add("active");
@@ -207,8 +213,15 @@ inputSection.classList.remove("hidden");
 receiptLabel.classList.toggle("hidden",type!=="REB");
 };
 
+window.autoAdd=function(type){
+if(submitted)return;
+let fee=39.10;
+entries.push({type,fee,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
+renderLog();updateTotal();saveState();
+};
+
 window.addEntry=function(){
-if(!currentType)return;
+if(submitted||!currentType)return;
 let R=parseFloat((amountInput.value||"").replace(/[$, ]/g,''))||0;
 if(!R)return;
 let fee=R;
@@ -216,13 +229,15 @@ if(currentType==="ITA"){let f=(R*0.11+34.5)*1.15;if(R>=39.68)fee=Math.min(f,345)
 if(currentType==="IR3"){let f=(R*0.11+49.5)*1.15;if(R>=56.93)fee=Math.min(f,402.5);}
 if(currentType==="REB"){let tier=R<500?45.99:R<2000?68.99:91.99;if(receiptAssist.checked)tier+=6.89;fee=Math.min(R,tier);}
 entries.push({type:currentType,fee,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
+if(["ITA","IR3","REB"].includes(currentType)) adj('filing',1);
 amountInput.value="";
-renderLog();updateTotal();
+renderLog();updateTotal();saveState();
 };
 
 window.deleteEntry=function(i){
+if(submitted)return;
 entries.splice(i,1);
-renderLog();updateTotal();
+renderLog();updateTotal();saveState();
 };
 
 window.toggleLog=function(){
@@ -230,10 +245,33 @@ logContainer.classList.toggle("hidden");
 toggleIcon.textContent=logContainer.classList.contains("hidden")?"▼":"▲";
 };
 
+window.switchTab=function(tab,btn){
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+btn.classList.add("active");
+workTab.classList.toggle("hidden",tab!=="work");
+resourcesTab.classList.toggle("hidden",tab!=="resources");
+};
+
 window.submitDay=async function(){
-if(!confirm("Submit day?"))return;
-await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors"});
-alert("Day submitted.");
+if(submitted)return;
+if(!confirm("Submit day? This cannot be edited."))return;
+
+const formData=new URLSearchParams();
+formData.append("action","submitProcessing");
+formData.append("date",todayISO);
+formData.append("staff",name);
+formData.append("Filing",filing.value);
+formData.append("Linking",linking.value);
+formData.append("LinkedReview",linkedreview.value);
+formData.append("Inbox",inbox.value);
+formData.append("ExistingReview",existingreview.value);
+formData.append("ProcessingReview",processingreview.value);
+formData.append("Miscellaneous",misc.value);
+formData.append("TotalFees",totalFees.textContent);
+
+await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:formData});
+submitted=true;
+alert("Processing day successfully submitted.");
 };
 
 function renderLog(){
@@ -244,7 +282,7 @@ logTable.innerHTML+=`
 <td>${e.time}</td>
 <td>${e.type}</td>
 <td>$${e.fee.toFixed(2)}</td>
-<td><button onclick="deleteEntry(${i})">✕</button></td>
+<td>${!submitted?`<button onclick="deleteEntry(${i})">✕</button>`:''}</td>
 </tr>`;
 });
 entryCount.textContent=entries.length;
@@ -253,6 +291,21 @@ entryCount.textContent=entries.length;
 function updateTotal(){
 totalFees.textContent=entries.reduce((s,e)=>s+e.fee,0).toFixed(2);
 }
+
+function saveState(){
+localStorage.setItem(storageKey,JSON.stringify({entries,submitted}));
+}
+
+function loadState(){
+const saved=localStorage.getItem(storageKey);
+if(saved){
+const data=JSON.parse(saved);
+entries=data.entries||[];
+submitted=data.submitted||false;
+}
+renderLog();updateTotal();
+}
+loadState();
 
 function tick(){
 clock.textContent=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
