@@ -48,20 +48,9 @@ body{
   gap:14px;
 }
 .brand img{height:26px}
-.brand-text strong{
-  font-size:15px;
-  font-weight:900;
-}
-.brand-text span{
-  font-size:12px;
-  opacity:.9;
-  font-weight:700;
-}
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
+.brand-text strong{font-size:15px;font-weight:900;}
+.brand-text span{font-size:12px;opacity:.9;font-weight:700;}
+.header-right{display:flex;align-items:center;gap:14px;}
 .dashboard-btn{
   border-radius:999px;
   padding:8px 16px;
@@ -72,26 +61,12 @@ body{
   color:#fff;
   cursor:pointer;
 }
-.dashboard-btn:hover{
-  background:rgba(255,255,255,.15);
-}
-.clock{
-  font-weight:900;
-  font-size:14px;
-}
+.dashboard-btn:hover{background:rgba(255,255,255,.15);}
+.clock{font-weight:900;font-size:14px;}
 
 /* CONTENT */
-.wrap{
-  max-width:1200px;
-  margin:0 auto;
-  padding:28px 24px 60px;
-}
-.tabs{
-  display:flex;
-  gap:8px;
-  margin-bottom:24px;
-  flex-wrap:wrap;
-}
+.wrap{max-width:1200px;margin:0 auto;padding:28px 24px 60px;}
+.tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
 .tab{
   padding:8px 16px;
   border-radius:999px;
@@ -101,13 +76,10 @@ body{
   font-size:13px;
   cursor:pointer;
 }
-.tab.active{
-  background:var(--g0);
-  color:#fff;
-  border-color:var(--g0);
-}
+.tab.active{background:var(--g0);color:#fff;border-color:var(--g0);}
 .tab-section{display:none}
 .tab-section.active{display:block}
+
 .panel{
   background:rgba(255,255,255,.95);
   border-radius:var(--radius);
@@ -149,6 +121,17 @@ textarea{min-height:90px}
   padding:16px;
   background:#fff;
 }
+.submit-btn{
+  width:100%;
+  border-radius:14px;
+  padding:14px;
+  font-weight:900;
+  font-size:15px;
+  border:none;
+  background:var(--g0);
+  color:#fff;
+  cursor:pointer;
+}
 </style>
 </head>
 
@@ -180,6 +163,27 @@ textarea{min-height:90px}
   <button class="tab" onclick="showTab('settings')">Settings</button>
 </div>
 
+<!-- ALLOCATION -->
+<div id="allocation" class="tab-section active">
+  <div class="panel">
+    <h3>CSR Work Allocation</h3>
+    <div class="notice">
+      🚧 Under Construction – Allocation logic not yet connected to backend.
+    </div>
+    <label>CSR Staff Member</label>
+    <select>
+      <option>Emma</option>
+      <option>Drew</option>
+      <option>Maddy</option>
+      <option>Sophie</option>
+    </select>
+    <label>Date</label>
+    <input type="date">
+    <label>Assigned Work</label>
+    <textarea placeholder="Example: A2A, Emails, INC/C Calling"></textarea>
+  </div>
+</div>
+
 <!-- DAILY ENVIRONMENT -->
 <div id="environment" class="tab-section">
   <div class="panel">
@@ -202,6 +206,8 @@ textarea{min-height:90px}
         <input type="number" id="env_start_unverified">
       </div>
     </div>
+
+    <button class="submit-btn" onclick="submitEnvironmentStart()">Submit Start of Day</button>
   </div>
 
   <div class="panel">
@@ -217,13 +223,35 @@ textarea{min-height:90px}
         <input type="number" id="env_end_chats">
       </div>
     </div>
-  </div>
 
+    <button class="submit-btn" onclick="submitEnvironmentEnd()">Submit End of Day</button>
+  </div>
+</div>
+
+<!-- ROSTER -->
+<div id="roster" class="tab-section">
   <div class="panel">
-    <button onclick="submitEnvironment()" 
-            style="width:100%;border-radius:14px;padding:14px;font-weight:900;font-size:15px;border:none;background:var(--g0);color:#fff;cursor:pointer;">
-      Submit Daily Environment
-    </button>
+    <h3>Weekly Roster (Example View)</h3>
+    <div class="notice">
+      🚧 Under Construction – Roster visualisation and backend sync coming in Phase 2.
+    </div>
+    <label>Week Starting (Monday)</label>
+    <input type="date">
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div id="settings" class="tab-section">
+  <div class="panel">
+    <h3>Staff List</h3>
+    <div class="grid">
+      <div class="staff-card"><strong>Emma</strong><div style="color:var(--muted);font-weight:800;">CSR</div></div>
+      <div class="staff-card"><strong>Drew</strong><div style="color:var(--muted);font-weight:800;">CSR</div></div>
+      <div class="staff-card"><strong>Maddy</strong><div style="color:var(--muted);font-weight:800;">CSR</div></div>
+      <div class="staff-card"><strong>Sophie</strong><div style="color:var(--muted);font-weight:800;">CSR</div></div>
+      <div class="staff-card"><strong>George</strong><div style="color:var(--muted);font-weight:800;">Processing</div></div>
+      <div class="staff-card"><strong>Merin</strong><div style="color:var(--muted);font-weight:800;">Processing</div></div>
+    </div>
   </div>
 </div>
 
@@ -231,33 +259,37 @@ textarea{min-height:90px}
 </div>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
+const WEB_APP_URL="https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
 
-function submitEnvironment(){
+/* AUTO DATE */
+document.addEventListener("DOMContentLoaded",()=>{
+  const today=new Date().toLocaleDateString("en-CA",{timeZone:"Pacific/Auckland"});
+  document.getElementById("env_date").value=today;
+});
 
-  const date = document.getElementById("env_date").value;
+/* START SUBMIT */
+function submitEnvironmentStart(){
+  const formData=new URLSearchParams();
+  formData.append("action","submitEnvironmentStart");
+  formData.append("date",env_date.value);
+  formData.append("Start_Emails",env_start_emails.value||0);
+  formData.append("Start_A2A",env_start_a2a.value||0);
+  formData.append("Start_Unverified",env_start_unverified.value||0);
 
-  if(!date){
-    alert("Please select a date.");
-    return;
-  }
+  fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:formData});
+  alert("Start of Day logged.");
+}
 
-  const formData = new URLSearchParams();
-  formData.append("action","submitEnvironment");
-  formData.append("date", date);
-  formData.append("Start_Emails", document.getElementById("env_start_emails").value || 0);
-  formData.append("Start_A2A", document.getElementById("env_start_a2a").value || 0);
-  formData.append("Start_Unverified", document.getElementById("env_start_unverified").value || 0);
-  formData.append("End_Missed_Calls", document.getElementById("env_end_calls").value || 0);
-  formData.append("End_Missed_Chats", document.getElementById("env_end_chats").value || 0);
+/* END SUBMIT */
+function submitEnvironmentEnd(){
+  const formData=new URLSearchParams();
+  formData.append("action","submitEnvironmentEnd");
+  formData.append("date",env_date.value);
+  formData.append("End_Missed_Calls",env_end_calls.value||0);
+  formData.append("End_Missed_Chats",env_end_chats.value||0);
 
-  fetch(WEB_APP_URL,{
-    method:"POST",
-    mode:"no-cors",
-    body:formData
-  });
-
-  alert("Daily environment logged successfully.");
+  fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:formData});
+  alert("End of Day logged.");
 }
 
 function showTab(id){
@@ -266,13 +298,9 @@ function showTab(id){
   document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
   document.getElementById(id).classList.add('active');
 }
-
-function goDashboard(){
-  window.location.href="index.html";
-}
-
+function goDashboard(){window.location.href="index.html";}
 function tick(){
-  document.getElementById("clock").textContent =
+  document.getElementById("clock").textContent=
     new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 tick(); setInterval(tick,1000);
