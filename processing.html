@@ -13,7 +13,7 @@
 <!-- NOTHING IN YOUR UI HAS BEEN REMOVED -->
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function(){
 
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
 
@@ -27,9 +27,9 @@ let submitted=false;
 let currentType=null;
 
 /* ===============================
-   DOM REFS (SAFE)
-   (Does NOT change your HTML at all — just avoids null crashes)
+   SAFE DOM REFERENCES
 =============================== */
+
 const staffNameLabel = document.getElementById("staffNameLabel");
 const helloName = document.getElementById("helloName");
 const todayDate = document.getElementById("todayDate");
@@ -52,218 +52,228 @@ const receiptAssist = document.getElementById("receiptAssist");
 /* ===============================
    HEADER INIT
 =============================== */
-if (staffNameLabel) staffNameLabel.textContent=name;
-if (helloName) helloName.textContent=name;
-if (todayDate) {
-  todayDate.textContent =
-    new Date().toLocaleDateString("en-NZ",{
-      weekday:"long",
-      day:"numeric",
-      month:"long",
-      year:"numeric",
-      timeZone:TZ
-    });
+
+if(staffNameLabel) staffNameLabel.textContent=name;
+if(helloName) helloName.textContent=name;
+if(todayDate){
+todayDate.textContent=
+new Date().toLocaleDateString("en-NZ",{
+weekday:"long",
+day:"numeric",
+month:"long",
+year:"numeric",
+timeZone:TZ
+});
 }
 
 /* ===============================
    SAVE / LOAD
 =============================== */
+
 function saveState(){
-  localStorage.setItem(storageKey,JSON.stringify({
-    entries,
-    submitted,
-    counters:{
-      filing: filing?.value ?? 0,
-      linking: linking?.value ?? 0,
-      linkedreview: linkedreview?.value ?? 0,
-      inbox: inbox?.value ?? 0,
-      existingreview: existingreview?.value ?? 0,
-      processingreview: processingreview?.value ?? 0,
-      misc: misc?.value ?? 0
-    }
-  }));
+localStorage.setItem(storageKey,JSON.stringify({
+entries,
+submitted,
+counters:{
+filing: filing?.value ?? 0,
+linking: linking?.value ?? 0,
+linkedreview: linkedreview?.value ?? 0,
+inbox: inbox?.value ?? 0,
+existingreview: existingreview?.value ?? 0,
+processingreview: processingreview?.value ?? 0,
+misc: misc?.value ?? 0
+}
+}));
 }
 
 function loadState(){
-  const saved=localStorage.getItem(storageKey);
-  if(saved){
-    const state=JSON.parse(saved);
-    entries=state.entries||[];
-    submitted=state.submitted||false;
+const saved=localStorage.getItem(storageKey);
+if(saved){
+const state=JSON.parse(saved);
+entries=state.entries||[];
+submitted=state.submitted||false;
 
-    if(state.counters){
-      for(let k in state.counters){
-        const el=document.getElementById(k);
-        if(el) el.value=state.counters[k];
-      }
-    }
+if(state.counters){
+for(let k in state.counters){
+const el=document.getElementById(k);
+if(el) el.value=state.counters[k];
+}
+}
 
-    if(submitted) lockPage();
-  }
-  renderLog();
-  updateTotal();
+if(submitted) lockPage();
+}
+renderLog();
+updateTotal();
 }
 
 /* ===============================
    LOCK
 =============================== */
+
 function lockPage(){
-  submitted=true;
-  document.querySelectorAll("button").forEach(b=>{
-    if(!b.classList.contains("tab")) b.disabled=true;
-  });
+submitted=true;
+document.querySelectorAll("button").forEach(b=>{
+if(!b.classList.contains("tab")) b.disabled=true;
+});
 }
 
 /* ===============================
    FEE LOGIC (UNCHANGED)
 =============================== */
+
 function cleanAmount(v){
-  return parseFloat(String(v ?? "").replace(/[$, ]/g,'')) || 0;
+return parseFloat(String(v||"").replace(/[$, ]/g,'')) || 0;
 }
 
 function calculateFee(type,R){
-  if(type==="ITA"){
-    let f=(R*0.11+34.5)*1.15;
-    if(R<39.68)return R;
-    return f>345?345:f;
-  }
-  if(type==="IR3"){
-    let f=(R*0.11+49.5)*1.15;
-    if(R<56.93)return R;
-    return f>402.5?402.5:f;
-  }
-  if(type==="REB"){
-    let tier=R<500?45.99:R<2000?68.99:91.99;
-    if(receiptAssist && receiptAssist.checked) tier+=6.89;
-    return R<tier?R:tier;
-  }
-  return 0;
+if(type==="ITA"){
+let f=(R*0.11+34.5)*1.15;
+if(R<39.68)return R;
+return f>345?345:f;
+}
+if(type==="IR3"){
+let f=(R*0.11+49.5)*1.15;
+if(R<56.93)return R;
+return f>402.5?402.5:f;
+}
+if(type==="REB"){
+let tier=R<500?45.99:R<2000?68.99:91.99;
+if(receiptAssist && receiptAssist.checked)tier+=6.89;
+return R<tier?R:tier;
+}
+return 0;
 }
 
 /* ===============================
    ENTRY HANDLING
 =============================== */
-window.addEntry = function addEntry(){
-  if(submitted||!currentType)return;
-  const R=cleanAmount(amountInput?.value);
-  if(!R)return;
-  const fee=calculateFee(currentType,R);
 
-  entries.push({
-    type:currentType,
-    fee,
-    time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})
-  });
+window.addEntry = function(){
 
-  if(["ITA","IR3","REB"].includes(currentType)) adj('filing',1);
+if(submitted||!currentType)return;
+let R=cleanAmount(amountInput?.value);
+if(!R)return;
 
-  if(amountInput) amountInput.value="";
-  renderLog();
-  updateTotal();
-  saveState();
+let fee=calculateFee(currentType,R);
+
+entries.push({
+type:currentType,
+fee,
+time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})
+});
+
+if(["ITA","IR3","REB"].includes(currentType)) adj('filing',1);
+
+if(amountInput) amountInput.value="";
+renderLog();
+updateTotal();
+saveState();
 };
 
 function renderLog(){
-  if(!logTable) return;
-  logTable.innerHTML="";
-  const visible=entries.slice(-200);
+if(!logTable) return;
 
-  visible.forEach((e,i)=>{
-    const index=entries.length-visible.length+i;
-    logTable.innerHTML+=`<tr>
+logTable.innerHTML="";
+const visible=entries.slice(-200);
+
+visible.forEach((e,i)=>{
+const index=entries.length-visible.length+i;
+logTable.innerHTML+=`<tr>
 <td>${e.time}</td>
 <td>${e.type}</td>
 <td>$${e.fee.toFixed(2)}</td>
 <td>${!submitted?`<button onclick="deleteEntry(${index})">✕</button>`:''}</td>
 </tr>`;
-  });
+});
 
-  if(entryCount) entryCount.textContent=entries.length;
+if(entryCount) entryCount.textContent=entries.length;
 }
 
 function updateTotal(){
-  if(!totalFees) return;
-  totalFees.textContent=
-    entries.reduce((s,e)=>s+e.fee,0).toFixed(2);
+if(!totalFees) return;
+totalFees.textContent=
+entries.reduce((s,e)=>s+e.fee,0).toFixed(2);
 }
 
-window.deleteEntry = function deleteEntry(index){
-  if(submitted) return;
-  const entry=entries[index];
-  if(!entry) return;
+window.deleteEntry = function(index){
+if(submitted) return;
+const entry=entries[index];
+if(!entry) return;
 
-  if(["ITA","IR3","REB"].includes(entry.type)) adj('filing',-1);
+if(["ITA","IR3","REB"].includes(entry.type)) adj('filing',-1);
 
-  entries.splice(index,1);
-  renderLog();
-  updateTotal();
-  saveState();
+entries.splice(index,1);
+renderLog();
+updateTotal();
+saveState();
 };
 
 /* ===============================
    OUTPUT COUNTERS
 =============================== */
+
 function adj(id,d){
-  const el=document.getElementById(id);
-  if(!el) return;
-  el.value=Math.max(0,Number(el.value||0)+d);
-  saveState();
+let el=document.getElementById(id);
+if(!el) return;
+el.value=Math.max(0,Number(el.value||0)+d);
+saveState();
 }
 
 /* ===============================
    SUBMIT TO BACKEND
 =============================== */
+
 window.submitDay = async function(){
-  if(submitted) return;
-  if(!confirm("Submit day? This cannot be edited.")) return;
 
-  const formData = new URLSearchParams();
+if(submitted) return;
+if(!confirm("Submit day? This cannot be edited.")) return;
 
-  formData.append("action","submitProcessing");
-  formData.append("date",todayISO);
-  formData.append("staff",name);
+const formData = new URLSearchParams();
 
-  formData.append("Filing",filing?.value ?? 0);
-  formData.append("Linking",linking?.value ?? 0);
-  formData.append("LinkedReview",linkedreview?.value ?? 0);
-  formData.append("Inbox",inbox?.value ?? 0);
-  formData.append("ExistingReview",existingreview?.value ?? 0);
-  formData.append("ProcessingReview",processingreview?.value ?? 0);
-  formData.append("Miscellaneous",misc?.value ?? 0);
-  formData.append("TotalFees",totalFees?.textContent ?? "0.00");
+formData.append("action","submitProcessing");
+formData.append("date",todayISO);
+formData.append("staff",name);
 
-  try{
-    await fetch(WEB_APP_URL,{
-      method:"POST",
-      mode:"no-cors",
-      body:formData
-    });
+formData.append("Filing",filing?.value ?? 0);
+formData.append("Linking",linking?.value ?? 0);
+formData.append("LinkedReview",linkedreview?.value ?? 0);
+formData.append("Inbox",inbox?.value ?? 0);
+formData.append("ExistingReview",existingreview?.value ?? 0);
+formData.append("ProcessingReview",processingreview?.value ?? 0);
+formData.append("Miscellaneous",misc?.value ?? 0);
+formData.append("TotalFees",totalFees?.textContent ?? "0.00");
 
-    lockPage();
-    saveState();
-    alert("Processing day successfully submitted.");
-  }catch(err){
-    alert("Network error. Data not submitted.");
-  }
+try{
+
+await fetch(WEB_APP_URL,{
+method:"POST",
+mode:"no-cors",
+body:formData
+});
+
+lockPage();
+saveState();
+alert("Processing day successfully submitted.");
+
+}catch(err){
+alert("Network error. Data not submitted.");
+}
+
 };
 
 /* ===============================
    CLOCK
 =============================== */
+
 function tick(){
-  if(!clock) return;
-  clock.textContent=
-    new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+if(!clock) return;
+clock.textContent=
+new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 tick();
 setInterval(tick,1000);
 
 loadState();
-
-/* OPTIONAL:
-   If your UI sets currentType via tab buttons, keep as-is.
-   If not, your addEntry won't work until currentType is set somewhere.
-*/
 
 });
 </script>
