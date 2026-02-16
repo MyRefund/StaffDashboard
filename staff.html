@@ -419,30 +419,27 @@ window.submitDay = async function(){
 
   if(!confirm("Submit & Finish Day? This cannot be edited.")) return;
 
-  const payload = {
-    action: "submitCSR",
-    date: todayISO,
-    staff: name,
-    Inbound: inbound.value,
-    Outbound: outbound.value,
-    Chat: chat.value,
-    Emails: emails.value,
-    A2A: a2a.value,
-    Unverified: unverified.value,
-    INC_C_Calling: inccalling.value,
-    Question_Calling: questioncalling.value,
-    A2A_Calling: a2acalling.value,
-    Delinks: delink.value,
-    Cancellations: cancel.value
-  };
+  const formData = new URLSearchParams();
+  formData.append("action", "submitCSR");
+  formData.append("date", todayISO);
+  formData.append("staff", name);
+  formData.append("Inbound", inbound.value);
+  formData.append("Outbound", outbound.value);
+  formData.append("Chat", chat.value);
+  formData.append("Emails", 0);
+  formData.append("A2A", 0);
+  formData.append("Unverified", 0);
+  formData.append("INC_C_Calling", 0);
+  formData.append("Question_Calling", 0);
+  formData.append("A2A_Calling", 0);
+  formData.append("Delinks", 0);
+  formData.append("Cancellations", 0);
 
   try {
 
     const res = await fetch(WEB_APP_URL, {
       method: "POST",
-      mode: "cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: formData
     });
 
     const result = await res.json();
@@ -450,9 +447,9 @@ window.submitDay = async function(){
     if(result.ok){
       lockPage();
       saveState();
-      alert("Day successfully submitted.");
+      alert("Day successfully submitted to system.");
     } else {
-      alert("Submission failed: " + result.error);
+      alert("Submission failed.");
     }
 
   } catch (err) {
