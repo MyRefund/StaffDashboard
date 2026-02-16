@@ -1,200 +1,272 @@
-<!-- PROCESSING.HTML — STABLE FORMATTED VERSION -->
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Refund — Processing Workspace</title>
-</head>
-
-<body>
-
-<div class="wrap">
-<div id="workTab">
-
-<!-- Greeting -->
-<div style="margin-bottom:28px;">
-  <div style="font-size:24px;font-weight:900;color:var(--g0);">
-    Hello, <span id="helloName"></span>
-  </div>
-  <div style="margin-top:6px;font-size:13px;font-weight:800;color:var(--muted);">
-    <span id="todayDate"></span> • Division: Processing
-  </div>
-</div>
-
-<div class="layout">
-
-<!-- LEFT COLUMN CONTENT REMAINS EXACTLY AS YOU HAD IT -->
-
-</div>
-</div>
-</div>
-
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
+  const TZ = "Pacific/Auckland";
 
-const TZ="Pacific/Auckland";
-const name=localStorage.getItem("currentStaff")||"Processing";
+  const name = localStorage.getItem("currentStaff") || "Processing";
+  const todayISO = new Date().toLocaleDateString("en-CA", { timeZone: TZ });
+  const storageKey = `processing_${name}_${todayISO}`;
 
-let entries=[];
-let submitted=false;
-let currentType=null;
+  let entries = [];
+  let submitted = false;
+  let currentType = null;
 
-/* ===============================
-   HEADER INIT (SAFE)
-=============================== */
+  /* ===============================
+     HEADER INIT (SAFE)
+  =============================== */
+  const staffNameLabel = document.getElementById("staffNameLabel");
+  const helloName = document.getElementById("helloName");
+  const todayDate = document.getElementById("todayDate");
 
-const staffLabel=document.getElementById("staffNameLabel");
-const helloName=document.getElementById("helloName");
-const todayDate=document.getElementById("todayDate");
+  if (staffNameLabel) staffNameLabel.textContent = name;
+  if (helloName) helloName.textContent = name;
+  if (todayDate) {
+    todayDate.textContent = new Date().toLocaleDateString("en-NZ", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      timeZone: TZ
+    });
+  }
 
-if(staffLabel) staffLabel.textContent=name;
-if(helloName) helloName.textContent=name;
-if(todayDate){
-  todayDate.textContent=new Date().toLocaleDateString("en-NZ",{
-    weekday:"long",
-    day:"numeric",
-    month:"long",
-    year:"numeric",
-    timeZone:TZ
-  });
-}
+  /* ===============================
+     HELPERS
+  =============================== */
+  function cleanAmount(v) {
+    return parseFloat(String(v || "").replace(/[$, ]/g, "")) || 0;
+  }
 
-/* ===============================
-   HELPERS
-=============================== */
+  function adj(id, delta) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = Math.max(0, Number(el.value || 0) + delta);
+    saveState();
+  }
 
-function cleanAmount(v){
-  return parseFloat((v||"").replace(/[$, ]/g,''))||0;
-}
+  /* ===============================
+     TOGGLE LOG
+  =============================== */
+  window.toggleLog = function () {
+    const container = document.getElementById("logContainer");
+    if (!container) return;
+    container.style.display = (container.style.display === "none" ? "block" : "none");
+  };
 
-/* ===============================
-   LOG RENDER
-=============================== */
+  /* ===============================
+     RENDER LOG
+  =============================== */
+  function renderLog() {
+    const tbody =
+      document.querySelector("#logTable tbody") ||
+      document.getElementById("logTable"); // fallback if your table uses tbody id
 
-function renderLog(){
-  const tbody=document.querySelector("#logTable tbody") || document.getElementById("logTable");
-  if(!tbody) return;
+    if (!tbody) return;
 
-  tbody.innerHTML="";
-  const visible=entries.slice(-200);
+    tbody.innerHTML = "";
+    const visible = entries.slice(-200);
 
-  visible.forEach((e,i)=>{
-    const realIndex=entries.length-visible.length+i;
+    visible.forEach((e, i) => {
+      const realIndex = entries.length - visible.length + i;
 
-    const row=document.createElement("tr");
-    row.innerHTML=`
-      <td>${e.time}</td>
-      <td>${e.type}</td>
-      <td>$${e.fee.toFixed(2)}</td>
-      <td>
-        ${!submitted
-          ? `<button onclick="editEntry(${realIndex})">✎</button>
-             <button onclick="deleteEntry(${realIndex})">✕</button>`
-          : ''
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${e.time}</td>
+        <td>${e.type}</td>
+        <td>$${Number(e.fee).toFixed(2)}</td>
+        <td>
+          ${
+            !submitted
+              ? `<button onclick="editEntry(${realIndex})">✎</button>
+                 <button onclick="deleteEntry(${realIndex})">✕</button>`
+              : ""
+          }
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    const entryCount = document.getElementById("entryCount");
+    if (entryCount) entryCount.textContent = entries.length;
+  }
+
+  function updateTotal() {
+    const totalFees = document.getElementById("totalFees");
+    if (!totalFees) return;
+    totalFees.textContent = entries.reduce((s, e) => s + (Number(e.fee) || 0), 0).toFixed(2);
+  }
+
+  /* ===============================
+     ENTRY HANDLING
+  =============================== */
+  window.addEntry = function () {
+    if (submitted || !currentType) return;
+
+    const amountInput = document.getElementById("amountInput");
+    const amt = amountInput ? amountInput.value : "";
+    const R = cleanAmount(amt);
+    if (!R) return;
+
+    // assumes your existing calculateFee(type, R) exists in the file
+    const fee = calculateFee(currentType, R);
+
+    entries.push({
+      type: currentType,
+      amount: R,
+      fee: fee,
+      time: new Date().toLocaleTimeString("en-NZ", { hour: "numeric", minute: "2-digit" })
+    });
+
+    if (currentType === "ITA" || currentType === "IR3" || currentType === "REB") {
+      adj("filing", 1);
+    }
+
+    if (amountInput) amountInput.value = "";
+    renderLog();
+    updateTotal();
+    saveState();
+  };
+
+  window.deleteEntry = function (index) {
+    if (submitted) return;
+    const entry = entries[index];
+    if (!entry) return;
+
+    if (entry.type === "ITA" || entry.type === "IR3" || entry.type === "REB") {
+      adj("filing", -1);
+    }
+
+    entries.splice(index, 1);
+    renderLog();
+    updateTotal();
+    saveState();
+  };
+
+  // Minimal safe stub if your editEntry exists elsewhere; keep it if already implemented
+  window.editEntry = window.editEntry || function (index) {
+    alert("Edit not wired yet for entry #" + index);
+  };
+
+  /* ===============================
+     SAVE / LOAD
+  =============================== */
+  function lockPage() {
+    submitted = true;
+    document.querySelectorAll("button").forEach((b) => {
+      if (!b.classList.contains("tab")) b.disabled = true;
+    });
+  }
+
+  function saveState() {
+    const filing = document.getElementById("filing");
+    const linking = document.getElementById("linking");
+    const linkedreview = document.getElementById("linkedreview");
+    const inbox = document.getElementById("inbox");
+    const existingreview = document.getElementById("existingreview");
+    const processingreview = document.getElementById("processingreview");
+    const misc = document.getElementById("misc");
+
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify({
+        entries,
+        submitted,
+        counters: {
+          filing: filing?.value || 0,
+          linking: linking?.value || 0,
+          linkedreview: linkedreview?.value || 0,
+          inbox: inbox?.value || 0,
+          existingreview: existingreview?.value || 0,
+          processingreview: processingreview?.value || 0,
+          misc: misc?.value || 0
         }
-      </td>
-    `;
-    tbody.appendChild(row);
-  });
-
-  const entryCount=document.getElementById("entryCount");
-  if(entryCount) entryCount.textContent=entries.length;
-}
-
-/* ===============================
-   TOTAL UPDATE
-=============================== */
-
-function updateTotal(){
-  const totalEl=document.getElementById("totalFees");
-  if(!totalEl) return;
-
-  totalEl.textContent=
-    entries.reduce((s,e)=>s+e.fee,0).toFixed(2);
-}
-
-/* ===============================
-   ENTRY ADD
-=============================== */
-
-window.addEntry=function(){
-  if(submitted||!currentType) return;
-
-  const amountInput=document.getElementById("amountInput");
-  const amt=amountInput ? amountInput.value : "";
-  const R=cleanAmount(amt);
-  if(!R) return;
-
-  const fee=calculateFee(currentType,R);
-
-  entries.push({
-    type:currentType,
-    amount:R,
-    fee:fee,
-    time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})
-  });
-
-  if(currentType==="ITA"||currentType==="IR3"||currentType==="REB"){
-    adj('filing',1);
+      })
+    );
   }
 
-  if(amountInput) amountInput.value="";
-  renderLog();
-  updateTotal();
-};
+  function loadState() {
+    const saved = localStorage.getItem(storageKey);
+    if (saved) {
+      const state = JSON.parse(saved);
+      entries = state.entries || [];
+      submitted = !!state.submitted;
 
-/* ===============================
-   DELETE ENTRY
-=============================== */
+      if (state.counters) {
+        for (const k in state.counters) {
+          const el = document.getElementById(k);
+          if (el) el.value = state.counters[k];
+        }
+      }
 
-window.deleteEntry=function(index){
-  if(submitted) return;
+      if (submitted) lockPage();
+    }
 
-  const entry=entries[index];
-  if(!entry) return;
-
-  if(entry.type==="ITA"||entry.type==="IR3"||entry.type==="REB"){
-    adj('filing',-1);
+    renderLog();
+    updateTotal();
   }
 
-  entries.splice(index,1);
-  renderLog();
-  updateTotal();
-};
+  /* ===============================
+     SUBMIT TO BACKEND
+  =============================== */
+  window.submitDay = async function () {
+    if (submitted) return;
+    if (!confirm("Submit day? This cannot be edited.")) return;
 
-/* ===============================
-   SUBMIT DAY
-=============================== */
+    const filing = document.getElementById("filing");
+    const linking = document.getElementById("linking");
+    const linkedreview = document.getElementById("linkedreview");
+    const inbox = document.getElementById("inbox");
+    const existingreview = document.getElementById("existingreview");
+    const processingreview = document.getElementById("processingreview");
+    const misc = document.getElementById("misc");
+    const totalFees = document.getElementById("totalFees");
 
-window.submitDay=function(){
-  if(submitted) return;
-  if(!confirm("Submit day? This cannot be edited.")) return;
+    const formData = new URLSearchParams();
+    formData.append("action", "submitProcessing");
+    formData.append("date", todayISO);
+    formData.append("staff", name);
 
-  submitted=true;
-  alert("Processing day successfully submitted.");
-};
+    formData.append("Filing", filing?.value || 0);
+    formData.append("Linking", linking?.value || 0);
+    formData.append("LinkedReview", linkedreview?.value || 0);
+    formData.append("Inbox", inbox?.value || 0);
+    formData.append("ExistingReview", existingreview?.value || 0);
+    formData.append("ProcessingReview", processingreview?.value || 0);
+    formData.append("Miscellaneous", misc?.value || 0);
+    formData.append("TotalFees", totalFees?.textContent || "0.00");
 
-/* ===============================
-   CLOCK (SAFE)
-=============================== */
+    try {
+      await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: formData });
+      lockPage();
+      saveState();
+      alert("Processing day successfully submitted.");
+    } catch (err) {
+      alert("Network error. Data not submitted.");
+    }
+  };
 
-function tick(){
-  const clock=document.getElementById("clock");
-  if(!clock) return;
+  /* ===============================
+     CLOCK (SAFE)
+  =============================== */
+  function tick() {
+    const clock = document.getElementById("clock");
+    if (!clock) return;
+    clock.textContent = new Date().toLocaleTimeString("en-NZ", {
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+  }
+  tick();
+  setInterval(tick, 1000);
 
-  clock.textContent=new Date().toLocaleTimeString("en-NZ",{
-    hour:"numeric",
-    minute:"2-digit",
-    second:"2-digit"
-  });
-}
+  /* ===============================
+     STARTUP
+  =============================== */
+  loadState();
 
-tick();
-setInterval(tick,1000);
-
+  // Optional: if your UI sets currentType via tab buttons, keep as-is.
+  // If you need a default, uncomment:
+  // currentType = "ITA";
 });
 </script>
-
-</body>
-</html>
