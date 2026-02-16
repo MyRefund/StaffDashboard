@@ -266,18 +266,18 @@ async function runReport(){
 
   document.getElementById("statusPill").textContent = "Loading…";
 
-  const formData = new URLSearchParams();
-  formData.append("action","getReportData");
-  formData.append("start",document.getElementById("startDate").value);
-  formData.append("end",document.getElementById("endDate").value);
+  const start = document.getElementById("startDate").value;
+  const end = document.getElementById("endDate").value;
 
-  try{
+  const url =
+    WEB_APP_URL +
+    "?action=getReportData" +
+    "&start=" + encodeURIComponent(start) +
+    "&end=" + encodeURIComponent(end);
 
-    const res = await fetch(WEB_APP_URL,{
-      method:"POST",
-      body:formData
-    });
+  try {
 
+    const res = await fetch(url);
     const data = await res.json();
 
     if(!data.ok){
@@ -312,7 +312,7 @@ async function runReport(){
 
     document.getElementById("statusPill").textContent = "Live Data";
 
-  }catch(err){
+  } catch(err){
     alert("Connection error");
   }
 }
