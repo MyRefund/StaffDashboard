@@ -18,6 +18,7 @@
   --radius:16px;
   --shadow:0 12px 32px rgba(0,0,0,.12);
 }
+
 *{box-sizing:border-box}
 body{
   margin:0;
@@ -45,6 +46,7 @@ body{
   align-items:center;
 }
 .brand img{height:26px}
+.brand-text{display:flex;flex-direction:column;line-height:1.1}
 .brand-text strong{font-weight:900;font-size:15px}
 .brand-text span{font-size:12px;opacity:.9;font-weight:700}
 .header-right{
@@ -64,7 +66,7 @@ body{
 }
 .clock{font-weight:900;font-size:14px}
 
-/* FILTER BAR */
+/* TOP FILTER BAR */
 .topbar{
   max-width:1400px;
   margin:20px auto 0;
@@ -77,6 +79,7 @@ body{
   gap:14px;
   align-items:flex-end;
 }
+
 .field{
   display:flex;
   flex-direction:column;
@@ -101,6 +104,16 @@ button.primary{
   font-weight:900;
   cursor:pointer;
 }
+button.secondary{
+  padding:10px 18px;
+  border-radius:12px;
+  background:#fff;
+  border:1px solid var(--g0);
+  color:var(--g0);
+  font-weight:900;
+  cursor:pointer;
+}
+
 .status-pill{
   padding:8px 12px;
   border-radius:999px;
@@ -109,6 +122,93 @@ button.primary{
   font-weight:900;
   color:var(--g0);
   border:1px solid rgba(9,75,53,.12);
+}
+
+/* Multi-select dropdown (checkbox style) */
+.mselect{
+  position:relative;
+  margin-top:6px;
+}
+.mselect-btn{
+  width:100%;
+  text-align:left;
+  padding:9px 10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-weight:900;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+}
+.mselect-btn span{
+  font-weight:800;
+  color:var(--text);
+  font-size:13px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.chev{opacity:.7;font-weight:900}
+.mselect-panel{
+  position:absolute;
+  left:0; right:0;
+  top:calc(100% + 8px);
+  z-index:50;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  padding:10px;
+  display:none;
+}
+.mselect.open .mselect-panel{display:block}
+.mselect-search{
+  width:100%;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-weight:800;
+  margin-bottom:10px;
+}
+.mselect-list{
+  max-height:240px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.mopt{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  border-radius:10px;
+  cursor:pointer;
+}
+.mopt:hover{background:#f3f4f6}
+.mopt input{transform:scale(1.05)}
+.mopt strong{font-size:13px}
+.mselect-actions{
+  display:flex;
+  gap:10px;
+  justify-content:space-between;
+  margin-top:10px;
+}
+.smallbtn{
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:10px;
+  padding:8px 10px;
+  font-weight:900;
+  cursor:pointer;
+  font-size:12px;
+}
+.smallbtn.primary{
+  border-color:var(--g0);
+  color:var(--g0);
 }
 
 /* CONTENT */
@@ -120,6 +220,8 @@ button.primary{
   flex-direction:column;
   gap:18px;
 }
+
+/* SUMMARY */
 .summary-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -129,7 +231,7 @@ button.primary{
   background:#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:18px;
+  padding:18px 18px 16px;
 }
 .summary-card h4{
   margin:0;
@@ -137,12 +239,113 @@ button.primary{
   font-weight:900;
   color:var(--muted);
 }
-.summary-value{
+.summary-main{
   margin-top:10px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:10px;
+}
+.summary-value{
   font-size:28px;
   font-weight:900;
   color:var(--g0);
+  line-height:1;
 }
+.delta{
+  font-size:12px;
+  font-weight:900;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:#fff;
+  white-space:nowrap;
+}
+.delta.up{color:#065f46;background:#ecfdf5;border-color:rgba(6,95,70,.18)}
+.delta.down{color:#7c2d12;background:#fff7ed;border-color:rgba(124,45,18,.18)}
+.summary-sub{
+  margin-top:10px;
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-weight:900;
+  font-size:12px;
+}
+.summary-sub strong{color:var(--g0)}
+
+/* PANELS */
+.panel{
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px;
+}
+.panel h3{
+  margin:0 0 12px;
+  font-weight:900;
+  color:var(--g0);
+  font-size:16px;
+}
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+@media(max-width:980px){
+  .grid2{grid-template-columns:1fr}
+}
+
+.table-wrap{overflow:auto}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:720px;
+}
+th,td{
+  padding:10px 8px;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+}
+th{
+  text-align:left;
+  color:var(--muted);
+  font-weight:900;
+}
+td strong{color:var(--g0)}
+.right{text-align:right}
+.small-muted{color:var(--muted);font-weight:800;font-size:12px}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  font-size:12px;
+  font-weight:900;
+  color:var(--g0);
+  background:var(--g2);
+}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#16a34a;
+}
+.dot.warn{background:#f59e0b}
+.dot.bad{background:#dc2626}
+
+/* Divider line inside panels */
+.hr{
+  height:1px;background:var(--border);margin:14px 0;
+}
+
+/* Footer note */
+.note{
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+  line-height:1.5;
+}
+.note strong{color:var(--g0)}
 </style>
 </head>
 
@@ -154,9 +357,10 @@ button.primary{
       <img src="logo.png" alt="My Refund">
       <div class="brand-text">
         <strong>Reports</strong>
-        <span>Live overview</span>
+        <span>Live overview + filters</span>
       </div>
     </div>
+
     <div class="header-right">
       <button class="dashboard-btn" onclick="goHome()">← Dashboard</button>
       <div class="clock" id="clock"></div>
@@ -164,7 +368,9 @@ button.primary{
   </div>
 </div>
 
+<!-- FILTER BAR -->
 <div class="topbar">
+
   <div class="field">
     Date From
     <input type="date" id="startDate">
@@ -175,42 +381,255 @@ button.primary{
     <input type="date" id="endDate">
   </div>
 
-  <button class="primary" onclick="runReport()">Run Report</button>
+  <div class="field" style="min-width:200px;">
+    Division
+    <div class="mselect" data-ms="division"></div>
+  </div>
+
+  <div class="field" style="min-width:220px;">
+    Staff
+    <div class="mselect" data-ms="staff"></div>
+  </div>
+
+  <div class="field" style="min-width:240px;">
+    Work Type
+    <div class="mselect" data-ms="work"></div>
+  </div>
+
+  <div class="field" style="min-width:220px;">
+    Fee Type
+    <div class="mselect" data-ms="fee"></div>
+  </div>
+
+  <button class="primary" id="runBtn" onclick="runReport()">Run Report</button>
+  <button class="secondary" onclick="downloadPDF()">Download PDF</button>
+
   <div class="status-pill" id="statusPill">Live Today</div>
+
 </div>
 
+<!-- CONTENT -->
 <div class="content">
+
+  <!-- EXEC SNAPSHOT -->
   <div class="summary-grid">
     <div class="summary-card">
       <h4>Client Touchpoints</h4>
-      <div class="summary-value" id="touchpointsToday">0</div>
+      <div class="summary-main">
+        <div class="summary-value" id="touchpointsToday">0</div>
+        <div class="delta" id="touchpointsDelta">—</div>
+      </div>
+      <div class="summary-sub">
+        <span>Yesterday: <strong id="touchpointsYday">0</strong></span>
+        <span class="small-muted">CSR only</span>
+      </div>
     </div>
 
     <div class="summary-card">
       <h4>Returns Processed</h4>
-      <div class="summary-value" id="returnsToday">0</div>
+      <div class="summary-main">
+        <div class="summary-value" id="returnsToday">0</div>
+        <div class="delta" id="returnsDelta">—</div>
+      </div>
+      <div class="summary-sub">
+        <span>Yesterday: <strong id="returnsYday">0</strong></span>
+        <span class="small-muted">Processing only</span>
+      </div>
     </div>
 
     <div class="summary-card">
       <h4>Revenue (Fees)</h4>
-      <div class="summary-value" id="feesToday">$0.00</div>
+      <div class="summary-main">
+        <div class="summary-value" id="feesToday">$0</div>
+        <div class="delta" id="feesDelta">—</div>
+      </div>
+      <div class="summary-sub">
+        <span>Yesterday: <strong id="feesYday">$0</strong></span>
+        <span class="small-muted">Processing only</span>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <h4>Active Staff Logged</h4>
+      <div class="summary-main">
+        <div class="summary-value" id="activeStaffToday">0</div>
+        <div class="delta" id="activeDelta">—</div>
+      </div>
+      <div class="summary-sub">
+        <span>Yesterday: <strong id="activeStaffYday">0</strong></span>
+        <span class="small-muted">All</span>
+      </div>
     </div>
   </div>
+
+  <!-- DIVISION SNAPSHOT -->
+  <div class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;">
+      <h3 style="margin:0;">Division snapshot</h3>
+      <div class="badge"><span class="dot"></span><span id="rangeLabel">Today</span></div>
+    </div>
+    <div class="hr"></div>
+
+    <div class="grid2">
+      <div class="panel" style="box-shadow:none;border:1px solid var(--border);">
+        <h3 style="font-size:15px;margin:0 0 10px;">CSR</h3>
+        <div class="summary-sub" style="margin-top:0;">
+          <span>Touchpoints: <strong id="csrTouchpoints">0</strong></span>
+          <span>Outbound: <strong id="csrOutbound">0</strong></span>
+        </div>
+        <div class="summary-sub" style="margin-top:8px;">
+          <span>Inbound: <strong id="csrInbound">0</strong></span>
+          <span>Chat: <strong id="csrChat">0</strong></span>
+        </div>
+      </div>
+
+      <div class="panel" style="box-shadow:none;border:1px solid var(--border);">
+        <h3 style="font-size:15px;margin:0 0 10px;">Processing</h3>
+        <div class="summary-sub" style="margin-top:0;">
+          <span>Total output: <strong id="procOutput">0</strong></span>
+          <span>Fees: <strong id="procFees">$0</strong></span>
+        </div>
+        <div class="summary-sub" style="margin-top:8px;">
+          <span>Fee entries: <strong id="procFeeEntries">0</strong></span>
+          <span class="small-muted">All fee types</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+    <div class="note">
+      <strong>How to read:</strong> CSR touchpoints = inbound + outbound + chat. Processing total output = sum of all output counters. Fees are totals from fee entries.
+    </div>
+  </div>
+
+  <!-- STAFF RANKINGS -->
+  <div class="grid2">
+    <div class="panel">
+      <h3>CSR staff ranking</h3>
+      <div class="small-muted" style="margin-bottom:10px;">Sorted by total touchpoints (inbound + outbound + chat)</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Staff</th>
+              <th class="right">Touchpoints</th>
+              <th class="right">Inbound</th>
+              <th class="right">Outbound</th>
+              <th class="right">Chat</th>
+              <th class="right">Emails</th>
+            </tr>
+          </thead>
+          <tbody id="csrRankBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Processing staff ranking</h3>
+      <div class="small-muted" style="margin-bottom:10px;">Sorted by total fees (then output)</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Staff</th>
+              <th class="right">Fees</th>
+              <th class="right">Fee entries</th>
+              <th class="right">Total output</th>
+            </tr>
+          </thead>
+          <tbody id="procRankBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULL DETAIL TABLES -->
+  <div class="panel">
+    <h3>CSR full breakdown</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Staff</th>
+            <th class="right">Inbound</th>
+            <th class="right">Outbound</th>
+            <th class="right">Chat</th>
+            <th class="right">Emails</th>
+            <th class="right">A2A</th>
+            <th class="right">Unverified</th>
+            <th class="right">INC/C</th>
+            <th class="right">Question</th>
+            <th class="right">A2A Calling</th>
+            <th class="right">Delinks</th>
+            <th class="right">Cancels</th>
+          </tr>
+        </thead>
+        <tbody id="csrFullBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Processing full breakdown</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Staff</th>
+            <th class="right">Filing</th>
+            <th class="right">Linking</th>
+            <th class="right">Linked Review</th>
+            <th class="right">Inbox</th>
+            <th class="right">Existing Review</th>
+            <th class="right">Processing Review</th>
+            <th class="right">Misc</th>
+            <th class="right">Total output</th>
+            <th class="right">Fees</th>
+            <th class="right">Fee entries</th>
+          </tr>
+        </thead>
+        <tbody id="procFullBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Fee breakdown by type</h3>
+    <div class="small-muted" style="margin-bottom:10px;">Includes only fee entries in the selected period + filters</div>
+    <div class="table-wrap">
+      <table style="min-width:520px;">
+        <thead>
+          <tr>
+            <th>Fee type</th>
+            <th class="right">Entries</th>
+            <th class="right">Total fees</th>
+          </tr>
+        </thead>
+        <tbody id="feeTypeBody"></tbody>
+        <tfoot>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td class="right"><strong id="feeTypeTotalEntries">0</strong></td>
+            <td class="right"><strong id="feeTypeTotalFees">$0</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
 </div>
 
 <script>
-
 /* ===========================
    BACKEND
 =========================== */
-
-const WEB_APP_URL =
-"https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
 
 /* ===========================
-   CLOCK
+   NAV / CLOCK
 =========================== */
-
 function goHome(){ window.location.href="index.html"; }
 
 (function tick(){
@@ -222,82 +641,714 @@ function goHome(){ window.location.href="index.html"; }
 /* ===========================
    DATE DEFAULTS
 =========================== */
-
 const TZ = "Pacific/Auckland";
 function nzISO(d=new Date()){
   return d.toLocaleDateString("en-CA",{timeZone:TZ});
 }
+function addDaysISO(iso,delta){
+  const [y,m,dd]=iso.split("-").map(Number);
+  const dt=new Date(Date.UTC(y,m-1,dd));
+  dt.setUTCDate(dt.getUTCDate()+delta);
+  return nzISO(new Date(dt));
+}
+function diffDaysISO(startIso,endIso){
+  const [sy,sm,sd]=startIso.split("-").map(Number);
+  const [ey,em,ed]=endIso.split("-").map(Number);
+  const a = Date.UTC(sy,sm-1,sd);
+  const b = Date.UTC(ey,em-1,ed);
+  return Math.round((b-a)/86400000);
+}
+function clampISO(iso){
+  // ensure valid "YYYY-MM-DD"
+  if(!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return nzISO();
+  return iso;
+}
+function toISODateCell(v){
+  // Handles GAS JSON date strings (ISO) and any other parseable date.
+  if(!v) return "";
+  if(typeof v === "string"){
+    // If it's already yyyy-mm-dd, keep it
+    if(/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+    const dt = new Date(v);
+    if(!isNaN(dt.getTime())) return nzISO(dt);
+    return "";
+  }
+  // If it is a Date object (rare in browser), handle
+  try{
+    const dt = new Date(v);
+    if(!isNaN(dt.getTime())) return nzISO(dt);
+  }catch(_){}
+  return "";
+}
+
 const todayISO = nzISO();
 document.getElementById("startDate").value = todayISO;
 document.getElementById("endDate").value = todayISO;
 
 /* ===========================
-   LIVE REPORT
+   FILTER OPTIONS (UI)
 =========================== */
+const WORK_TYPES = [
+  // CSR
+  "Inbound","Outbound","Chat","Emails","A2A","Unverified","INC/C Calling","Question Calling","A2A Calling","Delinks","Cancellations",
+  // Processing outputs
+  "Filing","Linking","Linked Review","Inbox","Existing Review","Processing Review","Miscellaneous"
+];
+const FEE_TYPES = ["ITA","IR3","REB","AA","R3P","OP"];
 
-async function runReport(){
-
-  document.getElementById("statusPill").textContent = "Loading…";
-
-  const start = document.getElementById("startDate").value;
-  const end = document.getElementById("endDate").value;
-
-  const res = await fetch(WEB_APP_URL + "?action=getReportData");
-  const data = await res.json();
-
-  if(!data.ok){
-    alert(data.error);
-    return;
-  }
-
-  /* FILTER BY DATE RANGE */
-  const csrFiltered = data.csr.filter(r =>
-    r.Date >= start && r.Date <= end
-  );
-
-  const procFiltered = data.processing.filter(r =>
-    r.Date >= start && r.Date <= end
-  );
-
-  const feeFiltered = data.fees.filter(f =>
-    f.Date >= start && f.Date <= end
-  );
-
-  /* TOUCHPOINTS */
-  let touchpoints = 0;
-  csrFiltered.forEach(r=>{
-    touchpoints +=
-      Number(r.Inbound||0) +
-      Number(r.Outbound||0) +
-      Number(r.Chat||0);
-  });
-
-  /* RETURNS */
-  let returns = 0;
-  procFiltered.forEach(r=>{
-    returns += Number(r["Total Output"]||0);
-  });
-
-  /* FEES */
-  let fees = 0;
-  feeFiltered.forEach(f=>{
-    fees += Number(f.Total_Fee||0);
-  });
-
-  document.getElementById("touchpointsToday").textContent =
-    touchpoints.toLocaleString("en-NZ");
-
-  document.getElementById("returnsToday").textContent =
-    returns.toLocaleString("en-NZ");
-
-  document.getElementById("feesToday").textContent =
-    "$"+fees.toLocaleString("en-NZ",{minimumFractionDigits:2});
-
-  document.getElementById("statusPill").textContent = "Live Data";
+/* ===========================
+   HELPERS
+=========================== */
+function money(n){
+  const v = Number(n)||0;
+  return "$" + v.toLocaleString("en-NZ",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function pctChange(today, yday){
+  const t = Number(today)||0;
+  const y = Number(yday)||0;
+  if(y===0 && t===0) return {text:"—", cls:""};
+  if(y===0 && t>0) return {text:"+∞", cls:"up"};
+  const p = ((t-y)/y)*100;
+  const sign = p>0?"+":"";
+  return {text:`${sign}${p.toFixed(0)}%`, cls: p>=0 ? "up" : "down"};
+}
+function formatDelta(el, today, yday){
+  const p = pctChange(today,yday);
+  el.classList.remove("up","down");
+  if(p.cls) el.classList.add(p.cls);
+  el.textContent = p.text;
+}
+function setStatus(text){
+  document.getElementById("statusPill").textContent = text;
 }
 
-runReport();
+/* ===========================
+   MULTISELECT COMPONENT
+=========================== */
+const msState = {
+  division: new Set(["CSR","Processing"]),
+  staff: new Set(),
+  work: new Set(),
+  fee: new Set()
+};
 
+function buildMultiSelect(el, key, options){
+  el.classList.add("mselect");
+  el.innerHTML = `
+    <button type="button" class="mselect-btn" aria-haspopup="listbox">
+      <span id="ms_label_${key}">All</span>
+      <span class="chev">▼</span>
+    </button>
+    <div class="mselect-panel">
+      <input class="mselect-search" placeholder="Search…" />
+      <div class="mselect-list" role="listbox"></div>
+      <div class="mselect-actions">
+        <button type="button" class="smallbtn" data-act="clear">Clear</button>
+        <button type="button" class="smallbtn" data-act="all">Select all</button>
+        <button type="button" class="smallbtn primary" data-act="apply">Apply</button>
+      </div>
+    </div>
+  `;
+
+  const btn = el.querySelector(".mselect-btn");
+  const list = el.querySelector(".mselect-list");
+  const search = el.querySelector(".mselect-search");
+  const label = el.querySelector(`#ms_label_${key}`);
+
+  const selected = msState[key];
+
+  function renderList(filter=""){
+    const f = filter.trim().toLowerCase();
+    list.innerHTML = "";
+    options
+      .filter(o => !f || o.toLowerCase().includes(f))
+      .forEach(o=>{
+        const row=document.createElement("div");
+        row.className="mopt";
+        row.innerHTML = `
+          <input type="checkbox" ${selected.has(o) ? "checked":""}>
+          <strong>${o}</strong>
+        `;
+        row.onclick = (e)=>{
+          if(e.target.tagName.toLowerCase() !== "input"){
+            const cb = row.querySelector("input");
+            cb.checked = !cb.checked;
+          }
+          const cb = row.querySelector("input");
+          if(cb.checked) selected.add(o); else selected.delete(o);
+        };
+        row.querySelector("input").onchange = ()=>{
+          const cb = row.querySelector("input");
+          if(cb.checked) selected.add(o); else selected.delete(o);
+        };
+        list.appendChild(row);
+      });
+  }
+
+  function updateLabel(){
+    if(selected.size===0) { label.textContent = "All"; return; }
+    if(selected.size===options.length) { label.textContent = "All"; return; }
+    const arr = Array.from(selected);
+    label.textContent = arr.length===1 ? arr[0] : `${arr.length} selected`;
+  }
+
+  btn.onclick = ()=>{
+    document.querySelectorAll(".mselect.open").forEach(x=>{
+      if(x!==el) x.classList.remove("open");
+    });
+    el.classList.toggle("open");
+    search.value="";
+    renderList("");
+    updateLabel();
+    if(el.classList.contains("open")) setTimeout(()=>search.focus(),0);
+  };
+
+  search.oninput = ()=>renderList(search.value);
+
+  el.querySelector('[data-act="clear"]').onclick = (e)=>{
+    e.preventDefault();
+    selected.clear();
+    renderList(search.value);
+  };
+  el.querySelector('[data-act="all"]').onclick = (e)=>{
+    e.preventDefault();
+    options.forEach(o=>selected.add(o));
+    renderList(search.value);
+  };
+  el.querySelector('[data-act="apply"]').onclick = (e)=>{
+    e.preventDefault();
+    el.classList.remove("open");
+    updateLabel();
+    runReport();
+  };
+
+  document.addEventListener("click",(ev)=>{
+    if(!el.contains(ev.target)) el.classList.remove("open");
+  });
+
+  updateLabel();
+}
+
+/* ===========================
+   FILTER SETS
+=========================== */
+function getFilterSet(key, options){
+  const s = msState[key];
+  if(!s || s.size===0) return new Set(options);
+  if(s.size===options.length) return new Set(options);
+  return new Set(Array.from(s));
+}
+
+/* ===========================
+   BACKEND FETCH + NORMALISE
+=========================== */
+let CACHE = null;
+
+async function fetchReportData(){
+  // Lightweight cache to avoid hammering Apps Script when filters change.
+  // Refresh when user hits Run Report (we still re-fetch to be safe).
+  const url = WEB_APP_URL + "?action=getReportData";
+  const res = await fetch(url, { method:"GET" });
+  const data = await res.json();
+  if(!data || !data.ok) throw new Error(data?.error || "Unknown backend error");
+  return data;
+}
+
+function normaliseFromBackend(raw){
+  // Convert arrays of objects to normalised rows with a reliable ISO date string.
+  const csr = (raw.csr||[]).map(r=>{
+    const iso = toISODateCell(r.Date);
+    return {
+      iso,
+      staff: String(r.Staff||"").trim(),
+      inbound: Number(r.Inbound||0),
+      outbound: Number(r.Outbound||0),
+      chat: Number(r.Chat||0),
+      emails: Number(r.Emails||0),
+      a2a: Number(r.A2A||0),
+      unverified: Number(r.Unverified||0),
+      inccalling: Number(r["INC_C_Calling"]||0),
+      questioncalling: Number(r["Question_Calling"]||0),
+      a2acalling: Number(r["A2A_Calling"]||0),
+      delinks: Number(r.Delinks||0),
+      cancellations: Number(r.Cancellations||0)
+    };
+  }).filter(r=>r.iso && r.staff);
+
+  const processing = (raw.processing||[]).map(r=>{
+    const iso = toISODateCell(r.Date);
+    return {
+      iso,
+      staff: String(r.Staff||"").trim(),
+      filing: Number(r.Filing||0),
+      linking: Number(r.Linking||0),
+      linkedreview: Number(r["Linked Review"]||0),
+      inbox: Number(r.Inbox||0),
+      existingreview: Number(r["Existing Review"]||0),
+      processingreview: Number(r["Processing Review"]||0),
+      misc: Number(r.Miscellaneous||0),
+      totalOutput: Number(r["Total Output"]||0),
+      totalFees: Number(r["Total Fees"]||0)
+    };
+  }).filter(r=>r.iso && r.staff);
+
+  const fees = (raw.fees||[]).map(r=>{
+    const iso = toISODateCell(r.Date);
+    return {
+      iso,
+      staff: String(r.Staff||"").trim(),
+      type: String(r.Fee_Type||"").trim(),
+      count: Number(r.Count||0),
+      total: Number(r.Total_Fee||0)
+    };
+  }).filter(r=>r.iso && r.staff && r.type);
+
+  // Infer staff lists from real data (so filters reflect reality)
+  const staffCSR = Array.from(new Set(csr.map(x=>x.staff))).sort((a,b)=>a.localeCompare(b));
+  const staffProc = Array.from(new Set(processing.map(x=>x.staff))).sort((a,b)=>a.localeCompare(b));
+
+  return { csr, processing, fees, staffCSR, staffProc };
+}
+
+function inRange(iso,start,end){
+  return iso >= start && iso <= end;
+}
+
+/* ===========================
+   SUMMATION (respect filters)
+=========================== */
+function sumCSRRow(row, workSet){
+  const map = {
+    "Inbound": row.inbound,
+    "Outbound": row.outbound,
+    "Chat": row.chat,
+    "Emails": row.emails,
+    "A2A": row.a2a,
+    "Unverified": row.unverified,
+    "INC/C Calling": row.inccalling,
+    "Question Calling": row.questioncalling,
+    "A2A Calling": row.a2acalling,
+    "Delinks": row.delinks,
+    "Cancellations": row.cancellations
+  };
+  const out = {};
+  Object.keys(map).forEach(k=>{
+    out[k] = workSet.has(k) ? (Number(map[k])||0) : 0;
+  });
+  return out;
+}
+
+function sumProcOutputs(row, workSet){
+  const map = {
+    "Filing": row.filing,
+    "Linking": row.linking,
+    "Linked Review": row.linkedreview,
+    "Inbox": row.inbox,
+    "Existing Review": row.existingreview,
+    "Processing Review": row.processingreview,
+    "Miscellaneous": row.misc
+  };
+  const out = {};
+  Object.keys(map).forEach(k=>{
+    out[k] = workSet.has(k) ? (Number(map[k])||0) : 0;
+  });
+  return out;
+}
+
+function sumFeesForStaff(feeRows, feeSet){
+  let entries = 0, total = 0;
+  feeRows.forEach(r=>{
+    if(!feeSet.has(r.type)) return;
+    entries += Number(r.count||0);
+    total += Number(r.total||0);
+  });
+  return { entries, total: Math.round(total*100)/100 };
+}
+
+/* ===========================
+   REPORT
+=========================== */
+async function runReport(){
+  setStatus("Loading…");
+
+  const start = clampISO(document.getElementById("startDate").value || todayISO);
+  const end = clampISO(document.getElementById("endDate").value || todayISO);
+
+  // Label
+  const isToday = (start===todayISO && end===todayISO);
+  document.getElementById("rangeLabel").textContent = isToday ? "Today (live)" : `${start} → ${end}`;
+
+  // Define comparison period = previous period same length (or yesterday for single day)
+  const days = diffDaysISO(start,end);
+  const yEnd = addDaysISO(start,-1);
+  const yStart = addDaysISO(yEnd, -days);
+
+  try{
+    // Always re-fetch on Run Report (live)
+    const raw = await fetchReportData();
+    const norm = normaliseFromBackend(raw);
+    CACHE = norm;
+
+    // Build options from data
+    const STAFF = {
+      CSR: norm.staffCSR,
+      Processing: norm.staffProc
+    };
+
+    // Filters
+    const divisions = getFilterSet("division", ["CSR","Processing"]);
+    const staffOptions = Array.from(new Set([...(STAFF.CSR||[]), ...(STAFF.Processing||[])])).sort((a,b)=>a.localeCompare(b));
+    const staffSet = getFilterSet("staff", staffOptions);
+
+    const csrWork = ["Inbound","Outbound","Chat","Emails","A2A","Unverified","INC/C Calling","Question Calling","A2A Calling","Delinks","Cancellations"];
+    const procWork = ["Filing","Linking","Linked Review","Inbox","Existing Review","Processing Review","Miscellaneous"];
+    const workOptions = Array.from(new Set([
+      ...(divisions.has("CSR") ? csrWork : []),
+      ...(divisions.has("Processing") ? procWork : [])
+    ]));
+    const workSet = getFilterSet("work", workOptions.length?workOptions:WORK_TYPES);
+
+    const feeSet = getFilterSet("fee", FEE_TYPES);
+
+    // Slice rows by date range + division + staff
+    const csrTodayRows = norm.csr.filter(r => inRange(r.iso,start,end) && divisions.has("CSR") && staffSet.has(r.staff));
+    const csrYdayRows = norm.csr.filter(r => inRange(r.iso,yStart,yEnd) && divisions.has("CSR") && staffSet.has(r.staff));
+
+    const procTodayRows = norm.processing.filter(r => inRange(r.iso,start,end) && divisions.has("Processing") && staffSet.has(r.staff));
+    const procYdayRows = norm.processing.filter(r => inRange(r.iso,yStart,yEnd) && divisions.has("Processing") && staffSet.has(r.staff));
+
+    const feeTodayRows = norm.fees.filter(r => inRange(r.iso,start,end) && divisions.has("Processing") && staffSet.has(r.staff));
+    const feeYdayRows = norm.fees.filter(r => inRange(r.iso,yStart,yEnd) && divisions.has("Processing") && staffSet.has(r.staff));
+
+    // Index fees by staff for quick sums
+    const feeTodayByStaff = {};
+    feeTodayRows.forEach(r=>{
+      (feeTodayByStaff[r.staff] ||= []).push(r);
+    });
+    const feeYdayByStaff = {};
+    feeYdayRows.forEach(r=>{
+      (feeYdayByStaff[r.staff] ||= []).push(r);
+    });
+
+    // CSR totals
+    let csrInbound=0, csrOutbound=0, csrChat=0, csrEmails=0, csrTouchpoints=0;
+    csrTodayRows.forEach(r=>{
+      const s = sumCSRRow(r, workSet);
+      csrInbound += s["Inbound"];
+      csrOutbound += s["Outbound"];
+      csrChat += s["Chat"];
+      csrEmails += s["Emails"];
+      csrTouchpoints += (s["Inbound"] + s["Outbound"] + s["Chat"]);
+    });
+
+    let csrTouchY=0;
+    csrYdayRows.forEach(r=>{
+      const s = sumCSRRow(r, workSet);
+      csrTouchY += (s["Inbound"] + s["Outbound"] + s["Chat"]);
+    });
+
+    // Processing totals (outputs from Processing_Log, fees from Fee_Log respecting fee filter)
+    let procOutput=0, procFees=0, procFeeEntries=0;
+    procTodayRows.forEach(r=>{
+      const out = sumProcOutputs(r, workSet);
+      procOutput += Object.values(out).reduce((a,b)=>a+Number(b||0),0);
+
+      const feeSum = sumFeesForStaff(feeTodayByStaff[r.staff] || [], feeSet);
+      procFees += feeSum.total;
+      procFeeEntries += feeSum.entries;
+    });
+    procFees = Math.round(procFees*100)/100;
+
+    let procOutputY=0, procFeesY=0, procEntriesY=0;
+    procYdayRows.forEach(r=>{
+      const out = sumProcOutputs(r, workSet);
+      procOutputY += Object.values(out).reduce((a,b)=>a+Number(b||0),0);
+
+      const feeSum = sumFeesForStaff(feeYdayByStaff[r.staff] || [], feeSet);
+      procFeesY += feeSum.total;
+      procEntriesY += feeSum.entries;
+    });
+    procFeesY = Math.round(procFeesY*100)/100;
+
+    // Active staff
+    function activeCount(){
+      const active = new Set();
+      csrTodayRows.forEach(r=>{
+        const s = sumCSRRow(r, workSet);
+        const total = Object.values(s).reduce((a,b)=>a+Number(b||0),0);
+        if(total>0) active.add(r.staff);
+      });
+      procTodayRows.forEach(r=>{
+        const out = sumProcOutputs(r, workSet);
+        const outTotal = Object.values(out).reduce((a,b)=>a+Number(b||0),0);
+        const feeSum = sumFeesForStaff(feeTodayByStaff[r.staff] || [], feeSet);
+        if(outTotal>0 || feeSum.entries>0 || feeSum.total>0) active.add(r.staff);
+      });
+      return active.size;
+    }
+    function activeCountY(){
+      const active = new Set();
+      csrYdayRows.forEach(r=>{
+        const s = sumCSRRow(r, workSet);
+        const total = Object.values(s).reduce((a,b)=>a+Number(b||0),0);
+        if(total>0) active.add(r.staff);
+      });
+      procYdayRows.forEach(r=>{
+        const out = sumProcOutputs(r, workSet);
+        const outTotal = Object.values(out).reduce((a,b)=>a+Number(b||0),0);
+        const feeSum = sumFeesForStaff(feeYdayByStaff[r.staff] || [], feeSet);
+        if(outTotal>0 || feeSum.entries>0 || feeSum.total>0) active.add(r.staff);
+      });
+      return active.size;
+    }
+    const activeToday = activeCount();
+    const activeYday = activeCountY();
+
+    // Update top summary
+    document.getElementById("touchpointsToday").textContent = csrTouchpoints.toLocaleString("en-NZ");
+    document.getElementById("touchpointsYday").textContent = csrTouchY.toLocaleString("en-NZ");
+    formatDelta(document.getElementById("touchpointsDelta"), csrTouchpoints, csrTouchY);
+
+    document.getElementById("returnsToday").textContent = procOutput.toLocaleString("en-NZ");
+    document.getElementById("returnsYday").textContent = procOutputY.toLocaleString("en-NZ");
+    formatDelta(document.getElementById("returnsDelta"), procOutput, procOutputY);
+
+    document.getElementById("feesToday").textContent = money(procFees);
+    document.getElementById("feesYday").textContent = money(procFeesY);
+    formatDelta(document.getElementById("feesDelta"), procFees, procFeesY);
+
+    document.getElementById("activeStaffToday").textContent = activeToday.toLocaleString("en-NZ");
+    document.getElementById("activeStaffYday").textContent = activeYday.toLocaleString("en-NZ");
+    formatDelta(document.getElementById("activeDelta"), activeToday, activeYday);
+
+    // Division snapshot
+    document.getElementById("csrTouchpoints").textContent = csrTouchpoints.toLocaleString("en-NZ");
+    document.getElementById("csrInbound").textContent = csrInbound.toLocaleString("en-NZ");
+    document.getElementById("csrOutbound").textContent = csrOutbound.toLocaleString("en-NZ");
+    document.getElementById("csrChat").textContent = csrChat.toLocaleString("en-NZ");
+
+    document.getElementById("procOutput").textContent = procOutput.toLocaleString("en-NZ");
+    document.getElementById("procFees").textContent = money(procFees);
+    document.getElementById("procFeeEntries").textContent = procFeeEntries.toLocaleString("en-NZ");
+
+    // CSR ranking + full table (aggregate by staff)
+    const csrAgg = {};
+    csrTodayRows.forEach(r=>{
+      const s = sumCSRRow(r, workSet);
+      const a = (csrAgg[r.staff] ||= {
+        name:r.staff,
+        inbound:0,outbound:0,chat:0,emails:0,a2a:0,unverified:0,incc:0,qc:0,a2ac:0,delink:0,cancel:0
+      });
+      a.inbound += s["Inbound"];
+      a.outbound += s["Outbound"];
+      a.chat += s["Chat"];
+      a.emails += s["Emails"];
+      a.a2a += s["A2A"];
+      a.unverified += s["Unverified"];
+      a.incc += s["INC/C Calling"];
+      a.qc += s["Question Calling"];
+      a.a2ac += s["A2A Calling"];
+      a.delink += s["Delinks"];
+      a.cancel += s["Cancellations"];
+    });
+
+    const csrRank = Object.values(csrAgg).map(r=>{
+      const touchpoints = (r.inbound + r.outbound + r.chat);
+      return {...r, touchpoints};
+    }).sort((a,b)=>b.touchpoints-a.touchpoints);
+
+    document.getElementById("csrRankBody").innerHTML = csrRank.map((r,i)=>`
+      <tr>
+        <td>${i+1}</td>
+        <td><strong>${r.name}</strong></td>
+        <td class="right"><strong>${r.touchpoints.toLocaleString("en-NZ")}</strong></td>
+        <td class="right">${r.inbound.toLocaleString("en-NZ")}</td>
+        <td class="right">${r.outbound.toLocaleString("en-NZ")}</td>
+        <td class="right">${r.chat.toLocaleString("en-NZ")}</td>
+        <td class="right">${r.emails.toLocaleString("en-NZ")}</td>
+      </tr>
+    `).join("") || `<tr><td colspan="7" class="small-muted">No CSR data for current filters.</td></tr>`;
+
+    document.getElementById("csrFullBody").innerHTML = csrRank.map(r=>`
+      <tr>
+        <td><strong>${r.name}</strong></td>
+        <td class="right">${r.inbound}</td>
+        <td class="right">${r.outbound}</td>
+        <td class="right">${r.chat}</td>
+        <td class="right">${r.emails}</td>
+        <td class="right">${r.a2a}</td>
+        <td class="right">${r.unverified}</td>
+        <td class="right">${r.incc}</td>
+        <td class="right">${r.qc}</td>
+        <td class="right">${r.a2ac}</td>
+        <td class="right">${r.delink}</td>
+        <td class="right">${r.cancel}</td>
+      </tr>
+    `).join("") || `<tr><td colspan="12" class="small-muted">No CSR data for current filters.</td></tr>`;
+
+    // Processing ranking + full table (aggregate by staff from Processing_Log + Fee_Log)
+    const procAgg = {};
+    procTodayRows.forEach(r=>{
+      const out = sumProcOutputs(r, workSet);
+      const a = (procAgg[r.staff] ||= {
+        name:r.staff,
+        filing:0,linking:0,linkedreview:0,inbox:0,existingreview:0,processingreview:0,misc:0,
+        output:0,
+        fees:0,
+        entries:0
+      });
+      a.filing += out["Filing"];
+      a.linking += out["Linking"];
+      a.linkedreview += out["Linked Review"];
+      a.inbox += out["Inbox"];
+      a.existingreview += out["Existing Review"];
+      a.processingreview += out["Processing Review"];
+      a.misc += out["Miscellaneous"];
+      a.output += Object.values(out).reduce((x,y)=>x+Number(y||0),0);
+
+      // fees from fee log (filtered)
+      const feeSum = sumFeesForStaff(feeTodayByStaff[r.staff] || [], feeSet);
+      a.fees = feeSum.total;     // set once (same across multiple rows; but safe)
+      a.entries = feeSum.entries;
+    });
+
+    const procRank = Object.values(procAgg).sort((a,b)=>{
+      if(b.fees !== a.fees) return b.fees - a.fees;
+      return b.output - a.output;
+    });
+
+    document.getElementById("procRankBody").innerHTML = procRank.map((r,i)=>`
+      <tr>
+        <td>${i+1}</td>
+        <td><strong>${r.name}</strong></td>
+        <td class="right"><strong>${money(r.fees)}</strong></td>
+        <td class="right">${r.entries.toLocaleString("en-NZ")}</td>
+        <td class="right">${r.output.toLocaleString("en-NZ")}</td>
+      </tr>
+    `).join("") || `<tr><td colspan="5" class="small-muted">No Processing data for current filters.</td></tr>`;
+
+    document.getElementById("procFullBody").innerHTML = procRank.map(r=>`
+      <tr>
+        <td><strong>${r.name}</strong></td>
+        <td class="right">${r.filing}</td>
+        <td class="right">${r.linking}</td>
+        <td class="right">${r.linkedreview}</td>
+        <td class="right">${r.inbox}</td>
+        <td class="right">${r.existingreview}</td>
+        <td class="right">${r.processingreview}</td>
+        <td class="right">${r.misc}</td>
+        <td class="right"><strong>${r.output}</strong></td>
+        <td class="right"><strong>${money(r.fees)}</strong></td>
+        <td class="right">${r.entries}</td>
+      </tr>
+    `).join("") || `<tr><td colspan="11" class="small-muted">No Processing data for current filters.</td></tr>`;
+
+    // Fee breakdown by type (from Fee_Log, filtered by staff + date + fee filter UI controls)
+    const feeTotals = {};
+    FEE_TYPES.forEach(t=>feeTotals[t]={entries:0,total:0});
+
+    feeTodayRows.forEach(r=>{
+      // respect fee filter (but table always shows all types; totals will reflect filtered staff/division/date)
+      if(!feeTotals[r.type]) return;
+      feeTotals[r.type].entries += Number(r.count||0);
+      feeTotals[r.type].total += Number(r.total||0);
+    });
+
+    let totalEntries = 0, totalFees = 0;
+    const feeRowsHtml = FEE_TYPES.map(t=>{
+      const v = feeTotals[t];
+      // Apply fee filter ONLY to totals row? No — table shows all types in range.
+      totalEntries += v.entries;
+      totalFees += v.total;
+      return `
+        <tr>
+          <td><strong>${t}</strong></td>
+          <td class="right">${v.entries.toLocaleString("en-NZ")}</td>
+          <td class="right">${money(Math.round(v.total*100)/100)}</td>
+        </tr>
+      `;
+    }).join("");
+
+    document.getElementById("feeTypeBody").innerHTML = feeRowsHtml;
+    document.getElementById("feeTypeTotalEntries").textContent = totalEntries.toLocaleString("en-NZ");
+    document.getElementById("feeTypeTotalFees").textContent = money(Math.round(totalFees*100)/100);
+
+    setStatus(isToday ? "Live Today" : "Filtered period");
+
+  }catch(err){
+    console.error(err);
+    alert("Connection error");
+    setStatus("Connection error");
+  }
+}
+
+/* ===========================
+   PDF (placeholder until wiring)
+=========================== */
+function downloadPDF(){
+  alert("PDF will match the current filters when backend wiring is added.");
+}
+
+/* ===========================
+   INIT MULTISELECTS
+=========================== */
+(function init(){
+  const msDiv = document.querySelector('[data-ms="division"]');
+  const msStaff = document.querySelector('[data-ms="staff"]');
+  const msWork = document.querySelector('[data-ms="work"]');
+  const msFee = document.querySelector('[data-ms="fee"]');
+
+  buildMultiSelect(msDiv, "division", ["CSR","Processing"]);
+
+  // staff/work depend on division selection, so rebuild them when division changes
+  function rebuildStaffWork(){
+    // staff list will come from live data (after first fetch). Until then, keep blank -> All.
+    // We'll rebuild again after the first runReport anyway.
+    const divisions = msState.division.size ? Array.from(msState.division) : ["CSR","Processing"];
+
+    // Use cached staff lists if available, else defaults empty.
+    let staffOpts = [];
+    if(CACHE){
+      const all = [...(CACHE.staffCSR||[]), ...(CACHE.staffProc||[])];
+      staffOpts = Array.from(new Set(all));
+    }
+    staffOpts.sort((a,b)=>a.localeCompare(b));
+
+    const csrWork = ["Inbound","Outbound","Chat","Emails","A2A","Unverified","INC/C Calling","Question Calling","A2A Calling","Delinks","Cancellations"];
+    const procWork = ["Filing","Linking","Linked Review","Inbox","Existing Review","Processing Review","Miscellaneous"];
+
+    const workOpts = [];
+    divisions.forEach(d=>{
+      (d==="CSR"?csrWork:procWork).forEach(w=>{ if(!workOpts.includes(w)) workOpts.push(w); });
+    });
+
+    // prune selections to valid options (but keep empty as All)
+    Array.from(msState.staff).forEach(v=>{ if(staffOpts.length && !staffOpts.includes(v)) msState.staff.delete(v); });
+    Array.from(msState.work).forEach(v=>{ if(workOpts.length && !workOpts.includes(v)) msState.work.delete(v); });
+
+    msStaff.innerHTML = "";
+    msWork.innerHTML = "";
+    buildMultiSelect(msStaff, "staff", staffOpts.length?staffOpts:["(No data yet)"]);
+    buildMultiSelect(msWork, "work", workOpts.length?workOpts:WORK_TYPES);
+  }
+
+  buildMultiSelect(msFee, "fee", FEE_TYPES);
+
+  rebuildStaffWork();
+
+  msDiv.addEventListener("click",(e)=>{
+    const btn = e.target.closest('[data-act="apply"]');
+    if(btn){
+      setTimeout(()=>rebuildStaffWork(),0);
+    }
+  });
+
+  // initial run
+  runReport().then(()=>{
+    // After first fetch, rebuild staff options with real staff list
+    rebuildStaffWork();
+  });
+})();
 </script>
 
 </body>
