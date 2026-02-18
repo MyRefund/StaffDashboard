@@ -66,26 +66,44 @@ body{
 }
 .clock{font-weight:900;font-size:14px}
 
-/* TOP FILTER BAR (kept, but we’ll keep it minimal; sidebar is primary) */
-.topbar{
+/* PAGE LAYOUT (NO SIDEWAYS SCROLL) */
+.wrap{
   max-width:1400px;
-  margin:20px auto 0;
-  padding:16px;
+  margin:20px auto 60px;
+  padding:0 16px;
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:18px;
+}
+@media(max-width:980px){
+  .wrap{grid-template-columns:1fr}
+}
+
+/* FILTER SIDEBAR */
+.sidebar{
   background:#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  display:flex;
-  flex-wrap:wrap;
-  gap:14px;
-  align-items:flex-end;
+  padding:16px;
+  position:sticky;
+  top:16px;
+  align-self:start;
 }
-
+@media(max-width:980px){
+  .sidebar{position:relative; top:auto}
+}
+.sidebar h3{
+  margin:0 0 12px;
+  font-weight:900;
+  color:var(--g0);
+  font-size:16px;
+}
 .field{
   display:flex;
   flex-direction:column;
   font-size:12px;
   font-weight:900;
-  min-width:160px;
+  margin-bottom:12px;
 }
 .field input{
   margin-top:6px;
@@ -96,6 +114,7 @@ body{
   background:#fff;
 }
 button.primary{
+  width:100%;
   padding:10px 18px;
   border-radius:12px;
   background:var(--g0);
@@ -105,6 +124,8 @@ button.primary{
   cursor:pointer;
 }
 button.secondary{
+  width:100%;
+  margin-top:10px;
   padding:10px 18px;
   border-radius:12px;
   background:#fff;
@@ -113,15 +134,16 @@ button.secondary{
   font-weight:900;
   cursor:pointer;
 }
-
 .status-pill{
-  padding:8px 12px;
+  margin-top:12px;
+  padding:10px 12px;
   border-radius:999px;
   background:var(--g2);
   font-size:12px;
   font-weight:900;
   color:var(--g0);
   border:1px solid rgba(9,75,53,.12);
+  text-align:center;
 }
 
 /* Multi-select dropdown (checkbox style) */
@@ -211,70 +233,12 @@ button.secondary{
   color:var(--g0);
 }
 
-/* ===== NEW: TWO-COLUMN LAYOUT (SIDEBAR + MAIN) ===== */
-.shell{
-  max-width:1400px;
-  margin:20px auto 60px;
-  padding:0 16px;
-  display:grid;
-  grid-template-columns:320px 1fr;
-  gap:16px;
-}
-@media(max-width:1100px){
-  .shell{grid-template-columns:1fr}
-}
-.sidebar{
-  background:#fff;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:16px;
-  position:sticky;
-  top:16px;
-  align-self:start;
-}
-@media(max-width:1100px){
-  .sidebar{position:static}
-}
-.sidebar h3{
-  margin:0 0 10px;
-  font-weight:900;
-  color:var(--g0);
-  font-size:16px;
-}
-.sidebar .hint{
-  font-size:12px;
-  font-weight:800;
-  color:var(--muted);
-  line-height:1.4;
-  margin-bottom:12px;
-}
-.sidebar .group{
-  margin-bottom:12px;
-}
-.sidebar .group .label{
-  font-size:12px;
-  font-weight:900;
-  margin-bottom:6px;
-}
-.sidebar .divider{
-  height:1px;
-  background:var(--border);
-  margin:12px 0;
-}
-.sidebar .btnrow{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-/* CONTENT (MAIN) */
-.content{
+/* MAIN CONTENT */
+.main{
   display:flex;
   flex-direction:column;
   gap:18px;
 }
-
-/* SUMMARY */
 .summary-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -326,7 +290,6 @@ button.secondary{
 }
 .summary-sub strong{color:var(--g0)}
 
-/* PANELS */
 .panel{
   background:#fff;
   border-radius:var(--radius);
@@ -339,6 +302,7 @@ button.secondary{
   color:var(--g0);
   font-size:16px;
 }
+.hr{height:1px;background:var(--border);margin:14px 0;}
 .grid2{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -348,25 +312,28 @@ button.secondary{
   .grid2{grid-template-columns:1fr}
 }
 
-.table-wrap{overflow:auto}
-table{
+.table{
   width:100%;
   border-collapse:collapse;
-  min-width:720px;
+  table-layout:fixed;
 }
-th,td{
+.table th, .table td{
   padding:10px 8px;
   border-bottom:1px solid var(--border);
   font-size:13px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
-th{
+.table th{
   text-align:left;
   color:var(--muted);
   font-weight:900;
 }
-td strong{color:var(--g0)}
+.table td strong{color:var(--g0)}
 .right{text-align:right}
 .small-muted{color:var(--muted);font-weight:800;font-size:12px}
+
 .badge{
   display:inline-flex;
   align-items:center;
@@ -383,15 +350,6 @@ td strong{color:var(--g0)}
   width:8px;height:8px;border-radius:50%;
   background:#16a34a;
 }
-.dot.warn{background:#f59e0b}
-.dot.bad{background:#dc2626}
-
-/* Divider line inside panels */
-.hr{
-  height:1px;background:var(--border);margin:14px 0;
-}
-
-/* Footer note */
 .note{
   font-size:12px;
   font-weight:800;
@@ -421,67 +379,50 @@ td strong{color:var(--g0)}
   </div>
 </div>
 
-<!-- TOP FILTER BAR (kept, not removed) -->
-<div class="topbar">
-  <div class="field">
-    Date From
-    <input type="date" id="startDate">
-  </div>
+<div class="wrap">
 
-  <div class="field">
-    Date To
-    <input type="date" id="endDate">
-  </div>
-
-  <button class="primary" id="runBtn" onclick="runReport()">Run Report</button>
-  <button class="secondary" onclick="downloadPDF()">Download PDF</button>
-
-  <div class="status-pill" id="statusPill">Live Today</div>
-</div>
-
-<!-- NEW SHELL: SIDEBAR + MAIN CONTENT -->
-<div class="shell">
-
-  <!-- SIDEBAR FILTERS -->
-  <aside class="sidebar">
+  <!-- LEFT: FILTERS -->
+  <div class="sidebar">
     <h3>Filters</h3>
-    <div class="hint">Select as many filters as you want. Empty = “All”. Filters apply across all panels and tables.</div>
 
-    <div class="group">
-      <div class="label">Division</div>
+    <div class="field">
+      Date From
+      <input type="date" id="startDate">
+    </div>
+
+    <div class="field">
+      Date To
+      <input type="date" id="endDate">
+    </div>
+
+    <div class="field">
+      Division
       <div class="mselect" data-ms="division"></div>
     </div>
 
-    <div class="group">
-      <div class="label">Staff</div>
+    <div class="field">
+      Staff
       <div class="mselect" data-ms="staff"></div>
     </div>
 
-    <div class="group">
-      <div class="label">Work Type</div>
+    <div class="field">
+      Work Type
       <div class="mselect" data-ms="work"></div>
     </div>
 
-    <div class="group">
-      <div class="label">Fee Type</div>
+    <div class="field">
+      Fee Type
       <div class="mselect" data-ms="fee"></div>
     </div>
 
-    <div class="divider"></div>
+    <button class="primary" id="runBtn" onclick="runReport()">Run Report</button>
+    <button class="secondary" onclick="downloadPDF()">Download PDF</button>
 
-    <div class="btnrow">
-      <button class="primary" type="button" onclick="runReport()">Run Report</button>
-      <button class="secondary" type="button" onclick="resetFilters()">Reset</button>
-    </div>
+    <div class="status-pill" id="statusPill">Live Today</div>
+  </div>
 
-    <div class="divider"></div>
-    <div class="note">
-      <strong>Note:</strong> Revenue is calculated from <strong>Fee_Log</strong> only.
-    </div>
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <main class="content">
+  <!-- RIGHT: CONTENT -->
+  <div class="main">
 
     <!-- EXEC SNAPSHOT -->
     <div class="summary-grid">
@@ -517,7 +458,7 @@ td strong{color:var(--g0)}
         </div>
         <div class="summary-sub">
           <span>Yesterday: <strong id="feesYday">$0</strong></span>
-          <span class="small-muted">From Fee_Log</span>
+          <span class="small-muted">Fee_Log</span>
         </div>
       </div>
 
@@ -563,143 +504,167 @@ td strong{color:var(--g0)}
           </div>
           <div class="summary-sub" style="margin-top:8px;">
             <span>Fee entries: <strong id="procFeeEntries">0</strong></span>
-            <span class="small-muted">From Fee_Log</span>
+            <span class="small-muted">Fee_Log</span>
           </div>
         </div>
       </div>
 
       <div class="hr"></div>
       <div class="note">
-        <strong>How to read:</strong> CSR touchpoints = inbound + outbound + chat. Processing total output = sum of all output counters. Fees + fee entries come from Fee_Log.
+        <strong>How to read:</strong> CSR touchpoints = inbound + outbound + chat. Processing total output = sum of all output counters. Fees and fee entries come from Fee_Log.
       </div>
     </div>
 
-    <!-- STAFF RANKINGS -->
+    <!-- RANKINGS -->
     <div class="grid2">
       <div class="panel">
         <h3>CSR staff ranking</h3>
         <div class="small-muted" style="margin-bottom:10px;">Sorted by total touchpoints (inbound + outbound + chat)</div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Staff</th>
-                <th class="right">Touchpoints</th>
-                <th class="right">Inbound</th>
-                <th class="right">Outbound</th>
-                <th class="right">Chat</th>
-                <th class="right">Emails</th>
-              </tr>
-            </thead>
-            <tbody id="csrRankBody"></tbody>
-          </table>
-        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:52px;">Rank</th>
+              <th>Staff</th>
+              <th class="right" style="width:130px;">Touchpoints</th>
+              <th class="right" style="width:110px;">Inbound</th>
+              <th class="right" style="width:110px;">Outbound</th>
+              <th class="right" style="width:100px;">Chat</th>
+              <th class="right" style="width:110px;">Emails</th>
+            </tr>
+          </thead>
+          <tbody id="csrRankBody"></tbody>
+        </table>
       </div>
 
       <div class="panel">
         <h3>Processing staff ranking</h3>
         <div class="small-muted" style="margin-bottom:10px;">Sorted by total fees (then output)</div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Staff</th>
-                <th class="right">Fees</th>
-                <th class="right">Fee entries</th>
-                <th class="right">Total output</th>
-              </tr>
-            </thead>
-            <tbody id="procRankBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- FULL DETAIL TABLES -->
-    <div class="panel">
-      <h3>CSR full breakdown</h3>
-      <div class="table-wrap">
-        <table>
+        <table class="table">
           <thead>
             <tr>
+              <th style="width:52px;">Rank</th>
               <th>Staff</th>
-              <th class="right">Inbound</th>
-              <th class="right">Outbound</th>
-              <th class="right">Chat</th>
-              <th class="right">Emails</th>
-              <th class="right">A2A</th>
-              <th class="right">Unverified</th>
-              <th class="right">INC/C</th>
-              <th class="right">Question</th>
-              <th class="right">A2A Calling</th>
-              <th class="right">Delinks</th>
-              <th class="right">Cancels</th>
+              <th class="right" style="width:140px;">Fees</th>
+              <th class="right" style="width:130px;">Fee entries</th>
+              <th class="right" style="width:130px;">Total output</th>
             </tr>
           </thead>
-          <tbody id="csrFullBody"></tbody>
+          <tbody id="procRankBody"></tbody>
         </table>
       </div>
     </div>
 
-    <div class="panel">
-      <h3>Processing full breakdown</h3>
-      <div class="table-wrap">
-        <table>
+    <!-- CSR BREAKDOWN (SPLIT PANELS) -->
+    <div class="grid2">
+      <div class="panel">
+        <h3>CSR core channels</h3>
+        <div class="small-muted" style="margin-bottom:10px;">Inbound / Outbound / Chat / Emails</div>
+        <table class="table">
           <thead>
             <tr>
               <th>Staff</th>
-              <th class="right">Filing</th>
-              <th class="right">Linking</th>
-              <th class="right">Linked Review</th>
-              <th class="right">Inbox</th>
-              <th class="right">Existing Review</th>
-              <th class="right">Processing Review</th>
-              <th class="right">Misc</th>
-              <th class="right">Total output</th>
-              <th class="right">Fees</th>
-              <th class="right">Fee entries</th>
+              <th class="right" style="width:110px;">Inbound</th>
+              <th class="right" style="width:110px;">Outbound</th>
+              <th class="right" style="width:100px;">Chat</th>
+              <th class="right" style="width:110px;">Emails</th>
+              <th class="right" style="width:130px;">Touchpoints</th>
             </tr>
           </thead>
-          <tbody id="procFullBody"></tbody>
+          <tbody id="csrCoreBody"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h3>CSR calling + actions</h3>
+        <div class="small-muted" style="margin-bottom:10px;">A2A / Unverified / INC/C / Question / A2A Calling / Delinks / Cancels</div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Staff</th>
+              <th class="right" style="width:90px;">A2A</th>
+              <th class="right" style="width:120px;">Unverified</th>
+              <th class="right" style="width:95px;">INC/C</th>
+              <th class="right" style="width:110px;">Question</th>
+              <th class="right" style="width:120px;">A2A Calling</th>
+              <th class="right" style="width:90px;">Delinks</th>
+              <th class="right" style="width:90px;">Cancels</th>
+            </tr>
+          </thead>
+          <tbody id="csrActionsBody"></tbody>
         </table>
       </div>
     </div>
 
+    <!-- PROCESSING BREAKDOWN (SPLIT PANELS) -->
+    <div class="grid2">
+      <div class="panel">
+        <h3>Processing output (group 1)</h3>
+        <div class="small-muted" style="margin-bottom:10px;">Filing / Linking / Linked Review / Inbox</div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Staff</th>
+              <th class="right" style="width:95px;">Filing</th>
+              <th class="right" style="width:95px;">Linking</th>
+              <th class="right" style="width:130px;">Linked Review</th>
+              <th class="right" style="width:95px;">Inbox</th>
+            </tr>
+          </thead>
+          <tbody id="procGroup1Body"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h3>Processing output (group 2)</h3>
+        <div class="small-muted" style="margin-bottom:10px;">Existing Review / Processing Review / Misc / Totals</div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Staff</th>
+              <th class="right" style="width:140px;">Existing Review</th>
+              <th class="right" style="width:150px;">Processing Review</th>
+              <th class="right" style="width:110px;">Misc</th>
+              <th class="right" style="width:130px;">Total output</th>
+              <th class="right" style="width:120px;">Fees</th>
+            </tr>
+          </thead>
+          <tbody id="procGroup2Body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FEE BREAKDOWN -->
     <div class="panel">
       <h3>Fee breakdown by type</h3>
-      <div class="small-muted" style="margin-bottom:10px;">Includes only fee entries in the selected period + filters</div>
-      <div class="table-wrap">
-        <table style="min-width:520px;">
-          <thead>
-            <tr>
-              <th>Fee type</th>
-              <th class="right">Entries</th>
-              <th class="right">Total fees</th>
-            </tr>
-          </thead>
-          <tbody id="feeTypeBody"></tbody>
-          <tfoot>
-            <tr>
-              <td><strong>Total</strong></td>
-              <td class="right"><strong id="feeTypeTotalEntries">0</strong></td>
-              <td class="right"><strong id="feeTypeTotalFees">$0</strong></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+      <div class="small-muted" style="margin-bottom:10px;">Includes only fee entries in selected period + filters</div>
+      <table class="table" style="max-width:720px;">
+        <thead>
+          <tr>
+            <th>Fee type</th>
+            <th class="right" style="width:140px;">Entries</th>
+            <th class="right" style="width:160px;">Total fees</th>
+          </tr>
+        </thead>
+        <tbody id="feeTypeBody"></tbody>
+        <tfoot>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td class="right"><strong id="feeTypeTotalEntries">0</strong></td>
+            <td class="right"><strong id="feeTypeTotalFees">$0</strong></td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
 
-  </main>
+  </div>
 </div>
 
 <script>
 /* ===========================
-   BACKEND URL
+   BACKEND
 =========================== */
 const WEB_APP_URL =
-  "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
+"https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
 
 /* ===========================
    NAV / CLOCK
@@ -730,12 +695,14 @@ document.getElementById("startDate").value = todayISO;
 document.getElementById("endDate").value = todayISO;
 
 /* ===========================
-   HELPERS
+   UTIL
 =========================== */
 function money(n){
   const v = Number(n)||0;
   return "$" + v.toLocaleString("en-NZ",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
+function num(n){ return Number(n)||0; }
+
 function pctChange(today, yday){
   const t = Number(today)||0;
   const y = Number(yday)||0;
@@ -756,33 +723,8 @@ function setStatus(text){
   document.getElementById("statusPill").textContent = text;
 }
 
-/* Normalize sheet dates into ISO yyyy-mm-dd if possible */
-function normISO(v){
-  if(!v && v!==0) return "";
-  if (typeof v === "string"){
-    // If already yyyy-mm-dd
-    if (/^\d{4}-\d{2}-\d{2}$/.test(v.trim())) return v.trim();
-    // Try parse
-    const d = new Date(v);
-    if (!isNaN(d.getTime())) return nzISO(d);
-    return v.trim();
-  }
-  if (v instanceof Date) return nzISO(v);
-  // Google sheets may return Date object but sometimes number
-  if (typeof v === "number"){
-    const d = new Date(Math.round((v - 25569) * 86400 * 1000)); // Excel-ish serial fallback
-    if (!isNaN(d.getTime())) return nzISO(d);
-  }
-  return String(v);
-}
-
-function betweenISO(iso, start, end){
-  if(!iso) return false;
-  return (iso >= start && iso <= end);
-}
-
 /* ===========================
-   MULTISELECT STATE
+   MULTISELECT
 =========================== */
 const msState = {
   division: new Set(["CSR","Processing"]),
@@ -791,13 +733,6 @@ const msState = {
   fee: new Set()
 };
 
-/* Canonical work + fee lists (matches your UI naming) */
-const CSR_WORK = ["Inbound","Outbound","Chat","Emails","A2A","Unverified","INC/C Calling","Question Calling","A2A Calling","Delinks","Cancellations"];
-const PROC_WORK = ["Filing","Linking","Linked Review","Inbox","Existing Review","Processing Review","Miscellaneous"];
-
-/* ===========================
-   MULTISELECT COMPONENT
-=========================== */
 function buildMultiSelect(el, key, options){
   el.classList.add("mselect");
   el.innerHTML = `
@@ -826,7 +761,7 @@ function buildMultiSelect(el, key, options){
     const f = filter.trim().toLowerCase();
     list.innerHTML = "";
     options
-      .filter(o => !f || o.toLowerCase().includes(f))
+      .filter(o => !f || String(o).toLowerCase().includes(f))
       .forEach(o=>{
         const row=document.createElement("div");
         row.className="mopt";
@@ -895,13 +830,8 @@ function buildMultiSelect(el, key, options){
 }
 
 /* ===========================
-   FILTER OPTIONS (DYNAMIC FROM DATA)
+   FILTER HELPERS
 =========================== */
-let ALL_CSR = [];
-let ALL_PROC = [];
-let ALL_FEES = [];
-let FEE_TYPES = ["ITA","IR3","REB","AA","R3P","OP"]; // fallback
-
 function getFilterSet(key, options){
   const s = msState[key];
   if(!s || s.size===0) return new Set(options);
@@ -909,465 +839,474 @@ function getFilterSet(key, options){
   return new Set(Array.from(s));
 }
 
-function selectedDivisions(){
-  return getFilterSet("division", ["CSR","Processing"]);
-}
-
-function refreshStaffOptionsFromData(){
-  const divs = selectedDivisions();
-  const names = new Set();
-  if(divs.has("CSR")){
-    ALL_CSR.forEach(r=>{ if(r.Staff) names.add(String(r.Staff)); });
-  }
-  if(divs.has("Processing")){
-    ALL_PROC.forEach(r=>{ if(r.Staff) names.add(String(r.Staff)); });
-  }
-  return Array.from(names).sort((a,b)=>a.localeCompare(b));
-}
-
-function refreshWorkOptions(){
-  const divs = selectedDivisions();
-  const work = [];
-  if(divs.has("CSR")) CSR_WORK.forEach(w=>{ if(!work.includes(w)) work.push(w); });
-  if(divs.has("Processing")) PROC_WORK.forEach(w=>{ if(!work.includes(w)) work.push(w); });
-  return work;
-}
-
-function refreshFeeTypeOptionsFromData(){
-  const types = new Set();
-  ALL_FEES.forEach(r=>{
-    const t = r.Fee_Type || r.FeeType || r.Type || r["Fee Type"];
-    if(t) types.add(String(t));
-  });
-  const arr = Array.from(types);
-  if(arr.length) return arr.sort((a,b)=>a.localeCompare(b));
-  return FEE_TYPES;
+function inDateRange(dateVal, startISO, endISO){
+  // Accept Date objects, ISO strings, or weird values.
+  const d = new Date(dateVal);
+  if(isNaN(d.getTime())) return false;
+  const iso = d.toLocaleDateString("en-CA",{timeZone:TZ});
+  return iso >= startISO && iso <= endISO;
 }
 
 /* ===========================
-   RESET
+   WORK TYPES (FIXED)
 =========================== */
-function resetFilters(){
-  msState.division = new Set(["CSR","Processing"]);
-  msState.staff.clear();
-  msState.work.clear();
-  msState.fee.clear();
-  initMultiSelects(true);
-  runReport();
-}
+const CSR_WORK = ["Inbound","Outbound","Chat","Emails","A2A","Unverified","INC_C_Calling","Question_Calling","A2A_Calling","Delinks","Cancellations"];
+const PROC_WORK = ["Filing","Linking","Linked Review","Inbox","Existing Review","Processing Review","Miscellaneous","Total Output","Total Fees"];
+const ALL_WORK = [...CSR_WORK, ...PROC_WORK];
 
 /* ===========================
-   BACKEND FETCH
+   LOAD BACKEND DATA
 =========================== */
-async function fetchReportData(params){
-  const qs = new URLSearchParams(params);
-  const url = WEB_APP_URL + "?" + qs.toString();
+async function fetchReportData(){
+  const url = WEB_APP_URL + "?action=getReportData";
   const res = await fetch(url, { method:"GET" });
-  return await res.json();
+  const data = await res.json();
+  if(!data || !data.ok) throw new Error((data && data.error) ? data.error : "Unknown backend error");
+  return data;
 }
 
 /* ===========================
-   APPLY FILTERS (CLIENT FALLBACK)
+   NORMALIZE BACKEND ROWS
 =========================== */
-function applyAllFilters(startISO, endISO){
-  const divs = selectedDivisions();
-  const staffSet = getFilterSet("staff", refreshStaffOptionsFromData());
-  const workSet = getFilterSet("work", refreshWorkOptions());
-  const feeSet = getFilterSet("fee", refreshFeeTypeOptionsFromData());
+function normalizeCSRRow(r){
+  return {
+    Timestamp: r.Timestamp,
+    Date: r.Date,
+    Staff: String(r.Staff||"").trim(),
+    Division: "CSR",
+    Inbound: num(r.Inbound),
+    Outbound: num(r.Outbound),
+    Chat: num(r.Chat),
+    Emails: num(r.Emails),
+    A2A: num(r.A2A),
+    Unverified: num(r.Unverified),
+    INC_C_Calling: num(r.INC_C_Calling),
+    Question_Calling: num(r.Question_Calling),
+    A2A_Calling: num(r.A2A_Calling),
+    Delinks: num(r.Delinks),
+    Cancellations: num(r.Cancellations)
+  };
+}
 
-  // CSR rows filtered by date + staff
-  let csr = ALL_CSR
-    .map(r=>{
-      const d = normISO(r.Date);
-      return { ...r, _DateISO:d };
-    })
-    .filter(r=>divs.has("CSR") && staffSet.has(String(r.Staff||"")) && betweenISO(r._DateISO, startISO, endISO));
+function normalizeProcRow(r){
+  return {
+    Date: r.Date,
+    Staff: String(r.Staff||"").trim(),
+    Filing: num(r.Filing),
+    Linking: num(r.Linking),
+    "Linked Review": num(r["Linked Review"]),
+    Inbox: num(r.Inbox),
+    "Existing Review": num(r["Existing Review"]),
+    "Processing Review": num(r["Processing Review"]),
+    Miscellaneous: num(r.Miscellaneous),
+    "Total Output": num(r["Total Output"]),
+    "Total Fees": num(r["Total Fees"]),
+    "Submitted At": r["Submitted At"]
+  };
+}
 
-  // Processing rows filtered by date + staff
-  let proc = ALL_PROC
-    .map(r=>{
-      const d = normISO(r.Date);
-      return { ...r, _DateISO:d };
-    })
-    .filter(r=>divs.has("Processing") && staffSet.has(String(r.Staff||"")) && betweenISO(r._DateISO, startISO, endISO));
-
-  // Fee rows filtered by date + staff + fee type
-  let fees = ALL_FEES
-    .map(r=>{
-      const d = normISO(r.Date);
-      const staff = String(r.Staff||"");
-      const type = String(r.Fee_Type || r.FeeType || r.Type || r["Fee Type"] || "");
-      const count = Number(r.Count || r.Entries || r.EntryCount || 0) || 0;
-      const total = Number(r.Total_Fee || r.TotalFee || r.Total || 0) || 0;
-      return { ...r, _DateISO:d, _Staff:staff, _Type:type, _Count:count, _Total:total };
-    })
-    .filter(r=>betweenISO(r._DateISO, startISO, endISO) && staffSet.has(r._Staff) && feeSet.has(r._Type));
-
-  return { csr, proc, fees, workSet, feeSet, divs };
+function normalizeFeeRow(r){
+  return {
+    Timestamp: r.Timestamp,
+    Date: r.Date,
+    Staff: String(r.Staff||"").trim(),
+    Fee_Type: String(r.Fee_Type||"").trim(),
+    Count: num(r.Count),
+    Total_Fee: num(r.Total_Fee)
+  };
 }
 
 /* ===========================
-   SUMMARISERS (RESPECT WORK FILTER)
+   BUILD ZERO-FILLED STAFF LINES
 =========================== */
-function sumCSRRow(r, workSet){
-  const inbound = Number(r.Inbound||0);
-  const outbound = Number(r.Outbound||0);
-  const chat = Number(r.Chat||0);
-  const emails = Number(r.Emails||0);
-  const a2a = Number(r.A2A||0);
-  const unverified = Number(r.Unverified||0);
-  const incc = Number(r.INC_C_Calling||0) || Number(r["INC/C Calling"]||0) || Number(r.INC_C||0);
-  const qc = Number(r.Question_Calling||0) || Number(r["Question Calling"]||0);
-  const a2ac = Number(r.A2A_Calling||0) || Number(r["A2A Calling"]||0);
-  const delinks = Number(r.Delinks||0);
-  const cancels = Number(r.Cancellations||0) || Number(r.Cancels||0);
-
-  const map = {
-    "Inbound": inbound,
-    "Outbound": outbound,
-    "Chat": chat,
-    "Emails": emails,
-    "A2A": a2a,
-    "Unverified": unverified,
-    "INC/C Calling": incc,
-    "Question Calling": qc,
-    "A2A Calling": a2ac,
-    "Delinks": delinks,
-    "Cancellations": cancels
+function emptyCSRLine(staff){
+  return {
+    Staff: staff,
+    Inbound:0, Outbound:0, Chat:0, Emails:0,
+    A2A:0, Unverified:0, INC_C_Calling:0, Question_Calling:0, A2A_Calling:0,
+    Delinks:0, Cancellations:0
   };
-  const out = {};
-  Object.keys(map).forEach(k=>{
-    out[k] = workSet.has(k) ? (Number(map[k])||0) : 0;
-  });
-  return out;
+}
+function emptyProcLine(staff){
+  return {
+    Staff: staff,
+    Filing:0, Linking:0, "Linked Review":0, Inbox:0, "Existing Review":0, "Processing Review":0, Miscellaneous:0,
+    "Total Output":0,
+    Fees:0,
+    FeeEntries:0
+  };
 }
 
-function sumProcRow(r, workSet){
-  const filing = Number(r.Filing||0);
-  const linking = Number(r.Linking||0);
-  const linkedreview = Number(r["Linked Review"]||0) || Number(r.LinkedReview||0) || Number(r.Linked_Review||0);
-  const inbox = Number(r.Inbox||0);
-  const existingreview = Number(r["Existing Review"]||0) || Number(r.ExistingReview||0);
-  const processingreview = Number(r["Processing Review"]||0) || Number(r.ProcessingReview||0);
-  const misc = Number(r.Miscellaneous||0) || Number(r.Misc||0);
+/* ===========================
+   REPORT CALC
+=========================== */
+function calcCSRByStaff(csrRows, allStaff, workSet){
+  const map = new Map();
+  allStaff.forEach(s=>map.set(s, emptyCSRLine(s)));
 
-  const map = {
-    "Filing": filing,
-    "Linking": linking,
-    "Linked Review": linkedreview,
-    "Inbox": inbox,
-    "Existing Review": existingreview,
-    "Processing Review": processingreview,
-    "Miscellaneous": misc
-  };
-  const out = {};
-  Object.keys(map).forEach(k=>{
-    out[k] = workSet.has(k) ? (Number(map[k])||0) : 0;
+  csrRows.forEach(r=>{
+    const staff = r.Staff;
+    if(!map.has(staff)) map.set(staff, emptyCSRLine(staff));
+    const o = map.get(staff);
+
+    // apply work filter per-field
+    const add = (k, v)=>{ if(workSet.has(k)) o[k] += v; };
+
+    add("Inbound", r.Inbound);
+    add("Outbound", r.Outbound);
+    add("Chat", r.Chat);
+    add("Emails", r.Emails);
+    add("A2A", r.A2A);
+    add("Unverified", r.Unverified);
+    add("INC_C_Calling", r.INC_C_Calling);
+    add("Question_Calling", r.Question_Calling);
+    add("A2A_Calling", r.A2A_Calling);
+    add("Delinks", r.Delinks);
+    add("Cancellations", r.Cancellations);
   });
-  const totalOutput = Object.values(out).reduce((a,b)=>a+(Number(b)||0),0);
-  return { out, totalOutput };
+
+  const rows = Array.from(map.values());
+  rows.forEach(r=>{
+    r.Touchpoints = (r.Inbound + r.Outbound + r.Chat);
+  });
+  return rows;
+}
+
+function calcProcByStaff(procRows, feeRows, allStaff, workSet, feeTypeSet){
+  const map = new Map();
+  allStaff.forEach(s=>map.set(s, emptyProcLine(s)));
+
+  // processing outputs
+  procRows.forEach(r=>{
+    const staff = r.Staff;
+    if(!map.has(staff)) map.set(staff, emptyProcLine(staff));
+    const o = map.get(staff);
+
+    const add = (k, v)=>{ if(workSet.has(k)) o[k] += v; };
+
+    add("Filing", r.Filing);
+    add("Linking", r.Linking);
+    add("Linked Review", r["Linked Review"]);
+    add("Inbox", r.Inbox);
+    add("Existing Review", r["Existing Review"]);
+    add("Processing Review", r["Processing Review"]);
+    add("Miscellaneous", r.Miscellaneous);
+
+    // Total Output respects work set: if they filter out all output types, total output can be 0
+    // We recompute total output from selected fields (not trusting sheet)
+    o["Total Output"] =
+      o.Filing + o.Linking + o["Linked Review"] + o.Inbox + o["Existing Review"] + o["Processing Review"] + o.Miscellaneous;
+  });
+
+  // fees from Fee_Log (authoritative)
+  feeRows.forEach(fr=>{
+    if(!feeTypeSet.has(fr.Fee_Type)) return;
+    const staff = fr.Staff;
+    if(!map.has(staff)) map.set(staff, emptyProcLine(staff));
+    const o = map.get(staff);
+    o.FeeEntries += fr.Count;
+    o.Fees += fr.Total_Fee;
+  });
+
+  // active rounding
+  Array.from(map.values()).forEach(r=>{
+    r.Fees = Math.round(r.Fees*100)/100;
+  });
+
+  return Array.from(map.values());
+}
+
+function feeBreakdown(feeRows, allFeeTypes, feeTypeSet){
+  const map = new Map();
+  allFeeTypes.forEach(t=>map.set(t,{Fee_Type:t, Entries:0, Total:0}));
+
+  feeRows.forEach(r=>{
+    if(!feeTypeSet.has(r.Fee_Type)) return;
+    if(!map.has(r.Fee_Type)) map.set(r.Fee_Type,{Fee_Type:r.Fee_Type, Entries:0, Total:0});
+    const o = map.get(r.Fee_Type);
+    o.Entries += r.Count;
+    o.Total += r.Total_Fee;
+  });
+
+  const rows = Array.from(map.values()).map(x=>({
+    Fee_Type: x.Fee_Type,
+    Entries: x.Entries,
+    Total: Math.round(x.Total*100)/100
+  }));
+
+  let totalEntries = 0, totalFees = 0;
+  rows.forEach(r=>{ totalEntries += r.Entries; totalFees += r.Total; });
+  totalFees = Math.round(totalFees*100)/100;
+
+  return { rows, totalEntries, totalFees };
+}
+
+/* ===========================
+   RENDER
+=========================== */
+function renderTables(csrByStaff, procByStaff, feeTypeRows){
+
+  // CSR Ranking
+  const csrRank = [...csrByStaff].sort((a,b)=>b.Touchpoints-a.Touchpoints);
+  document.getElementById("csrRankBody").innerHTML =
+    csrRank.map((r,i)=>`
+      <tr>
+        <td>${i+1}</td>
+        <td><strong>${r.Staff}</strong></td>
+        <td class="right"><strong>${r.Touchpoints.toLocaleString("en-NZ")}</strong></td>
+        <td class="right">${r.Inbound.toLocaleString("en-NZ")}</td>
+        <td class="right">${r.Outbound.toLocaleString("en-NZ")}</td>
+        <td class="right">${r.Chat.toLocaleString("en-NZ")}</td>
+        <td class="right">${r.Emails.toLocaleString("en-NZ")}</td>
+      </tr>
+    `).join("");
+
+  // CSR Core
+  document.getElementById("csrCoreBody").innerHTML =
+    csrByStaff.map(r=>`
+      <tr>
+        <td><strong>${r.Staff}</strong></td>
+        <td class="right">${r.Inbound}</td>
+        <td class="right">${r.Outbound}</td>
+        <td class="right">${r.Chat}</td>
+        <td class="right">${r.Emails}</td>
+        <td class="right"><strong>${r.Touchpoints}</strong></td>
+      </tr>
+    `).join("");
+
+  // CSR Actions
+  document.getElementById("csrActionsBody").innerHTML =
+    csrByStaff.map(r=>`
+      <tr>
+        <td><strong>${r.Staff}</strong></td>
+        <td class="right">${r.A2A}</td>
+        <td class="right">${r.Unverified}</td>
+        <td class="right">${r.INC_C_Calling}</td>
+        <td class="right">${r.Question_Calling}</td>
+        <td class="right">${r.A2A_Calling}</td>
+        <td class="right">${r.Delinks}</td>
+        <td class="right">${r.Cancellations}</td>
+      </tr>
+    `).join("");
+
+  // Processing Ranking
+  const procRank = [...procByStaff].sort((a,b)=>{
+    if(b.Fees!==a.Fees) return b.Fees-a.Fees;
+    return b["Total Output"]-a["Total Output"];
+  });
+  document.getElementById("procRankBody").innerHTML =
+    procRank.map((r,i)=>`
+      <tr>
+        <td>${i+1}</td>
+        <td><strong>${r.Staff}</strong></td>
+        <td class="right"><strong>${money(r.Fees)}</strong></td>
+        <td class="right">${r.FeeEntries.toLocaleString("en-NZ")}</td>
+        <td class="right">${r["Total Output"].toLocaleString("en-NZ")}</td>
+      </tr>
+    `).join("");
+
+  // Proc group 1
+  document.getElementById("procGroup1Body").innerHTML =
+    procByStaff.map(r=>`
+      <tr>
+        <td><strong>${r.Staff}</strong></td>
+        <td class="right">${r.Filing}</td>
+        <td class="right">${r.Linking}</td>
+        <td class="right">${r["Linked Review"]}</td>
+        <td class="right">${r.Inbox}</td>
+      </tr>
+    `).join("");
+
+  // Proc group 2
+  document.getElementById("procGroup2Body").innerHTML =
+    procByStaff.map(r=>`
+      <tr>
+        <td><strong>${r.Staff}</strong></td>
+        <td class="right">${r["Existing Review"]}</td>
+        <td class="right">${r["Processing Review"]}</td>
+        <td class="right">${r.Miscellaneous}</td>
+        <td class="right"><strong>${r["Total Output"]}</strong></td>
+        <td class="right"><strong>${money(r.Fees)}</strong></td>
+      </tr>
+    `).join("");
+
+  // Fee type table
+  document.getElementById("feeTypeBody").innerHTML =
+    feeTypeRows.rows.map(r=>`
+      <tr>
+        <td><strong>${r.Fee_Type}</strong></td>
+        <td class="right">${r.Entries.toLocaleString("en-NZ")}</td>
+        <td class="right">${money(r.Total)}</td>
+      </tr>
+    `).join("");
+
+  document.getElementById("feeTypeTotalEntries").textContent =
+    feeTypeRows.totalEntries.toLocaleString("en-NZ");
+
+  document.getElementById("feeTypeTotalFees").textContent =
+    money(feeTypeRows.totalFees);
 }
 
 /* ===========================
    MAIN REPORT
 =========================== */
+let CACHE = null;
+
 async function runReport(){
   setStatus("Loading…");
 
-  const startISO = document.getElementById("startDate").value || todayISO;
-  const endISO = document.getElementById("endDate").value || todayISO;
-  const isToday = (startISO===todayISO && endISO===todayISO);
-  document.getElementById("rangeLabel").textContent = isToday ? "Today (live)" : `${startISO} → ${endISO}`;
-
-  // Build params for backend filtering (as requested)
-  const divArr = Array.from(msState.division.size ? msState.division : new Set(["CSR","Processing"]));
-  const staffArr = Array.from(msState.staff);
-  const workArr = Array.from(msState.work);
-  const feeArr = Array.from(msState.fee);
-
-  const params = {
-    action: "getReportData",
-    start: startISO,
-    end: endISO,
-    division: divArr.join(","),
-    staff: staffArr.join(","),
-    work: workArr.join(","),
-    fee: feeArr.join(",")
-  };
+  const start = document.getElementById("startDate").value || todayISO;
+  const end = document.getElementById("endDate").value || todayISO;
+  const isToday = (start===todayISO && end===todayISO);
+  document.getElementById("rangeLabel").textContent = isToday ? "Today (live)" : `${start} → ${end}`;
 
   try{
-    const data = await fetchReportData(params);
-    if(!data.ok){
-      alert(data.error || "Unknown backend error");
-      setStatus("Error");
-      return;
+    if(!CACHE){
+      CACHE = await fetchReportData();
     }
 
-    // Store raw
-    ALL_CSR = Array.isArray(data.csr) ? data.csr : [];
-    ALL_PROC = Array.isArray(data.processing) ? data.processing : [];
-    ALL_FEES = Array.isArray(data.fees) ? data.fees : [];
+    // Build option lists from backend (NO EXCEPTIONS)
+    const allStaff = (CACHE.allStaff || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
+    const allFeeTypes = (CACHE.allFeeTypes || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
 
-    // Rebuild filter UIs based on real data (but keep current selections)
-    initMultiSelects(false);
+    // Filters
+    const divSet = getFilterSet("division", ["CSR","Processing"]);
+    const staffSet = getFilterSet("staff", allStaff);
 
-    // Apply (client fallback)
-    const filtered = applyAllFilters(startISO, endISO);
+    // Work options depend on divisions selected
+    const workOptions = [];
+    if(divSet.has("CSR")) CSR_WORK.forEach(w=>workOptions.push(w));
+    if(divSet.has("Processing")) PROC_WORK.forEach(w=>{ if(!workOptions.includes(w)) workOptions.push(w); });
 
-    // Yesterday (for deltas): we compare start date as primary day vs previous day (same UI approach you already had)
-    const day = startISO;
-    const ydayISO = addDaysISO(day, -1);
+    const workSet = getFilterSet("work", workOptions);
+    const feeSet = getFilterSet("fee", allFeeTypes);
 
-    // For yday comparisons, we re-filter against yday only (single day), with same filters
-    const yFiltered = applyAllFilters(ydayISO, ydayISO);
+    // Normalize rows
+    means = null;
+    const csrAll = (CACHE.csr||[]).map(normalizeCSRRow);
+    const procAll = (CACHE.processing||[]).map(normalizeProcRow);
+    const feeAll = (CACHE.fees||[]).map(normalizeFeeRow);
 
-    /* ===== CSR totals ===== */
-    let csrInbound=0, csrOutbound=0, csrChat=0, csrEmails=0, csrTouch=0;
-    filtered.csr.forEach(r=>{
-      const s = sumCSRRow(r, filtered.workSet);
-      csrInbound += s["Inbound"];
-      csrOutbound += s["Outbound"];
-      csrChat += s["Chat"];
-      csrEmails += s["Emails"];
-      csrTouch += (s["Inbound"] + s["Outbound"] + s["Chat"]);
-    });
+    // Date + staff filters
+    const csrRows = csrAll.filter(r =>
+      divSet.has("CSR") &&
+      staffSet.has(r.Staff) &&
+      inDateRange(r.Date, start, end)
+    );
 
-    let csrTouchY=0;
-    yFiltered.csr.forEach(r=>{
-      const s = sumCSRRow(r, yFiltered.workSet);
-      csrTouchY += (s["Inbound"] + s["Outbound"] + s["Chat"]);
-    });
+    const procRows = procAll.filter(r =>
+      divSet.has("Processing") &&
+      staffSet.has(r.Staff) &&
+      inDateRange(r.Date, start, end)
+    );
 
-    /* ===== Processing totals ===== */
-    let procOutput=0;
-    filtered.proc.forEach(r=>{
-      const sp = sumProcRow(r, filtered.workSet);
-      procOutput += sp.totalOutput;
-    });
+    const feeRows = feeAll.filter(r =>
+      divSet.has("Processing") && // fees are processing-side
+      staffSet.has(r.Staff) &&
+      inDateRange(r.Timestamp || r.Date, start, end) // prefer Timestamp if present
+    );
 
-    let procOutputY=0;
-    yFiltered.proc.forEach(r=>{
-      const sp = sumProcRow(r, yFiltered.workSet);
-      procOutputY += sp.totalOutput;
-    });
+    // Yesterday rows (for deltas)
+    const yStart = addDaysISO(start,-1);
+    const yEnd = addDaysISO(end,-1);
 
-    /* ===== Fees + entries from Fee_Log ONLY ===== */
-    let feeTotal=0, feeEntries=0;
-    filtered.fees.forEach(f=>{
-      feeTotal += Number(f._Total||0);
-      feeEntries += Number(f._Count||0);
-    });
-    feeTotal = Math.round(feeTotal*100)/100;
+    const csrY = csrAll.filter(r =>
+      divSet.has("CSR") &&
+      staffSet.has(r.Staff) &&
+      inDateRange(r.Date, yStart, yEnd)
+    );
 
-    let feeTotalY=0, feeEntriesY=0;
-    yFiltered.fees.forEach(f=>{
-      feeTotalY += Number(f._Total||0);
-      feeEntriesY += Number(f._Count||0);
-    });
-    feeTotalY = Math.round(feeTotalY*100)/100;
+    const procY = procAll.filter(r =>
+      divSet.has("Processing") &&
+      staffSet.has(r.Staff) &&
+      inDateRange(r.Date, yStart, yEnd)
+    );
 
-    /* ===== Active staff ===== */
-    function activeCount(ff){
-      const staffActive = new Set();
+    const feeY = feeAll.filter(r =>
+      divSet.has("Processing") &&
+      staffSet.has(r.Staff) &&
+      inDateRange(r.Timestamp || r.Date, yStart, yEnd)
+    );
 
-      // CSR: any activity in any selected CSR fields
-      ff.csr.forEach(r=>{
-        const s = sumCSRRow(r, ff.workSet);
-        const total = Object.values(s).reduce((a,b)=>a+(Number(b)||0),0);
-        if(total>0) staffActive.add(String(r.Staff||""));
+    // Calculate by staff (includes ALL staff)
+    const csrByStaff = calcCSRByStaff(csrRows, allStaff, workSet);
+    const csrByStaffY = calcCSRByStaff(csrY, allStaff, workSet);
+
+    const procByStaff = calcProcByStaff(procRows, feeRows, allStaff, workSet, feeSet);
+    const procByStaffY = calcProcByStaff(procY, feeY, allStaff, workSet, feeSet);
+
+    // Top totals
+    const csrTouch = csrByStaff.reduce((a,r)=>a + (r.Touchpoints||0),0);
+    const csrTouchY = csrByStaffY.reduce((a,r)=>a + (r.Touchpoints||0),0);
+
+    const procOut = procByStaff.reduce((a,r)=>a + (r["Total Output"]||0),0);
+    const procOutY = procByStaffY.reduce((a,r)=>a + (r["Total Output"]||0),0);
+
+    const procFees = procByStaff.reduce((a,r)=>a + (r.Fees||0),0);
+    const procFeesY = procByStaffY.reduce((a,r)=>a + (r.Fees||0),0);
+
+    const activeToday = (() => {
+      let n=0;
+      allStaff.forEach(s=>{
+        const c = csrByStaff.find(x=>x.Staff===s) || emptyCSRLine(s);
+        const p = procByStaff.find(x=>x.Staff===s) || emptyProcLine(s);
+        const csrAny = (c.Inbound+c.Outbound+c.Chat+c.Emails+c.A2A+c.Unverified+c.INC_C_Calling+c.Question_Calling+c.A2A_Calling+c.Delinks+c.Cancellations) > 0;
+        const procAny = (p.Filing+p.Linking+p["Linked Review"]+p.Inbox+p["Existing Review"]+p["Processing Review"]+p.Miscellaneous + p.FeeEntries) > 0;
+        if(csrAny || procAny) n++;
       });
+      return n;
+    })();
 
-      // Processing: any output activity OR fee entries
-      ff.proc.forEach(r=>{
-        const sp = sumProcRow(r, ff.workSet);
-        if(sp.totalOutput>0) staffActive.add(String(r.Staff||""));
+    const activeYday = (() => {
+      let n=0;
+      allStaff.forEach(s=>{
+        const c = csrByStaffY.find(x=>x.Staff===s) || emptyCSRLine(s);
+        const p = procByStaffY.find(x=>x.Staff===s) || emptyProcLine(s);
+        const csrAny = (c.Inbound+c.Outbound+c.Chat+c.Emails+c.A2A+c.Unverified+c.INC_C_Calling+c.Question_Calling+c.A2A_Calling+c.Delinks+c.Cancellations) > 0;
+        const procAny = (p.Filing+p.Linking+p["Linked Review"]+p.Inbox+p["Existing Review"]+p["Processing Review"]+p.Miscellaneous + p.FeeEntries) > 0;
+        if(csrAny || procAny) n++;
       });
+      return n;
+    })();
 
-      // Fee log: any entries
-      ff.fees.forEach(f=>{
-        if((Number(f._Count)||0)>0) staffActive.add(String(f._Staff||""));
-      });
-
-      // remove blanks
-      staffActive.delete("");
-      return staffActive.size;
-    }
-
-    const activeToday = activeCount(filtered);
-    const activeYday = activeCount(yFiltered);
-
-    /* ===== Update Summary Cards ===== */
+    // Update executive snapshot
     document.getElementById("touchpointsToday").textContent = csrTouch.toLocaleString("en-NZ");
     document.getElementById("touchpointsYday").textContent = csrTouchY.toLocaleString("en-NZ");
     formatDelta(document.getElementById("touchpointsDelta"), csrTouch, csrTouchY);
 
-    document.getElementById("returnsToday").textContent = procOutput.toLocaleString("en-NZ");
-    document.getElementById("returnsYday").textContent = procOutputY.toLocaleString("en-NZ");
-    formatDelta(document.getElementById("returnsDelta"), procOutput, procOutputY);
+    document.getElementById("returnsToday").textContent = procOut.toLocaleString("en-NZ");
+    document.getElementById("returnsYday").textContent = procOutY.toLocaleString("en-NZ");
+    formatDelta(document.getElementById("returnsDelta"), procOut, procOutY);
 
-    document.getElementById("feesToday").textContent = money(feeTotal);
-    document.getElementById("feesYday").textContent = money(feeTotalY);
-    formatDelta(document.getElementById("feesDelta"), feeTotal, feeTotalY);
+    document.getElementById("feesToday").textContent = money(procFees);
+    document.getElementById("feesYday").textContent = money(procFeesY);
+    formatDelta(document.getElementById("feesDelta"), procFees, procFeesY);
 
     document.getElementById("activeStaffToday").textContent = activeToday.toLocaleString("en-NZ");
     document.getElementById("activeStaffYday").textContent = activeYday.toLocaleString("en-NZ");
     formatDelta(document.getElementById("activeDelta"), activeToday, activeYday);
 
-    /* ===== Division Snapshot ===== */
+    // Division snapshot blocks
+    const csrInbound = csrByStaff.reduce((a,r)=>a + r.Inbound,0);
+    const csrOutbound = csrByStaff.reduce((a,r)=>a + r.Outbound,0);
+    const csrChat = csrByStaff.reduce((a,r)=>a + r.Chat,0);
+
     document.getElementById("csrTouchpoints").textContent = csrTouch.toLocaleString("en-NZ");
     document.getElementById("csrInbound").textContent = csrInbound.toLocaleString("en-NZ");
     document.getElementById("csrOutbound").textContent = csrOutbound.toLocaleString("en-NZ");
     document.getElementById("csrChat").textContent = csrChat.toLocaleString("en-NZ");
 
-    document.getElementById("procOutput").textContent = procOutput.toLocaleString("en-NZ");
-    document.getElementById("procFees").textContent = money(feeTotal);
-    document.getElementById("procFeeEntries").textContent = feeEntries.toLocaleString("en-NZ");
+    const procFeeEntries = procByStaff.reduce((a,r)=>a + (r.FeeEntries||0),0);
 
-    /* ===== CSR Ranking + Full ===== */
-    const csrRank = filtered.csr.map(r=>{
-      const s = sumCSRRow(r, filtered.workSet);
-      const tp = s["Inbound"] + s["Outbound"] + s["Chat"];
-      return {
-        name: String(r.Staff||""),
-        touchpoints: tp,
-        inbound: s["Inbound"],
-        outbound: s["Outbound"],
-        chat: s["Chat"],
-        emails: s["Emails"],
-        a2a: s["A2A"],
-        unverified: s["Unverified"],
-        incc: s["INC/C Calling"],
-        qc: s["Question Calling"],
-        a2ac: s["A2A Calling"],
-        delink: s["Delinks"],
-        cancel: s["Cancellations"]
-      };
-    }).sort((a,b)=>b.touchpoints-a.touchpoints);
+    document.getElementById("procOutput").textContent = procOut.toLocaleString("en-NZ");
+    document.getElementById("procFees").textContent = money(procFees);
+    document.getElementById("procFeeEntries").textContent = procFeeEntries.toLocaleString("en-NZ");
 
-    document.getElementById("csrRankBody").innerHTML =
-      csrRank.length ? csrRank.map((r,i)=>`
-        <tr>
-          <td>${i+1}</td>
-          <td><strong>${escapeHtml(r.name)}</strong></td>
-          <td class="right"><strong>${r.touchpoints.toLocaleString("en-NZ")}</strong></td>
-          <td class="right">${r.inbound.toLocaleString("en-NZ")}</td>
-          <td class="right">${r.outbound.toLocaleString("en-NZ")}</td>
-          <td class="right">${r.chat.toLocaleString("en-NZ")}</td>
-          <td class="right">${r.emails.toLocaleString("en-NZ")}</td>
-        </tr>
-      `).join("")
-      : `<tr><td colspan="7" class="small-muted">No CSR data for current filters.</td></tr>`;
+    // Fee breakdown by type (always include all fee types)
+    const feeTypeRows = feeBreakdown(feeRows, allFeeTypes, feeSet);
 
-    document.getElementById("csrFullBody").innerHTML =
-      csrRank.length ? csrRank.map(r=>`
-        <tr>
-          <td><strong>${escapeHtml(r.name)}</strong></td>
-          <td class="right">${r.inbound}</td>
-          <td class="right">${r.outbound}</td>
-          <td class="right">${r.chat}</td>
-          <td class="right">${r.emails}</td>
-          <td class="right">${r.a2a}</td>
-          <td class="right">${r.unverified}</td>
-          <td class="right">${r.incc}</td>
-          <td class="right">${r.qc}</td>
-          <td class="right">${r.a2ac}</td>
-          <td class="right">${r.delink}</td>
-          <td class="right">${r.cancel}</td>
-        </tr>
-      `).join("")
-      : `<tr><td colspan="12" class="small-muted">No CSR data for current filters.</td></tr>`;
-
-    /* ===== Processing Ranking + Full ===== */
-    // Build fee totals per staff from Fee_Log (already filtered)
-    const feeByStaff = {};
-    filtered.fees.forEach(f=>{
-      const staff = f._Staff;
-      if(!feeByStaff[staff]) feeByStaff[staff] = { total:0, entries:0 };
-      feeByStaff[staff].total += Number(f._Total||0);
-      feeByStaff[staff].entries += Number(f._Count||0);
-    });
-
-    const procRank = filtered.proc.map(r=>{
-      const sp = sumProcRow(r, filtered.workSet);
-      const staff = String(r.Staff||"");
-      const feesForStaff = feeByStaff[staff] || { total:0, entries:0 };
-      return {
-        name: staff,
-        filing: sp.out["Filing"]||0,
-        linking: sp.out["Linking"]||0,
-        linkedreview: sp.out["Linked Review"]||0,
-        inbox: sp.out["Inbox"]||0,
-        existingreview: sp.out["Existing Review"]||0,
-        processingreview: sp.out["Processing Review"]||0,
-        misc: sp.out["Miscellaneous"]||0,
-        totalOutput: sp.totalOutput||0,
-        fees: Math.round((feesForStaff.total||0)*100)/100,
-        entries: feesForStaff.entries||0
-      };
-    }).sort((a,b)=>{
-      if(b.fees!==a.fees) return b.fees-a.fees;
-      return b.totalOutput-a.totalOutput;
-    });
-
-    document.getElementById("procRankBody").innerHTML =
-      procRank.length ? procRank.map((r,i)=>`
-        <tr>
-          <td>${i+1}</td>
-          <td><strong>${escapeHtml(r.name)}</strong></td>
-          <td class="right"><strong>${money(r.fees)}</strong></td>
-          <td class="right">${Number(r.entries||0).toLocaleString("en-NZ")}</td>
-          <td class="right">${Number(r.totalOutput||0).toLocaleString("en-NZ")}</td>
-        </tr>
-      `).join("")
-      : `<tr><td colspan="5" class="small-muted">No Processing data for current filters.</td></tr>`;
-
-    document.getElementById("procFullBody").innerHTML =
-      procRank.length ? procRank.map(r=>`
-        <tr>
-          <td><strong>${escapeHtml(r.name)}</strong></td>
-          <td class="right">${r.filing}</td>
-          <td class="right">${r.linking}</td>
-          <td class="right">${r.linkedreview}</td>
-          <td class="right">${r.inbox}</td>
-          <td class="right">${r.existingreview}</td>
-          <td class="right">${r.processingreview}</td>
-          <td class="right">${r.misc}</td>
-          <td class="right"><strong>${Number(r.totalOutput||0)}</strong></td>
-          <td class="right"><strong>${money(r.fees)}</strong></td>
-          <td class="right">${Number(r.entries||0)}</td>
-        </tr>
-      `).join("")
-      : `<tr><td colspan="11" class="small-muted">No Processing data for current filters.</td></tr>`;
-
-    /* ===== Fee Breakdown By Type (Fee_Log ONLY) ===== */
-    const feeTotals = {};
-    const feeTypeOptions = refreshFeeTypeOptionsFromData();
-    feeTypeOptions.forEach(t=>feeTotals[t]={entries:0,total:0});
-
-    filtered.fees.forEach(f=>{
-      const t = f._Type || "";
-      if(!feeTotals[t]) feeTotals[t] = { entries:0, total:0 };
-      feeTotals[t].entries += Number(f._Count||0);
-      feeTotals[t].total += Number(f._Total||0);
-    });
-
-    let totalEntries = 0, totalFees = 0;
-    const feeRowsHtml = feeTypeOptions.map(t=>{
-      const v = feeTotals[t] || { entries:0, total:0 };
-      totalEntries += v.entries;
-      totalFees += v.total;
-      return `
-        <tr>
-          <td><strong>${escapeHtml(t)}</strong></td>
-          <td class="right">${Number(v.entries||0).toLocaleString("en-NZ")}</td>
-          <td class="right">${money(Math.round((v.total||0)*100)/100)}</td>
-        </tr>
-      `;
-    }).join("");
-
-    document.getElementById("feeTypeBody").innerHTML = feeRowsHtml || `<tr><td colspan="3" class="small-muted">No fee data for current filters.</td></tr>`;
-    document.getElementById("feeTypeTotalEntries").textContent = totalEntries.toLocaleString("en-NZ");
-    document.getElementById("feeTypeTotalFees").textContent = money(Math.round(totalFees*100)/100);
+    // Render tables
+    renderTables(csrByStaff, procByStaff, feeTypeRows);
 
     setStatus(isToday ? "Live Today" : "Filtered period");
 
@@ -1379,73 +1318,64 @@ async function runReport(){
 }
 
 /* ===========================
-   PDF (placeholder until wiring)
+   PDF (placeholder)
 =========================== */
 function downloadPDF(){
-  alert("PDF will match the current filters when backend wiring is added.");
+  alert("PDF will match current filters (next phase).");
 }
 
 /* ===========================
-   INIT MULTISELECTS (DATA-DRIVEN)
+   INIT
 =========================== */
-function initMultiSelects(forceRebuildAll){
+(async function init(){
+
+  // First fetch (so we can build dropdowns from backend lists)
+  try{
+    setStatus("Loading…");
+    CACHE = await fetchReportData();
+  }catch(e){
+    console.error(e);
+    setStatus("Connection error");
+    alert("Connection error");
+    return;
+  }
+
+  const allStaff = (CACHE.allStaff || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
+  const allFeeTypes = (CACHE.allFeeTypes || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
+
   const msDiv = document.querySelector('[data-ms="division"]');
   const msStaff = document.querySelector('[data-ms="staff"]');
   const msWork = document.querySelector('[data-ms="work"]');
   const msFee = document.querySelector('[data-ms="fee"]');
 
-  // Build DIVISION (static)
-  msDiv.innerHTML = "";
   buildMultiSelect(msDiv, "division", ["CSR","Processing"]);
+  buildMultiSelect(msStaff, "staff", allStaff);
+  buildMultiSelect(msFee, "fee", allFeeTypes);
 
-  // Build STAFF from data
-  const staffOpts = refreshStaffOptionsFromData();
-  // prune invalid staff selections
-  Array.from(msState.staff).forEach(v=>{ if(!staffOpts.includes(v)) msState.staff.delete(v); });
+  function rebuildWork(){
+    const divSet = getFilterSet("division", ["CSR","Processing"]);
+    const workOptions = [];
+    if(divSet.has("CSR")) CSR_WORK.forEach(w=>workOptions.push(w));
+    if(divSet.has("Processing")) PROC_WORK.forEach(w=>{ if(!workOptions.includes(w)) workOptions.push(w); });
 
-  msStaff.innerHTML = "";
-  buildMultiSelect(msStaff, "staff", staffOpts.length ? staffOpts : []);
+    // prune invalid selections
+    Array.from(msState.work).forEach(v=>{ if(!workOptions.includes(v)) msState.work.delete(v); });
 
-  // Build WORK based on division selection
-  const workOpts = refreshWorkOptions();
-  Array.from(msState.work).forEach(v=>{ if(!workOpts.includes(v)) msState.work.delete(v); });
+    msWork.innerHTML = "";
+    buildMultiSelect(msWork, "work", workOptions);
+  }
 
-  msWork.innerHTML = "";
-  buildMultiSelect(msWork, "work", workOpts);
+  rebuildWork();
 
-  // Build FEE TYPES from Fee_Log (fallback to default list)
-  const feeOpts = refreshFeeTypeOptionsFromData();
-  Array.from(msState.fee).forEach(v=>{ if(!feeOpts.includes(v)) msState.fee.delete(v); });
-
-  msFee.innerHTML = "";
-  buildMultiSelect(msFee, "fee", feeOpts);
-
-  // If division applies, rebuild staff/work quickly
+  // When division applied, rebuild work options
   msDiv.addEventListener("click",(e)=>{
     const btn = e.target.closest('[data-act="apply"]');
     if(btn){
-      setTimeout(()=>initMultiSelects(false),0);
+      setTimeout(()=>rebuildWork(),0);
     }
   });
-}
 
-/* Safe HTML */
-function escapeHtml(s){
-  return String(s||"")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-/* ===========================
-   BOOT
-=========================== */
-(function boot(){
-  // Initial multiselects (empty data, still renders)
-  initMultiSelects(true);
-  // Run report on load
+  // Initial run
   runReport();
 })();
 </script>
