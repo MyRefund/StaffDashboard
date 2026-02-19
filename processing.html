@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>My Refund — Processing Workspace</title>
 
 <style>
@@ -27,9 +26,7 @@ body{
   background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
   transition:.2s ease;
 }
-.page.submitting{
-  opacity:.7;
-}
+.page.submitting{opacity:.7}
 
 /* HEADER */
 .header{
@@ -44,26 +41,11 @@ body{
   justify-content:space-between;
   align-items:center;
 }
-.brand{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
+.brand{display:flex;align-items:center;gap:14px;}
 .brand img{height:26px}
-.brand-text strong{
-  font-size:15px;
-  font-weight:900;
-}
-.brand-text span{
-  font-size:12px;
-  opacity:.9;
-  font-weight:700;
-}
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
+.brand-text strong{font-size:15px;font-weight:900;}
+.brand-text span{font-size:12px;opacity:.9;font-weight:700;}
+.header-right{display:flex;align-items:center;gap:14px;}
 .dashboard-btn{
   border-radius:999px;
   padding:8px 16px;
@@ -76,7 +58,100 @@ body{
 }
 .clock{font-weight:900;font-size:14px}
 
-/* BUTTON LOADING */
+/* CONTENT */
+.wrap{max-width:1300px;margin:0 auto;padding:36px 24px 60px;}
+.layout{display:grid;grid-template-columns:1fr 260px;gap:24px;}
+.panel{
+  background:rgba(255,255,255,.96);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+  margin-bottom:20px;
+}
+.panel h3{margin:0 0 14px 0;font-size:18px;font-weight:900;color:var(--g0);}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:14px;
+}
+.item{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+}
+.item label{display:block;font-weight:900;margin-bottom:8px;}
+
+.controls{display:flex;align-items:center;gap:6px;}
+.controls button{
+  width:32px;height:32px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+.controls input{
+  width:56px;
+  text-align:center;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:6px;
+  font-weight:900;
+}
+
+/* FEE TYPES */
+.button-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:12px;
+  margin-bottom:16px;
+}
+.type-btn{
+  border-radius:12px;
+  padding:10px;
+  font-weight:900;
+  border:2px solid var(--g0);
+  background:#fff;
+  color:var(--g0);
+  cursor:pointer;
+}
+.type-btn.active{background:var(--g0);color:#fff;}
+
+input[type="text"]{
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-weight:700;
+  width:100%;
+}
+
+.add-btn{
+  margin-top:10px;
+  padding:10px 16px;
+  border:none;
+  border-radius:12px;
+  background:var(--g0);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+
+table{width:100%;border-collapse:collapse;}
+th,td{border-bottom:1px solid var(--border);padding:8px;font-size:13px;}
+th{color:var(--muted);font-weight:900;text-align:left;}
+
+.total-box{
+  background:var(--g2);
+  border-radius:12px;
+  padding:14px;
+  font-weight:900;
+  font-size:18px;
+  text-align:right;
+}
+
+/* SUBMIT BUTTON */
 .submit button{
   width:100%;
   border-radius:14px;
@@ -89,16 +164,13 @@ body{
   cursor:pointer;
   position:relative;
 }
-.submit button.loading{
-  pointer-events:none;
-}
+.submit button.loading{pointer-events:none;}
 .submit button.loading::after{
   content:"";
   position:absolute;
   right:18px;
   top:50%;
-  width:16px;
-  height:16px;
+  width:16px;height:16px;
   margin-top:-8px;
   border:2px solid rgba(255,255,255,.5);
   border-top:2px solid #fff;
@@ -131,19 +203,137 @@ body{
   </div>
 </div>
 
-<!-- (Your existing body content remains unchanged until script) -->
+<div class="wrap">
+<div style="font-size:24px;font-weight:900;color:var(--g0);margin-bottom:6px;">
+Hello, <span id="helloName"></span>
+</div>
+<div style="font-weight:800;color:var(--muted);margin-bottom:28px;">
+<span id="todayDate"></span> • Division: Processing
+</div>
+
+<div class="layout">
+
+<!-- LEFT -->
+<div>
+
+<div class="panel">
+<h3>Processing Output</h3>
+<div class="grid">
+
+<div class="item"><label>Filing</label>
+<div class="controls"><button onclick="adj('filing',-1)">−</button><input id="filing" value="0"><button onclick="adj('filing',1)">+</button></div></div>
+
+<div class="item"><label>Linking</label>
+<div class="controls"><button onclick="adj('linking',-1)">−</button><input id="linking" value="0"><button onclick="adj('linking',1)">+</button></div></div>
+
+<div class="item"><label>Linked Review</label>
+<div class="controls"><button onclick="adj('linkedreview',-1)">−</button><input id="linkedreview" value="0"><button onclick="adj('linkedreview',1)">+</button></div></div>
+
+<div class="item"><label>Inbox</label>
+<div class="controls"><button onclick="adj('inbox',-1)">−</button><input id="inbox" value="0"><button onclick="adj('inbox',1)">+</button></div></div>
+
+<div class="item"><label>Existing Review</label>
+<div class="controls"><button onclick="adj('existingreview',-1)">−</button><input id="existingreview" value="0"><button onclick="adj('existingreview',1)">+</button></div></div>
+
+<div class="item"><label>Processing Review</label>
+<div class="controls"><button onclick="adj('processingreview',-1)">−</button><input id="processingreview" value="0"><button onclick="adj('processingreview',1)">+</button></div></div>
+
+<div class="item"><label>Miscellaneous</label>
+<div class="controls"><button onclick="adj('misc',-1)">−</button><input id="misc" value="0"><button onclick="adj('misc',1)">+</button></div></div>
+
+</div>
+</div>
+
+<div class="panel">
+<h3>Return Fee Logging</h3>
+
+<div class="button-grid">
+<button class="type-btn" onclick="selectType(event,'ITA')">ITA</button>
+<button class="type-btn" onclick="selectType(event,'IR3')">IR3</button>
+<button class="type-btn" onclick="selectType(event,'REB')">REB</button>
+<button class="type-btn" onclick="autoAdd('AA')">AA</button>
+<button class="type-btn" onclick="autoAdd('R3P')">R3P</button>
+<button class="type-btn" onclick="autoAdd('OP')">OP</button>
+</div>
+
+<div id="inputSection" style="display:none;">
+<input type="text" id="amountInput" placeholder="Refund Amount">
+
+<label id="receiptLabel" style="display:none;margin-top:10px;font-weight:800;color:var(--muted);">
+<input type="checkbox" id="receiptAssist"> Add receipt assistance
+</label>
+
+<label id="backYearLabel" style="display:none;margin-top:10px;font-weight:800;color:var(--muted);">
+<input type="checkbox" id="backYear"> Back Year
+</label>
+
+<button class="add-btn" onclick="addEntry()">Add</button>
+</div>
+</div>
+
+<div class="panel">
+<table>
+<thead><tr><th>Time</th><th>Type</th><th>Fee</th><th></th></tr></thead>
+<tbody id="logTable"></tbody>
+</table>
+</div>
+
+<div class="panel">
+<div class="total-box">
+Total Fees Today: $<span id="totalFees">0.00</span>
+</div>
+</div>
+
+<div class="submit">
+<button onclick="submitDay()">Submit & Finish Day</button>
+</div>
+
+</div>
+
+<!-- RIGHT -->
+<div>
+<div class="panel">
+<h3>Quick Contacts</h3>
+<strong>My Refund</strong><br>
+0800 80 89 89<br>
+info@myrefund.co.nz<br>
+myrefund.co.nz
+</div>
+</div>
+
+</div>
+</div>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
-const WEB_APP_URL = "YOUR_WEB_APP_URL";
+const WEB_APP_URL="https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
 const TZ="Pacific/Auckland";
 const name=localStorage.getItem("currentStaff")||"Processing";
 const todayISO=new Date().toLocaleDateString("en-CA",{timeZone:TZ});
 
+document.getElementById("staffNameLabel").textContent=name;
+document.getElementById("helloName").textContent=name;
+document.getElementById("todayDate").textContent=
+new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
+
 window.goHome=function(){window.location.href="index.html";};
 
-/* UPDATED FEE CALCULATION */
+function tick(){
+clock.textContent=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+}
+tick();setInterval(tick,1000);
+
+/* COUNTERS */
+window.adj=function(id,d){
+const el=document.getElementById(id);
+let v=Math.max(0,Number(el.value||0)+d);
+el.value=v;
+};
+
+let entries=[];
+let currentType=null;
 
 function calculateFee(type,R,receiptAssist,backYear){
 
@@ -154,13 +344,10 @@ return f>345?345:f;
 }
 
 if(type==="IR3"){
-
 if(backYear){
-let f=(R*0.11)*1.15; // removed $29.50+GST
-if(R< (R*0.11*1.15)) return R;
+let f=(R*0.11)*1.15;
 return f>402.5?402.5:f;
 }
-
 let f=(R*0.11+49.5)*1.15;
 if(R<56.93)return R;
 return f>402.5?402.5:f;
@@ -172,22 +359,71 @@ if(receiptAssist) tier+=6.89;
 return R<tier?R:tier;
 }
 
-return 0;
+return 39.10; // AA/R3P/OP flat
 }
 
-/* UPDATED SUBMIT UX */
+window.selectType=function(e,type){
+currentType=type;
+document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
+e.target.classList.add("active");
+document.getElementById("inputSection").style.display="block";
+document.getElementById("receiptLabel").style.display=(type==="REB")?"block":"none";
+document.getElementById("backYearLabel").style.display=(type==="IR3")?"block":"none";
+};
+
+window.autoAdd=function(type){
+entries.push({type,fee:39.10,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
+render();
+};
+
+window.addEntry=function(){
+if(!currentType)return;
+const R=parseFloat(amountInput.value||0);
+if(!R)return;
+const fee=calculateFee(currentType,R,receiptAssist.checked,backYear.checked);
+entries.push({type:currentType,fee,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
+amountInput.value="";
+render();
+};
+
+function render(){
+logTable.innerHTML="";
+let total=0;
+entries.forEach((e,i)=>{
+total+=Number(e.fee);
+logTable.innerHTML+=`<tr><td>${e.time}</td><td>${e.type}</td><td>$${Number(e.fee).toFixed(2)}</td><td><button onclick="deleteEntry(${i})">✕</button></td></tr>`;
+});
+totalFees.textContent=total.toFixed(2);
+}
+
+window.deleteEntry=function(i){
+entries.splice(i,1);
+render();
+};
 
 window.submitDay=async function(){
-
 if(!confirm("Submit day? This cannot be edited."))return;
-
 const btn=document.querySelector(".submit button");
 btn.classList.add("loading");
 btn.textContent="Submitting...";
 document.querySelector(".page").classList.add("submitting");
 
+const formData=new URLSearchParams();
+formData.append("action","submitProcessing");
+formData.append("date",todayISO);
+formData.append("staff",name);
+formData.append("Filing",filing.value);
+formData.append("Linking",linking.value);
+formData.append("LinkedReview",linkedreview.value);
+formData.append("Inbox",inbox.value);
+formData.append("ExistingReview",existingreview.value);
+formData.append("ProcessingReview",processingreview.value);
+formData.append("Miscellaneous",misc.value);
+formData.append("TotalFees",totalFees.textContent);
+formData.append("feeEntries",JSON.stringify(entries));
+
 try{
-await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:new FormData()});
+await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:formData});
 btn.textContent="Submitted ✓";
 setTimeout(()=>{window.location.href="index.html";},2000);
 }catch(err){
@@ -197,12 +433,6 @@ document.querySelector(".page").classList.remove("submitting");
 alert("Network error.");
 }
 };
-
-/* CLOCK */
-function tick(){
-clock.textContent=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
-}
-tick();setInterval(tick,1000);
 
 });
 </script>
