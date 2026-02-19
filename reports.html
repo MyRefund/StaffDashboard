@@ -3,9 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Language" content="en">
-<meta name="google" content="notranslate">
-
 <title>My Refund — Reports</title>
 
 <style>
@@ -16,15 +13,16 @@
   --text:#111827;
   --muted:#6b7280;
   --radius:16px;
-  --shadow:0 12px 32px rgba(0,0,0,.12);
+  --shadow:0 12px 32px rgba(0,0,0,.08);
 }
 
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family:"Okta Neue", system-ui, sans-serif;
   background:#f9fafb;
   color:var(--text);
+  overflow-x:hidden;
 }
 
 /* HEADER */
@@ -34,88 +32,65 @@ body{
   padding:14px 24px;
 }
 .header-inner{
-  max-width:1400px;
+  max-width:1600px;
   margin:0 auto;
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
-.brand{
-  display:flex;
-  gap:14px;
-  align-items:center;
-}
+.brand{display:flex;align-items:center;gap:14px;}
 .brand img{height:26px}
-.brand-text{display:flex;flex-direction:column;line-height:1.1}
-.brand-text strong{font-weight:900;font-size:15px}
-.brand-text span{font-size:12px;opacity:.9;font-weight:700}
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-.dashboard-btn{
-  border-radius:999px;
-  padding:8px 16px;
-  font-weight:900;
-  font-size:13px;
-  border:1px solid #fff;
-  background:transparent;
-  color:#fff;
-  cursor:pointer;
-}
+.brand-text strong{font-size:15px;font-weight:900}
+.brand-text span{font-size:12px;opacity:.85}
 .clock{font-weight:900;font-size:14px}
 
-/* PAGE LAYOUT (NO SIDEWAYS SCROLL) */
-.wrap{
-  max-width:1400px;
-  margin:20px auto 60px;
+/* LAYOUT */
+.page{
+  display:flex;
+  max-width:1600px;
+  margin:24px auto 60px;
+  gap:24px;
   padding:0 16px;
-  display:grid;
-  grid-template-columns:320px 1fr;
-  gap:18px;
-}
-@media(max-width:980px){
-  .wrap{grid-template-columns:1fr}
 }
 
-/* FILTER SIDEBAR */
-.sidebar{
+/* LEFT FILTER COLUMN */
+.filters{
+  width:260px;
+  flex-shrink:0;
   background:#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:16px;
-  position:sticky;
-  top:16px;
-  align-self:start;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  height:fit-content;
 }
-@media(max-width:980px){
-  .sidebar{position:relative; top:auto}
-}
-.sidebar h3{
-  margin:0 0 12px;
+
+.filters h3{
+  margin:0;
+  font-size:14px;
   font-weight:900;
   color:var(--g0);
-  font-size:16px;
 }
+
 .field{
   display:flex;
   flex-direction:column;
   font-size:12px;
   font-weight:900;
-  margin-bottom:12px;
 }
-.field input{
+.field input,
+.field select{
   margin-top:6px;
   padding:8px 10px;
   border-radius:10px;
   border:1px solid var(--border);
   font-weight:800;
-  background:#fff;
 }
+
 button.primary{
-  width:100%;
-  padding:10px 18px;
+  padding:10px;
   border-radius:12px;
   background:var(--g0);
   color:#fff;
@@ -123,132 +98,36 @@ button.primary{
   font-weight:900;
   cursor:pointer;
 }
-button.secondary{
-  width:100%;
-  margin-top:10px;
-  padding:10px 18px;
-  border-radius:12px;
-  background:#fff;
-  border:1px solid var(--g0);
-  color:var(--g0);
-  font-weight:900;
-  cursor:pointer;
-}
+
 .status-pill{
-  margin-top:12px;
-  padding:10px 12px;
+  padding:8px 12px;
   border-radius:999px;
   background:var(--g2);
   font-size:12px;
   font-weight:900;
   color:var(--g0);
-  border:1px solid rgba(9,75,53,.12);
   text-align:center;
 }
 
-/* Multi-select dropdown (checkbox style) */
-.mselect{
-  position:relative;
-  margin-top:6px;
-}
-.mselect-btn{
-  width:100%;
-  text-align:left;
-  padding:9px 10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:#fff;
-  font-weight:900;
-  cursor:pointer;
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:center;
-}
-.mselect-btn span{
-  font-weight:800;
-  color:var(--text);
-  font-size:13px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.chev{opacity:.7;font-weight:900}
-.mselect-panel{
-  position:absolute;
-  left:0; right:0;
-  top:calc(100% + 8px);
-  z-index:50;
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:14px;
-  box-shadow:var(--shadow);
-  padding:10px;
-  display:none;
-}
-.mselect.open .mselect-panel{display:block}
-.mselect-search{
-  width:100%;
-  padding:8px 10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  font-weight:800;
-  margin-bottom:10px;
-}
-.mselect-list{
-  max-height:240px;
-  overflow:auto;
+/* MAIN CONTENT */
+.content{
+  flex:1;
   display:flex;
   flex-direction:column;
-  gap:6px;
-}
-.mopt{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 10px;
-  border-radius:10px;
-  cursor:pointer;
-}
-.mopt:hover{background:#f3f4f6}
-.mopt input{transform:scale(1.05)}
-.mopt strong{font-size:13px}
-.mselect-actions{
-  display:flex;
-  gap:10px;
-  justify-content:space-between;
-  margin-top:10px;
-}
-.smallbtn{
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:10px;
-  padding:8px 10px;
-  font-weight:900;
-  cursor:pointer;
-  font-size:12px;
-}
-.smallbtn.primary{
-  border-color:var(--g0);
-  color:var(--g0);
+  gap:24px;
 }
 
-/* MAIN CONTENT */
-.main{
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-}
+/* SUMMARY CARDS */
 .summary-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:16px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
 }
 .summary-card{
   background:#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:18px 18px 16px;
+  padding:18px;
 }
 .summary-card h4{
   margin:0;
@@ -256,40 +135,14 @@ button.secondary{
   font-weight:900;
   color:var(--muted);
 }
-.summary-main{
-  margin-top:10px;
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:10px;
-}
 .summary-value{
+  margin-top:10px;
   font-size:28px;
   font-weight:900;
   color:var(--g0);
-  line-height:1;
 }
-.delta{
-  font-size:12px;
-  font-weight:900;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background:#fff;
-  white-space:nowrap;
-}
-.delta.up{color:#065f46;background:#ecfdf5;border-color:rgba(6,95,70,.18)}
-.delta.down{color:#7c2d12;background:#fff7ed;border-color:rgba(124,45,18,.18)}
-.summary-sub{
-  margin-top:10px;
-  display:flex;
-  justify-content:space-between;
-  color:var(--muted);
-  font-weight:900;
-  font-size:12px;
-}
-.summary-sub strong{color:var(--g0)}
 
+/* PANELS */
 .panel{
   background:#fff;
   border-radius:var(--radius);
@@ -297,66 +150,38 @@ button.secondary{
   padding:18px;
 }
 .panel h3{
-  margin:0 0 12px;
+  margin:0 0 14px;
   font-weight:900;
   color:var(--g0);
-  font-size:16px;
-}
-.hr{height:1px;background:var(--border);margin:14px 0;}
-.grid2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-@media(max-width:980px){
-  .grid2{grid-template-columns:1fr}
+  font-size:15px;
 }
 
-.table{
+/* TABLES */
+.table-wrap{
+  overflow:hidden;
+}
+table{
   width:100%;
   border-collapse:collapse;
-  table-layout:fixed;
 }
-.table th, .table td{
-  padding:10px 8px;
+th,td{
+  padding:8px 6px;
+  font-size:12px;
   border-bottom:1px solid var(--border);
-  font-size:13px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
 }
-.table th{
+th{
   text-align:left;
   color:var(--muted);
   font-weight:900;
 }
-.table td strong{color:var(--g0)}
 .right{text-align:right}
-.small-muted{color:var(--muted);font-weight:800;font-size:12px}
+.small-muted{color:var(--muted);font-size:11px;font-weight:800}
 
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  font-size:12px;
-  font-weight:900;
-  color:var(--g0);
-  background:var(--g2);
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .page{flex-direction:column}
+  .filters{width:100%}
 }
-.dot{
-  width:8px;height:8px;border-radius:50%;
-  background:#16a34a;
-}
-.note{
-  font-size:12px;
-  font-weight:800;
-  color:var(--muted);
-  line-height:1.5;
-}
-.note strong{color:var(--g0)}
 </style>
 </head>
 
@@ -368,21 +193,17 @@ button.secondary{
       <img src="logo.png" alt="My Refund">
       <div class="brand-text">
         <strong>Reports</strong>
-        <span>Live overview + filters</span>
+        <span>Operational overview & revenue</span>
       </div>
     </div>
-
-    <div class="header-right">
-      <button class="dashboard-btn" onclick="goHome()">← Dashboard</button>
-      <div class="clock" id="clock"></div>
-    </div>
+    <div class="clock" id="clock"></div>
   </div>
 </div>
 
-<div class="wrap">
+<div class="page">
 
-  <!-- LEFT: FILTERS -->
-  <div class="sidebar">
+  <!-- LEFT FILTERS -->
+  <div class="filters">
     <h3>Filters</h3>
 
     <div class="field">
@@ -397,988 +218,608 @@ button.secondary{
 
     <div class="field">
       Division
-      <div class="mselect" data-ms="division"></div>
+      <select id="divisionFilter" multiple></select>
     </div>
 
     <div class="field">
       Staff
-      <div class="mselect" data-ms="staff"></div>
-    </div>
-
-    <div class="field">
-      Work Type
-      <div class="mselect" data-ms="work"></div>
+      <select id="staffFilter" multiple></select>
     </div>
 
     <div class="field">
       Fee Type
-      <div class="mselect" data-ms="fee"></div>
+      <select id="feeFilter" multiple></select>
     </div>
 
-    <button class="primary" id="runBtn" onclick="runReport()">Run Report</button>
-    <button class="secondary" onclick="downloadPDF()">Download PDF</button>
-
-    <div class="status-pill" id="statusPill">Live Today</div>
+    <button class="primary" onclick="runReport()">Run Report</button>
+    <div class="status-pill" id="statusPill">Live</div>
   </div>
 
-  <!-- RIGHT: CONTENT -->
-  <div class="main">
+  <!-- MAIN CONTENT -->
+  <div class="content">
 
-    <!-- EXEC SNAPSHOT -->
+    <!-- SUMMARY -->
     <div class="summary-grid">
       <div class="summary-card">
         <h4>Client Touchpoints</h4>
-        <div class="summary-main">
-          <div class="summary-value" id="touchpointsToday">0</div>
-          <div class="delta" id="touchpointsDelta">—</div>
-        </div>
-        <div class="summary-sub">
-          <span>Yesterday: <strong id="touchpointsYday">0</strong></span>
-          <span class="small-muted">CSR only</span>
-        </div>
+        <div class="summary-value" id="touchpointsTotal">0</div>
       </div>
-
       <div class="summary-card">
         <h4>Returns Processed</h4>
-        <div class="summary-main">
-          <div class="summary-value" id="returnsToday">0</div>
-          <div class="delta" id="returnsDelta">—</div>
-        </div>
-        <div class="summary-sub">
-          <span>Yesterday: <strong id="returnsYday">0</strong></span>
-          <span class="small-muted">Processing only</span>
-        </div>
+        <div class="summary-value" id="returnsTotal">0</div>
       </div>
-
       <div class="summary-card">
         <h4>Revenue (Fees)</h4>
-        <div class="summary-main">
-          <div class="summary-value" id="feesToday">$0</div>
-          <div class="delta" id="feesDelta">—</div>
-        </div>
-        <div class="summary-sub">
-          <span>Yesterday: <strong id="feesYday">$0</strong></span>
-          <span class="small-muted">Fee_Log</span>
-        </div>
+        <div class="summary-value" id="feesTotal">$0.00</div>
       </div>
-
       <div class="summary-card">
-        <h4>Active Staff Logged</h4>
-        <div class="summary-main">
-          <div class="summary-value" id="activeStaffToday">0</div>
-          <div class="delta" id="activeDelta">—</div>
-        </div>
-        <div class="summary-sub">
-          <span>Yesterday: <strong id="activeStaffYday">0</strong></span>
-          <span class="small-muted">All</span>
-        </div>
+        <h4>Active Staff</h4>
+        <div class="summary-value" id="activeStaffTotal">0</div>
       </div>
     </div>
 
-    <!-- DIVISION SNAPSHOT -->
+    <!-- CSR PANEL -->
     <div class="panel">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;">
-        <h3 style="margin:0;">Division snapshot</h3>
-        <div class="badge"><span class="dot"></span><span id="rangeLabel">Today</span></div>
-      </div>
-      <div class="hr"></div>
-
-      <div class="grid2">
-        <div class="panel" style="box-shadow:none;border:1px solid var(--border);">
-          <h3 style="font-size:15px;margin:0 0 10px;">CSR</h3>
-          <div class="summary-sub" style="margin-top:0;">
-            <span>Touchpoints: <strong id="csrTouchpoints">0</strong></span>
-            <span>Outbound: <strong id="csrOutbound">0</strong></span>
-          </div>
-          <div class="summary-sub" style="margin-top:8px;">
-            <span>Inbound: <strong id="csrInbound">0</strong></span>
-            <span>Chat: <strong id="csrChat">0</strong></span>
-          </div>
-        </div>
-
-        <div class="panel" style="box-shadow:none;border:1px solid var(--border);">
-          <h3 style="font-size:15px;margin:0 0 10px;">Processing</h3>
-          <div class="summary-sub" style="margin-top:0;">
-            <span>Total output: <strong id="procOutput">0</strong></span>
-            <span>Fees: <strong id="procFees">$0</strong></span>
-          </div>
-          <div class="summary-sub" style="margin-top:8px;">
-            <span>Fee entries: <strong id="procFeeEntries">0</strong></span>
-            <span class="small-muted">Fee_Log</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hr"></div>
-      <div class="note">
-        <strong>How to read:</strong> CSR touchpoints = inbound + outbound + chat. Processing total output = sum of all output counters. Fees and fee entries come from Fee_Log.
-      </div>
-    </div>
-
-    <!-- RANKINGS -->
-    <div class="grid2">
-      <div class="panel">
-        <h3>CSR staff ranking</h3>
-        <div class="small-muted" style="margin-bottom:10px;">Sorted by total touchpoints (inbound + outbound + chat)</div>
-        <table class="table">
+      <h3>CSR Activity Summary</h3>
+      <div class="table-wrap">
+        <table>
           <thead>
             <tr>
-              <th style="width:52px;">Rank</th>
               <th>Staff</th>
-              <th class="right" style="width:130px;">Touchpoints</th>
-              <th class="right" style="width:110px;">Inbound</th>
-              <th class="right" style="width:110px;">Outbound</th>
-              <th class="right" style="width:100px;">Chat</th>
-              <th class="right" style="width:110px;">Emails</th>
+              <th class="right">Inbound</th>
+              <th class="right">Outbound</th>
+              <th class="right">Chat</th>
+              <th class="right">Emails</th>
             </tr>
           </thead>
-          <tbody id="csrRankBody"></tbody>
-        </table>
-      </div>
-
-      <div class="panel">
-        <h3>Processing staff ranking</h3>
-        <div class="small-muted" style="margin-bottom:10px;">Sorted by total fees (then output)</div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th style="width:52px;">Rank</th>
-              <th>Staff</th>
-              <th class="right" style="width:140px;">Fees</th>
-              <th class="right" style="width:130px;">Fee entries</th>
-              <th class="right" style="width:130px;">Total output</th>
-            </tr>
-          </thead>
-          <tbody id="procRankBody"></tbody>
+          <tbody id="csrTable"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- CSR BREAKDOWN (SPLIT PANELS) -->
-    <div class="grid2">
-      <div class="panel">
-        <h3>CSR core channels</h3>
-        <div class="small-muted" style="margin-bottom:10px;">Inbound / Outbound / Chat / Emails</div>
-        <table class="table">
+    <!-- PROCESSING PANEL -->
+    <div class="panel">
+      <h3>Processing Output Summary</h3>
+      <div class="table-wrap">
+        <table>
           <thead>
             <tr>
               <th>Staff</th>
-              <th class="right" style="width:110px;">Inbound</th>
-              <th class="right" style="width:110px;">Outbound</th>
-              <th class="right" style="width:100px;">Chat</th>
-              <th class="right" style="width:110px;">Emails</th>
-              <th class="right" style="width:130px;">Touchpoints</th>
+              <th class="right">Total Output</th>
+              <th class="right">Total Fees</th>
             </tr>
           </thead>
-          <tbody id="csrCoreBody"></tbody>
-        </table>
-      </div>
-
-      <div class="panel">
-        <h3>CSR calling + actions</h3>
-        <div class="small-muted" style="margin-bottom:10px;">A2A / Unverified / INC/C / Question / A2A Calling / Delinks / Cancels</div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Staff</th>
-              <th class="right" style="width:90px;">A2A</th>
-              <th class="right" style="width:120px;">Unverified</th>
-              <th class="right" style="width:95px;">INC/C</th>
-              <th class="right" style="width:110px;">Question</th>
-              <th class="right" style="width:120px;">A2A Calling</th>
-              <th class="right" style="width:90px;">Delinks</th>
-              <th class="right" style="width:90px;">Cancels</th>
-            </tr>
-          </thead>
-          <tbody id="csrActionsBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- PROCESSING BREAKDOWN (SPLIT PANELS) -->
-    <div class="grid2">
-      <div class="panel">
-        <h3>Processing output (group 1)</h3>
-        <div class="small-muted" style="margin-bottom:10px;">Filing / Linking / Linked Review / Inbox</div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Staff</th>
-              <th class="right" style="width:95px;">Filing</th>
-              <th class="right" style="width:95px;">Linking</th>
-              <th class="right" style="width:130px;">Linked Review</th>
-              <th class="right" style="width:95px;">Inbox</th>
-            </tr>
-          </thead>
-          <tbody id="procGroup1Body"></tbody>
-        </table>
-      </div>
-
-      <div class="panel">
-        <h3>Processing output (group 2)</h3>
-        <div class="small-muted" style="margin-bottom:10px;">Existing Review / Processing Review / Misc / Totals</div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Staff</th>
-              <th class="right" style="width:140px;">Existing Review</th>
-              <th class="right" style="width:150px;">Processing Review</th>
-              <th class="right" style="width:110px;">Misc</th>
-              <th class="right" style="width:130px;">Total output</th>
-              <th class="right" style="width:120px;">Fees</th>
-            </tr>
-          </thead>
-          <tbody id="procGroup2Body"></tbody>
+          <tbody id="processingTable"></tbody>
         </table>
       </div>
     </div>
 
     <!-- FEE BREAKDOWN -->
     <div class="panel">
-      <h3>Fee breakdown by type</h3>
-      <div class="small-muted" style="margin-bottom:10px;">Includes only fee entries in selected period + filters</div>
-      <table class="table" style="max-width:720px;">
-        <thead>
-          <tr>
-            <th>Fee type</th>
-            <th class="right" style="width:140px;">Entries</th>
-            <th class="right" style="width:160px;">Total fees</th>
-          </tr>
-        </thead>
-        <tbody id="feeTypeBody"></tbody>
-        <tfoot>
-          <tr>
-            <td><strong>Total</strong></td>
-            <td class="right"><strong id="feeTypeTotalEntries">0</strong></td>
-            <td class="right"><strong id="feeTypeTotalFees">$0</strong></td>
-          </tr>
-        </tfoot>
-      </table>
+      <h3>Fee Breakdown</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Fee Type</th>
+              <th class="right">Count</th>
+              <th class="right">Total Fees</th>
+            </tr>
+          </thead>
+          <tbody id="feeTable"></tbody>
+        </table>
+      </div>
     </div>
 
   </div>
 </div>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Refund — Reports</title>
 
+<style>
+:root{
+  --g0:#094B35;
+  --g2:#ECFDF5;
+  --border:#e5e7eb;
+  --text:#111827;
+  --muted:#6b7280;
+  --radius:16px;
+  --shadow:0 12px 32px rgba(0,0,0,.08);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Okta Neue", system-ui, sans-serif;
+  background:#f9fafb;
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* HEADER */
+.header{
+  background:var(--g0);
+  color:#fff;
+  padding:14px 24px;
+}
+.header-inner{
+  max-width:1600px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand{display:flex;align-items:center;gap:14px;}
+.brand img{height:26px}
+.brand-text strong{font-size:15px;font-weight:900}
+.brand-text span{font-size:12px;opacity:.85}
+.clock{font-weight:900;font-size:14px}
+
+/* LAYOUT */
+.page{
+  display:flex;
+  max-width:1600px;
+  margin:24px auto 60px;
+  gap:24px;
+  padding:0 16px;
+}
+
+/* LEFT FILTER COLUMN */
+.filters{
+  width:260px;
+  flex-shrink:0;
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  height:fit-content;
+}
+
+.filters h3{
+  margin:0;
+  font-size:14px;
+  font-weight:900;
+  color:var(--g0);
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  font-size:12px;
+  font-weight:900;
+}
+.field input,
+.field select{
+  margin-top:6px;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-weight:800;
+}
+
+button.primary{
+  padding:10px;
+  border-radius:12px;
+  background:var(--g0);
+  color:#fff;
+  border:none;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.status-pill{
+  padding:8px 12px;
+  border-radius:999px;
+  background:var(--g2);
+  font-size:12px;
+  font-weight:900;
+  color:var(--g0);
+  text-align:center;
+}
+
+/* MAIN CONTENT */
+.content{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+/* SUMMARY CARDS */
+.summary-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+}
+.summary-card{
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px;
+}
+.summary-card h4{
+  margin:0;
+  font-size:13px;
+  font-weight:900;
+  color:var(--muted);
+}
+.summary-value{
+  margin-top:10px;
+  font-size:28px;
+  font-weight:900;
+  color:var(--g0);
+}
+
+/* PANELS */
+.panel{
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px;
+}
+.panel h3{
+  margin:0 0 14px;
+  font-weight:900;
+  color:var(--g0);
+  font-size:15px;
+}
+
+/* TABLES */
+.table-wrap{
+  overflow:hidden;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  padding:8px 6px;
+  font-size:12px;
+  border-bottom:1px solid var(--border);
+}
+th{
+  text-align:left;
+  color:var(--muted);
+  font-weight:900;
+}
+.right{text-align:right}
+.small-muted{color:var(--muted);font-size:11px;font-weight:800}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .page{flex-direction:column}
+  .filters{width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="My Refund">
+      <div class="brand-text">
+        <strong>Reports</strong>
+        <span>Operational overview & revenue</span>
+      </div>
+    </div>
+    <div class="clock" id="clock"></div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- LEFT FILTERS -->
+  <div class="filters">
+    <h3>Filters</h3>
+
+    <div class="field">
+      Date From
+      <input type="date" id="startDate">
+    </div>
+
+    <div class="field">
+      Date To
+      <input type="date" id="endDate">
+    </div>
+
+    <div class="field">
+      Division
+      <select id="divisionFilter" multiple></select>
+    </div>
+
+    <div class="field">
+      Staff
+      <select id="staffFilter" multiple></select>
+    </div>
+
+    <div class="field">
+      Fee Type
+      <select id="feeFilter" multiple></select>
+    </div>
+
+    <button class="primary" onclick="runReport()">Run Report</button>
+    <div class="status-pill" id="statusPill">Live</div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+
+    <!-- SUMMARY -->
+    <div class="summary-grid">
+      <div class="summary-card">
+        <h4>Client Touchpoints</h4>
+        <div class="summary-value" id="touchpointsTotal">0</div>
+      </div>
+      <div class="summary-card">
+        <h4>Returns Processed</h4>
+        <div class="summary-value" id="returnsTotal">0</div>
+      </div>
+      <div class="summary-card">
+        <h4>Revenue (Fees)</h4>
+        <div class="summary-value" id="feesTotal">$0.00</div>
+      </div>
+      <div class="summary-card">
+        <h4>Active Staff</h4>
+        <div class="summary-value" id="activeStaffTotal">0</div>
+      </div>
+    </div>
+
+    <!-- CSR PANEL -->
+    <div class="panel">
+      <h3>CSR Activity Summary</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Staff</th>
+              <th class="right">Inbound</th>
+              <th class="right">Outbound</th>
+              <th class="right">Chat</th>
+              <th class="right">Emails</th>
+            </tr>
+          </thead>
+          <tbody id="csrTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PROCESSING PANEL -->
+    <div class="panel">
+      <h3>Processing Output Summary</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Staff</th>
+              <th class="right">Total Output</th>
+              <th class="right">Total Fees</th>
+            </tr>
+          </thead>
+          <tbody id="processingTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FEE BREAKDOWN -->
+    <div class="panel">
+      <h3>Fee Breakdown</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Fee Type</th>
+              <th class="right">Count</th>
+              <th class="right">Total Fees</th>
+            </tr>
+          </thead>
+          <tbody id="feeTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
 <script>
-/* ===========================
-   BACKEND
-=========================== */
-const WEB_APP_URL =
-"https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
 
-/* ===========================
-   NAV / CLOCK
-=========================== */
-function goHome(){ window.location.href="index.html"; }
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
 
+/* CLOCK */
 (function tick(){
   document.getElementById("clock").textContent =
     new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
   setTimeout(tick,1000);
 })();
 
-/* ===========================
-   DATE DEFAULTS
-=========================== */
-const TZ = "Pacific/Auckland";
-function nzISO(d=new Date()){
-  return d.toLocaleDateString("en-CA",{timeZone:TZ});
-}
-function addDaysISO(iso,delta){
-  const [y,m,dd]=iso.split("-").map(Number);
-  const dt=new Date(Date.UTC(y,m-1,dd));
-  dt.setUTCDate(dt.getUTCDate()+delta);
-  return nzISO(new Date(dt));
-}
-const todayISO = nzISO();
-document.getElementById("startDate").value = todayISO;
-document.getElementById("endDate").value = todayISO;
+/* DATE DEFAULTS */
+const today = new Date().toISOString().split("T")[0];
+document.getElementById("startDate").value = today;
+document.getElementById("endDate").value = today;
 
-/* ===========================
-   UTIL
-=========================== */
+/* FORMAT MONEY */
 function money(n){
-  const v = Number(n)||0;
-  return "$" + v.toLocaleString("en-NZ",{minimumFractionDigits:2,maximumFractionDigits:2});
-}
-function num(n){ return Number(n)||0; }
-
-function pctChange(today, yday){
-  const t = Number(today)||0;
-  const y = Number(yday)||0;
-  if(y===0 && t===0) return {text:"—", cls:""};
-  if(y===0 && t>0) return {text:"+∞", cls:"up"};
-  const p = ((t-y)/y)*100;
-  const sign = p>0?"+":"";
-  return {text:`${sign}${p.toFixed(0)}%`, cls: p>=0 ? "up" : "down"};
-}
-function formatDelta(el, today, yday){
-  const p = pctChange(today, yday);
-  el.classList.remove("up","down");
-  if(p.cls) el.classList.add(p.cls);
-  el.textContent = p.text;
+  return "$"+Number(n||0).toLocaleString("en-NZ",{minimumFractionDigits:2});
 }
 
-function setStatus(text){
-  document.getElementById("statusPill").textContent = text;
-}
+/* LOAD FILTER OPTIONS */
+async function loadFilters(){
 
-/* ===========================
-   MULTISELECT
-=========================== */
-const msState = {
-  division: new Set(["CSR","Processing"]),
-  staff: new Set(),
-  work: new Set(),
-  fee: new Set()
-};
-
-function buildMultiSelect(el, key, options){
-  el.classList.add("mselect");
-  el.innerHTML = `
-    <button type="button" class="mselect-btn" aria-haspopup="listbox">
-      <span id="ms_label_${key}">All</span>
-      <span class="chev">▼</span>
-    </button>
-    <div class="mselect-panel">
-      <input class="mselect-search" placeholder="Search…" />
-      <div class="mselect-list" role="listbox"></div>
-      <div class="mselect-actions">
-        <button type="button" class="smallbtn" data-act="clear">Clear</button>
-        <button type="button" class="smallbtn" data-act="all">Select all</button>
-        <button type="button" class="smallbtn primary" data-act="apply">Apply</button>
-      </div>
-    </div>
-  `;
-
-  const btn = el.querySelector(".mselect-btn");
-  const list = el.querySelector(".mselect-list");
-  const search = el.querySelector(".mselect-search");
-  const label = el.querySelector(`#ms_label_${key}`);
-  const selected = msState[key];
-
-  function renderList(filter=""){
-    const f = filter.trim().toLowerCase();
-    list.innerHTML = "";
-    options
-      .filter(o => !f || String(o).toLowerCase().includes(f))
-      .forEach(o=>{
-        const row=document.createElement("div");
-        row.className="mopt";
-        row.innerHTML = `
-          <input type="checkbox" ${selected.has(o) ? "checked":""}>
-          <strong>${o}</strong>
-        `;
-        row.onclick = (e)=>{
-          if(e.target.tagName.toLowerCase() !== "input"){
-            const cb = row.querySelector("input");
-            cb.checked = !cb.checked;
-          }
-          const cb = row.querySelector("input");
-          if(cb.checked) selected.add(o); else selected.delete(o);
-        };
-        row.querySelector("input").onchange = ()=>{
-          const cb = row.querySelector("input");
-          if(cb.checked) selected.add(o); else selected.delete(o);
-        };
-        list.appendChild(row);
-      });
-  }
-
-  function updateLabel(){
-    if(selected.size===0) { label.textContent = "All"; return; }
-    if(selected.size===options.length) { label.textContent = "All"; return; }
-    const arr = Array.from(selected);
-    label.textContent = arr.length===1 ? arr[0] : `${arr.length} selected`;
-  }
-
-  btn.onclick = ()=>{
-    document.querySelectorAll(".mselect.open").forEach(x=>{
-      if(x!==el) x.classList.remove("open");
-    });
-    el.classList.toggle("open");
-    search.value="";
-    renderList("");
-    updateLabel();
-    if(el.classList.contains("open")) setTimeout(()=>search.focus(),0);
-  };
-
-  search.oninput = ()=>renderList(search.value);
-
-  el.querySelector('[data-act="clear"]').onclick = (e)=>{
-    e.preventDefault();
-    selected.clear();
-    renderList(search.value);
-  };
-  el.querySelector('[data-act="all"]').onclick = (e)=>{
-    e.preventDefault();
-    options.forEach(o=>selected.add(o));
-    renderList(search.value);
-  };
-  el.querySelector('[data-act="apply"]').onclick = (e)=>{
-    e.preventDefault();
-    el.classList.remove("open");
-    updateLabel();
-    runReport();
-  };
-
-  document.addEventListener("click",(ev)=>{
-    if(!el.contains(ev.target)) el.classList.remove("open");
-  });
-
-  updateLabel();
-}
-
-/* ===========================
-   FILTER HELPERS
-=========================== */
-function getFilterSet(key, options){
-  const s = msState[key];
-  if(!s || s.size===0) return new Set(options);
-  if(s.size===options.length) return new Set(options);
-  return new Set(Array.from(s));
-}
-
-function inDateRange(dateVal, startISO, endISO){
-  // Accept Date objects, ISO strings, or weird values.
-  const d = new Date(dateVal);
-  if(isNaN(d.getTime())) return false;
-  const iso = d.toLocaleDateString("en-CA",{timeZone:TZ});
-  return iso >= startISO && iso <= endISO;
-}
-
-/* ===========================
-   WORK TYPES (FIXED)
-=========================== */
-const CSR_WORK = ["Inbound","Outbound","Chat","Emails","A2A","Unverified","INC_C_Calling","Question_Calling","A2A_Calling","Delinks","Cancellations"];
-const PROC_WORK = ["Filing","Linking","Linked Review","Inbox","Existing Review","Processing Review","Miscellaneous","Total Output","Total Fees"];
-const ALL_WORK = [...CSR_WORK, ...PROC_WORK];
-
-/* ===========================
-   LOAD BACKEND DATA
-=========================== */
-async function fetchReportData(){
-  const url = WEB_APP_URL + "?action=getReportData";
-  const res = await fetch(url, { method:"GET" });
+  const res = await fetch(WEB_APP_URL + "?action=getReportData");
   const data = await res.json();
-  if(!data || !data.ok) throw new Error((data && data.error) ? data.error : "Unknown backend error");
-  return data;
-}
 
-/* ===========================
-   NORMALIZE BACKEND ROWS
-=========================== */
-function normalizeCSRRow(r){
-  return {
-    Timestamp: r.Timestamp,
-    Date: r.Date,
-    Staff: String(r.Staff||"").trim(),
-    Division: "CSR",
-    Inbound: num(r.Inbound),
-    Outbound: num(r.Outbound),
-    Chat: num(r.Chat),
-    Emails: num(r.Emails),
-    A2A: num(r.A2A),
-    Unverified: num(r.Unverified),
-    INC_C_Calling: num(r.INC_C_Calling),
-    Question_Calling: num(r.Question_Calling),
-    A2A_Calling: num(r.A2A_Calling),
-    Delinks: num(r.Delinks),
-    Cancellations: num(r.Cancellations)
-  };
-}
-
-function normalizeProcRow(r){
-  return {
-    Date: r.Date,
-    Staff: String(r.Staff||"").trim(),
-    Filing: num(r.Filing),
-    Linking: num(r.Linking),
-    "Linked Review": num(r["Linked Review"]),
-    Inbox: num(r.Inbox),
-    "Existing Review": num(r["Existing Review"]),
-    "Processing Review": num(r["Processing Review"]),
-    Miscellaneous: num(r.Miscellaneous),
-    "Total Output": num(r["Total Output"]),
-    "Total Fees": num(r["Total Fees"]),
-    "Submitted At": r["Submitted At"]
-  };
-}
-
-function normalizeFeeRow(r){
-  return {
-    Timestamp: r.Timestamp,
-    Date: r.Date,
-    Staff: String(r.Staff||"").trim(),
-    Fee_Type: String(r.Fee_Type||"").trim(),
-    Count: num(r.Count),
-    Total_Fee: num(r.Total_Fee)
-  };
-}
-
-/* ===========================
-   BUILD ZERO-FILLED STAFF LINES
-=========================== */
-function emptyCSRLine(staff){
-  return {
-    Staff: staff,
-    Inbound:0, Outbound:0, Chat:0, Emails:0,
-    A2A:0, Unverified:0, INC_C_Calling:0, Question_Calling:0, A2A_Calling:0,
-    Delinks:0, Cancellations:0
-  };
-}
-function emptyProcLine(staff){
-  return {
-    Staff: staff,
-    Filing:0, Linking:0, "Linked Review":0, Inbox:0, "Existing Review":0, "Processing Review":0, Miscellaneous:0,
-    "Total Output":0,
-    Fees:0,
-    FeeEntries:0
-  };
-}
-
-/* ===========================
-   REPORT CALC
-=========================== */
-function calcCSRByStaff(csrRows, allStaff, workSet){
-  const map = new Map();
-  allStaff.forEach(s=>map.set(s, emptyCSRLine(s)));
-
-  csrRows.forEach(r=>{
-    const staff = r.Staff;
-    if(!map.has(staff)) map.set(staff, emptyCSRLine(staff));
-    const o = map.get(staff);
-
-    // apply work filter per-field
-    const add = (k, v)=>{ if(workSet.has(k)) o[k] += v; };
-
-    add("Inbound", r.Inbound);
-    add("Outbound", r.Outbound);
-    add("Chat", r.Chat);
-    add("Emails", r.Emails);
-    add("A2A", r.A2A);
-    add("Unverified", r.Unverified);
-    add("INC_C_Calling", r.INC_C_Calling);
-    add("Question_Calling", r.Question_Calling);
-    add("A2A_Calling", r.A2A_Calling);
-    add("Delinks", r.Delinks);
-    add("Cancellations", r.Cancellations);
+  const staffSelect = document.getElementById("staffFilter");
+  staffSelect.innerHTML = "";
+  data.allStaff.forEach(name=>{
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    opt.selected = true;
+    staffSelect.appendChild(opt);
   });
 
-  const rows = Array.from(map.values());
-  rows.forEach(r=>{
-    r.Touchpoints = (r.Inbound + r.Outbound + r.Chat);
-  });
-  return rows;
-}
-
-function calcProcByStaff(procRows, feeRows, allStaff, workSet, feeTypeSet){
-  const map = new Map();
-  allStaff.forEach(s=>map.set(s, emptyProcLine(s)));
-
-  // processing outputs
-  procRows.forEach(r=>{
-    const staff = r.Staff;
-    if(!map.has(staff)) map.set(staff, emptyProcLine(staff));
-    const o = map.get(staff);
-
-    const add = (k, v)=>{ if(workSet.has(k)) o[k] += v; };
-
-    add("Filing", r.Filing);
-    add("Linking", r.Linking);
-    add("Linked Review", r["Linked Review"]);
-    add("Inbox", r.Inbox);
-    add("Existing Review", r["Existing Review"]);
-    add("Processing Review", r["Processing Review"]);
-    add("Miscellaneous", r.Miscellaneous);
-
-    // Total Output respects work set: if they filter out all output types, total output can be 0
-    // We recompute total output from selected fields (not trusting sheet)
-    o["Total Output"] =
-      o.Filing + o.Linking + o["Linked Review"] + o.Inbox + o["Existing Review"] + o["Processing Review"] + o.Miscellaneous;
+  const divisionSelect = document.getElementById("divisionFilter");
+  divisionSelect.innerHTML = "";
+  ["CSR","Processing"].forEach(d=>{
+    const opt = document.createElement("option");
+    opt.value = d;
+    opt.textContent = d;
+    opt.selected = true;
+    divisionSelect.appendChild(opt);
   });
 
-  // fees from Fee_Log (authoritative)
-  feeRows.forEach(fr=>{
-    if(!feeTypeSet.has(fr.Fee_Type)) return;
-    const staff = fr.Staff;
-    if(!map.has(staff)) map.set(staff, emptyProcLine(staff));
-    const o = map.get(staff);
-    o.FeeEntries += fr.Count;
-    o.Fees += fr.Total_Fee;
+  const feeSelect = document.getElementById("feeFilter");
+  feeSelect.innerHTML = "";
+  data.allFeeTypes.forEach(type=>{
+    const opt = document.createElement("option");
+    opt.value = type;
+    opt.textContent = type;
+    opt.selected = true;
+    feeSelect.appendChild(opt);
   });
 
-  // active rounding
-  Array.from(map.values()).forEach(r=>{
-    r.Fees = Math.round(r.Fees*100)/100;
-  });
-
-  return Array.from(map.values());
-}
-
-function feeBreakdown(feeRows, allFeeTypes, feeTypeSet){
-  const map = new Map();
-  allFeeTypes.forEach(t=>map.set(t,{Fee_Type:t, Entries:0, Total:0}));
-
-  feeRows.forEach(r=>{
-    if(!feeTypeSet.has(r.Fee_Type)) return;
-    if(!map.has(r.Fee_Type)) map.set(r.Fee_Type,{Fee_Type:r.Fee_Type, Entries:0, Total:0});
-    const o = map.get(r.Fee_Type);
-    o.Entries += r.Count;
-    o.Total += r.Total_Fee;
-  });
-
-  const rows = Array.from(map.values()).map(x=>({
-    Fee_Type: x.Fee_Type,
-    Entries: x.Entries,
-    Total: Math.round(x.Total*100)/100
-  }));
-
-  let totalEntries = 0, totalFees = 0;
-  rows.forEach(r=>{ totalEntries += r.Entries; totalFees += r.Total; });
-  totalFees = Math.round(totalFees*100)/100;
-
-  return { rows, totalEntries, totalFees };
-}
-
-/* ===========================
-   RENDER
-=========================== */
-function renderTables(csrByStaff, procByStaff, feeTypeRows){
-
-  // CSR Ranking
-  const csrRank = [...csrByStaff].sort((a,b)=>b.Touchpoints-a.Touchpoints);
-  document.getElementById("csrRankBody").innerHTML =
-    csrRank.map((r,i)=>`
-      <tr>
-        <td>${i+1}</td>
-        <td><strong>${r.Staff}</strong></td>
-        <td class="right"><strong>${r.Touchpoints.toLocaleString("en-NZ")}</strong></td>
-        <td class="right">${r.Inbound.toLocaleString("en-NZ")}</td>
-        <td class="right">${r.Outbound.toLocaleString("en-NZ")}</td>
-        <td class="right">${r.Chat.toLocaleString("en-NZ")}</td>
-        <td class="right">${r.Emails.toLocaleString("en-NZ")}</td>
-      </tr>
-    `).join("");
-
-  // CSR Core
-  document.getElementById("csrCoreBody").innerHTML =
-    csrByStaff.map(r=>`
-      <tr>
-        <td><strong>${r.Staff}</strong></td>
-        <td class="right">${r.Inbound}</td>
-        <td class="right">${r.Outbound}</td>
-        <td class="right">${r.Chat}</td>
-        <td class="right">${r.Emails}</td>
-        <td class="right"><strong>${r.Touchpoints}</strong></td>
-      </tr>
-    `).join("");
-
-  // CSR Actions
-  document.getElementById("csrActionsBody").innerHTML =
-    csrByStaff.map(r=>`
-      <tr>
-        <td><strong>${r.Staff}</strong></td>
-        <td class="right">${r.A2A}</td>
-        <td class="right">${r.Unverified}</td>
-        <td class="right">${r.INC_C_Calling}</td>
-        <td class="right">${r.Question_Calling}</td>
-        <td class="right">${r.A2A_Calling}</td>
-        <td class="right">${r.Delinks}</td>
-        <td class="right">${r.Cancellations}</td>
-      </tr>
-    `).join("");
-
-  // Processing Ranking
-  const procRank = [...procByStaff].sort((a,b)=>{
-    if(b.Fees!==a.Fees) return b.Fees-a.Fees;
-    return b["Total Output"]-a["Total Output"];
-  });
-  document.getElementById("procRankBody").innerHTML =
-    procRank.map((r,i)=>`
-      <tr>
-        <td>${i+1}</td>
-        <td><strong>${r.Staff}</strong></td>
-        <td class="right"><strong>${money(r.Fees)}</strong></td>
-        <td class="right">${r.FeeEntries.toLocaleString("en-NZ")}</td>
-        <td class="right">${r["Total Output"].toLocaleString("en-NZ")}</td>
-      </tr>
-    `).join("");
-
-  // Proc group 1
-  document.getElementById("procGroup1Body").innerHTML =
-    procByStaff.map(r=>`
-      <tr>
-        <td><strong>${r.Staff}</strong></td>
-        <td class="right">${r.Filing}</td>
-        <td class="right">${r.Linking}</td>
-        <td class="right">${r["Linked Review"]}</td>
-        <td class="right">${r.Inbox}</td>
-      </tr>
-    `).join("");
-
-  // Proc group 2
-  document.getElementById("procGroup2Body").innerHTML =
-    procByStaff.map(r=>`
-      <tr>
-        <td><strong>${r.Staff}</strong></td>
-        <td class="right">${r["Existing Review"]}</td>
-        <td class="right">${r["Processing Review"]}</td>
-        <td class="right">${r.Miscellaneous}</td>
-        <td class="right"><strong>${r["Total Output"]}</strong></td>
-        <td class="right"><strong>${money(r.Fees)}</strong></td>
-      </tr>
-    `).join("");
-
-  // Fee type table
-  document.getElementById("feeTypeBody").innerHTML =
-    feeTypeRows.rows.map(r=>`
-      <tr>
-        <td><strong>${r.Fee_Type}</strong></td>
-        <td class="right">${r.Entries.toLocaleString("en-NZ")}</td>
-        <td class="right">${money(r.Total)}</td>
-      </tr>
-    `).join("");
-
-  document.getElementById("feeTypeTotalEntries").textContent =
-    feeTypeRows.totalEntries.toLocaleString("en-NZ");
-
-  document.getElementById("feeTypeTotalFees").textContent =
-    money(feeTypeRows.totalFees);
-}
-
-/* ===========================
-   MAIN REPORT
-=========================== */
-let CACHE = null;
-
-async function runReport(){
-  setStatus("Loading…");
-
-  const start = document.getElementById("startDate").value || todayISO;
-  const end = document.getElementById("endDate").value || todayISO;
-  const isToday = (start===todayISO && end===todayISO);
-  document.getElementById("rangeLabel").textContent = isToday ? "Today (live)" : `${start} → ${end}`;
-
-  try{
-    if(!CACHE){
-      CACHE = await fetchReportData();
-    }
-
-    // Build option lists from backend (NO EXCEPTIONS)
-    const allStaff = (CACHE.allStaff || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
-    const allFeeTypes = (CACHE.allFeeTypes || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
-
-    // Filters
-    const divSet = getFilterSet("division", ["CSR","Processing"]);
-    const staffSet = getFilterSet("staff", allStaff);
-
-    // Work options depend on divisions selected
-    const workOptions = [];
-    if(divSet.has("CSR")) CSR_WORK.forEach(w=>workOptions.push(w));
-    if(divSet.has("Processing")) PROC_WORK.forEach(w=>{ if(!workOptions.includes(w)) workOptions.push(w); });
-
-    const workSet = getFilterSet("work", workOptions);
-    const feeSet = getFilterSet("fee", allFeeTypes);
-
-    // Normalize rows
-    means = null;
-    const csrAll = (CACHE.csr||[]).map(normalizeCSRRow);
-    const procAll = (CACHE.processing||[]).map(normalizeProcRow);
-    const feeAll = (CACHE.fees||[]).map(normalizeFeeRow);
-
-    // Date + staff filters
-    const csrRows = csrAll.filter(r =>
-      divSet.has("CSR") &&
-      staffSet.has(r.Staff) &&
-      inDateRange(r.Date, start, end)
-    );
-
-    const procRows = procAll.filter(r =>
-      divSet.has("Processing") &&
-      staffSet.has(r.Staff) &&
-      inDateRange(r.Date, start, end)
-    );
-
-    const feeRows = feeAll.filter(r =>
-      divSet.has("Processing") && // fees are processing-side
-      staffSet.has(r.Staff) &&
-      inDateRange(r.Timestamp || r.Date, start, end) // prefer Timestamp if present
-    );
-
-    // Yesterday rows (for deltas)
-    const yStart = addDaysISO(start,-1);
-    const yEnd = addDaysISO(end,-1);
-
-    const csrY = csrAll.filter(r =>
-      divSet.has("CSR") &&
-      staffSet.has(r.Staff) &&
-      inDateRange(r.Date, yStart, yEnd)
-    );
-
-    const procY = procAll.filter(r =>
-      divSet.has("Processing") &&
-      staffSet.has(r.Staff) &&
-      inDateRange(r.Date, yStart, yEnd)
-    );
-
-    const feeY = feeAll.filter(r =>
-      divSet.has("Processing") &&
-      staffSet.has(r.Staff) &&
-      inDateRange(r.Timestamp || r.Date, yStart, yEnd)
-    );
-
-    // Calculate by staff (includes ALL staff)
-    const csrByStaff = calcCSRByStaff(csrRows, allStaff, workSet);
-    const csrByStaffY = calcCSRByStaff(csrY, allStaff, workSet);
-
-    const procByStaff = calcProcByStaff(procRows, feeRows, allStaff, workSet, feeSet);
-    const procByStaffY = calcProcByStaff(procY, feeY, allStaff, workSet, feeSet);
-
-    // Top totals
-    const csrTouch = csrByStaff.reduce((a,r)=>a + (r.Touchpoints||0),0);
-    const csrTouchY = csrByStaffY.reduce((a,r)=>a + (r.Touchpoints||0),0);
-
-    const procOut = procByStaff.reduce((a,r)=>a + (r["Total Output"]||0),0);
-    const procOutY = procByStaffY.reduce((a,r)=>a + (r["Total Output"]||0),0);
-
-    const procFees = procByStaff.reduce((a,r)=>a + (r.Fees||0),0);
-    const procFeesY = procByStaffY.reduce((a,r)=>a + (r.Fees||0),0);
-
-    const activeToday = (() => {
-      let n=0;
-      allStaff.forEach(s=>{
-        const c = csrByStaff.find(x=>x.Staff===s) || emptyCSRLine(s);
-        const p = procByStaff.find(x=>x.Staff===s) || emptyProcLine(s);
-        const csrAny = (c.Inbound+c.Outbound+c.Chat+c.Emails+c.A2A+c.Unverified+c.INC_C_Calling+c.Question_Calling+c.A2A_Calling+c.Delinks+c.Cancellations) > 0;
-        const procAny = (p.Filing+p.Linking+p["Linked Review"]+p.Inbox+p["Existing Review"]+p["Processing Review"]+p.Miscellaneous + p.FeeEntries) > 0;
-        if(csrAny || procAny) n++;
-      });
-      return n;
-    })();
-
-    const activeYday = (() => {
-      let n=0;
-      allStaff.forEach(s=>{
-        const c = csrByStaffY.find(x=>x.Staff===s) || emptyCSRLine(s);
-        const p = procByStaffY.find(x=>x.Staff===s) || emptyProcLine(s);
-        const csrAny = (c.Inbound+c.Outbound+c.Chat+c.Emails+c.A2A+c.Unverified+c.INC_C_Calling+c.Question_Calling+c.A2A_Calling+c.Delinks+c.Cancellations) > 0;
-        const procAny = (p.Filing+p.Linking+p["Linked Review"]+p.Inbox+p["Existing Review"]+p["Processing Review"]+p.Miscellaneous + p.FeeEntries) > 0;
-        if(csrAny || procAny) n++;
-      });
-      return n;
-    })();
-
-    // Update executive snapshot
-    document.getElementById("touchpointsToday").textContent = csrTouch.toLocaleString("en-NZ");
-    document.getElementById("touchpointsYday").textContent = csrTouchY.toLocaleString("en-NZ");
-    formatDelta(document.getElementById("touchpointsDelta"), csrTouch, csrTouchY);
-
-    document.getElementById("returnsToday").textContent = procOut.toLocaleString("en-NZ");
-    document.getElementById("returnsYday").textContent = procOutY.toLocaleString("en-NZ");
-    formatDelta(document.getElementById("returnsDelta"), procOut, procOutY);
-
-    document.getElementById("feesToday").textContent = money(procFees);
-    document.getElementById("feesYday").textContent = money(procFeesY);
-    formatDelta(document.getElementById("feesDelta"), procFees, procFeesY);
-
-    document.getElementById("activeStaffToday").textContent = activeToday.toLocaleString("en-NZ");
-    document.getElementById("activeStaffYday").textContent = activeYday.toLocaleString("en-NZ");
-    formatDelta(document.getElementById("activeDelta"), activeToday, activeYday);
-
-    // Division snapshot blocks
-    const csrInbound = csrByStaff.reduce((a,r)=>a + r.Inbound,0);
-    const csrOutbound = csrByStaff.reduce((a,r)=>a + r.Outbound,0);
-    const csrChat = csrByStaff.reduce((a,r)=>a + r.Chat,0);
-
-    document.getElementById("csrTouchpoints").textContent = csrTouch.toLocaleString("en-NZ");
-    document.getElementById("csrInbound").textContent = csrInbound.toLocaleString("en-NZ");
-    document.getElementById("csrOutbound").textContent = csrOutbound.toLocaleString("en-NZ");
-    document.getElementById("csrChat").textContent = csrChat.toLocaleString("en-NZ");
-
-    const procFeeEntries = procByStaff.reduce((a,r)=>a + (r.FeeEntries||0),0);
-
-    document.getElementById("procOutput").textContent = procOut.toLocaleString("en-NZ");
-    document.getElementById("procFees").textContent = money(procFees);
-    document.getElementById("procFeeEntries").textContent = procFeeEntries.toLocaleString("en-NZ");
-
-    // Fee breakdown by type (always include all fee types)
-    const feeTypeRows = feeBreakdown(feeRows, allFeeTypes, feeSet);
-
-    // Render tables
-    renderTables(csrByStaff, procByStaff, feeTypeRows);
-
-    setStatus(isToday ? "Live Today" : "Filtered period");
-
-  }catch(err){
-    console.error(err);
-    alert("Connection error");
-    setStatus("Connection error");
-  }
-}
-
-/* ===========================
-   PDF (placeholder)
-=========================== */
-function downloadPDF(){
-  alert("PDF will match current filters (next phase).");
-}
-
-/* ===========================
-   INIT
-=========================== */
-(async function init(){
-
-  // First fetch (so we can build dropdowns from backend lists)
-  try{
-    setStatus("Loading…");
-    CACHE = await fetchReportData();
-  }catch(e){
-    console.error(e);
-    setStatus("Connection error");
-    alert("Connection error");
-    return;
-  }
-
-  const allStaff = (CACHE.allStaff || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
-  const allFeeTypes = (CACHE.allFeeTypes || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
-
-  const msDiv = document.querySelector('[data-ms="division"]');
-  const msStaff = document.querySelector('[data-ms="staff"]');
-  const msWork = document.querySelector('[data-ms="work"]');
-  const msFee = document.querySelector('[data-ms="fee"]');
-
-  buildMultiSelect(msDiv, "division", ["CSR","Processing"]);
-  buildMultiSelect(msStaff, "staff", allStaff);
-  buildMultiSelect(msFee, "fee", allFeeTypes);
-
-  function rebuildWork(){
-    const divSet = getFilterSet("division", ["CSR","Processing"]);
-    const workOptions = [];
-    if(divSet.has("CSR")) CSR_WORK.forEach(w=>workOptions.push(w));
-    if(divSet.has("Processing")) PROC_WORK.forEach(w=>{ if(!workOptions.includes(w)) workOptions.push(w); });
-
-    // prune invalid selections
-    Array.from(msState.work).forEach(v=>{ if(!workOptions.includes(v)) msState.work.delete(v); });
-
-    msWork.innerHTML = "";
-    buildMultiSelect(msWork, "work", workOptions);
-  }
-
-  rebuildWork();
-
-  // When division applied, rebuild work options
-  msDiv.addEventListener("click",(e)=>{
-    const btn = e.target.closest('[data-act="apply"]');
-    if(btn){
-      setTimeout(()=>rebuildWork(),0);
-    }
-  });
-
-  // Initial run
   runReport();
-})();
-</script>
+}
 
+/* MAIN REPORT */
+async function runReport(){
+
+  document.getElementById("statusPill").textContent = "Loading…";
+
+  const start = new Date(document.getElementById("startDate").value);
+  const end = new Date(document.getElementById("endDate").value);
+  end.setHours(23,59,59,999);
+
+  const selectedDivisions = Array.from(document.getElementById("divisionFilter").selectedOptions).map(o=>o.value);
+  const selectedStaff = Array.from(document.getElementById("staffFilter").selectedOptions).map(o=>o.value);
+  const selectedFees = Array.from(document.getElementById("feeFilter").selectedOptions).map(o=>o.value);
+
+  const res = await fetch(WEB_APP_URL + "?action=getReportData");
+  const data = await res.json();
+
+  /* FILTER DATA */
+  const csrData = data.csr.filter(r=>{
+    const d = new Date(r.Date);
+    return selectedDivisions.includes("CSR") &&
+           selectedStaff.includes(r.Staff) &&
+           d >= start && d <= end;
+  });
+
+  const processingData = data.processing.filter(r=>{
+    const d = new Date(r.Date);
+    return selectedDivisions.includes("Processing") &&
+           selectedStaff.includes(r.Staff) &&
+           d >= start && d <= end;
+  });
+
+  const feeData = data.fees.filter(r=>{
+    const d = new Date(r.Date);
+    return selectedStaff.includes(r.Staff) &&
+           selectedFees.includes(r.Fee_Type) &&
+           d >= start && d <= end;
+  });
+
+  /* SUMMARY TOTALS */
+  let touchpoints = 0;
+  csrData.forEach(r=>{
+    touchpoints += Number(r.Inbound||0)
+                + Number(r.Outbound||0)
+                + Number(r.Chat||0);
+  });
+
+  let returns = 0;
+  processingData.forEach(r=>{
+    returns += Number(r["Total Output"]||0);
+  });
+
+  let feesTotal = 0;
+  feeData.forEach(r=>{
+    feesTotal += Number(r.Total_Fee||0);
+  });
+
+  const activeStaff = new Set([
+    ...csrData.map(r=>r.Staff),
+    ...processingData.map(r=>r.Staff)
+  ]);
+
+  document.getElementById("touchpointsTotal").textContent = touchpoints;
+  document.getElementById("returnsTotal").textContent = returns;
+  document.getElementById("feesTotal").textContent = money(feesTotal);
+  document.getElementById("activeStaffTotal").textContent = activeStaff.size;
+
+  /* CSR TABLE */
+  const csrGrouped = {};
+  csrData.forEach(r=>{
+    if(!csrGrouped[r.Staff]) csrGrouped[r.Staff] = {Inbound:0,Outbound:0,Chat:0,Emails:0};
+    csrGrouped[r.Staff].Inbound += Number(r.Inbound||0);
+    csrGrouped[r.Staff].Outbound += Number(r.Outbound||0);
+    csrGrouped[r.Staff].Chat += Number(r.Chat||0);
+    csrGrouped[r.Staff].Emails += Number(r.Emails||0);
+  });
+
+  document.getElementById("csrTable").innerHTML =
+    Object.entries(csrGrouped).map(([staff,v])=>`
+      <tr>
+        <td><strong>${staff}</strong></td>
+        <td class="right">${v.Inbound}</td>
+        <td class="right">${v.Outbound}</td>
+        <td class="right">${v.Chat}</td>
+        <td class="right">${v.Emails}</td>
+      </tr>
+    `).join("") || `<tr><td colspan="5" class="small-muted">No CSR data</td></tr>`;
+
+  /* PROCESSING TABLE */
+  const procGrouped = {};
+  processingData.forEach(r=>{
+    if(!procGrouped[r.Staff]) procGrouped[r.Staff] = {output:0,fees:0};
+    procGrouped[r.Staff].output += Number(r["Total Output"]||0);
+  });
+
+  feeData.forEach(r=>{
+    if(procGrouped[r.Staff]){
+      procGrouped[r.Staff].fees += Number(r.Total_Fee||0);
+    }
+  });
+
+  document.getElementById("processingTable").innerHTML =
+    Object.entries(procGrouped).map(([staff,v])=>`
+      <tr>
+        <td><strong>${staff}</strong></td>
+        <td class="right">${v.output}</td>
+        <td class="right">${money(v.fees)}</td>
+      </tr>
+    `).join("") || `<tr><td colspan="3" class="small-muted">No Processing data</td></tr>`;
+
+  /* FEE TABLE */
+  const feeGrouped = {};
+  feeData.forEach(r=>{
+    if(!feeGrouped[r.Fee_Type]) feeGrouped[r.Fee_Type] = {count:0,total:0};
+    feeGrouped[r.Fee_Type].count += Number(r.Count||0);
+    feeGrouped[r.Fee_Type].total += Number(r.Total_Fee||0);
+  });
+
+  document.getElementById("feeTable").innerHTML =
+    Object.entries(feeGrouped).map(([type,v])=>`
+      <tr>
+        <td><strong>${type}</strong></td>
+        <td class="right">${v.count}</td>
+        <td class="right">${money(v.total)}</td>
+      </tr>
+    `).join("") || `<tr><td colspan="3" class="small-muted">No Fee data</td></tr>`;
+
+  document.getElementById("statusPill").textContent = "Live Data";
+}
+
+/* INIT */
+loadFilters();
+
+</script>
 </body>
 </html>
