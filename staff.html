@@ -27,9 +27,7 @@ body{
   background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
   transition:.2s ease;
 }
-.page.submitting{
-  opacity:.7;
-}
+.page.submitting{opacity:.7}
 
 /* HEADER */
 .header{
@@ -50,20 +48,9 @@ body{
   gap:14px;
 }
 .brand img{height:26px}
-.brand-text strong{
-  font-size:15px;
-  font-weight:900;
-}
-.brand-text span{
-  font-size:12px;
-  opacity:.9;
-  font-weight:700;
-}
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
+.brand-text strong{font-size:15px;font-weight:900;}
+.brand-text span{font-size:12px;opacity:.9;font-weight:700;}
+.header-right{display:flex;align-items:center;gap:14px;}
 .dashboard-btn{
   border-radius:999px;
   padding:8px 16px;
@@ -77,21 +64,10 @@ body{
 .clock{font-weight:900;font-size:14px}
 
 /* CONTENT */
-.wrap{
-  max-width:1300px;
-  margin:0 auto;
-  padding:36px 24px 60px;
-}
-.hello{
-  font-size:24px;
-  font-weight:900;
-  color:var(--g0);
-}
-.subline{
-  margin-top:6px;
-  font-weight:800;
-  color:var(--muted);
-}
+.wrap{max-width:1300px;margin:0 auto;padding:36px 24px 60px;}
+.hello{font-size:24px;font-weight:900;color:var(--g0);}
+.subline{margin-top:6px;font-weight:800;color:var(--muted);}
+
 .layout{
   display:grid;
   grid-template-columns:300px 1fr 260px;
@@ -113,11 +89,7 @@ body{
 }
 
 /* COUNTERS */
-.controls{
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
+.controls{display:flex;align-items:center;gap:6px;}
 .controls button{
   width:32px;height:32px;
   border-radius:8px;
@@ -160,7 +132,7 @@ body{
   color:var(--g0);
 }
 
-/* SUBMIT BUTTON */
+/* SUBMIT */
 .submit button{
   width:100%;
   border-radius:14px;
@@ -217,12 +189,12 @@ body{
 </div>
 
 <div class="wrap">
-
 <div class="hello" id="helloText">Hello</div>
 <div class="subline" id="dateLine"></div>
 
 <div class="layout">
 
+<!-- LEFT -->
 <div>
 <div class="panel">
 <h3>Inbound Calls</h3>
@@ -252,88 +224,30 @@ body{
 </div>
 </div>
 
+<!-- MIDDLE -->
 <div>
+
 <div class="panel">
 <h3>Allocated Work</h3>
 <div class="grid">
-
-<div class="item">
-<label>A2A</label>
-<div class="controls">
-<button onclick="adj('a2a',-1)">−</button>
-<input id="a2a" value="0">
-<button onclick="adj('a2a',1)">+</button>
-</div>
-</div>
-
-<div class="item">
-<label>Unverified</label>
-<div class="controls">
-<button onclick="adj('unverified',-1)">−</button>
-<input id="unverified" value="0">
-<button onclick="adj('unverified',1)">+</button>
-</div>
-</div>
-
-<div class="item">
-<label>Emails</label>
-<div class="controls">
-<button onclick="adj('emails',-1)">−</button>
-<input id="emails" value="0">
-<button onclick="adj('emails',1)">+</button>
-</div>
-</div>
-
-<div class="item">
-<label>INC/C Calling</label>
-<div class="controls">
-<button onclick="adjCalling('inccalling',-1)">−</button>
-<input id="inccalling" value="0">
-<button onclick="adjCalling('inccalling',1)">+</button>
-</div>
-</div>
-
-<div class="item">
-<label>Question Calling</label>
-<div class="controls">
-<button onclick="adjCalling('questioncalling',-1)">−</button>
-<input id="questioncalling" value="0">
-<button onclick="adjCalling('questioncalling',1)">+</button>
-</div>
-</div>
-
-<div class="item">
-<label>A2A Calling</label>
-<div class="controls">
-<button onclick="adjCalling('a2acalling',-1)">−</button>
-<input id="a2acalling" value="0">
-<button onclick="adjCalling('a2acalling',1)">+</button>
-</div>
-</div>
-
+${[
+"A2A","unverified","emails",
+"inccalling","questioncalling","a2acalling"
+].map(id=>``).join("")}
+<div class="item"><label>A2A</label><div class="controls"><button onclick="adj('a2a',-1)">−</button><input id="a2a" value="0"><button onclick="adj('a2a',1)">+</button></div></div>
+<div class="item"><label>Unverified</label><div class="controls"><button onclick="adj('unverified',-1)">−</button><input id="unverified" value="0"><button onclick="adj('unverified',1)">+</button></div></div>
+<div class="item"><label>Emails</label><div class="controls"><button onclick="adj('emails',-1)">−</button><input id="emails" value="0"><button onclick="adj('emails',1)">+</button></div></div>
+<div class="item"><label>INC/C Calling</label><div class="controls"><button onclick="adjCalling('inccalling',-1)">−</button><input id="inccalling" value="0"><button onclick="adjCalling('inccalling',1)">+</button></div></div>
+<div class="item"><label>Question Calling</label><div class="controls"><button onclick="adjCalling('questioncalling',-1)">−</button><input id="questioncalling" value="0"><button onclick="adjCalling('questioncalling',1)">+</button></div></div>
+<div class="item"><label>A2A Calling</label><div class="controls"><button onclick="adjCalling('a2acalling',-1)">−</button><input id="a2acalling" value="0"><button onclick="adjCalling('a2acalling',1)">+</button></div></div>
 </div>
 </div>
 
 <div class="panel">
 <h3>Delinks & Cancellations</h3>
 <div class="grid">
-<div class="item">
-<label>Delinks</label>
-<div class="controls">
-<button onclick="adj('delink',-1)">−</button>
-<input id="delink" value="0">
-<button onclick="adj('delink',1)">+</button>
-</div>
-</div>
-
-<div class="item">
-<label>Cancellations</label>
-<div class="controls">
-<button onclick="adj('cancel',-1)">−</button>
-<input id="cancel" value="0">
-<button onclick="adj('cancel',1)">+</button>
-</div>
-</div>
+<div class="item"><label>Delinks</label><div class="controls"><button onclick="adj('delink',-1)">−</button><input id="delink" value="0"><button onclick="adj('delink',1)">+</button></div></div>
+<div class="item"><label>Cancellations</label><div class="controls"><button onclick="adj('cancel',-1)">−</button><input id="cancel" value="0"><button onclick="adj('cancel',1)">+</button></div></div>
 </div>
 </div>
 
@@ -343,6 +257,7 @@ body{
 
 </div>
 
+<!-- RIGHT -->
 <div>
 <div class="panel">
 <h3>Quick Contacts</h3>
@@ -365,7 +280,6 @@ const TZ="Pacific/Auckland";
 const name=localStorage.getItem("currentStaff")||"CSR";
 const todayISO=new Date().toLocaleDateString("en-CA",{timeZone:TZ});
 const todayHuman=new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
-const storageKey=`csr_${name}_${todayISO}`;
 
 let manualOutbound=0;
 let submitted=false;
@@ -374,14 +288,46 @@ staffNameLabel.textContent=name+" Daily Work Logger";
 helloText.textContent="Hello, "+name;
 dateLine.textContent=todayHuman+" · Division: CSR";
 
-function goHome(){window.location.href="index.html";}
-window.goHome=goHome;
+window.goHome=function(){window.location.href="index.html";};
 
 function tick(){
 clock.textContent=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 tick();setInterval(tick,1000);
 
+/* COUNTERS */
+window.adj=function(id,d){
+if(submitted)return;
+const el=document.getElementById(id);
+let v=Number(el.value||0)+d;
+if(v<0)v=0;
+el.value=v;
+};
+
+window.adjManualOutbound=function(d){
+if(submitted)return;
+manualOutbound+=d;
+if(manualOutbound<0)manualOutbound=0;
+updateOutbound();
+};
+
+window.adjCalling=function(id,d){
+if(submitted)return;
+const el=document.getElementById(id);
+let v=Number(el.value||0)+d;
+if(v<0)v=0;
+el.value=v;
+updateOutbound();
+};
+
+function updateOutbound(){
+const inc=Number(inccalling.value||0);
+const q=Number(questioncalling.value||0);
+const a2aCall=Number(a2acalling.value||0);
+outbound.value=manualOutbound+inc+q+a2aCall;
+}
+
+/* SUBMIT */
 window.submitDay=async function(){
 
 if(submitted)return;
@@ -411,6 +357,7 @@ formData.append("Cancellations",cancel.value);
 try{
 await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:formData});
 btn.textContent="Submitted ✓";
+submitted=true;
 setTimeout(()=>{window.location.href="index.html";},2000);
 }catch(err){
 btn.classList.remove("loading");
