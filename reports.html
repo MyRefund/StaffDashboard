@@ -13,16 +13,14 @@
   --text:#111827;
   --muted:#6b7280;
   --radius:16px;
-  --shadow:0 12px 32px rgba(0,0,0,.08);
+  --shadow:0 12px 32px rgba(0,0,0,.12);
 }
-
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family:"Okta Neue", system-ui, sans-serif;
+  font-family:"Okta Neue",system-ui;
   background:#f9fafb;
   color:var(--text);
-  overflow-x:hidden;
 }
 
 /* HEADER */
@@ -32,96 +30,80 @@ body{
   padding:14px 24px;
 }
 .header-inner{
-  max-width:1600px;
+  max-width:1400px;
   margin:0 auto;
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
-.brand{display:flex;align-items:center;gap:14px;}
-.brand img{height:26px}
-.brand-text strong{font-size:15px;font-weight:900}
-.brand-text span{font-size:12px;opacity:.85}
+.dashboard-btn{
+  border-radius:999px;
+  padding:8px 16px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid #fff;
+  background:transparent;
+  color:#fff;
+  cursor:pointer;
+}
 .clock{font-weight:900;font-size:14px}
 
-/* LAYOUT */
-.page{
-  display:flex;
-  max-width:1600px;
-  margin:24px auto 60px;
-  gap:24px;
+/* FILTER COLUMN */
+.layout{
+  max-width:1400px;
+  margin:20px auto;
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:20px;
   padding:0 16px;
 }
-
-/* LEFT FILTER COLUMN */
 .filters{
-  width:260px;
-  flex-shrink:0;
   background:#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:20px;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-  height:fit-content;
 }
-
 .filters h3{
-  margin:0;
-  font-size:14px;
-  font-weight:900;
+  margin-top:0;
   color:var(--g0);
 }
-
-.field{
-  display:flex;
-  flex-direction:column;
+.filters label{
   font-size:12px;
   font-weight:900;
+  display:block;
+  margin-top:14px;
 }
-.field input,
-.field select{
+.filters input,
+.filters select{
+  width:100%;
   margin-top:6px;
   padding:8px 10px;
   border-radius:10px;
   border:1px solid var(--border);
   font-weight:800;
 }
-
-button.primary{
+.filters button{
+  margin-top:18px;
+  width:100%;
   padding:10px;
-  border-radius:12px;
   background:var(--g0);
   color:#fff;
   border:none;
+  border-radius:12px;
   font-weight:900;
   cursor:pointer;
 }
 
-.status-pill{
-  padding:8px 12px;
-  border-radius:999px;
-  background:var(--g2);
-  font-size:12px;
-  font-weight:900;
-  color:var(--g0);
-  text-align:center;
-}
-
-/* MAIN CONTENT */
+/* CONTENT */
 .content{
-  flex:1;
   display:flex;
   flex-direction:column;
-  gap:24px;
+  gap:18px;
 }
-
-/* SUMMARY CARDS */
 .summary-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
+  gap:16px;
 }
 .summary-card{
   background:#fff;
@@ -142,7 +124,6 @@ button.primary{
   color:var(--g0);
 }
 
-/* PANELS */
 .panel{
   background:#fff;
   border-radius:var(--radius);
@@ -150,24 +131,17 @@ button.primary{
   padding:18px;
 }
 .panel h3{
-  margin:0 0 14px;
-  font-weight:900;
+  margin-top:0;
   color:var(--g0);
-  font-size:15px;
-}
-
-/* TABLES */
-.table-wrap{
-  overflow:hidden;
 }
 table{
   width:100%;
   border-collapse:collapse;
 }
 th,td{
-  padding:8px 6px;
-  font-size:12px;
+  padding:8px;
   border-bottom:1px solid var(--border);
+  font-size:13px;
 }
 th{
   text-align:left;
@@ -175,245 +149,7 @@ th{
   font-weight:900;
 }
 .right{text-align:right}
-.small-muted{color:var(--muted);font-size:11px;font-weight:800}
-
-/* RESPONSIVE */
-@media(max-width:1100px){
-  .page{flex-direction:column}
-  .filters{width:100%}
-}
-</style>
-</head>
-
-<body>
-
-<div class="header">
-  <div class="header-inner">
-    <div class="brand">
-      <img src="logo.png" alt="My Refund">
-      <div class="brand-text">
-        <strong>Reports</strong>
-        <span>Operational overview & revenue</span>
-      </div>
-    </div>
-    <div class="clock" id="clock"></div>
-  </div>
-</div>
-
-<div class="page">
-
-  <!-- LEFT FILTERS -->
-  <div class="filters">
-    <h3>Filters</h3>
-
-    <div class="field">
-      Date From
-      <input type="date" id="startDate">
-    </div>
-
-    <div class="field">
-      Date To
-      <input type="date" id="endDate">
-    </div>
-
-    <div class="field">
-      Division
-      <select id="divisionFilter" multiple></select>
-    </div>
-
-    <div class="field">
-      Staff
-      <select id="staffFilter" multiple></select>
-    </div>
-
-    <div class="field">
-      Fee Type
-      <select id="feeFilter" multiple></select>
-    </div>
-
-    <button class="primary" onclick="runReport()">Run Report</button>
-    <div class="status-pill" id="statusPill">Live</div>
-  </div>
-
-  <!-- MAIN CONTENT -->
-  <div class="content">
-
-    <!-- SUMMARY -->
-    <div class="summary-grid">
-      <div class="summary-card">
-        <h4>Client Touchpoints</h4>
-        <div class="summary-value" id="touchpointsTotal">0</div>
-      </div>
-      <div class="summary-card">
-        <h4>Returns Processed</h4>
-        <div class="summary-value" id="returnsTotal">0</div>
-      </div>
-      <div class="summary-card">
-        <h4>Revenue (Fees)</h4>
-        <div class="summary-value" id="feesTotal">$0.00</div>
-      </div>
-      <div class="summary-card">
-        <h4>Active Staff</h4>
-        <div class="summary-value" id="activeStaffTotal">0</div>
-      </div>
-    </div>
-
-    <!-- CSR PANEL -->
-    <div class="panel">
-      <h3>CSR Activity Summary</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Staff</th>
-              <th class="right">Inbound</th>
-              <th class="right">Outbound</th>
-              <th class="right">Chat</th>
-              <th class="right">Emails</th>
-            </tr>
-          </thead>
-          <tbody id="csrTable"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- PROCESSING PANEL -->
-    <div class="panel">
-      <h3>Processing Output Summary</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Staff</th>
-              <th class="right">Total Output</th>
-              <th class="right">Total Fees</th>
-            </tr>
-          </thead>
-          <tbody id="processingTable"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- FEE BREAKDOWN -->
-    <div class="panel">
-      <h3>Fee Breakdown</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Fee Type</th>
-              <th class="right">Count</th>
-              <th class="right">Total Fees</th>
-            </tr>
-          </thead>
-          <tbody id="feeTable"></tbody>
-        </table>
-      </div>
-    </div>
-
-  </div>
-</div>
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Refund — Reports</title>
-
-<style>
-:root{
-  --g0:#094B35;
-  --g2:#ECFDF5;
-  --border:#e5e7eb;
-  --text:#111827;
-  --muted:#6b7280;
-  --radius:16px;
-  --shadow:0 12px 32px rgba(0,0,0,.08);
-}
-
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:"Okta Neue", system-ui, sans-serif;
-  background:#f9fafb;
-  color:var(--text);
-  overflow-x:hidden;
-}
-
-/* HEADER */
-.header{
-  background:var(--g0);
-  color:#fff;
-  padding:14px 24px;
-}
-.header-inner{
-  max-width:1600px;
-  margin:0 auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.brand{display:flex;align-items:center;gap:14px;}
-.brand img{height:26px}
-.brand-text strong{font-size:15px;font-weight:900}
-.brand-text span{font-size:12px;opacity:.85}
-.clock{font-weight:900;font-size:14px}
-
-/* LAYOUT */
-.page{
-  display:flex;
-  max-width:1600px;
-  margin:24px auto 60px;
-  gap:24px;
-  padding:0 16px;
-}
-
-/* LEFT FILTER COLUMN */
-.filters{
-  width:260px;
-  flex-shrink:0;
-  background:#fff;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-  height:fit-content;
-}
-
-.filters h3{
-  margin:0;
-  font-size:14px;
-  font-weight:900;
-  color:var(--g0);
-}
-
-.field{
-  display:flex;
-  flex-direction:column;
-  font-size:12px;
-  font-weight:900;
-}
-.field input,
-.field select{
-  margin-top:6px;
-  padding:8px 10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  font-weight:800;
-}
-
-button.primary{
-  padding:10px;
-  border-radius:12px;
-  background:var(--g0);
-  color:#fff;
-  border:none;
-  font-weight:900;
-  cursor:pointer;
-}
-
+.small-muted{color:var(--muted);font-weight:800;font-size:12px}
 .status-pill{
   padding:8px 12px;
   border-radius:999px;
@@ -421,81 +157,8 @@ button.primary{
   font-size:12px;
   font-weight:900;
   color:var(--g0);
-  text-align:center;
-}
-
-/* MAIN CONTENT */
-.content{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  gap:24px;
-}
-
-/* SUMMARY CARDS */
-.summary-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
-}
-.summary-card{
-  background:#fff;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:18px;
-}
-.summary-card h4{
-  margin:0;
-  font-size:13px;
-  font-weight:900;
-  color:var(--muted);
-}
-.summary-value{
+  display:inline-block;
   margin-top:10px;
-  font-size:28px;
-  font-weight:900;
-  color:var(--g0);
-}
-
-/* PANELS */
-.panel{
-  background:#fff;
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:18px;
-}
-.panel h3{
-  margin:0 0 14px;
-  font-weight:900;
-  color:var(--g0);
-  font-size:15px;
-}
-
-/* TABLES */
-.table-wrap{
-  overflow:hidden;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-}
-th,td{
-  padding:8px 6px;
-  font-size:12px;
-  border-bottom:1px solid var(--border);
-}
-th{
-  text-align:left;
-  color:var(--muted);
-  font-weight:900;
-}
-.right{text-align:right}
-.small-muted{color:var(--muted);font-size:11px;font-weight:800}
-
-/* RESPONSIVE */
-@media(max-width:1100px){
-  .page{flex-direction:column}
-  .filters{width:100%}
 }
 </style>
 </head>
@@ -504,322 +167,211 @@ th{
 
 <div class="header">
   <div class="header-inner">
-    <div class="brand">
-      <img src="logo.png" alt="My Refund">
-      <div class="brand-text">
-        <strong>Reports</strong>
-        <span>Operational overview & revenue</span>
-      </div>
+    <div><strong>Reports</strong></div>
+    <div>
+      <button class="dashboard-btn" onclick="window.location.href='index.html'">← Dashboard</button>
+      <span class="clock" id="clock"></span>
     </div>
-    <div class="clock" id="clock"></div>
   </div>
 </div>
 
-<div class="page">
+<div class="layout">
 
-  <!-- LEFT FILTERS -->
-  <div class="filters">
-    <h3>Filters</h3>
+<!-- LEFT FILTERS -->
+<div class="filters">
+  <h3>Filters</h3>
 
-    <div class="field">
-      Date From
-      <input type="date" id="startDate">
-    </div>
+  <label>Date From</label>
+  <input type="date" id="startDate">
 
-    <div class="field">
-      Date To
-      <input type="date" id="endDate">
-    </div>
+  <label>Date To</label>
+  <input type="date" id="endDate">
 
-    <div class="field">
-      Division
-      <select id="divisionFilter" multiple></select>
-    </div>
+  <label>Division</label>
+  <select id="divisionFilter" multiple></select>
 
-    <div class="field">
-      Staff
-      <select id="staffFilter" multiple></select>
-    </div>
+  <label>Staff</label>
+  <select id="staffFilter" multiple></select>
 
-    <div class="field">
-      Fee Type
-      <select id="feeFilter" multiple></select>
-    </div>
+  <label>Fee Type</label>
+  <select id="feeFilter" multiple></select>
 
-    <button class="primary" onclick="runReport()">Run Report</button>
-    <div class="status-pill" id="statusPill">Live</div>
+  <button onclick="runReport()">Run Report</button>
+
+  <div class="status-pill" id="statusPill">Loading…</div>
+</div>
+
+<!-- RIGHT CONTENT -->
+<div class="content">
+
+<div class="summary-grid">
+  <div class="summary-card">
+    <h4>Client Touchpoints</h4>
+    <div class="summary-value" id="touchpointsTotal">0</div>
   </div>
 
-  <!-- MAIN CONTENT -->
-  <div class="content">
+  <div class="summary-card">
+    <h4>Returns Processed</h4>
+    <div class="summary-value" id="returnsTotal">0</div>
+  </div>
 
-    <!-- SUMMARY -->
-    <div class="summary-grid">
-      <div class="summary-card">
-        <h4>Client Touchpoints</h4>
-        <div class="summary-value" id="touchpointsTotal">0</div>
-      </div>
-      <div class="summary-card">
-        <h4>Returns Processed</h4>
-        <div class="summary-value" id="returnsTotal">0</div>
-      </div>
-      <div class="summary-card">
-        <h4>Revenue (Fees)</h4>
-        <div class="summary-value" id="feesTotal">$0.00</div>
-      </div>
-      <div class="summary-card">
-        <h4>Active Staff</h4>
-        <div class="summary-value" id="activeStaffTotal">0</div>
-      </div>
-    </div>
+  <div class="summary-card">
+    <h4>Revenue</h4>
+    <div class="summary-value" id="feesTotal">$0.00</div>
+  </div>
 
-    <!-- CSR PANEL -->
-    <div class="panel">
-      <h3>CSR Activity Summary</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Staff</th>
-              <th class="right">Inbound</th>
-              <th class="right">Outbound</th>
-              <th class="right">Chat</th>
-              <th class="right">Emails</th>
-            </tr>
-          </thead>
-          <tbody id="csrTable"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- PROCESSING PANEL -->
-    <div class="panel">
-      <h3>Processing Output Summary</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Staff</th>
-              <th class="right">Total Output</th>
-              <th class="right">Total Fees</th>
-            </tr>
-          </thead>
-          <tbody id="processingTable"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- FEE BREAKDOWN -->
-    <div class="panel">
-      <h3>Fee Breakdown</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Fee Type</th>
-              <th class="right">Count</th>
-              <th class="right">Total Fees</th>
-            </tr>
-          </thead>
-          <tbody id="feeTable"></tbody>
-        </table>
-      </div>
-    </div>
-
+  <div class="summary-card">
+    <h4>Active Staff</h4>
+    <div class="summary-value" id="activeStaffTotal">0</div>
   </div>
 </div>
+
+<div class="panel">
+  <h3>CSR Activity</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Staff</th>
+        <th class="right">Inbound</th>
+        <th class="right">Outbound</th>
+        <th class="right">Chat</th>
+        <th class="right">Emails</th>
+      </tr>
+    </thead>
+    <tbody id="csrTable"></tbody>
+  </table>
+</div>
+
+<div class="panel">
+  <h3>Processing Output</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Staff</th>
+        <th class="right">Total Output</th>
+        <th class="right">Fees</th>
+      </tr>
+    </thead>
+    <tbody id="processingTable"></tbody>
+  </table>
+</div>
+
+<div class="panel">
+  <h3>Fee Breakdown</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Fee Type</th>
+        <th class="right">Count</th>
+        <th class="right">Total</th>
+      </tr>
+    </thead>
+    <tbody id="feeTable"></tbody>
+  </table>
+</div>
+
+</div>
+</div>
+
 <script>
+const WEB_APP_URL="https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
-
-/* CLOCK */
 (function tick(){
-  document.getElementById("clock").textContent =
-    new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+  document.getElementById("clock").textContent=
+  new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
   setTimeout(tick,1000);
 })();
 
-/* DATE DEFAULTS */
-const today = new Date().toISOString().split("T")[0];
-document.getElementById("startDate").value = today;
-document.getElementById("endDate").value = today;
+const today=new Date().toISOString().split("T")[0];
+document.getElementById("startDate").value=today;
+document.getElementById("endDate").value=today;
 
-/* FORMAT MONEY */
 function money(n){
   return "$"+Number(n||0).toLocaleString("en-NZ",{minimumFractionDigits:2});
 }
 
-/* LOAD FILTER OPTIONS */
 async function loadFilters(){
+  const res=await fetch(WEB_APP_URL+"?action=getReportData");
+  const data=await res.json();
 
-  const res = await fetch(WEB_APP_URL + "?action=getReportData");
-  const data = await res.json();
-
-  const staffSelect = document.getElementById("staffFilter");
-  staffSelect.innerHTML = "";
-  data.allStaff.forEach(name=>{
-    const opt = document.createElement("option");
-    opt.value = name;
-    opt.textContent = name;
-    opt.selected = true;
-    staffSelect.appendChild(opt);
+  const staff=document.getElementById("staffFilter");
+  staff.innerHTML="";
+  data.allStaff.forEach(s=>{
+    staff.innerHTML+=`<option selected>${s}</option>`;
   });
 
-  const divisionSelect = document.getElementById("divisionFilter");
-  divisionSelect.innerHTML = "";
+  const div=document.getElementById("divisionFilter");
+  div.innerHTML="";
   ["CSR","Processing"].forEach(d=>{
-    const opt = document.createElement("option");
-    opt.value = d;
-    opt.textContent = d;
-    opt.selected = true;
-    divisionSelect.appendChild(opt);
+    div.innerHTML+=`<option selected>${d}</option>`;
   });
 
-  const feeSelect = document.getElementById("feeFilter");
-  feeSelect.innerHTML = "";
-  data.allFeeTypes.forEach(type=>{
-    const opt = document.createElement("option");
-    opt.value = type;
-    opt.textContent = type;
-    opt.selected = true;
-    feeSelect.appendChild(opt);
+  const fee=document.getElementById("feeFilter");
+  fee.innerHTML="";
+  data.allFeeTypes.forEach(f=>{
+    fee.innerHTML+=`<option selected>${f}</option>`;
   });
 
   runReport();
 }
 
-/* MAIN REPORT */
 async function runReport(){
 
-  document.getElementById("statusPill").textContent = "Loading…";
+  document.getElementById("statusPill").textContent="Loading…";
 
-  const start = new Date(document.getElementById("startDate").value);
-  const end = new Date(document.getElementById("endDate").value);
+  const start=new Date(document.getElementById("startDate").value);
+  const end=new Date(document.getElementById("endDate").value);
   end.setHours(23,59,59,999);
 
-  const selectedDivisions = Array.from(document.getElementById("divisionFilter").selectedOptions).map(o=>o.value);
-  const selectedStaff = Array.from(document.getElementById("staffFilter").selectedOptions).map(o=>o.value);
-  const selectedFees = Array.from(document.getElementById("feeFilter").selectedOptions).map(o=>o.value);
+  const selStaff=Array.from(staffFilter.selectedOptions).map(o=>o.value);
+  const selDiv=Array.from(divisionFilter.selectedOptions).map(o=>o.value);
+  const selFee=Array.from(feeFilter.selectedOptions).map(o=>o.value);
 
-  const res = await fetch(WEB_APP_URL + "?action=getReportData");
-  const data = await res.json();
+  const res=await fetch(WEB_APP_URL+"?action=getReportData");
+  const data=await res.json();
 
-  /* FILTER DATA */
-  const csrData = data.csr.filter(r=>{
-    const d = new Date(r.Date);
-    return selectedDivisions.includes("CSR") &&
-           selectedStaff.includes(r.Staff) &&
-           d >= start && d <= end;
+  const csr=data.csr.filter(r=>{
+    const d=new Date(r.Date);
+    return selDiv.includes("CSR")&&selStaff.includes(r.Staff)&&d>=start&&d<=end;
   });
 
-  const processingData = data.processing.filter(r=>{
-    const d = new Date(r.Date);
-    return selectedDivisions.includes("Processing") &&
-           selectedStaff.includes(r.Staff) &&
-           d >= start && d <= end;
+  const proc=data.processing.filter(r=>{
+    const d=new Date(r.Date);
+    return selDiv.includes("Processing")&&selStaff.includes(r.Staff)&&d>=start&&d<=end;
   });
 
-  const feeData = data.fees.filter(r=>{
-    const d = new Date(r.Date);
-    return selectedStaff.includes(r.Staff) &&
-           selectedFees.includes(r.Fee_Type) &&
-           d >= start && d <= end;
+  const fees=data.fees.filter(r=>{
+    const d=new Date(r.Date);
+    return selStaff.includes(r.Staff)&&selFee.includes(r.Fee_Type)&&d>=start&&d<=end;
   });
 
-  /* SUMMARY TOTALS */
-  let touchpoints = 0;
-  csrData.forEach(r=>{
-    touchpoints += Number(r.Inbound||0)
-                + Number(r.Outbound||0)
-                + Number(r.Chat||0);
+  let touch=0;
+  csr.forEach(r=>{
+    touch+=Number(r.Inbound||0)+Number(r.Outbound||0)+Number(r.Chat||0);
   });
 
-  let returns = 0;
-  processingData.forEach(r=>{
-    returns += Number(r["Total Output"]||0);
+  let returns=0;
+  proc.forEach(r=>{
+    returns+=Number(r["Total Output"]||0);
   });
 
-  let feesTotal = 0;
-  feeData.forEach(r=>{
-    feesTotal += Number(r.Total_Fee||0);
+  let feeTotal=0;
+  fees.forEach(r=>{
+    feeTotal+=Number(r.Total_Fee||0);
   });
 
-  const activeStaff = new Set([
-    ...csrData.map(r=>r.Staff),
-    ...processingData.map(r=>r.Staff)
-  ]);
+  const active=new Set([...csr.map(r=>r.Staff),...proc.map(r=>r.Staff)]);
 
-  document.getElementById("touchpointsTotal").textContent = touchpoints;
-  document.getElementById("returnsTotal").textContent = returns;
-  document.getElementById("feesTotal").textContent = money(feesTotal);
-  document.getElementById("activeStaffTotal").textContent = activeStaff.size;
+  touchpointsTotal.textContent=touch;
+  returnsTotal.textContent=returns;
+  feesTotal.textContent=money(feeTotal);
+  activeStaffTotal.textContent=active.size;
 
-  /* CSR TABLE */
-  const csrGrouped = {};
-  csrData.forEach(r=>{
-    if(!csrGrouped[r.Staff]) csrGrouped[r.Staff] = {Inbound:0,Outbound:0,Chat:0,Emails:0};
-    csrGrouped[r.Staff].Inbound += Number(r.Inbound||0);
-    csrGrouped[r.Staff].Outbound += Number(r.Outbound||0);
-    csrGrouped[r.Staff].Chat += Number(r.Chat||0);
-    csrGrouped[r.Staff].Emails += Number(r.Emails||0);
-  });
-
-  document.getElementById("csrTable").innerHTML =
-    Object.entries(csrGrouped).map(([staff,v])=>`
-      <tr>
-        <td><strong>${staff}</strong></td>
-        <td class="right">${v.Inbound}</td>
-        <td class="right">${v.Outbound}</td>
-        <td class="right">${v.Chat}</td>
-        <td class="right">${v.Emails}</td>
-      </tr>
-    `).join("") || `<tr><td colspan="5" class="small-muted">No CSR data</td></tr>`;
-
-  /* PROCESSING TABLE */
-  const procGrouped = {};
-  processingData.forEach(r=>{
-    if(!procGrouped[r.Staff]) procGrouped[r.Staff] = {output:0,fees:0};
-    procGrouped[r.Staff].output += Number(r["Total Output"]||0);
-  });
-
-  feeData.forEach(r=>{
-    if(procGrouped[r.Staff]){
-      procGrouped[r.Staff].fees += Number(r.Total_Fee||0);
-    }
-  });
-
-  document.getElementById("processingTable").innerHTML =
-    Object.entries(procGrouped).map(([staff,v])=>`
-      <tr>
-        <td><strong>${staff}</strong></td>
-        <td class="right">${v.output}</td>
-        <td class="right">${money(v.fees)}</td>
-      </tr>
-    `).join("") || `<tr><td colspan="3" class="small-muted">No Processing data</td></tr>`;
-
-  /* FEE TABLE */
-  const feeGrouped = {};
-  feeData.forEach(r=>{
-    if(!feeGrouped[r.Fee_Type]) feeGrouped[r.Fee_Type] = {count:0,total:0};
-    feeGrouped[r.Fee_Type].count += Number(r.Count||0);
-    feeGrouped[r.Fee_Type].total += Number(r.Total_Fee||0);
-  });
-
-  document.getElementById("feeTable").innerHTML =
-    Object.entries(feeGrouped).map(([type,v])=>`
-      <tr>
-        <td><strong>${type}</strong></td>
-        <td class="right">${v.count}</td>
-        <td class="right">${money(v.total)}</td>
-      </tr>
-    `).join("") || `<tr><td colspan="3" class="small-muted">No Fee data</td></tr>`;
-
-  document.getElementById("statusPill").textContent = "Live Data";
+  document.getElementById("statusPill").textContent="Live Data";
 }
 
-/* INIT */
 loadFilters();
-
 </script>
+
 </body>
 </html>
