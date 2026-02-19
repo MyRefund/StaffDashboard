@@ -66,22 +66,24 @@ body{
 }
 .clock{font-weight:900;font-size:14px}
 
-/* PAGE LAYOUT (LEFT FILTERS + MAIN) */
-.shell{
+/* LAYOUT */
+.wrap{
   max-width:1400px;
   margin:20px auto 60px;
   padding:0 16px;
+}
+.layout{
   display:grid;
   grid-template-columns:320px 1fr;
   gap:16px;
   align-items:start;
 }
-@media(max-width:1100px){
-  .shell{grid-template-columns:1fr}
+@media(max-width:1060px){
+  .layout{grid-template-columns:1fr}
 }
 
-/* LEFT FILTER PANEL */
-.side{
+/* SIDEBAR FILTERS */
+.sidebar{
   background:#fff;
   border-radius:var(--radius);
   box-shadow:var(--shadow);
@@ -89,22 +91,21 @@ body{
   position:sticky;
   top:16px;
 }
-@media(max-width:1100px){
-  .side{position:relative; top:auto}
+@media(max-width:1060px){
+  .sidebar{position:static}
 }
-.side h3{
+.sidebar h3{
   margin:0 0 10px;
   font-weight:900;
   color:var(--g0);
-  font-size:15px;
+  font-size:16px;
 }
-.side .hr{margin:12px 0}
 .field{
   display:flex;
   flex-direction:column;
   font-size:12px;
   font-weight:900;
-  margin-bottom:12px;
+  margin-top:12px;
 }
 .field input{
   margin-top:6px;
@@ -114,14 +115,62 @@ body{
   font-weight:800;
   background:#fff;
 }
+.section{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid var(--border);
+}
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:0 0 10px;
+  color:var(--g0);
+  font-weight:900;
+  font-size:13px;
+}
+.pill{
+  padding:6px 10px;
+  border-radius:999px;
+  background:var(--g2);
+  font-size:11px;
+  font-weight:900;
+  color:var(--g0);
+  border:1px solid rgba(9,75,53,.12);
+  white-space:nowrap;
+}
+.checklist{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  max-height:220px;
+  overflow:auto;
+  padding-right:6px;
+}
+.check{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  cursor:pointer;
+  user-select:none;
+}
+.check:hover{background:#f3f4f6}
+.check input{transform:scale(1.05)}
+.check strong{font-size:13px}
+.small-muted{color:var(--muted);font-weight:800;font-size:12px}
+
 .actions{
+  margin-top:14px;
   display:flex;
   gap:10px;
-  flex-wrap:wrap;
-  margin-top:8px;
 }
 button.primary{
-  padding:10px 18px;
+  flex:1;
+  padding:10px 14px;
   border-radius:12px;
   background:var(--g0);
   color:#fff;
@@ -130,7 +179,7 @@ button.primary{
   cursor:pointer;
 }
 button.secondary{
-  padding:10px 18px;
+  padding:10px 14px;
   border-radius:12px;
   background:#fff;
   border:1px solid var(--g0);
@@ -138,108 +187,17 @@ button.secondary{
   font-weight:900;
   cursor:pointer;
 }
+
+/* STATUS */
 .status-pill{
   margin-top:12px;
-  padding:8px 12px;
-  border-radius:999px;
+  padding:10px 12px;
+  border-radius:14px;
   background:var(--g2);
   font-size:12px;
   font-weight:900;
   color:var(--g0);
   border:1px solid rgba(9,75,53,.12);
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-}
-.status-dot{
-  width:8px;height:8px;border-radius:50%;
-  background:#16a34a;
-}
-.status-dot.warn{background:#f59e0b}
-.status-dot.bad{background:#dc2626}
-
-/* Multi-select dropdown (checkbox style) */
-.mselect{ position:relative; margin-top:6px; }
-.mselect-btn{
-  width:100%;
-  text-align:left;
-  padding:9px 10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:#fff;
-  font-weight:900;
-  cursor:pointer;
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:center;
-}
-.mselect-btn span{
-  font-weight:800;
-  color:var(--text);
-  font-size:13px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.chev{opacity:.7;font-weight:900}
-.mselect-panel{
-  position:absolute;
-  left:0; right:0;
-  top:calc(100% + 8px);
-  z-index:50;
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:14px;
-  box-shadow:var(--shadow);
-  padding:10px;
-  display:none;
-}
-.mselect.open .mselect-panel{display:block}
-.mselect-search{
-  width:100%;
-  padding:8px 10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  font-weight:800;
-  margin-bottom:10px;
-}
-.mselect-list{
-  max-height:240px;
-  overflow:auto;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-.mopt{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 10px;
-  border-radius:10px;
-  cursor:pointer;
-}
-.mopt:hover{background:#f3f4f6}
-.mopt input{transform:scale(1.05)}
-.mopt strong{font-size:13px}
-.mselect-actions{
-  display:flex;
-  gap:10px;
-  justify-content:space-between;
-  margin-top:10px;
-}
-.smallbtn{
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:10px;
-  padding:8px 10px;
-  font-weight:900;
-  cursor:pointer;
-  font-size:12px;
-}
-.smallbtn.primary{
-  border-color:var(--g0);
-  color:var(--g0);
 }
 
 /* MAIN CONTENT */
@@ -249,14 +207,13 @@ button.secondary{
   gap:16px;
 }
 
-/* SUMMARY */
 .summary-grid{
   display:grid;
-  grid-template-columns:repeat(3,minmax(220px,1fr));
+  grid-template-columns:repeat(3,minmax(240px,1fr));
   gap:16px;
 }
-@media(max-width:1100px){
-  .summary-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+@media(max-width:980px){
+  .summary-grid{grid-template-columns:1fr}
 }
 .summary-card{
   background:#fff;
@@ -301,11 +258,9 @@ button.secondary{
   color:var(--muted);
   font-weight:900;
   font-size:12px;
-  gap:10px;
 }
 .summary-sub strong{color:var(--g0)}
 
-/* PANELS */
 .panel{
   background:#fff;
   border-radius:var(--radius);
@@ -318,6 +273,8 @@ button.secondary{
   color:var(--g0);
   font-size:16px;
 }
+.hr{height:1px;background:var(--border);margin:14px 0;}
+
 .grid2{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -327,20 +284,16 @@ button.secondary{
   .grid2{grid-template-columns:1fr}
 }
 
-/* TABLES (NO SIDE SCROLL) */
-.table-wrap{ overflow:hidden; }
+.table-wrap{overflow:hidden;} /* key: no sideways scroll */
 table{
   width:100%;
   border-collapse:collapse;
-  table-layout:fixed;
 }
 th,td{
   padding:10px 8px;
   border-bottom:1px solid var(--border);
   font-size:13px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+  vertical-align:top;
 }
 th{
   text-align:left;
@@ -349,12 +302,15 @@ th{
 }
 td strong{color:var(--g0)}
 .right{text-align:right}
-.small-muted{color:var(--muted);font-weight:800;font-size:12px}
 
-/* Divider line inside panels */
-.hr{ height:1px;background:var(--border);margin:14px 0; }
+.note{
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+  line-height:1.5;
+}
+.note strong{color:var(--g0)}
 
-/* Badge */
 .badge{
   display:inline-flex;
   align-items:center;
@@ -367,27 +323,25 @@ td strong{color:var(--g0)}
   color:var(--g0);
   background:var(--g2);
 }
-.dot{ width:8px;height:8px;border-radius:50%; background:#16a34a; }
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#16a34a;
+}
 .dot.warn{background:#f59e0b}
 .dot.bad{background:#dc2626}
 
-/* Footer note */
-.note{
-  font-size:12px;
-  font-weight:800;
-  color:var(--muted);
-  line-height:1.5;
+/* compact row cards (mobile-friendly, no sideways scroll) */
+@media(max-width:720px){
+  th{display:none}
+  tr{display:block;border-bottom:1px solid var(--border)}
+  td{display:flex;justify-content:space-between;gap:10px;border:none;padding:8px 0}
+  td::before{
+    content:attr(data-label);
+    color:var(--muted);
+    font-weight:900;
+  }
+  td.right{text-align:left}
 }
-.note strong{color:var(--g0)}
-
-/* LITTLE HELP TEXT */
-.help{
-  font-size:12px;
-  font-weight:800;
-  color:var(--muted);
-  line-height:1.45;
-}
-.help strong{color:var(--g0)}
 </style>
 </head>
 
@@ -410,291 +364,327 @@ td strong{color:var(--g0)}
   </div>
 </div>
 
-<div class="shell">
+<div class="wrap">
+  <div class="layout">
 
-  <!-- LEFT FILTER PANEL -->
-  <div class="side">
-    <h3>Filters</h3>
-    <div class="help">
-      <strong>Tip:</strong> Click a filter, tick the boxes, then press <strong>Apply</strong>.
-      Empty selection = <strong>All</strong>.
-    </div>
-    <div class="hr"></div>
+    <!-- LEFT: FILTERS -->
+    <div class="sidebar">
+      <h3>Filters</h3>
 
-    <div class="field">
-      Date From
-      <input type="date" id="startDate">
-    </div>
+      <div class="field">
+        Date From
+        <input type="date" id="startDate">
+      </div>
 
-    <div class="field">
-      Date To
-      <input type="date" id="endDate">
-    </div>
+      <div class="field">
+        Date To
+        <input type="date" id="endDate">
+      </div>
 
-    <div class="field">
-      Division
-      <div class="mselect" data-ms="division"></div>
-    </div>
-
-    <div class="field">
-      Staff
-      <div class="mselect" data-ms="staff"></div>
-    </div>
-
-    <div class="field">
-      Work Type
-      <div class="mselect" data-ms="work"></div>
-    </div>
-
-    <div class="field">
-      Fee Type
-      <div class="mselect" data-ms="fee"></div>
-    </div>
-
-    <div class="actions">
-      <button class="primary" id="runBtn" onclick="runReport()">Run Report</button>
-      <button class="secondary" onclick="downloadPDF()">Download PDF</button>
-    </div>
-
-    <div class="status-pill" id="statusPill"><span class="status-dot"></span><span id="statusText">Ready</span></div>
-  </div>
-
-  <!-- MAIN CONTENT -->
-  <div class="content">
-
-    <!-- EXEC SNAPSHOT (Active Staff removed) -->
-    <div class="summary-grid">
-      <div class="summary-card">
-        <h4>Client Touchpoints</h4>
-        <div class="summary-main">
-          <div class="summary-value" id="touchpointsToday">0</div>
-          <div class="delta" id="touchpointsDelta">—</div>
+      <div class="section">
+        <div class="section-title">
+          <span>Division</span>
+          <span class="pill" id="divCount">2 selected</span>
         </div>
-        <div class="summary-sub">
-          <span>Yesterday: <strong id="touchpointsYday">0</strong></span>
-          <span class="small-muted">CSR only</span>
+        <div class="checklist" id="divisionChecks"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <span>Staff (all)</span>
+          <span class="pill" id="staffCountPill">All</span>
+        </div>
+
+        <div class="small-muted" style="margin-bottom:8px;">CSR staff</div>
+        <div class="checklist" id="staffChecksCSR"></div>
+
+        <div class="small-muted" style="margin:12px 0 8px;">Processing staff</div>
+        <div class="checklist" id="staffChecksProcessing"></div>
+
+        <div class="small-muted" style="margin-top:10px;">Tip: leave staff blank to include everyone.</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <span>Fee Type (all)</span>
+          <span class="pill" id="feeCountPill">All</span>
+        </div>
+        <div class="checklist" id="feeChecks"></div>
+        <div class="small-muted" style="margin-top:10px;">Tip: leave fee types blank to include all fees.</div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="runBtn" onclick="runReport()">Apply Filters</button>
+        <button class="secondary" onclick="downloadPDF()">PDF</button>
+      </div>
+
+      <div class="status-pill" id="statusPill">Ready</div>
+    </div>
+
+    <!-- RIGHT: REPORT -->
+    <div class="content">
+
+      <!-- EXEC SNAPSHOT (Active Staff removed as requested) -->
+      <div class="summary-grid">
+        <div class="summary-card">
+          <h4>Client Touchpoints</h4>
+          <div class="summary-main">
+            <div class="summary-value" id="touchpointsToday">0</div>
+            <div class="delta" id="touchpointsDelta">—</div>
+          </div>
+          <div class="summary-sub">
+            <span>Yesterday: <strong id="touchpointsYday">0</strong></span>
+            <span class="small-muted">CSR only</span>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <h4>Returns Processed</h4>
+          <div class="summary-main">
+            <div class="summary-value" id="returnsToday">0</div>
+            <div class="delta" id="returnsDelta">—</div>
+          </div>
+          <div class="summary-sub">
+            <span>Yesterday: <strong id="returnsYday">0</strong></span>
+            <span class="small-muted">Processing only</span>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <h4>Revenue (Fees)</h4>
+          <div class="summary-main">
+            <div class="summary-value" id="feesToday">$0</div>
+            <div class="delta" id="feesDelta">—</div>
+          </div>
+          <div class="summary-sub">
+            <span>Yesterday: <strong id="feesYday">$0</strong></span>
+            <span class="small-muted">Fee Log</span>
+          </div>
         </div>
       </div>
 
-      <div class="summary-card">
-        <h4>Returns Processed</h4>
-        <div class="summary-main">
-          <div class="summary-value" id="returnsToday">0</div>
-          <div class="delta" id="returnsDelta">—</div>
+      <!-- RANGE + SNAPSHOT -->
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;">
+          <h3 style="margin:0;">Division snapshot</h3>
+          <div class="badge"><span class="dot"></span><span id="rangeLabel">Today</span></div>
         </div>
-        <div class="summary-sub">
-          <span>Yesterday: <strong id="returnsYday">0</strong></span>
-          <span class="small-muted">Processing only</span>
+        <div class="hr"></div>
+
+        <div class="grid2">
+          <div class="panel" style="box-shadow:none;border:1px solid var(--border);">
+            <h3 style="font-size:15px;margin:0 0 10px;">CSR</h3>
+            <div class="summary-sub" style="margin-top:0;">
+              <span>Touchpoints: <strong id="csrTouchpoints">0</strong></span>
+              <span>Outbound: <strong id="csrOutbound">0</strong></span>
+            </div>
+            <div class="summary-sub" style="margin-top:8px;">
+              <span>Inbound: <strong id="csrInbound">0</strong></span>
+              <span>Chat: <strong id="csrChat">0</strong></span>
+            </div>
+          </div>
+
+          <div class="panel" style="box-shadow:none;border:1px solid var(--border);">
+            <h3 style="font-size:15px;margin:0 0 10px;">Processing</h3>
+            <div class="summary-sub" style="margin-top:0;">
+              <span>Total output: <strong id="procOutput">0</strong></span>
+              <span>Fees: <strong id="procFees">$0</strong></span>
+            </div>
+            <div class="summary-sub" style="margin-top:8px;">
+              <span>Fee entries: <strong id="procFeeEntries">0</strong></span>
+              <span class="small-muted">Selected fee types</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+        <div class="note">
+          <strong>How to read:</strong> CSR touchpoints = inbound + outbound + chat. Processing total output = sum of output counters. Fees come from <strong>Fee_Log</strong> totals (filtered by fee type).
         </div>
       </div>
 
-      <div class="summary-card">
-        <h4>Revenue (Fees)</h4>
-        <div class="summary-main">
-          <div class="summary-value" id="feesToday">$0</div>
-          <div class="delta" id="feesDelta">—</div>
-        </div>
-        <div class="summary-sub">
-          <span>Yesterday: <strong id="feesYday">$0</strong></span>
-          <span class="small-muted">Processing only</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- DIVISION SNAPSHOT -->
-    <div class="panel">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;">
-        <h3 style="margin:0;">Division snapshot</h3>
-        <div class="badge"><span class="dot"></span><span id="rangeLabel">Today</span></div>
-      </div>
-      <div class="hr"></div>
-
+      <!-- RANKINGS -->
       <div class="grid2">
-        <div class="panel" style="box-shadow:none;border:1px solid var(--border);">
-          <h3 style="font-size:15px;margin:0 0 10px;">CSR</h3>
-          <div class="summary-sub" style="margin-top:0;">
-            <span>Touchpoints: <strong id="csrTouchpoints">0</strong></span>
-            <span>Outbound: <strong id="csrOutbound">0</strong></span>
-          </div>
-          <div class="summary-sub" style="margin-top:8px;">
-            <span>Inbound: <strong id="csrInbound">0</strong></span>
-            <span>Chat: <strong id="csrChat">0</strong></span>
+        <div class="panel">
+          <h3>CSR staff ranking</h3>
+          <div class="small-muted" style="margin-bottom:10px;">Sorted by touchpoints (inbound + outbound + chat)</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Staff</th>
+                  <th class="right">Touchpoints</th>
+                  <th class="right">Inbound</th>
+                  <th class="right">Outbound</th>
+                  <th class="right">Chat</th>
+                </tr>
+              </thead>
+              <tbody id="csrRankBody"></tbody>
+            </table>
           </div>
         </div>
 
-        <div class="panel" style="box-shadow:none;border:1px solid var(--border);">
-          <h3 style="font-size:15px;margin:0 0 10px;">Processing</h3>
-          <div class="summary-sub" style="margin-top:0;">
-            <span>Total output: <strong id="procOutput">0</strong></span>
-            <span>Fees: <strong id="procFees">$0</strong></span>
-          </div>
-          <div class="summary-sub" style="margin-top:8px;">
-            <span>Fee entries: <strong id="procFeeEntries">0</strong></span>
-            <span class="small-muted" id="procFeeNote">All fee types</span>
+        <div class="panel">
+          <h3>Processing staff ranking</h3>
+          <div class="small-muted" style="margin-bottom:10px;">Sorted by fees (then total output)</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Staff</th>
+                  <th class="right">Fees</th>
+                  <th class="right">Fee entries</th>
+                  <th class="right">Total output</th>
+                </tr>
+              </thead>
+              <tbody id="procRankBody"></tbody>
+            </table>
           </div>
         </div>
       </div>
 
-      <div class="hr"></div>
-      <div class="note">
-        <strong>How to read:</strong> CSR touchpoints = inbound + outbound + chat. Processing total output = sum of output counters. Fees are totals from fee entries (Fee_Log).
-      </div>
-    </div>
-
-    <!-- STAFF RANKINGS (SPLIT INTO SMALLER TABLES) -->
-    <div class="grid2">
+      <!-- CSR GROUPED TABLES (no sideways scroll) -->
       <div class="panel">
-        <h3>CSR staff ranking</h3>
-        <div class="small-muted" style="margin-bottom:10px;">Sorted by total touchpoints (inbound + outbound + chat)</div>
+        <h3>CSR breakdown (touchpoints)</h3>
+        <div class="small-muted" style="margin-bottom:10px;">Inbound / Outbound / Chat / Emails</div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th style="width:54px;">Rank</th>
                 <th>Staff</th>
-                <th class="right" style="width:120px;">Touchpoints</th>
-                <th class="right" style="width:90px;">Inbound</th>
-                <th class="right" style="width:90px;">Outbound</th>
-                <th class="right" style="width:70px;">Chat</th>
+                <th class="right">Inbound</th>
+                <th class="right">Outbound</th>
+                <th class="right">Chat</th>
+                <th class="right">Emails</th>
+                <th class="right">Touchpoints</th>
               </tr>
             </thead>
-            <tbody id="csrRankBody"></tbody>
+            <tbody id="csrTouchBody"></tbody>
           </table>
         </div>
-      </div>
 
-      <div class="panel">
-        <h3>Processing staff ranking</h3>
-        <div class="small-muted" style="margin-bottom:10px;">Sorted by total fees (then output)</div>
+        <div class="hr"></div>
+
+        <h3 style="margin-top:0;">CSR breakdown (calling)</h3>
+        <div class="small-muted" style="margin-bottom:10px;">INC/C Calling / Question Calling / A2A Calling</div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th style="width:54px;">Rank</th>
                 <th>Staff</th>
-                <th class="right" style="width:130px;">Fees</th>
-                <th class="right" style="width:110px;">Fee entries</th>
-                <th class="right" style="width:120px;">Total output</th>
+                <th class="right">INC/C</th>
+                <th class="right">Question</th>
+                <th class="right">A2A Calling</th>
               </tr>
             </thead>
-            <tbody id="procRankBody"></tbody>
+            <tbody id="csrCallingBody"></tbody>
           </table>
         </div>
-      </div>
-    </div>
 
-    <!-- CSR FULL BREAKDOWN (GROUPED PANELS) -->
-    <div class="grid2">
-      <div class="panel">
-        <h3>CSR — Core channels</h3>
-        <div class="small-muted" style="margin-bottom:10px;">Inbound / Outbound / Chat / Emails (per staff)</div>
+        <div class="hr"></div>
+
+        <h3 style="margin-top:0;">CSR breakdown (other)</h3>
+        <div class="small-muted" style="margin-bottom:10px;">A2A / Unverified / Delinks / Cancellations</div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th>Staff</th>
-                <th class="right" style="width:90px;">Inbound</th>
-                <th class="right" style="width:90px;">Outbound</th>
-                <th class="right" style="width:70px;">Chat</th>
-                <th class="right" style="width:80px;">Emails</th>
-              </tr>
-            </thead>
-            <tbody id="csrCoreBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h3>CSR — Other activity</h3>
-        <div class="small-muted" style="margin-bottom:10px;">A2A / Unverified / Calling / Delinks / Cancels (per staff)</div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Staff</th>
-                <th class="right" style="width:70px;">A2A</th>
-                <th class="right" style="width:90px;">Unverified</th>
-                <th class="right" style="width:70px;">INC/C</th>
-                <th class="right" style="width:80px;">Question</th>
-                <th class="right" style="width:80px;">A2A Call</th>
-                <th class="right" style="width:70px;">Delinks</th>
-                <th class="right" style="width:70px;">Cancels</th>
+                <th class="right">A2A</th>
+                <th class="right">Unverified</th>
+                <th class="right">Delinks</th>
+                <th class="right">Cancels</th>
               </tr>
             </thead>
             <tbody id="csrOtherBody"></tbody>
           </table>
         </div>
       </div>
-    </div>
 
-    <!-- PROCESSING FULL BREAKDOWN (GROUPED PANELS) -->
-    <div class="grid2">
+      <!-- PROCESSING GROUPED TABLES (no sideways scroll) -->
       <div class="panel">
-        <h3>Processing — Output breakdown</h3>
-        <div class="small-muted" style="margin-bottom:10px;">Outputs per staff (no sideways scroll)</div>
+        <h3>Processing breakdown (output)</h3>
+        <div class="small-muted" style="margin-bottom:10px;">Total output + core counters</div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th>Staff</th>
-                <th class="right" style="width:70px;">Filing</th>
-                <th class="right" style="width:80px;">Linking</th>
-                <th class="right" style="width:110px;">Linked Rev</th>
-                <th class="right" style="width:70px;">Inbox</th>
-                <th class="right" style="width:110px;">Existing Rev</th>
-                <th class="right" style="width:110px;">Proc Rev</th>
-                <th class="right" style="width:90px;">Misc</th>
-                <th class="right" style="width:110px;">Total</th>
+                <th class="right">Total output</th>
+                <th class="right">Filing</th>
+                <th class="right">Linking</th>
+                <th class="right">Linked Review</th>
+                <th class="right">Inbox</th>
               </tr>
             </thead>
-            <tbody id="procOutBody"></tbody>
+            <tbody id="procOutputBody"></tbody>
           </table>
         </div>
-      </div>
 
-      <div class="panel">
-        <h3>Processing — Fees summary</h3>
-        <div class="small-muted" style="margin-bottom:10px;">Fees + fee entries per staff (from Fee_Log)</div>
+        <div class="hr"></div>
+
+        <h3 style="margin-top:0;">Processing breakdown (reviews + misc)</h3>
+        <div class="small-muted" style="margin-bottom:10px;">Existing / Processing Review / Misc</div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th>Staff</th>
-                <th class="right" style="width:120px;">Fee entries</th>
-                <th class="right" style="width:140px;">Total fees</th>
+                <th class="right">Existing Review</th>
+                <th class="right">Processing Review</th>
+                <th class="right">Misc</th>
+              </tr>
+            </thead>
+            <tbody id="procReviewBody"></tbody>
+          </table>
+        </div>
+
+        <div class="hr"></div>
+
+        <h3 style="margin-top:0;">Processing fees (from Fee_Log)</h3>
+        <div class="small-muted" style="margin-bottom:10px;">Fees are summed from Fee_Log for the date range and fee type filter</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Staff</th>
+                <th class="right">Fee entries</th>
+                <th class="right">Total fees</th>
               </tr>
             </thead>
             <tbody id="procFeesBody"></tbody>
           </table>
         </div>
       </div>
-    </div>
 
-    <!-- FEE BREAKDOWN -->
-    <div class="panel">
-      <h3>Fee breakdown by type</h3>
-      <div class="small-muted" style="margin-bottom:10px;">Includes only fee entries in the selected period + filters</div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Fee type</th>
-              <th class="right" style="width:140px;">Entries</th>
-              <th class="right" style="width:180px;">Total fees</th>
-            </tr>
-          </thead>
-          <tbody id="feeTypeBody"></tbody>
-          <tfoot>
-            <tr>
-              <td><strong>Total</strong></td>
-              <td class="right"><strong id="feeTypeTotalEntries">0</strong></td>
-              <td class="right"><strong id="feeTypeTotalFees">$0</strong></td>
-            </tr>
-          </tfoot>
-        </table>
+      <!-- FEE BREAKDOWN -->
+      <div class="panel">
+        <h3>Fee breakdown by type</h3>
+        <div class="small-muted" style="margin-bottom:10px;">Fee_Log totals in selected period (fixed type list always shown)</div>
+        <div class="table-wrap">
+          <table style="min-width:0;">
+            <thead>
+              <tr>
+                <th>Fee type</th>
+                <th class="right">Entries</th>
+                <th class="right">Total fees</th>
+              </tr>
+            </thead>
+            <tbody id="feeTypeBody"></tbody>
+            <tfoot>
+              <tr>
+                <td><strong>Total</strong></td>
+                <td class="right"><strong id="feeTypeTotalEntries">0</strong></td>
+                <td class="right"><strong id="feeTypeTotalFees">$0</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </div>
 
@@ -717,7 +707,7 @@ function goHome(){ window.location.href="index.html"; }
 })();
 
 /* ===========================
-   DATE DEFAULTS (NZ)
+   DATE DEFAULTS
 =========================== */
 const TZ = "Pacific/Auckland";
 function nzISO(d=new Date()){
@@ -734,22 +724,12 @@ document.getElementById("startDate").value = todayISO;
 document.getElementById("endDate").value = todayISO;
 
 /* ===========================
-   OPTIONS (WORK TYPES)
+   MONEY + DELTAS
 =========================== */
-const CSR_WORK = [
-  "Inbound","Outbound","Chat","Emails","A2A","Unverified",
-  "INC/C Calling","Question Calling","A2A Calling","Delinks","Cancellations"
-];
-
-const PROC_WORK = [
-  "Filing","Linking","Linked Review","Inbox","Existing Review","Processing Review","Miscellaneous"
-];
-
 function money(n){
   const v = Number(n)||0;
   return "$" + v.toLocaleString("en-NZ",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
-
 function pctChange(today, yday){
   const t = Number(today)||0;
   const y = Number(yday)||0;
@@ -759,340 +739,6 @@ function pctChange(today, yday){
   const sign = p>0?"+":"";
   return {text:`${sign}${p.toFixed(0)}%`, cls: p>=0 ? "up" : "down"};
 }
-
-/* ===========================
-   MULTISELECT COMPONENT
-=========================== */
-const msState = {
-  division: new Set(["CSR","Processing"]),
-  staff: new Set(),
-  work: new Set(),
-  fee: new Set()
-};
-
-function buildMultiSelect(el, key, options){
-  el.classList.add("mselect");
-  el.innerHTML = `
-    <button type="button" class="mselect-btn" aria-haspopup="listbox">
-      <span id="ms_label_${key}">All</span>
-      <span class="chev">▼</span>
-    </button>
-    <div class="mselect-panel">
-      <input class="mselect-search" placeholder="Search…" />
-      <div class="mselect-list" role="listbox"></div>
-      <div class="mselect-actions">
-        <button type="button" class="smallbtn" data-act="clear">Clear</button>
-        <button type="button" class="smallbtn" data-act="all">Select all</button>
-        <button type="button" class="smallbtn primary" data-act="apply">Apply</button>
-      </div>
-    </div>
-  `;
-
-  const btn = el.querySelector(".mselect-btn");
-  const list = el.querySelector(".mselect-list");
-  const search = el.querySelector(".mselect-search");
-  const label = el.querySelector(`#ms_label_${key}`);
-  const selected = msState[key];
-
-  function renderList(filter=""){
-    const f = filter.trim().toLowerCase();
-    list.innerHTML = "";
-    options
-      .filter(o => !f || String(o).toLowerCase().includes(f))
-      .forEach(o=>{
-        const row=document.createElement("div");
-        row.className="mopt";
-        row.innerHTML = `
-          <input type="checkbox" ${selected.has(o) ? "checked":""}>
-          <strong>${o}</strong>
-        `;
-        row.onclick = (e)=>{
-          if(e.target.tagName.toLowerCase() !== "input"){
-            const cb = row.querySelector("input");
-            cb.checked = !cb.checked;
-          }
-          const cb = row.querySelector("input");
-          if(cb.checked) selected.add(o); else selected.delete(o);
-        };
-        row.querySelector("input").onchange = ()=>{
-          const cb = row.querySelector("input");
-          if(cb.checked) selected.add(o); else selected.delete(o);
-        };
-        list.appendChild(row);
-      });
-  }
-
-  function updateLabel(){
-    if(selected.size===0) { label.textContent = "All"; return; }
-    if(selected.size===options.length) { label.textContent = "All"; return; }
-    const arr = Array.from(selected);
-    label.textContent = arr.length===1 ? arr[0] : `${arr.length} selected`;
-  }
-
-  btn.onclick = ()=>{
-    document.querySelectorAll(".mselect.open").forEach(x=>{
-      if(x!==el) x.classList.remove("open");
-    });
-    el.classList.toggle("open");
-    search.value="";
-    renderList("");
-    updateLabel();
-    if(el.classList.contains("open")) setTimeout(()=>search.focus(),0);
-  };
-
-  search.oninput = ()=>renderList(search.value);
-
-  el.querySelector('[data-act="clear"]').onclick = (e)=>{
-    e.preventDefault();
-    selected.clear();
-    renderList(search.value);
-  };
-  el.querySelector('[data-act="all"]').onclick = (e)=>{
-    e.preventDefault();
-    options.forEach(o=>selected.add(o));
-    renderList(search.value);
-  };
-  el.querySelector('[data-act="apply"]').onclick = (e)=>{
-    e.preventDefault();
-    el.classList.remove("open");
-    updateLabel();
-    runReport();
-  };
-
-  document.addEventListener("click",(ev)=>{
-    if(!el.contains(ev.target)) el.classList.remove("open");
-  });
-
-  updateLabel();
-}
-
-function getFilterSet(key, options){
-  const s = msState[key];
-  if(!s || s.size===0) return new Set(options);
-  if(s.size===options.length) return new Set(options);
-  return new Set(Array.from(s));
-}
-
-/* ===========================
-   STATUS
-=========================== */
-function setStatus(text, level="ok"){
-  const dot = document.querySelector("#statusPill .status-dot");
-  const label = document.getElementById("statusText");
-  label.textContent = text;
-
-  dot.classList.remove("warn","bad");
-  if(level==="warn") dot.classList.add("warn");
-  if(level==="bad") dot.classList.add("bad");
-}
-
-/* ===========================
-   DATA NORMALISERS
-=========================== */
-function safeNum(v){
-  const n = Number(v);
-  return isNaN(n) ? 0 : n;
-}
-
-function toISODateOnly(v){
-  // Accept Date objects, ISO strings, or "YYYY-MM-DD"
-  if(!v) return "";
-  if(Object.prototype.toString.call(v)==="[object Date]"){
-    return v.toISOString().slice(0,10);
-  }
-  const s = String(v);
-
-  // If already YYYY-MM-DD
-  if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
-
-  // Try parse
-  const d = new Date(s);
-  if(!isNaN(d.getTime())) return d.toISOString().slice(0,10);
-
-  return "";
-}
-
-function inRange(iso, startISO, endISO){
-  if(!iso) return false;
-  return iso >= startISO && iso <= endISO;
-}
-
-/* ===========================
-   BACKEND FETCH
-=========================== */
-async function fetchReportData(){
-  const url = WEB_APP_URL + "?action=getReportData";
-  const res = await fetch(url, { method:"GET" });
-  const data = await res.json();
-  if(!data || !data.ok) throw new Error((data && data.error) ? data.error : "Unknown backend error");
-  return data;
-}
-
-/* ===========================
-   FILTER + AGGREGATE
-=========================== */
-function applyAllFilters(raw, startISO, endISO, divisionsSet, staffSet, workSet, feeTypeSet){
-  // CSR rows
-  const csrRows = (raw.csr||[]).map(r=>({
-    Timestamp:r.Timestamp,
-    DateISO: toISODateOnly(r.Date),
-    Staff: r.Staff || "",
-    Division: r.Division || "CSR",
-    Inbound: safeNum(r.Inbound),
-    Outbound: safeNum(r.Outbound),
-    Chat: safeNum(r.Chat),
-    Emails: safeNum(r.Emails),
-    A2A: safeNum(r.A2A),
-    Unverified: safeNum(r.Unverified),
-    INC_C_Calling: safeNum(r.INC_C_Calling),
-    Question_Calling: safeNum(r.Question_Calling),
-    A2A_Calling: safeNum(r.A2A_C_Calling || r.A2A_Calling), // tolerate variations
-    Delinks: safeNum(r.Delinks),
-    Cancellations: safeNum(r.Cancellations)
-  }));
-
-  const procRows = (raw.processing||[]).map(r=>({
-    DateISO: toISODateOnly(r.Date),
-    Staff: r.Staff || "",
-    Filing: safeNum(r.Filing),
-    Linking: safeNum(r.Linking),
-    "Linked Review": safeNum(r["Linked Review"] ?? r.LinkedReview),
-    Inbox: safeNum(r.Inbox),
-    "Existing Review": safeNum(r["Existing Review"] ?? r.ExistingReview),
-    "Processing Review": safeNum(r["Processing Review"] ?? r.ProcessingReview),
-    Miscellaneous: safeNum(r.Miscellaneous),
-    "Total Output": safeNum(r["Total Output"] ?? r.TotalOutput),
-    "Total Fees": safeNum(r["Total Fees"] ?? r.TotalFees),
-    "Submitted At": r["Submitted At"] ?? r.SubmittedAt
-  }));
-
-  const feeRows = (raw.fees||[]).map(r=>({
-    Timestamp: r.Timestamp,
-    DateISO: toISODateOnly(r.Date),
-    Staff: r.Staff || "",
-    Fee_Type: r.Fee_Type || r.FeeType || "",
-    Count: safeNum(r.Count),
-    Total_Fee: safeNum(r.Total_Fee ?? r.TotalFee)
-  }));
-
-  // Range filter
-  const csrR = csrRows.filter(r =>
-    divisionsSet.has("CSR") &&
-    staffSet.has(r.Staff) &&
-    inRange(r.DateISO, startISO, endISO)
-  );
-
-  const procR = procRows.filter(r =>
-    divisionsSet.has("Processing") &&
-    staffSet.has(r.Staff) &&
-    inRange(r.DateISO, startISO, endISO)
-  );
-
-  const feeR = feeRows.filter(r =>
-    staffSet.has(r.Staff) &&
-    feeTypeSet.has(r.Fee_Type) &&
-    inRange(r.DateISO, startISO, endISO)
-  );
-
-  // Work filtering is applied at metric-sum level (not row inclusion).
-  return { csrR, procR, feeR };
-}
-
-function sumCSRByStaff(rows, workSet){
-  const out = {};
-  rows.forEach(r=>{
-    const name = r.Staff || "Unknown";
-    if(!out[name]){
-      out[name] = {
-        Inbound:0, Outbound:0, Chat:0, Emails:0,
-        A2A:0, Unverified:0,
-        "INC/C Calling":0, "Question Calling":0, "A2A Calling":0,
-        Delinks:0, Cancellations:0
-      };
-    }
-    const add = (label, val)=>{ if(workSet.has(label)) out[name][label] += val; };
-
-    add("Inbound", r.Inbound);
-    add("Outbound", r.Outbound);
-    add("Chat", r.Chat);
-    add("Emails", r.Emails);
-    add("A2A", r.A2A);
-    add("Unverified", r.Unverified);
-    add("INC/C Calling", r.INC_C_Calling);
-    add("Question Calling", r.Question_Calling);
-    add("A2A Calling", r.A2A_Calling);
-    add("Delinks", r.Delinks);
-    add("Cancellations", r.Cancellations);
-  });
-  return out;
-}
-
-function sumProcessingByStaff(rows, workSet){
-  const out = {};
-  rows.forEach(r=>{
-    const name = r.Staff || "Unknown";
-    if(!out[name]){
-      out[name] = {
-        Filing:0, Linking:0, "Linked Review":0, Inbox:0,
-        "Existing Review":0, "Processing Review":0, Miscellaneous:0,
-        "Total Output":0
-      };
-    }
-    const add = (label, val)=>{ if(workSet.has(label)) out[name][label] += val; };
-
-    add("Filing", r.Filing);
-    add("Linking", r.Linking);
-    add("Linked Review", r["Linked Review"]);
-    add("Inbox", r.Inbox);
-    add("Existing Review", r["Existing Review"]);
-    add("Processing Review", r["Processing Review"]);
-    add("Miscellaneous", r.Miscellaneous);
-  });
-
-  // Total Output should reflect selected work types (not necessarily the sheet Total Output)
-  Object.keys(out).forEach(st=>{
-    const o = out[st];
-    o["Total Output"] =
-      (workSet.has("Filing") ? o.Filing : 0) +
-      (workSet.has("Linking") ? o.Linking : 0) +
-      (workSet.has("Linked Review") ? o["Linked Review"] : 0) +
-      (workSet.has("Inbox") ? o.Inbox : 0) +
-      (workSet.has("Existing Review") ? o["Existing Review"] : 0) +
-      (workSet.has("Processing Review") ? o["Processing Review"] : 0) +
-      (workSet.has("Miscellaneous") ? o.Miscellaneous : 0);
-  });
-
-  return out;
-}
-
-function sumFeesByStaff(feeRows){
-  const out = {};
-  feeRows.forEach(r=>{
-    const name = r.Staff || "Unknown";
-    if(!out[name]) out[name] = { entries:0, total:0 };
-    out[name].entries += safeNum(r.Count) || 0;
-    out[name].total += safeNum(r.Total_Fee) || 0;
-  });
-  Object.keys(out).forEach(k=> out[k].total = Math.round(out[k].total*100)/100 );
-  return out;
-}
-
-function sumFeesByType(feeRows, allFeeTypes){
-  const totals = {};
-  allFeeTypes.forEach(t=> totals[t] = { entries:0, total:0 });
-  feeRows.forEach(r=>{
-    const t = r.Fee_Type || "";
-    if(!totals[t]) totals[t] = { entries:0, total:0 };
-    totals[t].entries += safeNum(r.Count);
-    totals[t].total += safeNum(r.Total_Fee);
-  });
-  Object.keys(totals).forEach(t=> totals[t].total = Math.round(totals[t].total*100)/100 );
-  return totals;
-}
-
-/* ===========================
-   UI RENDER HELPERS
-=========================== */
 function formatDelta(el, today, yday){
   const p = pctChange(today, yday);
   el.classList.remove("up","down");
@@ -1100,345 +746,591 @@ function formatDelta(el, today, yday){
   el.textContent = p.text;
 }
 
-function setText(id, txt){
-  const el = document.getElementById(id);
-  if(el) el.textContent = txt;
+/* ===========================
+   SAFE DATE PARSING (sheet rows can be messy)
+=========================== */
+function toNZDayISO(value){
+  if(value==null || value==="") return null;
+
+  // If it already looks like YYYY-MM-DD, keep it.
+  if(typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+
+  // Try Date parse
+  const d = new Date(value);
+  if(isNaN(d.getTime())) return null;
+
+  return d.toLocaleDateString("en-CA",{timeZone:TZ});
+}
+function inRange(nzDay, startISO, endISO){
+  if(!nzDay) return false;
+  return nzDay >= startISO && nzDay <= endISO;
 }
 
 /* ===========================
-   RUN REPORT (LIVE)
+   FIXED FEE TYPES (always shown)
 =========================== */
-let RAW_CACHE = null;
-let ALL_STAFF = [];
-let ALL_FEE_TYPES = [];
+const FIXED_FEE_TYPES = ["ITA","IR3","REB","AA","R3P","OP","BY"];
 
+/* ===========================
+   FILTER STATE (checkbox-driven)
+=========================== */
+const state = {
+  divisions: new Set(["CSR","Processing"]), // default both
+  staffCSR: new Set(),        // empty means ALL
+  staffProcessing: new Set(), // empty means ALL
+  feeTypes: new Set()         // empty means ALL
+};
+
+function setStatus(text){
+  document.getElementById("statusPill").textContent = text;
+}
+
+function buildCheckList(container, items, getChecked, setChecked){
+  container.innerHTML = "";
+  items.forEach(item=>{
+    const row = document.createElement("label");
+    row.className = "check";
+    row.innerHTML = `<input type="checkbox"><strong></strong>`;
+    row.querySelector("strong").textContent = item;
+
+    const cb = row.querySelector("input");
+    cb.checked = !!getChecked(item);
+
+    row.addEventListener("click",(e)=>{
+      // allow clicking anywhere
+      if(e.target.tagName.toLowerCase() !== "input"){
+        cb.checked = !cb.checked;
+      }
+      setChecked(item, cb.checked);
+      updateFilterPills();
+    });
+
+    cb.addEventListener("change",()=>{
+      setChecked(item, cb.checked);
+      updateFilterPills();
+    });
+
+    container.appendChild(row);
+  });
+}
+
+function updateFilterPills(){
+  // Division pill
+  const divCount = state.divisions.size;
+  document.getElementById("divCount").textContent =
+    divCount===0 ? "None" : (divCount===2 ? "2 selected" : "1 selected");
+
+  // Staff pill (combined)
+  const csrSel = state.staffCSR.size;
+  const procSel = state.staffProcessing.size;
+  const anySelected = (csrSel + procSel) > 0;
+  document.getElementById("staffCountPill").textContent = anySelected ? "Filtered" : "All";
+
+  // Fee pill
+  document.getElementById("feeCountPill").textContent =
+    state.feeTypes.size ? `${state.feeTypes.size} selected` : "All";
+}
+
+/* ===========================
+   DATA CACHE
+=========================== */
+let CACHE = null;
+
+async function fetchAllData(){
+  const url = WEB_APP_URL + "?action=getReportData";
+  const res = await fetch(url, { method:"GET" });
+  const data = await res.json();
+  if(!data || !data.ok) throw new Error((data && data.error) ? data.error : "Unknown error");
+  return data;
+}
+
+/* ===========================
+   NORMALISE ROWS
+=========================== */
+function normaliseCSRRow(r){
+  const day = toNZDayISO(r.Date);
+  return {
+    day,
+    staff: String(r.Staff||"").trim(),
+    division: String(r.Division||"CSR").trim() || "CSR",
+    inbound: Number(r.Inbound||0),
+    outbound: Number(r.Outbound||0),
+    chat: Number(r.Chat||0),
+    emails: Number(r.Emails||0),
+    a2a: Number(r.A2A||0),
+    unverified: Number(r.Unverified||0),
+    incc: Number(r.INC_C_Calling||0),
+    qc: Number(r.Question_Calling||0),
+    a2ac: Number(r.A2A_Calling||0),
+    delinks: Number(r.Delinks||0),
+    cancels: Number(r.Cancellations||0),
+  };
+}
+
+function normaliseProcessingRow(r){
+  const day = toNZDayISO(r.Date);
+  return {
+    day,
+    staff: String(r.Staff||"").trim(),
+    filing: Number(r.Filing||0),
+    linking: Number(r.Linking||0),
+    linkedReview: Number(r["Linked Review"]||r.LinkedReview||0),
+    inbox: Number(r.Inbox||0),
+    existingReview: Number(r["Existing Review"]||r.ExistingReview||0),
+    processingReview: Number(r["Processing Review"]||r.ProcessingReview||0),
+    misc: Number(r.Miscellaneous||0),
+    totalOutput: Number(r["Total Output"]||r.TotalOutput||0),
+    totalFees: Number(r["Total Fees"]||r.TotalFees||0), // kept for reference, but fees displayed come from Fee_Log
+  };
+}
+
+function normaliseFeeRow(r){
+  const day = toNZDayISO(r.Date);
+  return {
+    day,
+    staff: String(r.Staff||"").trim(),
+    type: String(r.Fee_Type||"").trim(),
+    count: Number(r.Count||0),
+    total: Number(r.Total_Fee||0)
+  };
+}
+
+/* ===========================
+   APPLY FILTERS
+=========================== */
+function getSelectedDivisions(){
+  // empty means none (allowed, but results will be empty)
+  return new Set(Array.from(state.divisions));
+}
+function staffAllowed(staff, division, allStaffByDivision){
+  // if no specific staff selected for that division => all staff allowed
+  if(division==="CSR"){
+    if(state.staffCSR.size===0) return true;
+    return state.staffCSR.has(staff);
+  }
+  if(division==="Processing"){
+    if(state.staffProcessing.size===0) return true;
+    return state.staffProcessing.has(staff);
+  }
+  return true;
+}
+function feeTypeAllowed(type){
+  if(state.feeTypes.size===0) return true;
+  return state.feeTypes.has(type);
+}
+
+/* ===========================
+   RENDER HELPERS
+=========================== */
+function td(label, value, cls="right"){
+  return `<td class="${cls}" data-label="${label}">${value}</td>`;
+}
+function nameTd(name){
+  return `<td data-label="Staff"><strong>${escapeHtml(name)}</strong></td>`;
+}
+function escapeHtml(s){
+  return String(s||"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/* ===========================
+   REPORT
+=========================== */
 async function runReport(){
-  setStatus("Loading…","warn");
+  setStatus("Loading…");
 
   const start = document.getElementById("startDate").value || todayISO;
   const end = document.getElementById("endDate").value || todayISO;
+
+  // label
   const isToday = (start===todayISO && end===todayISO);
   document.getElementById("rangeLabel").textContent = isToday ? "Today (live)" : `${start} → ${end}`;
 
   try{
-    if(!RAW_CACHE){
-      RAW_CACHE = await fetchReportData();
-      ALL_STAFF = (RAW_CACHE.allStaff || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
-      ALL_FEE_TYPES = (RAW_CACHE.allFeeTypes || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
-      initOrRebuildFilters(); // build the checkbox dropdowns with real sources (all staff / all fee types)
-    }
+    if(!CACHE) CACHE = await fetchAllData();
 
-    // Filter sets
-    const divisionsSet = getFilterSet("division", ["CSR","Processing"]);
-    const staffSet = getFilterSet("staff", ALL_STAFF.length ? ALL_STAFF : []);
-    const workOptions = refreshWorkOptions(divisionsSet);
-    const workSet = getFilterSet("work", workOptions);
-    const feeSet = getFilterSet("fee", ALL_FEE_TYPES.length ? ALL_FEE_TYPES : []);
+    const allStaffByDivision = CACHE.allStaffByDivision || { CSR:[], Processing:[] };
 
-    // Note
-    document.getElementById("procFeeNote").textContent =
-      (feeSet.size === (ALL_FEE_TYPES.length||feeSet.size)) ? "All fee types" : "Filtered fee types";
+    // Normalise and filter by date + division + staff
+    const divisions = getSelectedDivisions();
 
-    // Apply filters
-    const filtered = applyAllFilters(RAW_CACHE, start, end, divisionsSet, staffSet, workSet, feeSet);
+    const csrRows = (CACHE.csr||[])
+      .map(normaliseCSRRow)
+      .filter(r => r.day && inRange(r.day, start, end))
+      .filter(r => divisions.has("CSR"))
+      .filter(r => staffAllowed(r.staff, "CSR", allStaffByDivision));
 
-    // Build "yesterday" range (same as start/end shifted back by 1 day)
-    const yStart = addDaysISO(start, -1);
-    const yEnd = addDaysISO(end, -1);
-    const yFiltered = applyAllFilters(RAW_CACHE, yStart, yEnd, divisionsSet, staffSet, workSet, feeSet);
+    const procRows = (CACHE.processing||[])
+      .map(normaliseProcessingRow)
+      .filter(r => r.day && inRange(r.day, start, end))
+      .filter(r => divisions.has("Processing"))
+      .filter(r => staffAllowed(r.staff, "Processing", allStaffByDivision));
 
-    // Aggregate
-    const csrByStaff = sumCSRByStaff(filtered.csrR, workSet);
-    const csrByStaffY = sumCSRByStaff(yFiltered.csrR, workSet);
+    const feeRows = (CACHE.fees||[])
+      .map(normaliseFeeRow)
+      .filter(r => r.day && inRange(r.day, start, end))
+      .filter(r => divisions.has("Processing")) // fees only for processing
+      .filter(r => staffAllowed(r.staff, "Processing", allStaffByDivision))
+      .filter(r => feeTypeAllowed(r.type));
 
-    const procByStaff = sumProcessingByStaff(filtered.procR, workSet);
-    const procByStaffY = sumProcessingByStaff(yFiltered.procR, workSet);
+    // yesterday comparisons only when single-day
+    const singleDay = (start===end);
+    const ydayISO = singleDay ? addDaysISO(start, -1) : null;
 
-    const feesByStaff = sumFeesByStaff(filtered.feeR);
-    const feesByStaffY = sumFeesByStaff(yFiltered.feeR);
+    const csrY = singleDay
+      ? (CACHE.csr||[]).map(normaliseCSRRow).filter(r => r.day===ydayISO).filter(r=>divisions.has("CSR")).filter(r=>staffAllowed(r.staff,"CSR",allStaffByDivision))
+      : [];
+
+    const procY = singleDay
+      ? (CACHE.processing||[]).map(normaliseProcessingRow).filter(r => r.day===ydayISO).filter(r=>divisions.has("Processing")).filter(r=>staffAllowed(r.staff,"Processing",allStaffByDivision))
+      : [];
+
+    const feeY = singleDay
+      ? (CACHE.fees||[]).map(normaliseFeeRow).filter(r => r.day===ydayISO).filter(r=>divisions.has("Processing")).filter(r=>staffAllowed(r.staff,"Processing",allStaffByDivision)).filter(r=>feeTypeAllowed(r.type))
+      : [];
 
     // Totals
-    let csrInbound=0, csrOutbound=0, csrChat=0, csrEmails=0, csrTouchpoints=0;
-    Object.values(csrByStaff).forEach(s=>{
-      csrInbound += safeNum(s.Inbound);
-      csrOutbound += safeNum(s.Outbound);
-      csrChat += safeNum(s.Chat);
-      csrEmails += safeNum(s.Emails);
-      csrTouchpoints += (safeNum(s.Inbound) + safeNum(s.Outbound) + safeNum(s.Chat));
+    const csrInbound = csrRows.reduce((a,r)=>a+r.inbound,0);
+    const csrOutbound = csrRows.reduce((a,r)=>a+r.outbound,0);
+    const csrChat = csrRows.reduce((a,r)=>a+r.chat,0);
+    const csrEmails = csrRows.reduce((a,r)=>a+r.emails,0);
+    const csrTouchpoints = csrInbound + csrOutbound + csrChat;
+
+    const csrTouchY = csrY.reduce((a,r)=>a+(r.inbound+r.outbound+r.chat),0);
+
+    const procOutput = procRows.reduce((a,r)=>a+r.totalOutput,0);
+    const procOutputY = procY.reduce((a,r)=>a+r.totalOutput,0);
+
+    const feeEntries = feeRows.reduce((a,r)=>a+r.count,0);
+    const feeTotal = Math.round(feeRows.reduce((a,r)=>a+r.total,0)*100)/100;
+
+    const feeEntriesY = feeY.reduce((a,r)=>a+r.count,0);
+    const feeTotalY = Math.round(feeY.reduce((a,r)=>a+r.total,0)*100)/100;
+
+    // Top cards
+    document.getElementById("touchpointsToday").textContent = csrTouchpoints.toLocaleString("en-NZ");
+    document.getElementById("touchpointsYday").textContent = (singleDay ? csrTouchY : 0).toLocaleString("en-NZ");
+    formatDelta(document.getElementById("touchpointsDelta"), csrTouchpoints, singleDay ? csrTouchY : 0);
+    if(!singleDay){ document.getElementById("touchpointsDelta").textContent = "—"; document.getElementById("touchpointsYday").textContent="—"; }
+
+    document.getElementById("returnsToday").textContent = procOutput.toLocaleString("en-NZ");
+    document.getElementById("returnsYday").textContent = (singleDay ? procOutputY : 0).toLocaleString("en-NZ");
+    formatDelta(document.getElementById("returnsDelta"), procOutput, singleDay ? procOutputY : 0);
+    if(!singleDay){ document.getElementById("returnsDelta").textContent = "—"; document.getElementById("returnsYday").textContent="—"; }
+
+    document.getElementById("feesToday").textContent = money(feeTotal);
+    document.getElementById("feesYday").textContent = singleDay ? money(feeTotalY) : "—";
+    formatDelta(document.getElementById("feesDelta"), feeTotal, singleDay ? feeTotalY : 0);
+    if(!singleDay){ document.getElementById("feesDelta").textContent = "—"; }
+
+    // Snapshot
+    document.getElementById("csrTouchpoints").textContent = csrTouchpoints.toLocaleString("en-NZ");
+    document.getElementById("csrInbound").textContent = csrInbound.toLocaleString("en-NZ");
+    document.getElementById("csrOutbound").textContent = csrOutbound.toLocaleString("en-NZ");
+    document.getElementById("csrChat").textContent = csrChat.toLocaleString("en-NZ");
+
+    document.getElementById("procOutput").textContent = procOutput.toLocaleString("en-NZ");
+    document.getElementById("procFees").textContent = money(feeTotal);
+    document.getElementById("procFeeEntries").textContent = feeEntries.toLocaleString("en-NZ");
+
+    // Group by staff helpers
+    function groupByStaff(rows, getStaff){
+      const map = {};
+      rows.forEach(r=>{
+        const s = getStaff(r);
+        if(!s) return;
+        if(!map[s]) map[s] = [];
+        map[s].push(r);
+      });
+      return map;
+    }
+
+    // CSR per staff aggregation
+    const csrByStaff = {};
+    csrRows.forEach(r=>{
+      if(!csrByStaff[r.staff]){
+        csrByStaff[r.staff] = { inbound:0,outbound:0,chat:0,emails:0,a2a:0,unverified:0,incc:0,qc:0,a2ac:0,delinks:0,cancels:0 };
+      }
+      const o = csrByStaff[r.staff];
+      o.inbound += r.inbound; o.outbound += r.outbound; o.chat += r.chat; o.emails += r.emails;
+      o.a2a += r.a2a; o.unverified += r.unverified; o.incc += r.incc; o.qc += r.qc; o.a2ac += r.a2ac;
+      o.delinks += r.delinks; o.cancels += r.cancels;
     });
 
-    let csrTouchY=0;
-    Object.values(csrByStaffY).forEach(s=>{
-      csrTouchY += (safeNum(s.Inbound) + safeNum(s.Outbound) + safeNum(s.Chat));
+    // Processing per staff aggregation
+    const procByStaff = {};
+    procRows.forEach(r=>{
+      if(!procByStaff[r.staff]){
+        procByStaff[r.staff] = { filing:0,linking:0,linkedReview:0,inbox:0,existingReview:0,processingReview:0,misc:0,totalOutput:0 };
+      }
+      const o = procByStaff[r.staff];
+      o.filing += r.filing; o.linking += r.linking; o.linkedReview += r.linkedReview; o.inbox += r.inbox;
+      o.existingReview += r.existingReview; o.processingReview += r.processingReview; o.misc += r.misc;
+      o.totalOutput += r.totalOutput;
     });
 
-    let procOutput=0;
-    Object.values(procByStaff).forEach(s=>{ procOutput += safeNum(s["Total Output"]); });
-
-    let procOutputY=0;
-    Object.values(procByStaffY).forEach(s=>{ procOutputY += safeNum(s["Total Output"]); });
-
-    let feeTotal=0, feeEntries=0;
-    Object.values(feesByStaff).forEach(s=>{
-      feeEntries += safeNum(s.entries);
-      feeTotal += safeNum(s.total);
+    // Fees per staff aggregation (Fee_Log)
+    const feeByStaff = {};
+    feeRows.forEach(r=>{
+      if(!feeByStaff[r.staff]) feeByStaff[r.staff] = { entries:0, total:0 };
+      feeByStaff[r.staff].entries += r.count;
+      feeByStaff[r.staff].total += r.total;
     });
-    feeTotal = Math.round(feeTotal*100)/100;
+    Object.keys(feeByStaff).forEach(s=>{
+      feeByStaff[s].total = Math.round(feeByStaff[s].total * 100) / 100;
+    });
 
-    let feeTotalY=0;
-    Object.values(feesByStaffY).forEach(s=>{ feeTotalY += safeNum(s.total); });
-    feeTotalY = Math.round(feeTotalY*100)/100;
-
-    // Top Summary (Active Staff removed)
-    setText("touchpointsToday", csrTouchpoints.toLocaleString("en-NZ"));
-    setText("touchpointsYday", csrTouchY.toLocaleString("en-NZ"));
-    formatDelta(document.getElementById("touchpointsDelta"), csrTouchpoints, csrTouchY);
-
-    setText("returnsToday", procOutput.toLocaleString("en-NZ"));
-    setText("returnsYday", procOutputY.toLocaleString("en-NZ"));
-    formatDelta(document.getElementById("returnsDelta"), procOutput, procOutputY);
-
-    setText("feesToday", money(feeTotal));
-    setText("feesYday", money(feeTotalY));
-    formatDelta(document.getElementById("feesDelta"), feeTotal, feeTotalY);
-
-    // Division snapshot
-    setText("csrTouchpoints", csrTouchpoints.toLocaleString("en-NZ"));
-    setText("csrInbound", csrInbound.toLocaleString("en-NZ"));
-    setText("csrOutbound", csrOutbound.toLocaleString("en-NZ"));
-    setText("csrChat", csrChat.toLocaleString("en-NZ"));
-
-    setText("procOutput", procOutput.toLocaleString("en-NZ"));
-    setText("procFees", money(feeTotal));
-    setText("procFeeEntries", feeEntries.toLocaleString("en-NZ"));
-
-    // CSR ranking
+    // CSR ranking (touchpoints)
     const csrRank = Object.keys(csrByStaff).map(name=>{
-      const s = csrByStaff[name];
-      const tp = safeNum(s.Inbound)+safeNum(s.Outbound)+safeNum(s.Chat);
-      return { name, tp, inbound:safeNum(s.Inbound), outbound:safeNum(s.Outbound), chat:safeNum(s.Chat), emails:safeNum(s.Emails) };
+      const o = csrByStaff[name];
+      const tp = o.inbound + o.outbound + o.chat;
+      return { name, tp, inbound:o.inbound, outbound:o.outbound, chat:o.chat };
     }).sort((a,b)=>b.tp-a.tp);
 
     document.getElementById("csrRankBody").innerHTML =
-      (csrRank.length ? csrRank : ALL_STAFF.map(n=>({name:n,tp:0,inbound:0,outbound:0,chat:0,emails:0})))
-      .map((r,i)=>`
+      csrRank.length ? csrRank.map((r,i)=>`
         <tr>
-          <td>${i+1}</td>
-          <td><strong>${r.name}</strong></td>
-          <td class="right"><strong>${r.tp.toLocaleString("en-NZ")}</strong></td>
-          <td class="right">${r.inbound.toLocaleString("en-NZ")}</td>
-          <td class="right">${r.outbound.toLocaleString("en-NZ")}</td>
-          <td class="right">${r.chat.toLocaleString("en-NZ")}</td>
+          <td data-label="Rank">${i+1}</td>
+          ${nameTd(r.name)}
+          ${td("Touchpoints", `<strong>${r.tp.toLocaleString("en-NZ")}</strong>`)}
+          ${td("Inbound", r.inbound.toLocaleString("en-NZ"))}
+          ${td("Outbound", r.outbound.toLocaleString("en-NZ"))}
+          ${td("Chat", r.chat.toLocaleString("en-NZ"))}
         </tr>
-      `).join("") || `<tr><td colspan="6" class="small-muted">No CSR data for current filters.</td></tr>`;
+      `).join("") : `<tr><td colspan="6" class="small-muted">No CSR data for current filters.</td></tr>`;
 
-    // CSR Core + Other
-    const csrRowsAll = (csrRank.length ? csrRank : ALL_STAFF.map(n=>({name:n,tp:0,inbound:0,outbound:0,chat:0,emails:0})));
-    document.getElementById("csrCoreBody").innerHTML = csrRowsAll.map(r=>`
-      <tr>
-        <td><strong>${r.name}</strong></td>
-        <td class="right">${r.inbound.toLocaleString("en-NZ")}</td>
-        <td class="right">${r.outbound.toLocaleString("en-NZ")}</td>
-        <td class="right">${r.chat.toLocaleString("en-NZ")}</td>
-        <td class="right">${r.emails.toLocaleString("en-NZ")}</td>
-      </tr>
-    `).join("") || `<tr><td colspan="5" class="small-muted">No CSR data for current filters.</td></tr>`;
-
-    document.getElementById("csrOtherBody").innerHTML = (csrRowsAll).map(r=>{
-      const s = csrByStaff[r.name] || {
-        A2A:0, Unverified:0, "INC/C Calling":0, "Question Calling":0, "A2A Calling":0, Delinks:0, Cancellations:0
-      };
-      return `
-        <tr>
-          <td><strong>${r.name}</strong></td>
-          <td class="right">${safeNum(s.A2A).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(s.Unverified).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(s["INC/C Calling"]).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(s["Question Calling"]).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(s["A2A Calling"]).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(s.Delinks).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(s.Cancellations).toLocaleString("en-NZ")}</td>
-        </tr>
-      `;
-    }).join("") || `<tr><td colspan="8" class="small-muted">No CSR data for current filters.</td></tr>`;
-
-    // Processing ranking
+    // Processing ranking (fees then output)
     const procRank = Object.keys(procByStaff).map(name=>{
-      const out = procByStaff[name];
-      const f = feesByStaff[name] || {entries:0,total:0};
-      return {
-        name,
-        totalOutput: safeNum(out["Total Output"]),
-        fees: Math.round(safeNum(f.total)*100)/100,
-        entries: safeNum(f.entries)
-      };
+      const out = procByStaff[name].totalOutput || 0;
+      const fees = (feeByStaff[name] ? feeByStaff[name].total : 0);
+      const entries = (feeByStaff[name] ? feeByStaff[name].entries : 0);
+      return { name, fees, entries, out };
     }).sort((a,b)=>{
       if(b.fees!==a.fees) return b.fees-a.fees;
-      return b.totalOutput-a.totalOutput;
+      return b.out-a.out;
     });
 
     document.getElementById("procRankBody").innerHTML =
-      (procRank.length ? procRank : ALL_STAFF.map(n=>({name:n,fees:0,entries:0,totalOutput:0})))
-      .map((r,i)=>`
+      procRank.length ? procRank.map((r,i)=>`
         <tr>
-          <td>${i+1}</td>
-          <td><strong>${r.name}</strong></td>
-          <td class="right"><strong>${money(r.fees)}</strong></td>
-          <td class="right">${safeNum(r.entries).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(r.totalOutput).toLocaleString("en-NZ")}</td>
+          <td data-label="Rank">${i+1}</td>
+          ${nameTd(r.name)}
+          ${td("Fees", `<strong>${money(r.fees)}</strong>`)}
+          ${td("Fee entries", r.entries.toLocaleString("en-NZ"))}
+          ${td("Total output", r.out.toLocaleString("en-NZ"))}
         </tr>
-      `).join("") || `<tr><td colspan="5" class="small-muted">No Processing data for current filters.</td></tr>`;
+      `).join("") : `<tr><td colspan="5" class="small-muted">No Processing data for current filters.</td></tr>`;
 
-    // Processing output breakdown
-    const procStaffList = (Object.keys(procByStaff).length ? Object.keys(procByStaff) : ALL_STAFF);
-    document.getElementById("procOutBody").innerHTML = procStaffList.map(name=>{
-      const o = procByStaff[name] || {
-        Filing:0, Linking:0, "Linked Review":0, Inbox:0, "Existing Review":0, "Processing Review":0, Miscellaneous:0, "Total Output":0
-      };
+    // CSR grouped tables
+    const csrNames = Object.keys(csrByStaff).sort((a,b)=>a.localeCompare(b));
+    document.getElementById("csrTouchBody").innerHTML =
+      csrNames.length ? csrNames.map(name=>{
+        const o = csrByStaff[name];
+        const tp = o.inbound + o.outbound + o.chat;
+        return `
+          <tr>
+            ${nameTd(name)}
+            ${td("Inbound", o.inbound.toLocaleString("en-NZ"))}
+            ${td("Outbound", o.outbound.toLocaleString("en-NZ"))}
+            ${td("Chat", o.chat.toLocaleString("en-NZ"))}
+            ${td("Emails", o.emails.toLocaleString("en-NZ"))}
+            ${td("Touchpoints", `<strong>${tp.toLocaleString("en-NZ")}</strong>`)}
+          </tr>
+        `;
+      }).join("") : `<tr><td colspan="6" class="small-muted">No CSR data for current filters.</td></tr>`;
+
+    document.getElementById("csrCallingBody").innerHTML =
+      csrNames.length ? csrNames.map(name=>{
+        const o = csrByStaff[name];
+        return `
+          <tr>
+            ${nameTd(name)}
+            ${td("INC/C", o.incc.toLocaleString("en-NZ"))}
+            ${td("Question", o.qc.toLocaleString("en-NZ"))}
+            ${td("A2A Calling", o.a2ac.toLocaleString("en-NZ"))}
+          </tr>
+        `;
+      }).join("") : `<tr><td colspan="4" class="small-muted">No CSR data for current filters.</td></tr>`;
+
+    document.getElementById("csrOtherBody").innerHTML =
+      csrNames.length ? csrNames.map(name=>{
+        const o = csrByStaff[name];
+        return `
+          <tr>
+            ${nameTd(name)}
+            ${td("A2A", o.a2a.toLocaleString("en-NZ"))}
+            ${td("Unverified", o.unverified.toLocaleString("en-NZ"))}
+            ${td("Delinks", o.delinks.toLocaleString("en-NZ"))}
+            ${td("Cancels", o.cancels.toLocaleString("en-NZ"))}
+          </tr>
+        `;
+      }).join("") : `<tr><td colspan="5" class="small-muted">No CSR data for current filters.</td></tr>`;
+
+    // Processing grouped tables
+    const procNames = Object.keys(procByStaff).sort((a,b)=>a.localeCompare(b));
+
+    document.getElementById("procOutputBody").innerHTML =
+      procNames.length ? procNames.map(name=>{
+        const o = procByStaff[name];
+        return `
+          <tr>
+            ${nameTd(name)}
+            ${td("Total output", `<strong>${o.totalOutput.toLocaleString("en-NZ")}</strong>`)}
+            ${td("Filing", o.filing.toLocaleString("en-NZ"))}
+            ${td("Linking", o.linking.toLocaleString("en-NZ"))}
+            ${td("Linked Review", o.linkedReview.toLocaleString("en-NZ"))}
+            ${td("Inbox", o.inbox.toLocaleString("en-NZ"))}
+          </tr>
+        `;
+      }).join("") : `<tr><td colspan="6" class="small-muted">No Processing data for current filters.</td></tr>`;
+
+    document.getElementById("procReviewBody").innerHTML =
+      procNames.length ? procNames.map(name=>{
+        const o = procByStaff[name];
+        return `
+          <tr>
+            ${nameTd(name)}
+            ${td("Existing Review", o.existingReview.toLocaleString("en-NZ"))}
+            ${td("Processing Review", o.processingReview.toLocaleString("en-NZ"))}
+            ${td("Misc", o.misc.toLocaleString("en-NZ"))}
+          </tr>
+        `;
+      }).join("") : `<tr><td colspan="4" class="small-muted">No Processing data for current filters.</td></tr>`;
+
+    document.getElementById("procFeesBody").innerHTML =
+      procNames.length ? procNames.map(name=>{
+        const f = feeByStaff[name] || { entries:0, total:0 };
+        return `
+          <tr>
+            ${nameTd(name)}
+            ${td("Fee entries", f.entries.toLocaleString("en-NZ"))}
+            ${td("Total fees", `<strong>${money(f.total)}</strong>`)}
+          </tr>
+        `;
+      }).join("") : `<tr><td colspan="3" class="small-muted">No Processing data for current filters.</td></tr>`;
+
+    // Fee breakdown by type (fixed list always shown)
+    const feeTotalsByType = {};
+    FIXED_FEE_TYPES.forEach(t=>feeTotalsByType[t]={entries:0,total:0});
+
+    feeRows.forEach(r=>{
+      if(!feeTotalsByType[r.type]){
+        // if a future type arrives, include it too (but do not remove fixed list)
+        feeTotalsByType[r.type] = { entries:0,total:0 };
+      }
+      feeTotalsByType[r.type].entries += r.count;
+      feeTotalsByType[r.type].total += r.total;
+    });
+
+    const orderedTypes = [
+      ...FIXED_FEE_TYPES,
+      ...Object.keys(feeTotalsByType).filter(t=>!FIXED_FEE_TYPES.includes(t)).sort((a,b)=>a.localeCompare(b))
+    ];
+
+    let totalEntries = 0, totalFeesAll = 0;
+    const feeRowsHtml = orderedTypes.map(t=>{
+      const v = feeTotalsByType[t] || { entries:0,total:0 };
+      const total = Math.round((v.total||0)*100)/100;
+      totalEntries += (v.entries||0);
+      totalFeesAll += total;
       return `
         <tr>
-          <td><strong>${name}</strong></td>
-          <td class="right">${safeNum(o.Filing).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(o.Linking).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(o["Linked Review"]).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(o.Inbox).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(o["Existing Review"]).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(o["Processing Review"]).toLocaleString("en-NZ")}</td>
-          <td class="right">${safeNum(o.Miscellaneous).toLocaleString("en-NZ")}</td>
-          <td class="right"><strong>${safeNum(o["Total Output"]).toLocaleString("en-NZ")}</strong></td>
-        </tr>
-      `;
-    }).join("") || `<tr><td colspan="9" class="small-muted">No Processing data for current filters.</td></tr>`;
-
-    // Processing fees summary by staff
-    document.getElementById("procFeesBody").innerHTML = procStaffList.map(name=>{
-      const f = feesByStaff[name] || {entries:0,total:0};
-      return `
-        <tr>
-          <td><strong>${name}</strong></td>
-          <td class="right">${safeNum(f.entries).toLocaleString("en-NZ")}</td>
-          <td class="right"><strong>${money(Math.round(safeNum(f.total)*100)/100)}</strong></td>
-        </tr>
-      `;
-    }).join("") || `<tr><td colspan="3" class="small-muted">No Fee_Log data for current filters.</td></tr>`;
-
-    // Fee breakdown by type (only selected types, but show all fee types from backend as rows)
-    const feeTotalsByType = sumFeesByType(filtered.feeR, ALL_FEE_TYPES.length ? ALL_FEE_TYPES : Array.from(feeSet));
-    let totalEntries = 0, totalFees = 0;
-
-    const typesToRender = (ALL_FEE_TYPES.length ? ALL_FEE_TYPES : Object.keys(feeTotalsByType)).slice();
-    document.getElementById("feeTypeBody").innerHTML = typesToRender.map(t=>{
-      const v = feeTotalsByType[t] || {entries:0,total:0};
-      totalEntries += safeNum(v.entries);
-      totalFees += safeNum(v.total);
-      return `
-        <tr>
-          <td><strong>${t}</strong></td>
-          <td class="right">${safeNum(v.entries).toLocaleString("en-NZ")}</td>
-          <td class="right">${money(Math.round(safeNum(v.total)*100)/100)}</td>
+          <td data-label="Fee type"><strong>${escapeHtml(t)}</strong></td>
+          ${td("Entries", (v.entries||0).toLocaleString("en-NZ"))}
+          ${td("Total fees", money(total))}
         </tr>
       `;
     }).join("");
 
+    document.getElementById("feeTypeBody").innerHTML = feeRowsHtml || `<tr><td colspan="3" class="small-muted">No fee data for current filters.</td></tr>`;
     document.getElementById("feeTypeTotalEntries").textContent = totalEntries.toLocaleString("en-NZ");
-    document.getElementById("feeTypeTotalFees").textContent = money(Math.round(totalFees*100)/100);
+    document.getElementById("feeTypeTotalFees").textContent = money(Math.round(totalFeesAll*100)/100);
 
-    setStatus(isToday ? "Live Today" : "Filtered period", "ok");
+    setStatus(isToday ? "Live Today" : "Filtered period");
+
   }catch(err){
     console.error(err);
-    setStatus("Connection error","bad");
+    setStatus("Connection error");
     alert("Connection error");
   }
 }
 
 /* ===========================
-   FILTER OPTIONS (ALL STAFF / ALL FEE TYPES)
-=========================== */
-let FILTERS_BUILT = false;
-
-function refreshWorkOptions(divisionsSet){
-  const work = [];
-  if(divisionsSet.has("CSR")) CSR_WORK.forEach(w=>{ if(!work.includes(w)) work.push(w); });
-  if(divisionsSet.has("Processing")) PROC_WORK.forEach(w=>{ if(!work.includes(w)) work.push(w); });
-  return work;
-}
-
-function initOrRebuildFilters(){
-  // Build once, then on division apply we rebuild staff/work lists cleanly.
-  const msDiv = document.querySelector('[data-ms="division"]');
-  const msStaff = document.querySelector('[data-ms="staff"]');
-  const msWork = document.querySelector('[data-ms="work"]');
-  const msFee = document.querySelector('[data-ms="fee"]');
-
-  function rebuild(){
-    // DIVISION
-    msDiv.innerHTML = "";
-    buildMultiSelect(msDiv, "division", ["CSR","Processing"]);
-
-    // STAFF (All staff, no exceptions)
-    msStaff.innerHTML = "";
-    buildMultiSelect(msStaff, "staff", ALL_STAFF.length ? ALL_STAFF : []);
-
-    // WORK (depends on division)
-    const divisionsSet = getFilterSet("division", ["CSR","Processing"]);
-    const workOpts = refreshWorkOptions(divisionsSet);
-    // prune invalid selections
-    Array.from(msState.work).forEach(v=>{ if(!workOpts.includes(v)) msState.work.delete(v); });
-
-    msWork.innerHTML = "";
-    buildMultiSelect(msWork, "work", workOpts);
-
-    // FEE TYPES (All fee types, no exceptions)
-    msFee.innerHTML = "";
-    buildMultiSelect(msFee, "fee", ALL_FEE_TYPES.length ? ALL_FEE_TYPES : []);
-  }
-
-  rebuild();
-
-  // Rebuild WORK only when division changes (after apply)
-  const msDivEl = document.querySelector('[data-ms="division"]');
-  msDivEl.addEventListener("click",(e)=>{
-    const btn = e.target.closest('[data-act="apply"]');
-    if(btn){
-      setTimeout(()=>{
-        const msWork = document.querySelector('[data-ms="work"]');
-        const divisionsSet = getFilterSet("division", ["CSR","Processing"]);
-        const workOpts = refreshWorkOptions(divisionsSet);
-        Array.from(msState.work).forEach(v=>{ if(!workOpts.includes(v)) msState.work.delete(v); });
-        msWork.innerHTML = "";
-        buildMultiSelect(msWork, "work", workOpts);
-      },0);
-    }
-  });
-
-  FILTERS_BUILT = true;
-}
-
-/* ===========================
-   PDF (placeholder until wiring)
+   PDF (placeholder)
 =========================== */
 function downloadPDF(){
-  alert("PDF will match the current filters when backend wiring is added.");
+  alert("PDF will match current filters (next phase).");
 }
 
 /* ===========================
-   INIT
+   INIT FILTER UI (from backend staff lists)
 =========================== */
-(async function init(){
-  setStatus("Loading…","warn");
+async function init(){
+  setStatus("Loading…");
   try{
-    RAW_CACHE = await fetchReportData();
-    ALL_STAFF = (RAW_CACHE.allStaff || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
-    ALL_FEE_TYPES = (RAW_CACHE.allFeeTypes || []).slice().sort((a,b)=>String(a).localeCompare(String(b)));
+    CACHE = await fetchAllData();
 
-    initOrRebuildFilters();
+    // Division checks (fixed)
+    buildCheckList(
+      document.getElementById("divisionChecks"),
+      ["CSR","Processing"],
+      (d)=>state.divisions.has(d),
+      (d,checked)=>{
+        if(checked) state.divisions.add(d);
+        else state.divisions.delete(d);
+      }
+    );
+
+    // Staff checks (from backend allStaffByDivision)
+    const staffCSR = (CACHE.allStaffByDivision && CACHE.allStaffByDivision.CSR) ? CACHE.allStaffByDivision.CSR : [];
+    const staffProc = (CACHE.allStaffByDivision && CACHE.allStaffByDivision.Processing) ? CACHE.allStaffByDivision.Processing : [];
+
+    buildCheckList(
+      document.getElementById("staffChecksCSR"),
+      staffCSR.slice().sort((a,b)=>String(a).localeCompare(String(b))),
+      (name)=>state.staffCSR.has(name),
+      (name,checked)=>{
+        if(checked) state.staffCSR.add(name);
+        else state.staffCSR.delete(name);
+      }
+    );
+
+    buildCheckList(
+      document.getElementById("staffChecksProcessing"),
+      staffProc.slice().sort((a,b)=>String(a).localeCompare(String(b))),
+      (name)=>state.staffProcessing.has(name),
+      (name,checked)=>{
+        if(checked) state.staffProcessing.add(name);
+        else state.staffProcessing.delete(name);
+      }
+    );
+
+    // Fee type checks (fixed list always)
+    buildCheckList(
+      document.getElementById("feeChecks"),
+      FIXED_FEE_TYPES,
+      (t)=>state.feeTypes.has(t),
+      (t,checked)=>{
+        if(checked) state.feeTypes.add(t);
+        else state.feeTypes.delete(t);
+      }
+    );
+
+    updateFilterPills();
+    setStatus("Ready");
     runReport();
   }catch(err){
     console.error(err);
-    setStatus("Connection error","bad");
+    setStatus("Connection error");
     alert("Connection error");
   }
-})();
+}
+
+init();
 </script>
 
 </body>
