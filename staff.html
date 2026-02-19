@@ -3,8 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Language" content="en">
-<meta name="google" content="notranslate">
 
 <title>My Refund — CSR Workspace</title>
 
@@ -27,6 +25,10 @@ body{
 .page{
   min-height:100vh;
   background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
+  transition:.2s ease;
+}
+.page.submitting{
+  opacity:.7;
 }
 
 /* HEADER */
@@ -110,7 +112,7 @@ body{
   color:var(--g0);
 }
 
-/* COUNTER CONTROLS */
+/* COUNTERS */
 .controls{
   display:flex;
   align-items:center;
@@ -133,16 +135,14 @@ body{
   font-weight:900;
 }
 
-/* GRID FOR CLEAN LAYOUT */
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:14px;
 }
 @media(max-width:900px){
-  .grid{
-    grid-template-columns:1fr;
-  }
+  .grid{grid-template-columns:1fr}
 }
 .item{
   display:flex;
@@ -160,6 +160,7 @@ body{
   color:var(--g0);
 }
 
+/* SUBMIT BUTTON */
 .submit button{
   width:100%;
   border-radius:14px;
@@ -170,6 +171,28 @@ body{
   background:var(--g0);
   color:#fff;
   cursor:pointer;
+  position:relative;
+}
+.submit button.loading{
+  pointer-events:none;
+  opacity:.9;
+}
+.submit button.loading::after{
+  content:"";
+  position:absolute;
+  right:18px;
+  top:50%;
+  width:16px;
+  height:16px;
+  margin-top:-8px;
+  border:2px solid rgba(255,255,255,.5);
+  border-top:2px solid #fff;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
 }
 </style>
 </head>
@@ -195,157 +218,149 @@ body{
 
 <div class="wrap">
 
-  <div class="hello" id="helloText">Hello</div>
-  <div class="subline" id="dateLine"></div>
+<div class="hello" id="helloText">Hello</div>
+<div class="subline" id="dateLine"></div>
 
-  <div class="layout">
+<div class="layout">
 
-    <!-- LEFT -->
-    <div>
-      <div class="panel">
-        <h3>Inbound Calls</h3>
-        <div class="controls">
-          <button onclick="adj('inbound',-1)">−</button>
-          <input id="inbound" value="0">
-          <button onclick="adj('inbound',1)">+</button>
-        </div>
-      </div>
+<div>
+<div class="panel">
+<h3>Inbound Calls</h3>
+<div class="controls">
+<button onclick="adj('inbound',-1)">−</button>
+<input id="inbound" value="0">
+<button onclick="adj('inbound',1)">+</button>
+</div>
+</div>
 
-      <div class="panel">
-        <h3>Outbound Calls (Auto)</h3>
-        <div class="controls">
-          <button onclick="adjManualOutbound(-1)">−</button>
-          <input id="outbound" value="0" readonly>
-          <button onclick="adjManualOutbound(1)">+</button>
-        </div>
-      </div>
+<div class="panel">
+<h3>Outbound Calls (Auto)</h3>
+<div class="controls">
+<button onclick="adjManualOutbound(-1)">−</button>
+<input id="outbound" value="0" readonly>
+<button onclick="adjManualOutbound(1)">+</button>
+</div>
+</div>
 
-      <div class="panel">
-        <h3>Live Chat</h3>
-        <div class="controls">
-          <button onclick="adj('chat',-1)">−</button>
-          <input id="chat" value="0">
-          <button onclick="adj('chat',1)">+</button>
-        </div>
-      </div>
-    </div>
+<div class="panel">
+<h3>Live Chat</h3>
+<div class="controls">
+<button onclick="adj('chat',-1)">−</button>
+<input id="chat" value="0">
+<button onclick="adj('chat',1)">+</button>
+</div>
+</div>
+</div>
 
-    <!-- MIDDLE -->
-    <div>
+<div>
+<div class="panel">
+<h3>Allocated Work</h3>
+<div class="grid">
 
-      <!-- ALLOCATED WORK -->
-      <div class="panel">
-        <h3>Allocated Work</h3>
-        <div class="grid">
+<div class="item">
+<label>A2A</label>
+<div class="controls">
+<button onclick="adj('a2a',-1)">−</button>
+<input id="a2a" value="0">
+<button onclick="adj('a2a',1)">+</button>
+</div>
+</div>
 
-          <div class="item">
-            <label>A2A</label>
-            <div class="controls">
-              <button onclick="adj('a2a',-1)">−</button>
-              <input id="a2a" value="0">
-              <button onclick="adj('a2a',1)">+</button>
-            </div>
-          </div>
+<div class="item">
+<label>Unverified</label>
+<div class="controls">
+<button onclick="adj('unverified',-1)">−</button>
+<input id="unverified" value="0">
+<button onclick="adj('unverified',1)">+</button>
+</div>
+</div>
 
-          <div class="item">
-            <label>Unverified</label>
-            <div class="controls">
-              <button onclick="adj('unverified',-1)">−</button>
-              <input id="unverified" value="0">
-              <button onclick="adj('unverified',1)">+</button>
-            </div>
-          </div>
+<div class="item">
+<label>Emails</label>
+<div class="controls">
+<button onclick="adj('emails',-1)">−</button>
+<input id="emails" value="0">
+<button onclick="adj('emails',1)">+</button>
+</div>
+</div>
 
-          <div class="item">
-            <label>Emails</label>
-            <div class="controls">
-              <button onclick="adj('emails',-1)">−</button>
-              <input id="emails" value="0">
-              <button onclick="adj('emails',1)">+</button>
-            </div>
-          </div>
+<div class="item">
+<label>INC/C Calling</label>
+<div class="controls">
+<button onclick="adjCalling('inccalling',-1)">−</button>
+<input id="inccalling" value="0">
+<button onclick="adjCalling('inccalling',1)">+</button>
+</div>
+</div>
 
-          <div class="item">
-            <label>INC/C Calling</label>
-            <div class="controls">
-              <button onclick="adjCalling('inccalling',-1)">−</button>
-              <input id="inccalling" value="0">
-              <button onclick="adjCalling('inccalling',1)">+</button>
-            </div>
-          </div>
+<div class="item">
+<label>Question Calling</label>
+<div class="controls">
+<button onclick="adjCalling('questioncalling',-1)">−</button>
+<input id="questioncalling" value="0">
+<button onclick="adjCalling('questioncalling',1)">+</button>
+</div>
+</div>
 
-          <div class="item">
-            <label>Question Calling</label>
-            <div class="controls">
-              <button onclick="adjCalling('questioncalling',-1)">−</button>
-              <input id="questioncalling" value="0">
-              <button onclick="adjCalling('questioncalling',1)">+</button>
-            </div>
-          </div>
+<div class="item">
+<label>A2A Calling</label>
+<div class="controls">
+<button onclick="adjCalling('a2acalling',-1)">−</button>
+<input id="a2acalling" value="0">
+<button onclick="adjCalling('a2acalling',1)">+</button>
+</div>
+</div>
 
-          <div class="item">
-            <label>A2A Calling</label>
-            <div class="controls">
-              <button onclick="adjCalling('a2acalling',-1)">−</button>
-              <input id="a2acalling" value="0">
-              <button onclick="adjCalling('a2acalling',1)">+</button>
-            </div>
-          </div>
+</div>
+</div>
 
-        </div>
-      </div>
+<div class="panel">
+<h3>Delinks & Cancellations</h3>
+<div class="grid">
+<div class="item">
+<label>Delinks</label>
+<div class="controls">
+<button onclick="adj('delink',-1)">−</button>
+<input id="delink" value="0">
+<button onclick="adj('delink',1)">+</button>
+</div>
+</div>
 
-      <!-- DELINKS -->
-      <div class="panel">
-        <h3>Delinks & Cancellations</h3>
-        <div class="grid">
-          <div class="item">
-            <label>Delinks</label>
-            <div class="controls">
-              <button onclick="adj('delink',-1)">−</button>
-              <input id="delink" value="0">
-              <button onclick="adj('delink',1)">+</button>
-            </div>
-          </div>
+<div class="item">
+<label>Cancellations</label>
+<div class="controls">
+<button onclick="adj('cancel',-1)">−</button>
+<input id="cancel" value="0">
+<button onclick="adj('cancel',1)">+</button>
+</div>
+</div>
+</div>
+</div>
 
-          <div class="item">
-            <label>Cancellations</label>
-            <div class="controls">
-              <button onclick="adj('cancel',-1)">−</button>
-              <input id="cancel" value="0">
-              <button onclick="adj('cancel',1)">+</button>
-            </div>
-          </div>
-        </div>
-      </div>
+<div class="submit">
+<button onclick="submitDay()">Submit & Finish Day</button>
+</div>
 
-      <div class="submit">
-        <button onclick="submitDay()">Submit & Finish Day</button>
-      </div>
-    </div>
+</div>
 
-    <!-- RIGHT -->
-    <div>
-      <div class="panel">
-        <h3>Quick Contacts</h3>
-        <strong>My Refund</strong><br>
-        0800 80 89 89<br>
-        info@myrefund.co.nz<br>
-        myrefund.co.nz<br><br>
-        <strong>IRD</strong><br>
-        ird.govt.nz<br>
-        0800 227 774
-      </div>
-    </div>
+<div>
+<div class="panel">
+<h3>Quick Contacts</h3>
+<strong>My Refund</strong><br>
+0800 80 89 89<br>
+info@myrefund.co.nz<br>
+myrefund.co.nz
+</div>
+</div>
 
-  </div>
+</div>
 </div>
 </div>
 
 <script>
-/* === YOUR ORIGINAL JS (UNCHANGED) === */
 document.addEventListener("DOMContentLoaded", function(){
 
+const WEB_APP_URL="https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
 const TZ="Pacific/Auckland";
 const name=localStorage.getItem("currentStaff")||"CSR";
 const todayISO=new Date().toLocaleDateString("en-CA",{timeZone:TZ});
@@ -363,89 +378,48 @@ function goHome(){window.location.href="index.html";}
 window.goHome=goHome;
 
 function tick(){
-  clock.textContent=
-  new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+clock.textContent=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 tick();setInterval(tick,1000);
 
-function saveState(){
-  const data={
-    submitted,
-    manualOutbound,
-    counters:{
-      inbound:inbound.value,
-      chat:chat.value,
-      outbound:outbound.value,
-      a2a:a2a.value,
-      unverified:unverified.value,
-      emails:emails.value,
-      inccalling:inccalling.value,
-      questioncalling:questioncalling.value,
-      a2acalling:a2acalling.value,
-      delink:delink.value,
-      cancel:cancel.value
-    }
-  };
-  localStorage.setItem(storageKey,JSON.stringify(data));
-}
+window.submitDay=async function(){
 
-function loadState(){
-  const saved=localStorage.getItem(storageKey);
-  if(!saved)return;
-  const d=JSON.parse(saved);
-  submitted=d.submitted||false;
-  manualOutbound=d.manualOutbound||0;
-  for(let k in d.counters){
-    if(document.getElementById(k)){
-      document.getElementById(k).value=d.counters[k];
-    }
-  }
-  if(submitted) lockPage();
-  updateOutbound();
-}
+if(submitted)return;
+if(!confirm("Submit & Finish Day? This cannot be edited."))return;
 
-function lockPage(){
-  submitted=true;
-  document.querySelectorAll("button").forEach(b=>{
-    if(!b.classList.contains("dashboard-btn")) b.disabled=true;
-  });
-}
+const btn=document.querySelector(".submit button");
+btn.classList.add("loading");
+btn.textContent="Submitting...";
+document.querySelector(".page").classList.add("submitting");
 
-window.adj=function(id,d){
-  if(submitted)return;
-  const el=document.getElementById(id);
-  let v=Number(el.value||0)+d;
-  if(v<0)v=0;
-  el.value=v;
-  saveState();
+const formData=new URLSearchParams();
+formData.append("action","submitCSR");
+formData.append("date",todayISO);
+formData.append("staff",name);
+formData.append("Inbound",inbound.value);
+formData.append("Outbound",outbound.value);
+formData.append("Chat",chat.value);
+formData.append("Emails",emails.value);
+formData.append("A2A",a2a.value);
+formData.append("Unverified",unverified.value);
+formData.append("INC_C_Calling",inccalling.value);
+formData.append("Question_Calling",questioncalling.value);
+formData.append("A2A_Calling",a2acalling.value);
+formData.append("Delinks",delink.value);
+formData.append("Cancellations",cancel.value);
+
+try{
+await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:formData});
+btn.textContent="Submitted ✓";
+setTimeout(()=>{window.location.href="index.html";},2000);
+}catch(err){
+btn.classList.remove("loading");
+btn.textContent="Submit & Finish Day";
+document.querySelector(".page").classList.remove("submitting");
+alert("Network error. Data not submitted.");
+}
 };
 
-window.adjManualOutbound=function(d){
-  if(submitted)return;
-  manualOutbound+=d;
-  if(manualOutbound<0)manualOutbound=0;
-  updateOutbound();
-  saveState();
-};
-
-window.adjCalling=function(id,d){
-  if(submitted)return;
-  const el=document.getElementById(id);
-  let v=Number(el.value||0)+d;
-  if(v<0)v=0;
-  el.value=v;
-  updateOutbound();
-  saveState();
-};
-
-function updateOutbound(){
-  const inc=Number(inccalling.value||0);
-  const q=Number(questioncalling.value||0);
-  const a2aCall=Number(a2acalling.value||0);
-  outbound.value=manualOutbound+inc+q+a2aCall;
-}
-
-loadState();
 });
 </script>
 
