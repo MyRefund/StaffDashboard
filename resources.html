@@ -210,18 +210,23 @@ async function loadResources() {
 }
 
 function parseFrontmatter(markdown) {
-  const match = markdown.match(/---([\s\S]*?)---/);
+  const frontmatterRegex = /^---\s*([\s\S]*?)\s*---/;
+  const match = markdown.match(frontmatterRegex);
+
   let frontmatter = {};
   let content = markdown;
 
   if (match) {
     const fmText = match[1];
-    content = markdown.replace(match[0], "");
+    content = markdown.replace(match[0], "").trim();
 
     fmText.split("\n").forEach(line => {
-      const [key, ...rest] = line.split(":");
-      if (!key) return;
-      frontmatter[key.trim()] = rest.join(":").trim();
+      const parts = line.split(":");
+      if (parts.length >= 2) {
+        const key = parts[0].trim();
+        const value = parts.slice(1).join(":").trim();
+        frontmatter[key] = value;
+      }
     });
   }
 
