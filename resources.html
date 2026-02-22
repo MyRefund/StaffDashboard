@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta http-equiv="Content-Language" content="en">
+<meta name="google" content="notranslate">
+
+<title>My Refund — Resources</title>
+
+<style>
+:root{
+  --g0:#094B35;
+  --text:#111827;
+  --radius:16px;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+}
+
+/* ===== HEADER ===== */
+.header{
+  background:var(--g0);
+  color:#fff;
+  padding:16px 24px;
+}
+
+.header-inner{
+  max-width:1300px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.brand img{
+  height:28px;
+}
+
+.brand-text{
+  display:flex;
+  flex-direction:column;
+  line-height:1.15;
+}
+
+.brand-text strong{
+  font-size:16px;
+  font-weight:900;
+}
+
+.brand-text span{
+  font-size:13px;
+  opacity:.9;
+  font-weight:700;
+}
+
+.menu{
+  display:flex;
+  gap:10px;
+}
+
+.menu button{
+  border-radius:999px;
+  padding:8px 16px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid #fff;
+  background:#fff;
+  color:var(--g0);
+  cursor:pointer;
+}
+
+/* ===== PAGE ===== */
+.page{
+  min-height:calc(100vh - 72px);
+  background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+
+/* ===== COLUMN ===== */
+.column{
+  padding:60px 60px;
+}
+
+.section-title{
+  font-size:20px;
+  font-weight:900;
+  color:var(--g0);
+  margin-bottom:20px;
+}
+
+/* ===== SEARCH ===== */
+.search-box{
+  background:#fff;
+  border-radius:14px;
+  padding:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.search-box input{
+  width:100%;
+  border:1px solid rgba(17,24,39,.15);
+  border-radius:12px;
+  padding:12px 14px;
+  font-weight:800;
+  font-size:14px;
+  outline:none;
+}
+
+.search-hint{
+  margin-top:10px;
+  font-size:12px;
+  font-weight:800;
+  color:rgba(17,24,39,.65);
+}
+
+/* ===== RESULTS (placeholder for now) ===== */
+.results{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.result-card{
+  background:#fff;
+  border-radius:14px;
+  padding:16px 18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.badge{
+  display:inline-block;
+  background:rgba(9,75,53,.10);
+  color:var(--g0);
+  font-weight:900;
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+}
+
+.result-card h3{
+  margin:10px 0 6px;
+  font-size:16px;
+  font-weight:900;
+  color:var(--g0);
+}
+
+.result-card p{
+  margin:0;
+  font-weight:800;
+  color:rgba(17,24,39,.8);
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1000px){
+  .page{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="My Refund">
+      <div class="brand-text">
+        <strong>Resources</strong>
+        <span>Procedures, guides, and how-to info</span>
+      </div>
+    </div>
+
+    <div class="menu">
+      <button onclick="goDashboard()">Dashboard</button>
+      <button onclick="goReports()">Reports</button>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- LEFT COLUMN: SEARCH -->
+  <div class="column">
+    <div class="section-title">Search</div>
+
+    <div class="search-box">
+      <input id="searchInput" type="text" placeholder="Search procedures..." autocomplete="off">
+      <div class="search-hint">Tip: try keywords like “IRD”, “amendment”, “refund delay”, “Jotform”.</div>
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN: RESULTS (placeholder for now) -->
+  <div class="column">
+    <div class="section-title">Results</div>
+
+    <div class="results" id="results">
+      <div class="result-card">
+        <span class="badge">Last Updated: 2026-02-23</span>
+        <h3>Example: IRD Amendment Process</h3>
+        <p>Placeholder card — next step will load real Markdown procedures.</p>
+      </div>
+
+      <div class="result-card">
+        <span class="badge">Last Updated: 2026-02-20</span>
+        <h3>Example: Refund Delay Script</h3>
+        <p>Placeholder card — next step will add live search + file loading.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* For later – safe placeholders */
+function goDashboard(){
+  window.location.href = "staff.html";
+}
+function goReports(){
+  window.location.href = "reports.html";
+}
+
+/* Placeholder search behaviour for now (we’ll wire to real content next) */
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  // No-op for now. We’ll implement real search in the next step.
+});
+</script>
+
+</body>
+</html>
