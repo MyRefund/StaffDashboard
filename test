@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Language" content="en">
+<meta name="google" content="notranslate">
+<title>My Refund — Processing Workspace</title>
+
+<style>
+/* === ALL YOUR ORIGINAL CSS UNCHANGED === */
+:root{
+  --g0:#094B35;
+  --g2:#ECFDF5;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --radius:16px;
+  --shadow:0 12px 32px rgba(0,0,0,.14);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+}
+.page{
+  min-height:100vh;
+  background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
+  transition:.2s ease;
+}
+.page.submitting{ opacity:.7; }
+
+/* HEADER */
+.header{
+  background:var(--g0);
+  color:#fff;
+  padding:14px 24px;
+}
+.header-inner{
+  max-width:1300px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.brand img{height:26px}
+.brand-text strong{font-size:15px;font-weight:900}
+.brand-text span{font-size:12px;opacity:.9;font-weight:700}
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.dashboard-btn{
+  border-radius:999px;
+  padding:8px 16px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid #fff;
+  background:transparent;
+  color:#fff;
+  cursor:pointer;
+}
+.clock{font-weight:900;font-size:14px}
+
+/* TABS */
+.tabs{
+  background:#fff;
+  padding:12px 24px;
+  display:flex;
+  gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.tab{
+  border-radius:999px;
+  padding:8px 16px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid var(--g0);
+  background:#fff;
+  color:var(--g0);
+  cursor:pointer;
+}
+.tab.active{background:var(--g0);color:#fff;}
+
+.wrap{
+  max-width:1300px;
+  margin:0 auto;
+  padding:36px 24px 60px;
+}
+
+.panel{
+  background:rgba(255,255,255,.96);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+  margin-bottom:20px;
+}
+.hidden{display:none;}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <img src="logo.png" alt="My Refund">
+        <div class="brand-text">
+          <strong id="staffNameLabel">Processing</strong>
+          <span>Daily Work Logger</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="dashboard-btn" onclick="goHome()">← Dashboard</button>
+        <div class="clock" id="clock"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('work', this)">Work Log</button>
+    <button class="tab" onclick="switchTab('resources', this)">Resources</button>
+    <button class="tab" onclick="openSheetTab(this)">Linking Sheet</button>
+  </div>
+
+  <div class="wrap">
+
+    <!-- WORK TAB -->
+    <div id="workTab">
+      <div class="panel">
+        <h3>Processing Output</h3>
+        <p>Your existing Work Log content remains here unchanged.</p>
+      </div>
+    </div>
+
+    <!-- RESOURCES TAB -->
+    <div id="resourcesTab" class="hidden">
+      <div class="panel">
+        <h3>Resources</h3>
+        <p>No resources added yet.</p>
+      </div>
+    </div>
+
+    <!-- NEW LINKING SHEET TAB -->
+    <div id="sheetTab" class="hidden">
+      <div class="panel">
+        <h3>Linking Sheet</h3>
+
+        <div style="margin-bottom:12px;">
+          <button class="dashboard-btn" 
+            style="border:1px solid var(--g0);color:var(--g0);background:#fff;"
+            onclick="window.open('https://docs.google.com/spreadsheets/d/1GeOWAY7O2Kgs_Uo1_WRE4n1vzPj7SgaNLXPZYGsjvng/edit?usp=sharing','_blank')">
+            Open Full Sheet ↗
+          </button>
+        </div>
+
+        <iframe
+          src="https://docs.google.com/spreadsheets/d/1GeOWAY7O2Kgs_Uo1_WRE4n1vzPj7SgaNLXPZYGsjvng/edit?rm=minimal&usp=sharing"
+          style="width:100%;height:80vh;border:none;border-radius:12px;"
+          allow="clipboard-read; clipboard-write">
+        </iframe>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* SIMPLE NAV */
+window.goHome = function(){ window.location.href="index.html"; };
+
+/* CLOCK */
+function tick(){
+  document.getElementById("clock").textContent =
+    new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+}
+tick(); setInterval(tick, 1000);
+
+/* ORIGINAL TAB SWITCH (unchanged logic) */
+window.switchTab = function(tab, btn){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("workTab").classList.toggle("hidden", tab !== "work");
+  document.getElementById("resourcesTab").classList.toggle("hidden", tab !== "resources");
+  document.getElementById("sheetTab").classList.add("hidden");
+};
+
+/* NEW SHEET TAB HANDLER */
+window.openSheetTab = function(btn){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  btn.classList.add("active");
+
+  document.getElementById("workTab").classList.add("hidden");
+  document.getElementById("resourcesTab").classList.add("hidden");
+  document.getElementById("sheetTab").classList.remove("hidden");
+};
+</script>
+
+</body>
+</html>
