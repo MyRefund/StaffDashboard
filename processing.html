@@ -68,16 +68,36 @@ body{
 }
 .clock{font-weight:900;font-size:14px}
 
-.top-update{
+/* TOP ACTION BUTTONS */
+.top-action{
   border-radius:999px;
-  padding:8px 16px;
+  padding:8px 14px;
   font-weight:900;
   font-size:13px;
-  border:none;
+  border:1px solid #fff;
   background:#fff;
   color:var(--g0);
   cursor:pointer;
+  position:relative;
 }
+.top-action.loading{
+  pointer-events:none;
+  opacity:.95;
+}
+.top-action.loading::after{
+  content:"";
+  position:absolute;
+  right:12px;
+  top:50%;
+  width:14px;
+  height:14px;
+  margin-top:-7px;
+  border:2px solid rgba(9,75,53,.25);
+  border-top:2px solid var(--g0);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 
 /* TABS */
 .tabs{
@@ -123,6 +143,16 @@ body{
   font-weight:900;
   color:var(--g0);
 }
+.fee-panel{border-top:6px solid var(--g0);}
+
+.banner{
+  background:#fff3cd;
+  border-left:6px solid #f0ad4e;
+  padding:12px 16px;
+  margin-bottom:20px;
+  font-weight:800;
+  border-radius:12px;
+}
 
 .grid{
   display:grid;
@@ -134,6 +164,11 @@ body{
   border:1px solid var(--border);
   border-radius:14px;
   padding:14px;
+}
+.item label{
+  display:block;
+  font-weight:900;
+  margin-bottom:8px;
 }
 .controls{
   display:flex;
@@ -182,20 +217,6 @@ input[type="text"]{
   width:100%;
 }
 
-.inline-check{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:10px;
-  padding:10px 12px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:#fff;
-  font-weight:900;
-  color:var(--muted);
-  font-size:13px;
-}
-
 .add-btn{
   margin-top:10px;
   padding:10px 16px;
@@ -207,6 +228,18 @@ input[type="text"]{
   cursor:pointer;
 }
 
+table{width:100%;border-collapse:collapse;}
+th,td{border-bottom:1px solid var(--border);padding:8px;font-size:13px;}
+th{color:var(--muted);font-weight:900;text-align:left;}
+td button{
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:8px;
+  padding:6px 8px;
+  cursor:pointer;
+  font-weight:900;
+}
+
 .total-box{
   background:var(--g2);
   border-radius:12px;
@@ -216,6 +249,7 @@ input[type="text"]{
   text-align:right;
 }
 
+/* SUBMIT BUTTON LOADING */
 .submit button{
   width:100%;
   border-radius:14px;
@@ -226,6 +260,60 @@ input[type="text"]{
   background:var(--g0);
   color:#fff;
   cursor:pointer;
+  position:relative;
+}
+.submit button.loading{
+  pointer-events:none;
+  opacity:.95;
+}
+.submit button.loading::after{
+  content:"";
+  position:absolute;
+  right:18px;
+  top:50%;
+  width:16px;
+  height:16px;
+  margin-top:-8px;
+  border:2px solid rgba(255,255,255,.5);
+  border-top:2px solid #fff;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+.collapsible-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
+  font-weight:900;
+}
+.hidden{display:none;}
+
+.inline-check{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:10px;
+  padding:10px 12px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#fff;
+}
+.inline-check span{
+  font-weight:900;
+  color:var(--muted);
+  font-size:13px;
+}
+.helper{
+  margin-top:10px;
+  color:var(--muted);
+  font-weight:800;
+  font-size:12px;
+  line-height:1.4;
+}
+
+@media(max-width:1100px){
+  .layout{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -233,209 +321,673 @@ input[type="text"]{
 <body>
 <div class="page">
 
-<div class="header">
-  <div class="header-inner">
-    <div class="brand">
-      <img src="logo.png">
-      <div class="brand-text">
-        <strong id="staffNameLabel">Processing</strong>
-        <span>Daily Work Logger</span>
+  <div class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <img src="logo.png" alt="My Refund">
+        <div class="brand-text">
+          <strong id="staffNameLabel">Processing</strong>
+          <span>Daily Work Logger</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="top-action" id="topUpdateBtn" onclick="updateDay()">Update</button>
+        <button class="dashboard-btn" onclick="goHome()">← Dashboard</button>
+        <div class="clock" id="clock"></div>
       </div>
     </div>
-    <div class="header-right">
-      <button class="top-update" onclick="updateDay()">Update</button>
-      <button class="dashboard-btn" onclick="goHome()">← Dashboard</button>
-      <div class="clock" id="clock"></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('work', this)">Work Log</button>
+    <button class="tab" onclick="switchTab('resources', this)">Resources</button>
+  </div>
+
+  <div class="wrap">
+
+    <div id="workTab">
+
+      <div id="warningBanner" class="banner hidden"></div>
+
+      <div style="margin-bottom:28px;">
+        <div style="font-size:24px;font-weight:900;color:var(--g0);">
+          Hello, <span id="helloName"></span>
+        </div>
+        <div style="margin-top:6px;font-size:13px;font-weight:800;color:var(--muted);">
+          <span id="todayDate"></span> • Division: Processing
+        </div>
+      </div>
+
+      <div class="layout">
+
+        <!-- LEFT -->
+        <div>
+
+          <div class="panel">
+            <h3>Processing Output</h3>
+            <div class="grid">
+
+              <div class="item">
+                <label>Filing</label>
+                <div class="controls">
+                  <button onclick="adj('filing',-1)">−</button>
+                  <input id="filing" value="0">
+                  <button onclick="adj('filing',1)">+</button>
+                </div>
+              </div>
+
+              <div class="item">
+                <label>Linking</label>
+                <div class="controls">
+                  <button onclick="adj('linking',-1)">−</button>
+                  <input id="linking" value="0">
+                  <button onclick="adj('linking',1)">+</button>
+                </div>
+              </div>
+
+              <div class="item">
+                <label>Linked Review</label>
+                <div class="controls">
+                  <button onclick="adj('linkedreview',-1)">−</button>
+                  <input id="linkedreview" value="0">
+                  <button onclick="adj('linkedreview',1)">+</button>
+                </div>
+              </div>
+
+              <div class="item">
+                <label>Inbox</label>
+                <div class="controls">
+                  <button onclick="adj('inbox',-1)">−</button>
+                  <input id="inbox" value="0">
+                  <button onclick="adj('inbox',1)">+</button>
+                </div>
+              </div>
+
+              <div class="item">
+                <label>Existing Review</label>
+                <div class="controls">
+                  <button onclick="adj('existingreview',-1)">−</button>
+                  <input id="existingreview" value="0">
+                  <button onclick="adj('existingreview',1)">+</button>
+                </div>
+              </div>
+
+              <div class="item">
+                <label>Processing Review</label>
+                <div class="controls">
+                  <button onclick="adj('processingreview',-1)">−</button>
+                  <input id="processingreview" value="0">
+                  <button onclick="adj('processingreview',1)">+</button>
+                </div>
+              </div>
+
+              <div class="item">
+                <label>Miscellaneous</label>
+                <div class="controls">
+                  <button onclick="adj('misc',-1)">−</button>
+                  <input id="misc" value="0">
+                  <button onclick="adj('misc',1)">+</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="panel fee-panel">
+            <h3>Return Fee Logging</h3>
+
+            <!-- ✅ RESTORED ALL FEE BUTTONS -->
+            <div class="button-grid">
+              <button class="type-btn" onclick="selectType(event,'ITA')">ITA</button>
+              <button class="type-btn" onclick="selectType(event,'IR3')">IR3</button>
+              <button class="type-btn" onclick="selectType(event,'REB')">REB</button>
+              <button class="type-btn" onclick="autoAdd('AA')">AA</button>
+              <button class="type-btn" onclick="autoAdd('R3P')">R3P</button>
+              <button class="type-btn" onclick="autoAdd('OP')">OP</button>
+            </div>
+
+            <div id="inputSection" class="hidden">
+              <input type="text" id="amountInput" placeholder="Refund Amount">
+
+              <!-- ✅ Back Year (ONLY ITA + IR3) -->
+              <label id="backYearLabel" class="hidden inline-check">
+                <input type="checkbox" id="backYear">
+                <span>Back Year</span>
+              </label>
+
+              <!-- ✅ Receipt assist (ONLY REB) -->
+              <label id="receiptLabel" class="hidden inline-check">
+                <input type="checkbox" id="receiptAssist">
+                <span>Receipt Assistance</span>
+              </label>
+
+              <div class="helper" id="feeHelper" style="display:none;"></div>
+
+              <button class="add-btn" onclick="addEntry()">Add</button>
+            </div>
+          </div>
+
+          <div class="panel fee-panel">
+            <div class="collapsible-header" onclick="toggleLog()">
+              <span>Today’s Fee Entries (<span id="entryCount">0</span> total · showing last 200)</span>
+              <span id="toggleIcon">▼</span>
+            </div>
+
+            <div id="logContainer" class="hidden">
+              <table>
+                <thead>
+                  <tr><th>Time</th><th>Type</th><th>Fee</th><th></th></tr>
+                </thead>
+                <tbody id="logTable"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel fee-panel">
+            <div class="total-box">
+              Total Fees Today: $<span id="totalFees">0.00</span>
+            </div>
+          </div>
+
+          <div class="submit">
+            <button id="submitBtn" onclick="submitDay()">Submit & Finish Day</button>
+          </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div>
+          <div class="panel">
+            <h3>Quick Contacts</h3>
+            <strong>My Refund</strong><br>
+            0800 80 89 89<br>
+            info@myrefund.co.nz<br>
+            myrefund.co.nz<br><br>
+            <strong>IRD</strong><br>
+            ird.govt.nz<br>
+            0800 227 774
+          </div>
+        </div>
+
+      </div>
     </div>
+
+    <div id="resourcesTab" class="hidden">
+      <div class="panel">
+        <h3>Resources</h3>
+        <p>No resources added yet.</p>
+      </div>
+    </div>
+
   </div>
-</div>
-
-<div class="tabs">
-  <button class="tab active" onclick="switchTab('work', this)">Work Log</button>
-  <button class="tab" onclick="switchTab('resources', this)">Resources</button>
-</div>
-
-<div class="wrap">
-
-<div id="workTab">
-
-<div style="margin-bottom:28px;">
-  <div style="font-size:24px;font-weight:900;color:var(--g0);">
-    Hello, <span id="helloName"></span>
-  </div>
-</div>
-
-<div class="layout">
-
-<div>
-
-<div class="panel">
-<h3>Return Fee Logging</h3>
-
-<div class="button-grid">
-<button class="type-btn" onclick="selectType(event,'ITA')">ITA</button>
-<button class="type-btn" onclick="selectType(event,'IR3')">IR3</button>
-<button class="type-btn" onclick="selectType(event,'REB')">REB</button>
-<button class="type-btn" onclick="autoAdd('AA')">AA</button>
-<button class="type-btn" onclick="autoAdd('R3P')">R3P</button>
-<button class="type-btn" onclick="autoAdd('OP')">OP</button>
-</div>
-
-<div id="inputSection" class="hidden">
-<input type="text" id="amountInput" placeholder="Refund Amount">
-
-<label id="backYearLabel" class="hidden inline-check">
-<input type="checkbox" id="backYear">
-<span>Back Year</span>
-</label>
-
-<label id="receiptLabel" class="hidden inline-check">
-<input type="checkbox" id="receiptAssist">
-<span>Receipt Assistance</span>
-</label>
-
-<button class="add-btn" onclick="addEntry()">Add</button>
-</div>
-
-<div class="total-box">
-Total Fees Today: $<span id="totalFees">0.00</span>
-</div>
-
-<div class="submit">
-<button onclick="submitDay()">Submit & Finish Day</button>
-</div>
-
-</div>
-
-</div>
-
-<div>
-<div class="panel">
-<h3>Quick Contacts</h3>
-<strong>My Refund</strong><br>
-0800 80 89 89<br>
-info@myrefund.co.nz
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded",function(){
+document.addEventListener("DOMContentLoaded", function(){
 
-const WEB_APP_URL="YOUR_WEB_APP_URL";
-const name=localStorage.getItem("currentStaff")||"Processing";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
+  const TZ = "Pacific/Auckland";
+  const DIVISION = "Processing";
 
-document.getElementById("staffNameLabel").textContent=name;
-document.getElementById("helloName").textContent=name;
+  const name = localStorage.getItem("currentStaff") || "Processing";
+  const todayISO = new Date().toLocaleDateString("en-CA", { timeZone: TZ });
+  const storageKey = `processing_${name}_${todayISO}`;
 
-setInterval(()=>{clock.textContent=new Date().toLocaleTimeString("en-NZ")},1000);
+  let entries = [];
+  let submitted = false;
+  let currentType = null;
 
-let entries=[];
-let currentType=null;
+  /* NAV */
+  window.goHome = function(){ window.location.href="index.html"; };
 
-window.goHome=function(){window.location.href="index.html"};
+  /* HEADER INIT */
+  document.getElementById("staffNameLabel").textContent = name;
+  document.getElementById("helloName").textContent = name;
+  document.getElementById("todayDate").textContent =
+    new Date().toLocaleDateString("en-NZ", { weekday:"long", day:"numeric", month:"long", year:"numeric", timeZone: TZ });
 
-function clean(v){return parseFloat(String(v||"").replace(/[$, ]/g,''))||0}
+  /* CLOCK */
+  function tick(){
+    document.getElementById("clock").textContent =
+      new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+  }
+  tick(); setInterval(tick, 1000);
 
-function calculateFee(type,R,receiptAssist,backYear){
+  /* ENTER KEY ADDS ENTRY ✅ */
+  const amountInput = document.getElementById("amountInput");
+  amountInput.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+      e.preventDefault();
+      window.addEntry();
+    }
+  });
 
-if(type==="ITA"){
-if(R<39.68)return R;
-let base=(R*0.11)+5;
-if(!backYear)base+=29.5;
-let fee=base*1.15;
-return fee>345?345:fee;
-}
+  /* SAVE / LOAD */
+  function saveState(){
+    localStorage.setItem(storageKey, JSON.stringify({
+      entries,
+      submitted,
+      counters:{
+        filing: filing.value,
+        linking: linking.value,
+        linkedreview: linkedreview.value,
+        inbox: inbox.value,
+        existingreview: existingreview.value,
+        processingreview: processingreview.value,
+        misc: misc.value
+      }
+    }));
+  }
 
-if(type==="IR3"){
-if(backYear){
-if(R<23)return R;
-let base=(R*0.11)+20;
-let fee=base*1.15;
-return fee>402.5?402.5:fee;
-}
-if(R<56.93)return R;
-let base=(R*0.11)+20+29.5;
-let fee=base*1.15;
-return fee>402.5?402.5:fee;
-}
+  function loadState(){
+    const saved = localStorage.getItem(storageKey);
+    if(saved){
+      const state = JSON.parse(saved);
+      entries = state.entries || [];
+      submitted = state.submitted || false;
 
-if(type==="REB"){
-let tier=R<500?45.99:(R<2000?68.99:91.99);
-if(receiptAssist)tier+=6.89;
-return R<tier?R:tier;
-}
+      if(state.counters){
+        for(let k in state.counters){
+          const el = document.getElementById(k);
+          if(el) el.value = state.counters[k];
+        }
+      }
 
-return 0;
-}
+      if(submitted) lockPage();
+    }
+    renderLog();
+    updateTotal();
+    checkYesterday();
+  }
 
-window.selectType=function(e,type){
-currentType=type;
-document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
-e.target.classList.add("active");
-inputSection.classList.remove("hidden");
+  /* YESTERDAY CHECK */
+  function checkYesterday(){
+    const yesterdayISO = new Date(Date.now() - 86400000).toLocaleDateString("en-CA", { timeZone: TZ });
+    const yesterdayKey = `processing_${name}_${yesterdayISO}`;
+    const old = localStorage.getItem(yesterdayKey);
+    if(old){
+      const data = JSON.parse(old);
+      if(!data.submitted){
+        const banner = document.getElementById("warningBanner");
+        banner.textContent = "Yesterday was not submitted. Please notify Admin if required.";
+        banner.classList.remove("hidden");
+      }
+    }
+  }
 
-backYearLabel.classList.add("hidden");
-receiptLabel.classList.add("hidden");
-backYear.checked=false;
-receiptAssist.checked=false;
+  /* LOCK */
+  function lockPage(){
+    submitted = true;
+    document.querySelectorAll("button").forEach(b=>{
+      if(!b.classList.contains("tab") && !b.classList.contains("dashboard-btn")) b.disabled = true;
+    });
+  }
 
-if(type==="ITA"||type==="IR3"){
-backYearLabel.classList.remove("hidden");
-}
+  /* COUNTERS */
+  window.adj = function(id, d){
+    if(submitted) return;
+    const el = document.getElementById(id);
+    let v = Math.max(0, Number(el.value||0) + d);
+    el.value = v;
+    saveState();
+  };
 
-if(type==="REB"){
-receiptLabel.classList.remove("hidden");
-}
-};
+  /* TABS */
+  window.switchTab = function(tab, btn){
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("workTab").classList.toggle("hidden", tab !== "work");
+    document.getElementById("resourcesTab").classList.toggle("hidden", tab !== "resources");
+  };
 
-amountInput.addEventListener("keydown",function(e){
-if(e.key==="Enter"){
-e.preventDefault();
-addEntry();
-}
-});
+  /* FEE LOGIC */
+  function cleanAmount(v){
+    return parseFloat(String(v||"").replace(/[$, ]/g,'')) || 0;
+  }
 
-window.autoAdd=function(type){
-entries.push({type:type,amount:null,fee:39.10});
-updateTotal();
-};
+  // Fees include GST.
+  // Filing fee ALWAYS included:
+  //   ITA filing = $5 (pre-GST) -> included inside calc base
+  //   IR3 filing = $20 (pre-GST) -> included inside calc base
+  // Service component removed for back year: remove $29.50 (pre-GST) only.
+  // Minimum thresholds:
+  //   ITA: if refund < 39.68 fee=refund
+  //   IR3: if refund < 56.93 fee=refund
+  //   IR3 back year: if refund < 23 fee=refund
+  // Caps:
+  //   ITA max 345
+  //   IR3 max 402.5
+  function calculateFee(type, R, receiptAssistChecked, backYearChecked){
 
-window.addEntry=function(){
-if(!currentType)return;
-let R=clean(amountInput.value);
-if(!R)return;
-let fee=calculateFee(currentType,R,receiptAssist.checked,backYear.checked);
-entries.push({type:currentType,amount:R,fee:fee});
-amountInput.value="";
-updateTotal();
-};
+    if(type==="ITA"){
+      if(R < 39.68) return R;
 
-function updateTotal(){
-let total=entries.reduce((s,e)=>s+e.fee,0);
-totalFees.textContent=total.toFixed(2);
-}
+      let base = (R * 0.11) + 5;        // filing fee always
+      if(!backYearChecked) base += 29.5; // service component only if not back year
 
-window.updateDay=function(){
-let fd=new URLSearchParams();
-fd.append("action","updateProcessing");
-fd.append("staff",name);
-fd.append("entries",JSON.stringify(entries));
-fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:fd});
-};
+      let fee = base * 1.15;
+      return fee > 345 ? 345 : fee;
+    }
 
-window.submitDay=function(){
-let fd=new URLSearchParams();
-fd.append("action","submitProcessing");
-fd.append("staff",name);
-fd.append("entries",JSON.stringify(entries));
-fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:fd});
-setTimeout(()=>window.location.href="index.html",2000);
-};
+    if(type==="IR3"){
+      if(backYearChecked){
+        if(R < 23) return R;
+
+        let base = (R * 0.11) + 20;     // filing fee always
+        // no +29.5 for back year
+        let fee = base * 1.15;
+        return fee > 402.5 ? 402.5 : fee;
+      }
+
+      if(R < 56.93) return R;
+
+      let base = (R * 0.11) + 20 + 29.5; // filing + service
+      let fee = base * 1.15;
+      return fee > 402.5 ? 402.5 : fee;
+    }
+
+    if(type==="REB"){
+      let tier = R < 500 ? 45.99 : (R < 2000 ? 68.99 : 91.99);
+      if(receiptAssistChecked) tier += 6.89;
+      return R < tier ? R : tier;
+    }
+
+    return 0;
+  }
+
+  function money2(n){ return Number(n||0).toFixed(2); }
+
+  function updateHelper(){
+    const helper = document.getElementById("feeHelper");
+    if(!currentType){
+      helper.style.display="none";
+      helper.textContent="";
+      return;
+    }
+
+    const R = cleanAmount(amountInput.value);
+    if(!R){
+      helper.style.display="none";
+      helper.textContent="";
+      return;
+    }
+
+    const receiptAssistChecked = document.getElementById("receiptAssist").checked;
+    const backYearChecked = document.getElementById("backYear").checked;
+
+    const fee = calculateFee(currentType, R, receiptAssistChecked, backYearChecked);
+    helper.style.display="block";
+    helper.textContent = `Estimated fee: $${money2(fee)} (incl. GST)`;
+  }
+
+  /* Collapsible log */
+  window.toggleLog = function(){
+    const logContainer = document.getElementById("logContainer");
+    const toggleIcon = document.getElementById("toggleIcon");
+    logContainer.classList.toggle("hidden");
+    toggleIcon.textContent = logContainer.classList.contains("hidden") ? "▼" : "▲";
+  };
+
+  /* Type selection */
+  function resetTypeToggles(){
+    backYearLabel.classList.add("hidden");
+    backYear.checked = false;
+
+    receiptLabel.classList.add("hidden");
+    receiptAssist.checked = false;
+  }
+
+  window.selectType = function(e, type){
+    if(submitted) return;
+
+    currentType = type;
+
+    document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
+    e.target.classList.add("active");
+
+    inputSection.classList.remove("hidden");
+
+    resetTypeToggles();
+
+    // Back Year only ITA + IR3
+    if(type === "ITA" || type === "IR3"){
+      backYearLabel.classList.remove("hidden");
+    }
+
+    // Receipt assistance only REB
+    if(type === "REB"){
+      receiptLabel.classList.remove("hidden");
+    }
+
+    updateHelper();
+    amountInput.focus();
+  };
+
+  /* Fixed fee types */
+  window.autoAdd = function(type){
+    if(submitted) return;
+
+    // fixed fee types (AA, R3P, OP): $39.10 (incl. GST)
+    const fee = 39.10;
+
+    entries.push({
+      type,
+      amount: null,
+      fee,
+      receiptAssist: false,
+      backYear: false,
+      time: new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})
+    });
+
+    renderLog();
+    updateTotal();
+    saveState();
+  };
+
+  window.addEntry = function(){
+    if(submitted || !currentType) return;
+
+    const receiptAssistChecked = receiptAssist.checked;
+    const backYearChecked = backYear.checked;
+
+    const R = cleanAmount(amountInput.value);
+    if(!R) return;
+
+    const fee = calculateFee(currentType, R, receiptAssistChecked, backYearChecked);
+
+    entries.push({
+      type: currentType,
+      amount: R,
+      fee: fee,
+      receiptAssist: (currentType==="REB") ? receiptAssistChecked : false,
+      backYear: (currentType==="ITA" || currentType==="IR3") ? backYearChecked : false,
+      time: new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})
+    });
+
+    // Original behaviour: filing count increments for ITA/IR3/REB
+    if(["ITA","IR3","REB"].includes(currentType)) window.adj("filing", 1);
+
+    amountInput.value = "";
+    updateHelper();
+    renderLog();
+    updateTotal();
+    saveState();
+    amountInput.focus();
+  };
+
+  window.editEntry = function(index){
+    if(submitted) return;
+
+    const entry = entries[index];
+    if(!entry) return;
+
+    if(!["ITA","IR3","REB"].includes(entry.type)){
+      alert("Only ITA / IR3 / REB entries can be edited.");
+      return;
+    }
+
+    const v = prompt("Enter new refund amount:");
+    if(v === null) return;
+
+    const R = cleanAmount(v);
+    if(!R) return;
+
+    const fee = calculateFee(entry.type, R, entry.receiptAssist === true, entry.backYear === true);
+
+    entry.amount = R;
+    entry.fee = fee;
+
+    renderLog();
+    updateTotal();
+    saveState();
+  };
+
+  window.deleteEntry = function(index){
+    if(submitted) return;
+
+    const entry = entries[index];
+    if(!entry) return;
+
+    // reverse filing count if ITA/IR3/REB
+    if(["ITA","IR3","REB"].includes(entry.type)) window.adj("filing", -1);
+
+    entries.splice(index, 1);
+    renderLog();
+    updateTotal();
+    saveState();
+  };
+
+  function renderLog(){
+    const tbody = document.getElementById("logTable");
+    tbody.innerHTML = "";
+
+    const visible = entries.slice(-200);
+    visible.forEach((e, i)=>{
+      const realIndex = entries.length - visible.length + i;
+
+      const typeLabel =
+        (e.type === "IR3" && e.backYear === true) ? "IR3 (Back Year)" :
+        (e.type === "ITA" && e.backYear === true) ? "ITA (Back Year)" :
+        e.type;
+
+      const extra =
+        (e.type === "REB" && e.receiptAssist) ? " + RA" : "";
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${e.time}</td>
+        <td>${typeLabel}${extra}</td>
+        <td>$${Number(e.fee||0).toFixed(2)}</td>
+        <td>${!submitted ? `
+          <button onclick="editEntry(${realIndex})" title="Edit">✎</button>
+          <button onclick="deleteEntry(${realIndex})" title="Delete">✕</button>
+        ` : ""}</td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    document.getElementById("entryCount").textContent = entries.length;
+  }
+
+  function updateTotal(){
+    const total = entries.reduce((s,e)=> s + Number(e.fee||0), 0);
+    document.getElementById("totalFees").textContent = total.toFixed(2);
+  }
+
+  /* INPUT LISTENERS (helper estimate) */
+  amountInput.addEventListener("input", updateHelper);
+  receiptAssist.addEventListener("change", updateHelper);
+  backYear.addEventListener("change", updateHelper);
+
+  /* UPDATED SUBMIT UX */
+  window.submitDay = async function(){
+    if(submitted) return;
+    if(!confirm("Submit day? This cannot be edited.")) return;
+
+    const btn = document.getElementById("submitBtn");
+    btn.classList.add("loading");
+    btn.textContent = "Submitting...";
+    document.querySelector(".page").classList.add("submitting");
+
+    const formData = new URLSearchParams();
+    formData.append("action","submitProcessing");
+    formData.append("date",todayISO);
+    formData.append("staff",name);
+    formData.append("division",DIVISION);
+
+    formData.append("Filing",filing.value);
+    formData.append("Linking",linking.value);
+    formData.append("LinkedReview",linkedreview.value);
+    formData.append("Inbox",inbox.value);
+    formData.append("ExistingReview",existingreview.value);
+    formData.append("ProcessingReview",processingreview.value);
+    formData.append("Miscellaneous",misc.value);
+
+    formData.append("TotalFees",document.getElementById("totalFees").textContent);
+    formData.append("feeEntries", JSON.stringify(entries));
+
+    try{
+      await fetch(WEB_APP_URL, { method:"POST", mode:"no-cors", body: formData });
+
+      lockPage();
+      saveState();
+
+      btn.classList.remove("loading");
+      btn.textContent = "Submitted ✓";
+
+      setTimeout(()=>{ window.location.href="index.html"; }, 2000);
+
+    }catch(err){
+      btn.classList.remove("loading");
+      btn.textContent = "Submit & Finish Day";
+      document.querySelector(".page").classList.remove("submitting");
+      alert("Network error. Data not submitted.");
+    }
+  };
+
+  /* ✅ UPDATE BUTTON (TOP) */
+  window.updateDay = async function(){
+    if(submitted) return;
+
+    const btn = document.getElementById("topUpdateBtn");
+    btn.classList.add("loading");
+    btn.textContent = "Updating...";
+
+    const formData = new URLSearchParams();
+    formData.append("action","updateProcessing");
+    formData.append("date",todayISO);
+    formData.append("staff",name);
+    formData.append("division",DIVISION);
+
+    formData.append("Filing",filing.value);
+    formData.append("Linking",linking.value);
+    formData.append("LinkedReview",linkedreview.value);
+    formData.append("Inbox",inbox.value);
+    formData.append("ExistingReview",existingreview.value);
+    formData.append("ProcessingReview",processingreview.value);
+    formData.append("Miscellaneous",misc.value);
+
+    formData.append("TotalFees",document.getElementById("totalFees").textContent);
+    formData.append("feeEntries", JSON.stringify(entries));
+    formData.append("submitted","false");
+
+    try{
+      await fetch(WEB_APP_URL, { method:"POST", mode:"no-cors", body: formData });
+
+      btn.classList.remove("loading");
+      btn.textContent = "Updated ✓";
+      setTimeout(()=>{ btn.textContent="Update"; }, 1500);
+
+      saveState();
+
+    }catch(err){
+      btn.classList.remove("loading");
+      btn.textContent = "Update";
+      alert("Network error. Data not updated.");
+    }
+  };
+
+  loadState();
 
 });
 </script>
