@@ -210,7 +210,10 @@ async function loadResources() {
 }
 
 function parseFrontmatter(markdown) {
-  const frontmatterRegex = /^---\s*([\s\S]*?)\s*---/;
+  // Remove possible BOM character
+  markdown = markdown.replace(/^\uFEFF/, "");
+
+  const frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
   const match = markdown.match(frontmatterRegex);
 
   let frontmatter = {};
@@ -230,6 +233,12 @@ function parseFrontmatter(markdown) {
     });
   }
 
+  return {
+    title: frontmatter.title || "Untitled",
+    lastUpdated: frontmatter.lastUpdated || "",
+    content
+  };
+}
   return {
     title: frontmatter.title || "Untitled",
     lastUpdated: frontmatter.lastUpdated || "",
