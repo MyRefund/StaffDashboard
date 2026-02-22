@@ -92,7 +92,6 @@ body{
   grid-template-columns:1fr 1fr;
 }
 
-/* ===== COLUMN ===== */
 .column{
   padding:60px 60px;
 }
@@ -210,7 +209,7 @@ async function loadResources() {
 }
 
 function parseFrontmatter(markdown) {
-  // Remove possible BOM character
+  // Remove possible invisible BOM
   markdown = markdown.replace(/^\uFEFF/, "");
 
   const frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
@@ -233,12 +232,6 @@ function parseFrontmatter(markdown) {
     });
   }
 
-  return {
-    title: frontmatter.title || "Untitled",
-    lastUpdated: frontmatter.lastUpdated || "",
-    content
-  };
-}
   return {
     title: frontmatter.title || "Untitled",
     lastUpdated: frontmatter.lastUpdated || "",
