@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
@@ -9,6 +8,8 @@
 <meta name="google" content="notranslate">
 
 <title>My Refund — Resources</title>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <style>
 :root{
@@ -103,42 +104,17 @@ body{
   margin-bottom:20px;
 }
 
-/* ===== SEARCH ===== */
-.search-box{
-  background:#fff;
-  border-radius:14px;
-  padding:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
-
-.search-box input{
-  width:100%;
-  border:1px solid rgba(17,24,39,.15);
-  border-radius:12px;
-  padding:12px 14px;
-  font-weight:800;
-  font-size:14px;
-  outline:none;
-}
-
-.search-hint{
-  margin-top:10px;
-  font-size:12px;
-  font-weight:800;
-  color:rgba(17,24,39,.65);
-}
-
-/* ===== RESULTS (placeholder for now) ===== */
+/* ===== RESULTS ===== */
 .results{
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap:20px;
 }
 
 .result-card{
   background:#fff;
   border-radius:14px;
-  padding:16px 18px;
+  padding:20px;
   box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
@@ -150,19 +126,24 @@ body{
   font-size:12px;
   padding:6px 10px;
   border-radius:999px;
+  margin-bottom:10px;
 }
 
 .result-card h3{
-  margin:10px 0 6px;
-  font-size:16px;
+  margin:6px 0 14px;
+  font-size:18px;
   font-weight:900;
   color:var(--g0);
 }
 
-.result-card p{
-  margin:0;
-  font-weight:800;
-  color:rgba(17,24,39,.8);
+.result-card a{
+  font-weight:900;
+  color:var(--g0);
+  text-decoration:none;
+}
+
+.result-card a:hover{
+  text-decoration:underline;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -182,7 +163,7 @@ body{
       <img src="logo.png" alt="My Refund">
       <div class="brand-text">
         <strong>Resources</strong>
-        <span>Procedures, guides, and how-to info</span>
+        <span>Procedures & Operational Guides</span>
       </div>
     </div>
 
@@ -195,50 +176,100 @@ body{
 
 <div class="page">
 
-  <!-- LEFT COLUMN: SEARCH -->
   <div class="column">
-    <div class="section-title">Search</div>
+    <div class="section-title">Resources</div>
 
-    <div class="search-box">
-      <input id="searchInput" type="text" placeholder="Search procedures..." autocomplete="off">
-      <div class="search-hint">Tip: try keywords like “IRD”, “amendment”, “refund delay”, “Jotform”.</div>
+    <div class="results" id="results">
+      Loading procedures...
     </div>
   </div>
 
-  <!-- RIGHT COLUMN: RESULTS (placeholder for now) -->
   <div class="column">
-    <div class="section-title">Results</div>
-
-    <div class="results" id="results">
-      <div class="result-card">
-        <span class="badge">Last Updated: 2026-02-23</span>
-        <h3>Example: IRD Amendment Process</h3>
-        <p>Placeholder card — next step will load real Markdown procedures.</p>
-      </div>
-
-      <div class="result-card">
-        <span class="badge">Last Updated: 2026-02-20</span>
-        <h3>Example: Refund Delay Script</h3>
-        <p>Placeholder card — next step will add live search + file loading.</p>
-      </div>
-    </div>
+    <!-- Reserved for future search panel -->
   </div>
 
 </div>
 
 <script>
-/* For later – safe placeholders */
+const resourceFiles = [
+  "ird-amendment-process.md"
+];
+
+const resultsContainer = document.getElementById("results");
+
+async function loadResources() {
+  resultsContainer.innerHTML = "";
+
+  for (let file of resourceFiles) {
+    const response = await fetch("resources/" + file);
+    const text = await response.text();
+
+    const parsed = parseFrontmatter(text);
+    renderResource(parsed, file);
+  }
+}
+
+function parseFrontmatter(markdown) {
+  const match = markdown.match(/---([\s\S]*?)---/);
+  let frontmatter = {};
+  let content = markdown;
+
+  if (match) {
+    const fmText = match[1];
+    content = markdown.replace(match[0], "");
+
+    fmText.split("\n").forEach(line => {
+      const [key, ...rest] = line.split(":");
+      if (!key) return;
+      frontmatter[key.trim()] = rest.join(":").trim();
+    });
+  }
+
+  return {
+    title: frontmatter.title || "Untitled",
+    lastUpdated: frontmatter.lastUpdated || "",
+    content
+  };
+}
+
+function renderResource(data, filename) {
+  const card = document.createElement("div");
+  card.className = "result-card";
+
+  const badge = document.createElement("span");
+  badge.className = "badge";
+  badge.textContent = "Last Updated: " + data.lastUpdated;
+
+  const title = document.createElement("h3");
+  title.textContent = data.title;
+
+  const body = document.createElement("div");
+  body.innerHTML = marked.parse(data.content);
+
+  const historyLink = document.createElement("p");
+  historyLink.innerHTML = `
+    <a href="https://github.com/YOUR-USERNAME/YOUR-REPO/commits/main/resources/${filename}" target="_blank">
+      View Version History →
+    </a>
+  `;
+
+  card.appendChild(badge);
+  card.appendChild(title);
+  card.appendChild(body);
+  card.appendChild(historyLink);
+
+  resultsContainer.appendChild(card);
+}
+
 function goDashboard(){
   window.location.href = "staff.html";
 }
+
 function goReports(){
   window.location.href = "reports.html";
 }
 
-/* Placeholder search behaviour for now (we’ll wire to real content next) */
-document.getElementById("searchInput").addEventListener("input", (e) => {
-  // No-op for now. We’ll implement real search in the next step.
-});
+loadResources();
 </script>
 
 </body>
