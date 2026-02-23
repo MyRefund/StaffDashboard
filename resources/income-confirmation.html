@@ -3,17 +3,184 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Income Confirmation Script</title>
+<meta http-equiv="Content-Language" content="en">
+<meta name="google" content="notranslate">
+
+<title>Income Confirmation Script — My Refund</title>
+
+<style>
+:root{
+  --g0:#094B35;
+  --text:#111827;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+}
+
+/* ===== HEADER ===== */
+.header{
+  background:var(--g0);
+  color:#fff;
+  padding:16px 24px;
+}
+
+.header-inner{
+  max-width:1300px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.brand img{ height:28px; }
+
+.brand-text{
+  display:flex;
+  flex-direction:column;
+  line-height:1.15;
+}
+
+.brand-text strong{
+  font-size:16px;
+  font-weight:900;
+}
+
+.brand-text span{
+  font-size:13px;
+  opacity:.9;
+  font-weight:700;
+}
+
+.menu button{
+  border-radius:999px;
+  padding:8px 16px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid #fff;
+  background:#fff;
+  color:var(--g0);
+  cursor:pointer;
+}
+
+/* ===== PAGE ===== */
+.page{
+  min-height:calc(100vh - 72px);
+  background:url("../My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
+  padding:60px;
+}
+
+.container{
+  max-width:900px;
+  margin:0 auto;
+  background:#fff;
+  padding:40px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+h1{
+  margin-top:0;
+  color:var(--g0);
+}
+
+h2{
+  margin-top:30px;
+  color:var(--g0);
+}
+
+ul{
+  line-height:1.6;
+}
+
+@media(max-width:900px){
+  .page{ padding:30px; }
+  .container{ padding:25px; }
+}
+</style>
 </head>
 
 <body>
-<h1>Income Confirmation Script</h1>
 
-<p>This is a test resource page.</p>
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="../logo.png" alt="My Refund">
+      <div class="brand-text">
+        <strong>Resources</strong>
+        <span>Operational Scripts & Procedures</span>
+      </div>
+    </div>
 
-<p>
-  <a href="../resources.html">← Back to Resources</a>
-</p>
+    <div class="menu">
+      <button onclick="goBack()">All Resources</button>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="container">
+
+    <h1>Income Confirmation Script</h1>
+
+    <h2>Opening Statement</h2>
+    <p>
+      All this information we are about to go through is for the <strong>202X tax year</strong>,
+      which runs from <strong>1 April 202X through to 31 March 202X</strong>.
+    </p>
+
+    <h2>Earnings Confirmation</h2>
+    <p>Read through IRD earnings and get the client to confirm all details are correct.</p>
+    <p><strong>If earnings information is under $5,000 — ask MID questions.</strong></p>
+
+    <h2>Additional Income Questions</h2>
+    <ul>
+      <li>Did you receive any untaxed income?</li>
+      <li>Any interest, dividends or Māori Authority distributions over $200?</li>
+      <li>Are you part of a trust or family trust?</li>
+      <li>Have you received any overseas income?</li>
+      <li>Have you arrived, or been overseas for more than 183 days?</li>
+      <li>Have you been self-employed, or done any work for a rideshare or food delivery company?</li>
+      <li>Do you have any personal or business expenses to claim?</li>
+      <li>Do you own a company and earn income from a business, partnership or shareholder income?</li>
+      <li>Have you sold a property within 2 years of purchase, or received any rental income?</li>
+      <li>Have you received income from an Employee Share Scheme?</li>
+      <li>Have you made any donations to a charitable organisation over $5?</li>
+    </ul>
+
+    <h2>Declaration</h2>
+    <ul>
+      <li>We have reviewed the earnings information, including employer name, months listed and gross income / PAYE.</li>
+      <li>We have reviewed any investment income details including provider, months received and gross income / tax.</li>
+      <li>You have advised My Refund Ltd of any additional income and/or expenses not listed on the earnings summary.</li>
+      <li>My Refund Ltd will sign and file your tax return based on information provided or sourced from Inland Revenue.</li>
+      <li>You will pay any tax owing to IRD on or before the due date and do not hold My Refund Ltd liable for any resulting tax bill.</li>
+      <li>You have read and agree to our terms and conditions.</li>
+    </ul>
+
+    <h2>Final Confirmation</h2>
+    <p>
+      Please confirm all information discussed is true and correct, and that your agreement to this declaration constitutes your electronic signature.
+    </p>
+
+  </div>
+</div>
+
+<script>
+function goBack(){
+  window.location.href = "../resources.html";
+}
+</script>
 
 </body>
 </html>
