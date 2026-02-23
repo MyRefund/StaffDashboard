@@ -1002,8 +1002,9 @@ async function runReport(){
 
     const csrTouchY = csrY.reduce((a,r)=>a+(r.inbound+r.outbound+r.chat),0);
 
-    const procOutput = procRows.reduce((a,r)=>a+r.totalOutput,0);
-    const procOutputY = procY.reduce((a,r)=>a+r.totalOutput,0);
+    // Returns Processed = Filing only
+const procOutput = procRows.reduce((a,r)=>a+r.filing,0);
+const procOutputY = procY.reduce((a,r)=>a+r.filing,0);
 
     const feeEntries = feeRows.reduce((a,r)=>a+r.count,0);
     const feeTotal = Math.round(feeRows.reduce((a,r)=>a+r.total,0)*100)/100;
