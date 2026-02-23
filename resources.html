@@ -3,43 +3,176 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Resources</title>
+<meta http-equiv="Content-Language" content="en">
+<meta name="google" content="notranslate">
+
+<title>Resources — My Refund</title>
 
 <style>
+:root{
+  --g0:#094B35;
+  --text:#111827;
+}
+
+*{box-sizing:border-box}
+
 body{
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  margin:0;
+  font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+}
+
+/* ===== HEADER ===== */
+.header{
+  background:var(--g0);
+  color:#fff;
+  padding:16px 24px;
+}
+
+.header-inner{
+  max-width:1300px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.brand img{ height:28px; }
+
+.brand-text{
+  display:flex;
+  flex-direction:column;
+  line-height:1.15;
+}
+
+.brand-text strong{
+  font-size:16px;
+  font-weight:900;
+}
+
+.brand-text span{
+  font-size:13px;
+  opacity:.9;
+  font-weight:700;
+}
+
+.menu button{
+  border-radius:999px;
+  padding:8px 16px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid #fff;
+  background:#fff;
+  color:var(--g0);
+  cursor:pointer;
+}
+
+/* ===== PAGE ===== */
+.page{
+  min-height:calc(100vh - 72px);
+  background:url("My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
+  padding:60px;
+}
+
+.container{
+  max-width:900px;
+  margin:0 auto;
+  background:#fff;
   padding:40px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
-h1{
+.section-title{
+  font-size:24px;
+  font-weight:900;
+  color:var(--g0);
   margin-bottom:20px;
 }
 
-input{
-  padding:10px;
+/* ===== SEARCH ===== */
+.search-box{
+  margin-bottom:30px;
+}
+
+.search-box input{
   width:100%;
-  max-width:400px;
-  margin-bottom:20px;
-  font-size:14px;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #d1d5db;
+  font-size:15px;
+  font-weight:700;
 }
 
-.resource{
-  margin-bottom:12px;
+/* ===== RESULTS ===== */
+.result{
+  padding:14px 0;
+  border-bottom:1px solid #eee;
+}
+
+.result:last-child{
+  border-bottom:none;
+}
+
+.result a{
+  text-decoration:none;
+  color:var(--g0);
+  font-weight:900;
+}
+
+.no-results{
+  color:#6b7280;
+  font-weight:700;
+}
+
+@media(max-width:900px){
+  .page{ padding:30px; }
+  .container{ padding:25px; }
 }
 </style>
 </head>
 
 <body>
 
-<h1>Search Resources</h1>
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="logo.png" alt="My Refund">
+      <div class="brand-text">
+        <strong>Resources</strong>
+        <span>Search scripts & procedures</span>
+      </div>
+    </div>
 
-<input type="text" id="search" placeholder="Type to search...">
+    <div class="menu">
+      <button onclick="goDashboard()">Dashboard</button>
+    </div>
+  </div>
+</div>
 
-<div id="resourceList"></div>
+<div class="page">
+  <div class="container">
+
+    <div class="section-title">Search Resources</div>
+
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Start typing to search...">
+    </div>
+
+    <div id="resourceList"></div>
+
+  </div>
+</div>
 
 <script>
 
-// 🔹 Add all resources here
+// 🔹 Resource index
 const RESOURCES = [
   {
     title: "Income Confirmation Script",
@@ -47,15 +180,20 @@ const RESOURCES = [
   }
 ];
 
-// 🔹 Render function
+// 🔹 Render
 const list = document.getElementById("resourceList");
 
 function renderResources(items){
   list.innerHTML = "";
 
+  if(items.length === 0){
+    list.innerHTML = "<div class='no-results'>No matching resources found.</div>";
+    return;
+  }
+
   items.forEach(item => {
     const div = document.createElement("div");
-    div.className = "resource";
+    div.className = "result";
     div.innerHTML = `
       <a href="resources/${item.file}">
         ${item.title}
@@ -65,7 +203,7 @@ function renderResources(items){
   });
 }
 
-// 🔹 Search logic
+// 🔹 Search
 const searchInput = document.getElementById("search");
 
 searchInput.addEventListener("input", function(){
@@ -80,6 +218,10 @@ searchInput.addEventListener("input", function(){
 
 // Initial load
 renderResources(RESOURCES);
+
+function goDashboard(){
+  window.location.href = "staff.html";
+}
 
 </script>
 
