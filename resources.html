@@ -241,6 +241,13 @@ const searchInput = document.getElementById("search");
 const list = document.getElementById("resourceList");
 const resultCount = document.getElementById("resultCount");
 
+/* ===== INITIAL EMPTY STATE ===== */
+list.innerHTML = `
+  <div class="no-results">
+    🔎 Start typing to search resources.
+  </div>
+`;
+
 /* ===== RENDER ===== */
 function renderResults(items){
   list.innerHTML = "";
@@ -275,6 +282,16 @@ function renderResults(items){
 searchInput.addEventListener("input", function(){
   const query = this.value.toLowerCase();
 
+  if(query === ""){
+    resultCount.innerText = "";
+    list.innerHTML = `
+      <div class="no-results">
+        🔎 Start typing to search resources.
+      </div>
+    `;
+    return;
+  }
+
   const filtered = RESOURCES.filter(item =>
     item.title.toLowerCase().includes(query) ||
     item.description.toLowerCase().includes(query) ||
@@ -292,14 +309,10 @@ document.addEventListener("keydown", function(e){
   }
 });
 
-/* ===== INITIAL LOAD ===== */
-renderResults(RESOURCES);
-
 function goDashboard(){
   window.location.href = "staff.html";
 }
 
 </script>
-
 </body>
 </html>
