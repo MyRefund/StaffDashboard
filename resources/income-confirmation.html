@@ -12,6 +12,7 @@
 :root{
   --g0:#094B35;
   --text:#111827;
+  --muted:#6b7280;
 }
 
 *{box-sizing:border-box}
@@ -20,6 +21,7 @@ body{
   margin:0;
   font-family:"Okta Neue", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color:var(--text);
+  line-height:1.7;
 }
 
 /* ===== HEADER ===== */
@@ -77,35 +79,64 @@ body{
 .page{
   min-height:calc(100vh - 72px);
   background:url("../My Refund-Hero Images-02 (1).jpg") center / cover no-repeat;
-  padding:60px;
+  padding:60px 20px;
 }
 
 .container{
-  max-width:900px;
+  max-width:1000px;
   margin:0 auto;
   background:#fff;
-  padding:40px;
+  padding:60px 80px;
   border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  box-shadow:0 20px 40px rgba(0,0,0,.08);
 }
+
+/* ===== TYPOGRAPHY ===== */
 
 h1{
   margin-top:0;
+  margin-bottom:30px;
+  font-size:32px;
   color:var(--g0);
 }
 
 h2{
-  margin-top:30px;
+  margin-top:40px;
+  margin-bottom:12px;
+  font-size:20px;
   color:var(--g0);
 }
 
-ul{
-  line-height:1.6;
+p{
+  margin-bottom:16px;
 }
 
+ul{
+  margin:12px 0 20px 20px;
+}
+
+li{
+  margin-bottom:8px;
+}
+
+strong{
+  font-weight:900;
+}
+
+.note{
+  background:#f3f4f6;
+  padding:16px;
+  border-radius:10px;
+  margin:20px 0;
+  font-weight:700;
+  color:var(--muted);
+}
+
+/* ===== RESPONSIVE ===== */
 @media(max-width:900px){
-  .page{ padding:30px; }
-  .container{ padding:25px; }
+  .container{
+    padding:40px 25px;
+  }
 }
 </style>
 </head>
@@ -118,7 +149,7 @@ ul{
       <img src="../logo.png" alt="My Refund">
       <div class="brand-text">
         <strong>Resources</strong>
-        <span>Operational Scripts & Procedures</span>
+        <span>Operational Knowledge Base</span>
       </div>
     </div>
 
@@ -141,7 +172,10 @@ ul{
 
     <h2>Earnings Confirmation</h2>
     <p>Read through IRD earnings and get the client to confirm all details are correct.</p>
-    <p><strong>If earnings information is under $5,000 — ask MID questions.</strong></p>
+
+    <div class="note">
+      If earnings information is under $5,000 — ask MID questions.
+    </div>
 
     <h2>Additional Income Questions</h2>
     <ul>
