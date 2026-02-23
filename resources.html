@@ -24,7 +24,7 @@ input{
 }
 
 .resource{
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 </style>
 </head>
@@ -35,28 +35,52 @@ input{
 
 <input type="text" id="search" placeholder="Type to search...">
 
-<div id="resourceList">
-
-  <div class="resource">
-    <a href="resources/income-confirmation.html">
-      Income Confirmation Script
-    </a>
-  </div>
-
-</div>
+<div id="resourceList"></div>
 
 <script>
-const searchInput = document.getElementById("search");
-const resources = document.querySelectorAll(".resource");
 
-searchInput.addEventListener("input", function() {
+// 🔹 Add all resources here
+const RESOURCES = [
+  {
+    title: "Income Confirmation Script",
+    file: "income-confirmation.html"
+  }
+];
+
+// 🔹 Render function
+const list = document.getElementById("resourceList");
+
+function renderResources(items){
+  list.innerHTML = "";
+
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "resource";
+    div.innerHTML = `
+      <a href="resources/${item.file}">
+        ${item.title}
+      </a>
+    `;
+    list.appendChild(div);
+  });
+}
+
+// 🔹 Search logic
+const searchInput = document.getElementById("search");
+
+searchInput.addEventListener("input", function(){
   const query = this.value.toLowerCase();
 
-  resources.forEach(resource => {
-    const text = resource.innerText.toLowerCase();
-    resource.style.display = text.includes(query) ? "block" : "none";
-  });
+  const filtered = RESOURCES.filter(item =>
+    item.title.toLowerCase().includes(query)
+  );
+
+  renderResources(filtered);
 });
+
+// Initial load
+renderResources(RESOURCES);
+
 </script>
 
 </body>
