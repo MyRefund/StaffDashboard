@@ -13,6 +13,7 @@
   --g0:#094B35;
   --text:#111827;
   --muted:#6b7280;
+  --bg:#f9fafb;
 }
 
 *{box-sizing:border-box}
@@ -72,6 +73,11 @@ body{
   background:#fff;
   color:var(--g0);
   cursor:pointer;
+  transition:.2s ease;
+}
+
+.menu button:hover{
+  transform:translateY(-2px);
 }
 
 /* ===== PAGE ===== */
@@ -86,27 +92,53 @@ body{
   margin:0 auto;
   background:#fff;
   padding:40px;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  border-radius:18px;
+  box-shadow:0 20px 40px rgba(0,0,0,.08);
 }
 
 .section-title{
   font-size:24px;
   font-weight:900;
   color:var(--g0);
-  margin-bottom:20px;
+  margin-bottom:10px;
 }
 
-.search-box{
-  margin-bottom:15px;
+/* ===== SEARCH ===== */
+.search-wrapper{
+  position:relative;
+  margin-bottom:10px;
 }
 
-.search-box input{
+.search-wrapper input{
   width:100%;
-  padding:14px;
+  padding:14px 14px 14px 40px;
   border-radius:14px;
   border:1px solid #d1d5db;
   font-size:15px;
+  font-weight:700;
+  transition:.2s ease;
+  box-shadow:0 4px 10px rgba(0,0,0,.04);
+}
+
+.search-wrapper input:focus{
+  outline:none;
+  border-color:var(--g0);
+  box-shadow:0 6px 16px rgba(9,75,53,.15);
+}
+
+.search-icon{
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:14px;
+  color:var(--muted);
+}
+
+.tip{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:20px;
   font-weight:700;
 }
 
@@ -117,20 +149,17 @@ body{
   margin-bottom:20px;
 }
 
-.subsection-title{
-  font-size:14px;
-  font-weight:900;
-  margin:20px 0 10px;
-  color:var(--g0);
-}
-
+/* ===== RESULTS ===== */
 .result{
-  padding:14px 0;
-  border-bottom:1px solid #eee;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:8px;
+  transition:.15s ease;
 }
 
-.result:last-child{
-  border-bottom:none;
+.result:hover{
+  background:var(--bg);
+  transform:translateX(4px);
 }
 
 .result a{
@@ -147,8 +176,11 @@ body{
 }
 
 .no-results{
+  background:#f3f4f6;
+  padding:20px;
+  border-radius:12px;
+  font-weight:800;
   color:var(--muted);
-  font-weight:700;
 }
 </style>
 </head>
@@ -176,13 +208,15 @@ body{
 
     <div class="section-title">Search Resources</div>
 
-    <div class="search-box">
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
       <input type="text" id="search" placeholder="Start typing to search...">
     </div>
 
+    <div class="tip">Tip: You can search by script name, topic, or keyword.</div>
+
     <div class="meta" id="resultCount"></div>
 
-    <div id="recentSection"></div>
     <div id="resourceList"></div>
 
   </div>
@@ -191,29 +225,33 @@ body{
 <script>
 
 /* ===== RESOURCE INDEX ===== */
-const RESOURCES = [
+let RESOURCES = [
   {
     title: "Income Confirmation Script",
     file: "income-confirmation.html",
     description: "CSR script for confirming income and declaration.",
-    keywords: "income declaration csr earnings mid questions",
-    category: "CSR Script"
+    keywords: "income declaration csr earnings mid questions"
   }
 ];
 
-/* ===== ELEMENTS ===== */
+/* ===== AUTO SORT ===== */
+RESOURCES = RESOURCES.sort((a,b)=>a.title.localeCompare(b.title));
+
 const searchInput = document.getElementById("search");
 const list = document.getElementById("resourceList");
-const recentSection = document.getElementById("recentSection");
 const resultCount = document.getElementById("resultCount");
 
-/* ===== RENDER FUNCTIONS ===== */
-
+/* ===== RENDER ===== */
 function renderResults(items){
   list.innerHTML = "";
 
   if(items.length === 0){
-    list.innerHTML = "<div class='no-results'>No matching resources found.</div>";
+    list.innerHTML = `
+      <div class="no-results">
+        🔍 No results found.<br>
+        Try a different keyword or check spelling.
+      </div>
+    `;
     resultCount.innerText = "";
     return;
   }
@@ -224,7 +262,7 @@ function renderResults(items){
     const div = document.createElement("div");
     div.className = "result";
     div.innerHTML = `
-      <a href="resources/${item.file}" onclick="storeRecent('${item.file}')">
+      <a href="resources/${item.file}">
         ${item.title}
       </a>
       <small>${item.description}</small>
@@ -234,17 +272,8 @@ function renderResults(items){
 }
 
 /* ===== SEARCH ===== */
-
 searchInput.addEventListener("input", function(){
   const query = this.value.toLowerCase();
-
-  if(query === ""){
-    renderResults(RESOURCES);
-    renderRecent();
-    return;
-  }
-
-  recentSection.innerHTML = "";
 
   const filtered = RESOURCES.filter(item =>
     item.title.toLowerCase().includes(query) ||
@@ -255,53 +284,17 @@ searchInput.addEventListener("input", function(){
   renderResults(filtered);
 });
 
-/* ===== RECENTLY VIEWED ===== */
-
-function storeRecent(file){
-  let recent = JSON.parse(localStorage.getItem("recentResources")) || [];
-
-  recent = recent.filter(item => item !== file);
-  recent.unshift(file);
-
-  if(recent.length > 5){
-    recent.pop();
+/* ===== KEYBOARD SHORTCUT ===== */
+document.addEventListener("keydown", function(e){
+  if(e.key === "/" && document.activeElement.tagName !== "INPUT"){
+    e.preventDefault();
+    searchInput.focus();
   }
-
-  localStorage.setItem("recentResources", JSON.stringify(recent));
-}
-
-function renderRecent(){
-  const recent = JSON.parse(localStorage.getItem("recentResources")) || [];
-
-  if(recent.length === 0){
-    recentSection.innerHTML = "";
-    return;
-  }
-
-  recentSection.innerHTML = "<div class='subsection-title'>Recently Viewed</div>";
-
-  recent.forEach(file => {
-    const resource = RESOURCES.find(r => r.file === file);
-    if(resource){
-      const div = document.createElement("div");
-      div.className = "result";
-      div.innerHTML = `
-        <a href="resources/${resource.file}" onclick="storeRecent('${resource.file}')">
-          ${resource.title}
-        </a>
-        <small>${resource.description}</small>
-      `;
-      recentSection.appendChild(div);
-    }
-  });
-}
+});
 
 /* ===== INITIAL LOAD ===== */
-
 renderResults(RESOURCES);
-renderRecent();
 
-/* ===== NAVIGATION ===== */
 function goDashboard(){
   window.location.href = "staff.html";
 }
