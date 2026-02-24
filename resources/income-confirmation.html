@@ -116,7 +116,7 @@ ul{
 }
 
 li{
-  margin-bottom:8px;
+  margin-bottom:10px;
 }
 
 strong{
@@ -132,7 +132,15 @@ strong{
   color:var(--muted);
 }
 
-/* ===== RESPONSIVE ===== */
+.confirm{
+  background:#ecfdf5;
+  padding:18px;
+  border-radius:12px;
+  margin:25px 0;
+  font-weight:800;
+  color:var(--g0);
+}
+
 @media(max-width:900px){
   .container{
     padding:40px 25px;
@@ -164,48 +172,83 @@ strong{
 
     <h1>Income Confirmation Script</h1>
 
-    <h2>Opening Statement</h2>
+    <h2>Opening</h2>
     <p>
-      All this information we are about to go through is for the <strong>202X tax year</strong>,
-      which runs from <strong>1 April 202X through to 31 March 202X</strong>.
+      We’re just going to quickly run through your <strong>202X tax year</strong>, 
+      which covers <strong>1 April 202X through to 31 March 202X</strong>.
     </p>
 
-    <h2>Earnings Confirmation</h2>
-    <p>Read through IRD earnings and get the client to confirm all details are correct.</p>
+    <p>
+      I’ve got your income summary from Inland Revenue here, so I’ll read through 
+      what they have recorded and you can let me know if everything sounds right.
+    </p>
 
     <div class="note">
-      If earnings information is under $5,000 — ask MID questions.
+      Read income summary from IRD.
     </div>
 
-    <h2>Additional Income Questions</h2>
-    <ul>
-      <li>Did you receive any untaxed income?</li>
-      <li>Any interest, dividends or Māori Authority distributions over $200?</li>
-      <li>Are you part of a trust or family trust?</li>
-      <li>Have you received any overseas income?</li>
-      <li>Have you arrived, or been overseas for more than 183 days?</li>
-      <li>Have you been self-employed, or done any work for a rideshare or food delivery company?</li>
-      <li>Do you have any personal or business expenses to claim?</li>
-      <li>Do you own a company and earn income from a business, partnership or shareholder income?</li>
-      <li>Have you sold a property within 2 years of purchase, or received any rental income?</li>
-      <li>Have you received income from an Employee Share Scheme?</li>
-      <li>Have you made any donations to a charitable organisation over $5?</li>
-    </ul>
+    <div class="confirm">
+      Does that all sound correct to you?
+    </div>
 
-    <h2>Declaration</h2>
-    <ul>
-      <li>We have reviewed the earnings information, including employer name, months listed and gross income / PAYE.</li>
-      <li>We have reviewed any investment income details including provider, months received and gross income / tax.</li>
-      <li>You have advised My Refund Ltd of any additional income and/or expenses not listed on the earnings summary.</li>
-      <li>My Refund Ltd will sign and file your tax return based on information provided or sourced from Inland Revenue.</li>
-      <li>You will pay any tax owing to IRD on or before the due date and do not hold My Refund Ltd liable for any resulting tax bill.</li>
-      <li>You have read and agree to our terms and conditions.</li>
-    </ul>
+    <div class="note">
+      Pause and confirm.  
+      If earnings are under $5,000, complete MID questions as required.
+    </div>
 
-    <h2>Final Confirmation</h2>
+    <p><strong>Great.</strong></p>
+
+    <h2>Additional Income Check</h2>
+
     <p>
-      Please confirm all information discussed is true and correct, and that your agreement to this declaration constitutes your electronic signature.
+      Now I just want to make sure there’s nothing else we need to include before we file your return.
     </p>
+
+    <p>
+      Since <strong>1 April 202X</strong>, have you earned any other income that wasn’t already taxed automatically?
+    </p>
+
+    <p>That could include things like:</p>
+
+    <ul>
+      <li>Working for yourself or doing contract work</li>
+      <li>Earning money through Uber, rideshare, or delivery apps</li>
+      <li>Rental income or selling a property within two years</li>
+      <li>Overseas income</li>
+      <li>Income from a company, partnership, or trust</li>
+      <li>Investment income like interest, shares or Māori Authority Distributions</li>
+      <li>Anything else outside of normal wages or salary</li>
+    </ul>
+
+    <div class="confirm">
+      Have you had anything like that?
+    </div>
+
+    <p>
+      And finally, do you have any expenses or charitable donations you’d like us to include?
+    </p>
+
+    <div class="note">
+      Pause and confirm responses.
+    </div>
+
+    <h2>Final Confirmation & Declaration</h2>
+
+    <div class="confirm">
+      Just to confirm before we file:
+    </div>
+
+    <ul>
+      <li>We’ve reviewed the income information held by IRD.</li>
+      <li>You’ve told us about any additional income or expenses.</li>
+      <li>We’ll prepare and file your return based on this information and what we’ve sourced from Inland Revenue.</li>
+      <li>If there’s any tax to pay, that will need to be paid directly to IRD by the due date.</li>
+      <li>By confirming now, you’re agreeing to My Refund’s Terms and Conditions and confirming that everything discussed is true and correct. This will act as your electronic signature.</li>
+    </ul>
+
+    <div class="confirm">
+      Are you happy to confirm that?
+    </div>
 
   </div>
 </div>
