@@ -63,6 +63,34 @@ body{
 }
 .clock{font-weight:900;font-size:14px}
 
+/* RECOVERY BANNER */
+.recovery-banner{
+  background:#fff3cd;
+  border-left:6px solid #f0ad4e;
+  padding:14px 16px;
+  margin:20px 0;
+  border-radius:12px;
+  font-weight:800;
+}
+.recovery-banner button{
+  margin-top:10px;
+  margin-right:10px;
+  padding:8px 14px;
+  border-radius:10px;
+  border:none;
+  font-weight:900;
+  cursor:pointer;
+}
+.recovery-banner .continue{
+  background:var(--g0);
+  color:#fff;
+}
+.recovery-banner .fresh{
+  background:#fff;
+  border:1px solid var(--g0);
+  color:var(--g0);
+}
+
 /* CONTENT */
 .wrap{max-width:1300px;margin:0 auto;padding:36px 24px 60px;}
 .hello{font-size:24px;font-weight:900;color:var(--g0);}
@@ -189,6 +217,9 @@ body{
 </div>
 
 <div class="wrap">
+
+<div id="recoveryContainer"></div>
+
 <div class="hello" id="helloText">Hello</div>
 <div class="subline" id="dateLine"></div>
 
@@ -274,22 +305,44 @@ document.addEventListener("DOMContentLoaded", function(){
 const WEB_APP_URL="https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
 const TZ="Pacific/Auckland";
 const name=localStorage.getItem("currentStaff")||"CSR";
-const todayISO=new Date().toLocaleDateString("en-CA",{timeZone:TZ});
-const todayHuman=new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});
 
+const todayISO=new Date().toLocaleDateString("en-CA",{timeZone:TZ});
+const yesterdayISO=new Date(Date.now()-86400000).toLocaleDateString("en-CA",{timeZone:TZ});
+
+let workingDate=todayISO;
 let manualOutbound=0;
 let submitted=false;
 
 staffNameLabel.textContent=name+" Daily Work Logger";
 helloText.textContent="Hello, "+name;
-dateLine.textContent=todayHuman+" · Division: CSR";
+dateLine.textContent=new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ})+" · Division: CSR";
 
 window.goHome=function(){window.location.href="index.html";};
 
-function tick(){
-clock.textContent=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});
+/* RECOVERY CHECK */
+const recoveryContainer=document.getElementById("recoveryContainer");
+const yesterdayKey="csr_"+name+"_"+yesterdayISO;
+const yesterdayData=localStorage.getItem(yesterdayKey);
+
+if(yesterdayData){
+recoveryContainer.innerHTML=`
+<div class="recovery-banner">
+⚠ You have unsubmitted data from yesterday.<br>
+<button class="continue" onclick="continueYesterday()">Continue Yesterday</button>
+<button class="fresh" onclick="startFresh()">Start Fresh Today</button>
+</div>
+`;
 }
-tick();setInterval(tick,1000);
+
+window.continueYesterday=function(){
+workingDate=yesterdayISO;
+alert("You are now logging for yesterday. Submission will use yesterday's date.");
+recoveryContainer.innerHTML="";
+};
+
+window.startFresh=function(){
+recoveryContainer.innerHTML="";
+};
 
 /* COUNTERS */
 window.adj=function(id,d){
@@ -336,7 +389,7 @@ document.querySelector(".page").classList.add("submitting");
 
 const formData=new URLSearchParams();
 formData.append("action","submitCSR");
-formData.append("date",todayISO);
+formData.append("date",workingDate);
 formData.append("staff",name);
 formData.append("Inbound",inbound.value);
 formData.append("Outbound",outbound.value);
