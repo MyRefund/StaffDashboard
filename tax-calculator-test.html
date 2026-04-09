@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Processing Staff Tax Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 30px;
+    }
+
+    .intro {
+      margin-bottom: 24px;
+      color: #475569;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 22px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .btn-download {
+      background: #2563eb;
+      color: white;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+    }
+
+    .result-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      background: #f8fafc;
+    }
+
+    .result-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #64748b;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .result-value {
+      font-size: 26px;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .positive {
+      color: #15803d;
+    }
+
+    .negative {
+      color: #b91c1c;
+    }
+
+    .neutral {
+      color: #1f2937;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border: 1px solid #e2e8f0;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f8fafc;
+    }
+
+    .small-note {
+      margin-top: 10px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 14px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .result-value {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Processing Staff Tax Calculator</h1>
+    <p class="intro">
+      Standalone test calculator page. Figures update automatically as values are entered.
+    </p>
+
+    <div class="card">
+      <h2>Client Details</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="irdNumber">IRD Number</label>
+          <input type="text" id="irdNumber" placeholder="Enter IRD Number" />
+        </div>
+
+        <div class="field">
+          <label for="year">Tax Year</label>
+          <select id="year">
+            <option value="2026">2026</option>
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Income and Tax Inputs</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="grossIncome">Gross Income</label>
+          <input type="number" id="grossIncome" value="0" step="0.01" />
+        </div>
+
+        <div class="field">
+          <label for="grossWhp">Gross WHP</label>
+          <input type="number" id="grossWhp" value="0" step="0.01" />
+        </div>
+
+        <div class="field">
+          <label for="taxDeductions">Tax Deductions</label>
+          <input type="number" id="taxDeductions" value="0" step="0.01" />
+        </div>
+
+        <div class="field">
+          <label for="taxWhp">Tax WHP</label>
+          <input type="number" id="taxWhp" value="0" step="0.01" />
+        </div>
+
+        <div class="field">
+          <label for="imputationCredits">Imputation Credits</label>
+          <input type="number" id="imputationCredits" value="0" step="0.01" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Expenses and Adjustments</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="expense1">Expense 1</label>
+          <input type="number" id="expense1" value="0" step="0.01" />
+        </div>
+
+        <div class="field">
+          <label for="expense2">Expense 2</label>
+          <input type="number" id="expense2" value="0" step="0.01" />
+        </div>
+
+        <div class="field">
+          <label for="ietcMonths">IETC Months</label>
+          <input type="number" id="ietcMonths" value="0" min="0" max="12" step="1" />
+        </div>
+
+        <div class="field">
+          <label for="pieIncome">PIE Income</label>
+          <input type="number" id="pieIncome" value="0" step="0.01" />
+        </div>
+
+        <div class="field">
+          <label for="pir">PIR Rate</label>
+          <input type="number" id="pir" value="0" step="0.0001" />
+        </div>
+
+        <div class="field">
+          <label for="yRate">Y Rate</label>
+          <input type="number" id="yRate" value="0" step="0.0001" />
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button type="button" class="btn-download" onclick="downloadResult()">Download Result</button>
+        <button type="button" class="btn-secondary" onclick="resetForm()">Reset</button>
+      </div>
+
+      <p class="small-note">
+        The calculator updates automatically when values are entered or changed.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Results</h2>
+      <div class="results-grid">
+        <div class="result-box">
+          <div class="result-label">Taxable Income</div>
+          <div class="result-value neutral" id="outTaxableIncome">$0.00</div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-label">Tax Paid</div>
+          <div class="result-value neutral" id="outTaxPaid">$0.00</div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-label">Tax Required</div>
+          <div class="result-value neutral" id="outTaxRequired">$0.00</div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-label">Refund / TTP</div>
+          <div class="result-value neutral" id="outRefundTtp">$0.00</div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-label">IETC Amount</div>
+          <div class="result-value neutral" id="outIetc">$0.00</div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-label">PIE Debt / Credit</div>
+          <div class="result-value neutral" id="outPieDebtCredit">$0.00</div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody id="breakdownBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function n(id) {
+      return Number(document.getElementById(id).value || 0);
+    }
+
+    function money(value) {
+      return new Intl.NumberFormat("en-NZ", {
+        style: "currency",
+        currency: "NZD"
+      }).format(Number(value || 0));
+    }
+
+    function roundDown2(value) {
+      return Math.floor(Number(value || 0) * 100) / 100;
+    }
+
+    function roundDown0(value) {
+      return Math.floor(Number(value || 0));
+    }
+
+    const yearConfigs = {
+      2026: {
+        brackets: [
+          { max: 15600, rate: 0.105, baseAt: 0 },
+          { max: 53500, rate: 0.175, baseAt: 15600 },
+          { max: 78100, rate: 0.30, baseAt: 53500 },
+          { max: 180000, rate: 0.33, baseAt: 78100 },
+          { max: Infinity, rate: 0.39, baseAt: 180000 }
+        ],
+        ietcThresholdLow: 24000,
+        ietcThresholdHigh: 70000,
+        ietcBaseLimit: 66000,
+        ietcMonthlyFactor: 43.333333,
+        ietcReductionRate: 0.13
+      },
+      2025: {
+        brackets: [
+          { max: 14000, rate: 0.105, baseAt: 0 },
+          { max: 15600, rate: 0.1282, baseAt: 14000 },
+          { max: 48000, rate: 0.175, baseAt: 15600 },
+          { max: 53500, rate: 0.2164, baseAt: 48000 },
+          { max: 70000, rate: 0.30, baseAt: 53500 },
+          { max: 78100, rate: 0.3099, baseAt: 70000 },
+          { max: 180000, rate: 0.33, baseAt: 78100 },
+          { max: Infinity, rate: 0.39, baseAt: 180000 }
+        ],
+        ietcThresholdLow: 24000,
+        ietcThresholdHigh: 70000,
+        ietcBaseLimit: 66000,
+        ietcMonthlyFactor: 43.333333,
+        ietcReductionRate: 0.13
+      },
+      2024: {
+        brackets: [
+          { max: 14000, rate: 0.105, baseAt: 0 },
+          { max: 48000, rate: 0.175, baseAt: 14000 },
+          { max: 70000, rate: 0.30, baseAt: 48000 },
+          { max: 180000, rate: 0.33, baseAt: 70000 },
+          { max: Infinity, rate: 0.39, baseAt: 180000 }
+        ],
+        ietcThresholdLow: 24000,
+        ietcThresholdHigh: 48000,
+        ietcBaseLimit: 44000,
+        ietcMonthlyFactor: 43.333333,
+        ietcReductionRate: 0.13
+      },
+      2023: {
+        brackets: [
+          { max: 14000, rate: 0.105, baseAt: 0 },
+          { max: 48000, rate: 0.175, baseAt: 14000 },
+          { max: 70000, rate: 0.30, baseAt: 48000 },
+          { max: 180000, rate: 0.33, baseAt: 70000 },
+          { max: Infinity, rate: 0.39, baseAt: 180000 }
+        ],
+        ietcThresholdLow: 24000,
+        ietcThresholdHigh: 48000,
+        ietcBaseLimit: 44000,
+        ietcMonthlyFactor: 43.333333,
+        ietcReductionRate: 0.13
+      },
+      2022: {
+        brackets: [
+          { max: 14000, rate: 0.105, baseAt: 0 },
+          { max: 48000, rate: 0.175, baseAt: 14000 },
+          { max: 70000, rate: 0.30, baseAt: 48000 },
+          { max: 180000, rate: 0.33, baseAt: 70000 },
+          { max: Infinity, rate: 0.39, baseAt: 180000 }
+        ],
+        ietcThresholdLow: 24000,
+        ietcThresholdHigh: 48000,
+        ietcBaseLimit: 44000,
+        ietcMonthlyFactor: 43.333333,
+        ietcReductionRate: 0.13
+      },
+      2021: {
+        brackets: [
+          { max: 14000, rate: 0.105, baseAt: 0 },
+          { max: 48000, rate: 0.175, baseAt: 14000 },
+          { max: 70000, rate: 0.30, baseAt: 48000 },
+          { max: Infinity, rate: 0.33, baseAt: 70000 }
+        ],
+        ietcThresholdLow: 24000,
+        ietcThresholdHigh: 48000,
+        ietcBaseLimit: 44000,
+        ietcMonthlyFactor: 43.333333,
+        ietcReductionRate: 0.13
+      },
+      2020: {
+        brackets: [
+          { max: 14000, rate: 0.105, baseAt: 0 },
+          { max: 48000, rate: 0.175, baseAt: 14000 },
+          { max: 70000, rate: 0.30, baseAt: 48000 },
+          { max: Infinity, rate: 0.33, baseAt: 70000 }
+        ],
+        ietcThresholdLow: 24000,
+        ietcThresholdHigh: 48000,
+        ietcBaseLimit: 44000,
+        ietcMonthlyFactor: 43.333333,
+        ietcReductionRate: 0.13
+      }
+    };
+
+    function calculateIetc(taxableIncome, ietcMonths, config) {
+      if (!config || ietcMonths <= 0) return 0;
+
+      const monthlyFactor = config.ietcMonthlyFactor;
+      const baseLimit = config.ietcBaseLimit;
+      const reductionRate = config.ietcReductionRate;
+
+      let provisional;
+      if (taxableIncome > baseLimit) {
+        provisional = taxableIncome - baseLimit;
+      } else {
+        provisional = ietcMonths * monthlyFactor;
+      }
+
+      let adjusted;
+      if (taxableIncome < baseLimit) {
+        adjusted = provisional;
+      } else {
+        adjusted = (ietcMonths * monthlyFactor) - ((provisional / 12) * reductionRate) * ietcMonths;
+      }
+
+      const qualifies =
+        taxableIncome > config.ietcThresholdLow &&
+        taxableIncome < config.ietcThresholdHigh;
+
+      if (!qualifies) return 0;
+      return adjusted > 0 ? adjusted : 0;
+    }
+
+    function calculatePieDebtCredit(pieIncome, pir, yRate) {
+      const pieTaxAtPir = pieIncome * pir;
+      const pieTaxAtY = pieIncome * yRate;
+      return pieTaxAtY - pieTaxAtPir;
+    }
+
+    function calculateTaxByYear(taxableIncome, year) {
+      const config = yearConfigs[year];
+      if (!config) {
+        return { totalTax: 0, rows: [] };
+      }
+
+      let totalTax = 0;
+      const rows = [];
+
+      for (let i = 0; i < config.brackets.length; i++) {
+        const bracket = config.brackets[i];
+
+        if (taxableIncome <= bracket.baseAt) {
+          continue;
+        }
+
+        let amountInBracket = 0;
+
+        if (bracket.max === Infinity) {
+          amountInBracket = taxableIncome - bracket.baseAt;
+        } else {
+          amountInBracket = Math.min(taxableIncome, bracket.max) - bracket.baseAt;
+        }
+
+        if (amountInBracket > 0) {
+          const bracketTax = amountInBracket * bracket.rate;
+          totalTax += bracketTax;
+
+          rows.push({
+            label: `${(bracket.rate * 100).toFixed(2)}% bracket`,
+            amount: roundDown2(bracketTax)
+          });
+        }
+      }
+
+      return {
+        totalTax: roundDown2(totalTax),
+        rows
+      };
+    }
+
+    function runCalculation() {
+      const year = document.getElementById("year").value;
+
+      const grossIncome = n("grossIncome");
+      const grossWhp = n("grossWhp");
+      const taxDeductions = n("taxDeductions");
+      const taxWhp = n("taxWhp");
+      const expense1 = n("expense1");
+      const expense2 = n("expense2");
+      const imputationCredits = n("imputationCredits");
+      const ietcMonths = n("ietcMonths");
+      const pieIncome = n("pieIncome");
+      const pir = n("pir");
+      const yRate = n("yRate");
+
+      const totalExpenses = expense1 + expense2;
+      const taxableIncomeRaw = grossIncome + grossWhp - totalExpenses;
+      const taxableIncome = roundDown0(taxableIncomeRaw);
+
+      const taxPaid = roundDown2(taxDeductions + taxWhp);
+      const pieDebtCredit = roundDown2(calculatePieDebtCredit(pieIncome, pir, yRate));
+
+      const config = yearConfigs[year];
+      const ietcAmount = roundDown2(calculateIetc(taxableIncome, ietcMonths, config));
+
+      const taxCalc = calculateTaxByYear(taxableIncome, year);
+      let taxRequired = taxCalc.totalTax - imputationCredits;
+
+      if (pieDebtCredit < 0) {
+        taxRequired += Math.abs(pieDebtCredit);
+      }
+
+      taxRequired = roundDown2(taxRequired);
+
+      let refundTtp;
+      if (pieDebtCredit > 0) {
+        refundTtp = roundDown2((taxPaid - taxRequired) + ietcAmount + pieDebtCredit);
+      } else {
+        refundTtp = roundDown2((taxPaid - taxRequired) + ietcAmount);
+      }
+
+      document.getElementById("outTaxableIncome").textContent = money(taxableIncome);
+      document.getElementById("outTaxPaid").textContent = money(taxPaid);
+      document.getElementById("outTaxRequired").textContent = money(taxRequired);
+      document.getElementById("outRefundTtp").textContent = money(refundTtp);
+      document.getElementById("outIetc").textContent = money(ietcAmount);
+      document.getElementById("outPieDebtCredit").textContent = money(pieDebtCredit);
+
+      const refundEl = document.getElementById("outRefundTtp");
+      refundEl.classList.remove("positive", "negative", "neutral");
+      if (refundTtp > 0) {
+        refundEl.classList.add("positive");
+      } else if (refundTtp < 0) {
+        refundEl.classList.add("negative");
+      } else {
+        refundEl.classList.add("neutral");
+      }
+
+      const body = document.getElementById("breakdownBody");
+      body.innerHTML = "";
+
+      const breakdownItems = [
+        { label: "Gross Income", amount: grossIncome },
+        { label: "Gross WHP", amount: grossWhp },
+        { label: "Total Expenses", amount: -totalExpenses },
+        { label: "Taxable Income", amount: taxableIncome },
+        { label: "Tax Paid", amount: taxPaid },
+        { label: "Imputation Credits", amount: -imputationCredits },
+        { label: "PIE Debt / Credit", amount: pieDebtCredit },
+        { label: "IETC Amount", amount: ietcAmount }
+      ];
+
+      taxCalc.rows.forEach(row => breakdownItems.push(row));
+
+      breakdownItems.push(
+        { label: "Tax Required", amount: taxRequired },
+        { label: "Refund / TTP", amount: refundTtp }
+      );
+
+      breakdownItems.forEach(item => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${item.label}</td>
+          <td>${money(item.amount)}</td>
+        `;
+        body.appendChild(tr);
+      });
+    }
+
+    function resetForm() {
+      document.getElementById("irdNumber").value = "";
+      document.getElementById("year").value = "2026";
+      document.getElementById("grossIncome").value = 0;
+      document.getElementById("grossWhp").value = 0;
+      document.getElementById("taxDeductions").value = 0;
+      document.getElementById("taxWhp").value = 0;
+      document.getElementById("imputationCredits").value = 0;
+      document.getElementById("expense1").value = 0;
+      document.getElementById("expense2").value = 0;
+      document.getElementById("ietcMonths").value = 0;
+      document.getElementById("pieIncome").value = 0;
+      document.getElementById("pir").value = 0;
+      document.getElementById("yRate").value = 0;
+      runCalculation();
+    }
+
+    function downloadResult() {
+      const irdNumber = document.getElementById("irdNumber").value || "No IRD Number";
+      const year = document.getElementById("year").value;
+
+      const content = [
+        "Processing Staff Tax Calculator Result",
+        "-------------------------------------",
+        `IRD Number: ${irdNumber}`,
+        `Tax Year: ${year}`,
+        "",
+        "Inputs",
+        "------",
+        `Gross Income: ${document.getElementById("grossIncome").value}`,
+        `Gross WHP: ${document.getElementById("grossWhp").value}`,
+        `Tax Deductions: ${document.getElementById("taxDeductions").value}`,
+        `Tax WHP: ${document.getElementById("taxWhp").value}`,
+        `Imputation Credits: ${document.getElementById("imputationCredits").value}`,
+        `Expense 1: ${document.getElementById("expense1").value}`,
+        `Expense 2: ${document.getElementById("expense2").value}`,
+        `IETC Months: ${document.getElementById("ietcMonths").value}`,
+        `PIE Income: ${document.getElementById("pieIncome").value}`,
+        `PIR Rate: ${document.getElementById("pir").value}`,
+        `Y Rate: ${document.getElementById("yRate").value}`,
+        "",
+        "Results",
+        "-------",
+        `Taxable Income: ${document.getElementById("outTaxableIncome").textContent}`,
+        `Tax Paid: ${document.getElementById("outTaxPaid").textContent}`,
+        `Tax Required: ${document.getElementById("outTaxRequired").textContent}`,
+        `Refund / TTP: ${document.getElementById("outRefundTtp").textContent}`,
+        `IETC Amount: ${document.getElementById("outIetc").textContent}`,
+        `PIE Debt / Credit: ${document.getElementById("outPieDebtCredit").textContent}`
+      ].join("\n");
+
+      const blob = new Blob([content], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `tax-result-${year}-${irdNumber.replace(/[^a-zA-Z0-9]/g, "-")}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      URL.revokeObjectURL(url);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const inputs = document.querySelectorAll("input, select");
+
+      inputs.forEach(input => {
+        input.addEventListener("input", runCalculation);
+        input.addEventListener("change", runCalculation);
+      });
+
+      runCalculation();
+    });
+  </script>
+</body>
+</html>
