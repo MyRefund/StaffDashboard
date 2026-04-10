@@ -198,7 +198,6 @@
     ];
 
     // Fake sample lookup data for A Expense
-    // Later this gets replaced with Google Sheet lookup
     const expenseLookup = {
       "2026": {
         "048286461": 2328.74,
@@ -318,7 +317,7 @@
           <td><input class="cell-input" type="number" step="0.01" id="rwt-${year}" value="0"></td>
           <td><input class="cell-input" type="number" step="0.01" id="imp-${year}" value="0"></td>
           <td><input class="cell-input" type="number" step="0.01" id="pie-${year}" value="0"></td>
-          <td><input class="cell-input" type="number" step="0.0001" id="pir-${year}" value="0"></td>
+          <td><input class="cell-input" type="number" step="0.01" id="pir-${year}" value="0"></td>
           <td><input class="cell-input" type="number" step="0.0001" id="yrate-${year}" value="0"></td>
           <td><input class="cell-input" type="number" min="0" max="12" step="1" id="ietcmonths-${year}" value="0"></td>
           <td><input class="cell-input" type="number" step="0.01" id="mexp-${year}" value="0"></td>
@@ -387,14 +386,20 @@
       return round2(totalTax);
     }
 
-    function calculatePieAdjustment(pie, pir, yRate) {
-      return round2(pie * (yRate - pir));
+    // PIE mini-calc:
+    // correct tax = PIE * Y Rate
+    // compare against PIR amount already paid
+    // positive result = credit, negative result = debt
+    function calculatePieAdjustment(pieIncome, pirPaid, yRate) {
+      const correctPieTax = pieIncome * yRate;
+      return round2(pirPaid - correctPieTax);
     }
 
     function calculateIetc(year, income, monthsEligible) {
       if (monthsEligible <= 0) return 0;
       if (income < 24000) return 0;
 
+      // 2026
       if (year === 2026) {
         if (income > 70000) return 0;
 
@@ -407,6 +412,7 @@
         return round2((annualEntitlement * monthsEligible) / 12);
       }
 
+      // 2025 split year
       if (year === 2025) {
         if (income > 70000) return 0;
 
@@ -464,7 +470,7 @@
       const rwt = num(`rwt-${year}`);
       const impCr = num(`imp-${year}`);
       const pie = num(`pie-${year}`);
-      const pir = num(`pir-${year}`);
+      const pirPaid = num(`pir-${year}`);
       const yRate = num(`yrate-${year}`);
       const ietcMonths = num(`ietcmonths-${year}`);
       const mExp = num(`mexp-${year}`);
@@ -472,13 +478,26 @@
 
       document.getElementById(`totaltax-${year}`).value = totalTax.toFixed(2);
 
+      // Taxable income
       const taxableIncome = floor0(gross + wht - mExp - aExp);
-      const taxPaid = totalTax + rwt;
-      const taxRequired = calculateTax(taxableIncome, year);
-      const pieAdjustment = calculatePieAdjustment(pie, pir, yRate);
+
+      // Tax already paid
+      const taxPaid = round2(totalTax + rwt);
+
+      // Tax required by brackets
+      let taxRequired = calculateTax(taxableIncome, year);
+
+      // Imputation credits reduce tax required
+      taxRequired = round2(taxRequired - impCr);
+
+      // IETC
       const ietcAmount = calculateIetc(year, taxableIncome, ietcMonths);
 
-      const result = round2(taxPaid - taxRequired - impCr + pieAdjustment + ietcAmount);
+      // PIE adjustment (separate mini-calc)
+      const pieAdjustment = calculatePieAdjustment(pie, pirPaid, yRate);
+
+      // Final result
+      const result = round2((taxPaid - taxRequired) + ietcAmount + pieAdjustment);
 
       document.getElementById(`result-${year}`).textContent = result.toFixed(2);
     }
