@@ -14,7 +14,7 @@
     }
 
     .wrap {
-      max-width: 1400px;
+      max-width: 1800px;
       margin: 0 auto;
       background: #fff;
       padding: 20px;
@@ -71,7 +71,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1200px;
+      min-width: 1700px;
     }
 
     th, td {
@@ -79,11 +79,13 @@
       padding: 8px;
       text-align: center;
       font-size: 14px;
+      vertical-align: middle;
     }
 
     th {
       background: #f1f1f1;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     td.year-cell {
@@ -91,7 +93,8 @@
       background: #fafafa;
     }
 
-    input.cell-input {
+    input.cell-input,
+    select.cell-input {
       width: 100%;
       border: none;
       outline: none;
@@ -99,6 +102,12 @@
       padding: 6px 4px;
       background: transparent;
       font-size: 14px;
+      min-width: 70px;
+    }
+
+    input.readonly-cell {
+      background: #f5f5f5;
+      font-weight: 700;
     }
 
     .calc-output {
@@ -112,6 +121,12 @@
       font-size: 12px;
       color: #666;
     }
+
+    .lookup-note {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -119,7 +134,7 @@
     <h1>Tax Calculator</h1>
 
     <div class="topbar">
-      <label for="irdNumber">IRD #</label>
+      <label for="irdNumber">IRD Number</label>
       <input type="text" id="irdNumber" placeholder="Enter IRD Number" />
 
       <div class="actions">
@@ -132,23 +147,32 @@
       <table>
         <thead>
           <tr>
-            <th>YEAR</th>
-            <th>GROSS</th>
-            <th>TAX</th>
-            <th>WHT G/INT</th>
+            <th>Year</th>
+            <th>Status</th>
+            <th>Return Type</th>
+            <th>Return Date</th>
+            <th>Gross Income</th>
+            <th>PAYE</th>
+            <th>ACC</th>
+            <th>Total Tax</th>
+            <th>WHT/INT</th>
             <th>RWT</th>
             <th>IMP CR</th>
             <th>PIE</th>
             <th>PIR</th>
-            <th>Y RATE</th>
+            <th>Y Rate</th>
             <th>IETC</th>
-            <th>M EXP</th>
-            <th>A EXP</th>
-            <th>MYR CALC</th>
+            <th>M Exp</th>
+            <th>A Expense</th>
+            <th>Result</th>
           </tr>
         </thead>
         <tbody id="calcBody"></tbody>
       </table>
+    </div>
+
+    <div class="lookup-note">
+      A Expense is using fake sample lookup data for now.
     </div>
 
     <div class="footer-note">
@@ -157,7 +181,51 @@
   </div>
 
   <script>
-    const years = [2026, 2025, 2024, 2023, 2022, 2021, 2020];
+    const years = [2026, 2025, 2024, 2023, 2022];
+
+    const statusOptions = [
+      "Pending",
+      "Tax Refund",
+      "Tax to Pay",
+      "Income Tax Arrears",
+      "Child Support Arrears"
+    ];
+
+    const returnTypeOptions = [
+      "Auto Assessed",
+      "ITA",
+      "IR3"
+    ];
+
+    // Fake sample lookup data for A Expense
+    // Later this gets replaced with Google Sheet lookup
+    const expenseLookup = {
+      "2026": {
+        "048286461": 2328.74,
+        "088633921": 1409.56,
+        "070005050": 1221.03
+      },
+      "2025": {
+        "048286461": 2100.00,
+        "088633921": 1320.45,
+        "070005050": 1185.20
+      },
+      "2024": {
+        "048286461": 1980.00,
+        "088633921": 1210.10,
+        "070005050": 1099.99
+      },
+      "2023": {
+        "048286461": 1845.50,
+        "088633921": 1150.25,
+        "070005050": 980.40
+      },
+      "2022": {
+        "048286461": 1720.00,
+        "088633921": 1044.44,
+        "070005050": 910.00
+      }
+    };
 
     const yearConfigs = {
       2026: {
@@ -167,12 +235,7 @@
           { max: 78100, rate: 0.30, baseAt: 53500 },
           { max: 180000, rate: 0.33, baseAt: 78100 },
           { max: Infinity, rate: 0.39, baseAt: 180000 }
-        ],
-        ietcThresholdLow: 24000,
-        ietcThresholdHigh: 70000,
-        ietcBaseLimit: 66000,
-        ietcMonthlyFactor: 43.333333,
-        ietcReductionRate: 0.13
+        ]
       },
       2025: {
         brackets: [
@@ -184,12 +247,7 @@
           { max: 78100, rate: 0.3099, baseAt: 70000 },
           { max: 180000, rate: 0.33, baseAt: 78100 },
           { max: Infinity, rate: 0.39, baseAt: 180000 }
-        ],
-        ietcThresholdLow: 24000,
-        ietcThresholdHigh: 70000,
-        ietcBaseLimit: 66000,
-        ietcMonthlyFactor: 43.333333,
-        ietcReductionRate: 0.13
+        ]
       },
       2024: {
         brackets: [
@@ -198,12 +256,7 @@
           { max: 70000, rate: 0.30, baseAt: 48000 },
           { max: 180000, rate: 0.33, baseAt: 70000 },
           { max: Infinity, rate: 0.39, baseAt: 180000 }
-        ],
-        ietcThresholdLow: 24000,
-        ietcThresholdHigh: 48000,
-        ietcBaseLimit: 44000,
-        ietcMonthlyFactor: 43.333333,
-        ietcReductionRate: 0.13
+        ]
       },
       2023: {
         brackets: [
@@ -212,12 +265,7 @@
           { max: 70000, rate: 0.30, baseAt: 48000 },
           { max: 180000, rate: 0.33, baseAt: 70000 },
           { max: Infinity, rate: 0.39, baseAt: 180000 }
-        ],
-        ietcThresholdLow: 24000,
-        ietcThresholdHigh: 48000,
-        ietcBaseLimit: 44000,
-        ietcMonthlyFactor: 43.333333,
-        ietcReductionRate: 0.13
+        ]
       },
       2022: {
         brackets: [
@@ -226,40 +274,29 @@
           { max: 70000, rate: 0.30, baseAt: 48000 },
           { max: 180000, rate: 0.33, baseAt: 70000 },
           { max: Infinity, rate: 0.39, baseAt: 180000 }
-        ],
-        ietcThresholdLow: 24000,
-        ietcThresholdHigh: 48000,
-        ietcBaseLimit: 44000,
-        ietcMonthlyFactor: 43.333333,
-        ietcReductionRate: 0.13
-      },
-      2021: {
-        brackets: [
-          { max: 14000, rate: 0.105, baseAt: 0 },
-          { max: 48000, rate: 0.175, baseAt: 14000 },
-          { max: 70000, rate: 0.30, baseAt: 48000 },
-          { max: Infinity, rate: 0.33, baseAt: 70000 }
-        ],
-        ietcThresholdLow: 24000,
-        ietcThresholdHigh: 48000,
-        ietcBaseLimit: 44000,
-        ietcMonthlyFactor: 43.333333,
-        ietcReductionRate: 0.13
-      },
-      2020: {
-        brackets: [
-          { max: 14000, rate: 0.105, baseAt: 0 },
-          { max: 48000, rate: 0.175, baseAt: 14000 },
-          { max: 70000, rate: 0.30, baseAt: 48000 },
-          { max: Infinity, rate: 0.33, baseAt: 70000 }
-        ],
-        ietcThresholdLow: 24000,
-        ietcThresholdHigh: 48000,
-        ietcBaseLimit: 44000,
-        ietcMonthlyFactor: 43.333333,
-        ietcReductionRate: 0.13
+        ]
       }
     };
+
+    function buildSelect(options, id) {
+      const select = document.createElement("select");
+      select.className = "cell-input";
+      select.id = id;
+
+      const blankOption = document.createElement("option");
+      blankOption.value = "";
+      blankOption.textContent = "";
+      select.appendChild(blankOption);
+
+      options.forEach(optionText => {
+        const option = document.createElement("option");
+        option.value = optionText;
+        option.textContent = optionText;
+        select.appendChild(option);
+      });
+
+      return select;
+    }
 
     function buildTable() {
       const body = document.getElementById("calcBody");
@@ -267,72 +304,66 @@
 
       years.forEach(year => {
         const tr = document.createElement("tr");
+
         tr.innerHTML = `
           <td class="year-cell">${year}</td>
+          <td id="status-cell-${year}"></td>
+          <td id="returntype-cell-${year}"></td>
+          <td><input class="cell-input" type="date" id="returndate-${year}"></td>
           <td><input class="cell-input" type="number" step="0.01" id="gross-${year}" value="0"></td>
-          <td><input class="cell-input" type="number" step="0.01" id="tax-${year}" value="0"></td>
+          <td><input class="cell-input" type="number" step="0.01" id="paye-${year}" value="0"></td>
+          <td><input class="cell-input" type="number" step="0.01" id="acc-${year}" value="0"></td>
+          <td><input class="cell-input readonly-cell" type="number" step="0.01" id="totaltax-${year}" value="0" readonly></td>
           <td><input class="cell-input" type="number" step="0.01" id="wht-${year}" value="0"></td>
           <td><input class="cell-input" type="number" step="0.01" id="rwt-${year}" value="0"></td>
           <td><input class="cell-input" type="number" step="0.01" id="imp-${year}" value="0"></td>
           <td><input class="cell-input" type="number" step="0.01" id="pie-${year}" value="0"></td>
           <td><input class="cell-input" type="number" step="0.0001" id="pir-${year}" value="0"></td>
           <td><input class="cell-input" type="number" step="0.0001" id="yrate-${year}" value="0"></td>
-          <td><input class="cell-input" type="number" step="1" min="0" max="12" id="ietc-${year}" value="0"></td>
+          <td><input class="cell-input" type="number" min="0" max="12" step="1" id="ietcmonths-${year}" value="0"></td>
           <td><input class="cell-input" type="number" step="0.01" id="mexp-${year}" value="0"></td>
-          <td><input class="cell-input" type="number" step="0.01" id="aexp-${year}" value="0"></td>
-          <td class="calc-output" id="calc-${year}">0.00</td>
+          <td><input class="cell-input readonly-cell" type="number" step="0.01" id="aexp-${year}" value="0" readonly></td>
+          <td class="calc-output" id="result-${year}">0.00</td>
         `;
+
         body.appendChild(tr);
+
+        document.getElementById(`status-cell-${year}`).appendChild(
+          buildSelect(statusOptions, `status-${year}`)
+        );
+
+        document.getElementById(`returntype-cell-${year}`).appendChild(
+          buildSelect(returnTypeOptions, `returntype-${year}`)
+        );
       });
 
       document.querySelectorAll(".cell-input").forEach(input => {
-        input.addEventListener("input", calculateAll);
-        input.addEventListener("change", calculateAll);
+        input.addEventListener("input", handleAllChanges);
+        input.addEventListener("change", handleAllChanges);
       });
+
+      document.getElementById("irdNumber").addEventListener("input", handleAllChanges);
+      document.getElementById("irdNumber").addEventListener("change", handleAllChanges);
     }
 
     function num(id) {
       return Number(document.getElementById(id).value || 0);
     }
 
-    function roundDown2(value) {
-      return Math.floor((Number(value) || 0) * 100) / 100;
+    function normalizeIrd(value) {
+      return String(value || "").replace(/\D/g, "");
     }
 
-    function calculateIetc(taxableIncome, ietcMonths, config) {
-      if (!config || ietcMonths <= 0) return 0;
-
-      const monthlyFactor = config.ietcMonthlyFactor;
-      const baseLimit = config.ietcBaseLimit;
-      const reductionRate = config.ietcReductionRate;
-
-      let provisional;
-      if (taxableIncome > baseLimit) {
-        provisional = taxableIncome - baseLimit;
-      } else {
-        provisional = ietcMonths * monthlyFactor;
-      }
-
-      let adjusted;
-      if (taxableIncome < baseLimit) {
-        adjusted = provisional;
-      } else {
-        adjusted = (ietcMonths * monthlyFactor) - ((provisional / 12) * reductionRate) * ietcMonths;
-      }
-
-      const qualifies =
-        taxableIncome > config.ietcThresholdLow &&
-        taxableIncome < config.ietcThresholdHigh;
-
-      if (!qualifies) return 0;
-      return adjusted > 0 ? adjusted : 0;
+    function round2(value) {
+      return Math.round((Number(value) || 0) * 100) / 100;
     }
 
-    function calculatePieDebtCredit(pieIncome, pir, yRate) {
-      return (pieIncome * yRate) - (pieIncome * pir);
+    function floor0(value) {
+      return Math.floor(Number(value) || 0);
     }
 
-    function calculateTax(taxableIncome, config) {
+    function calculateTax(taxableIncome, year) {
+      const config = yearConfigs[year];
       if (!config) return 0;
 
       let totalTax = 0;
@@ -353,82 +384,191 @@
         }
       });
 
-      return roundDown2(totalTax);
+      return round2(totalTax);
+    }
+
+    function calculatePieAdjustment(pie, pir, yRate) {
+      return round2(pie * (yRate - pir));
+    }
+
+    function calculateIetc(year, income, monthsEligible) {
+      if (monthsEligible <= 0) return 0;
+      if (income < 24000) return 0;
+
+      if (year === 2026) {
+        if (income > 70000) return 0;
+
+        let annualEntitlement = 520;
+        if (income > 66000) {
+          annualEntitlement = 520 - ((income - 66000) * 0.13);
+        }
+
+        annualEntitlement = Math.max(0, annualEntitlement);
+        return round2((annualEntitlement * monthsEligible) / 12);
+      }
+
+      if (year === 2025) {
+        if (income > 70000) return 0;
+
+        let part1Annual = 520;
+        if (income > 44000) {
+          part1Annual = 520 - ((income - 44000) * 0.13);
+        }
+        part1Annual = Math.max(0, part1Annual);
+        const part1Prorated = (part1Annual * 121) / 365;
+
+        let part2Annual = 520;
+        if (income > 66000) {
+          part2Annual = 520 - ((income - 66000) * 0.13);
+        }
+        part2Annual = Math.max(0, part2Annual);
+        const part2Prorated = (part2Annual * 244) / 365;
+
+        const combined = part1Prorated + part2Prorated;
+        return round2((combined * monthsEligible) / 12);
+      }
+
+      // 2024 and prior
+      if (income > 48000) return 0;
+
+      let annualEntitlement = 520;
+      if (income > 44000) {
+        annualEntitlement = 520 - ((income - 44000) * 0.13);
+      }
+
+      annualEntitlement = Math.max(0, annualEntitlement);
+      return round2((annualEntitlement * monthsEligible) / 12);
+    }
+
+    function lookupExpenseForYear(year) {
+      const ird = normalizeIrd(document.getElementById("irdNumber").value);
+      if (!ird) return 0;
+
+      const yearBucket = expenseLookup[String(year)] || {};
+      return round2(yearBucket[ird] || 0);
+    }
+
+    function updateLookupExpenses() {
+      years.forEach(year => {
+        const expense = lookupExpenseForYear(year);
+        document.getElementById(`aexp-${year}`).value = expense.toFixed(2);
+      });
     }
 
     function calculateRow(year) {
       const gross = num(`gross-${year}`);
-      const tax = num(`tax-${year}`);
+      const paye = num(`paye-${year}`);
+      const acc = num(`acc-${year}`);
+      const totalTax = round2(paye - acc);
       const wht = num(`wht-${year}`);
       const rwt = num(`rwt-${year}`);
-      const imp = num(`imp-${year}`);
+      const impCr = num(`imp-${year}`);
       const pie = num(`pie-${year}`);
       const pir = num(`pir-${year}`);
       const yRate = num(`yrate-${year}`);
-      const ietcMonths = num(`ietc-${year}`);
+      const ietcMonths = num(`ietcmonths-${year}`);
       const mExp = num(`mexp-${year}`);
       const aExp = num(`aexp-${year}`);
 
-      const config = yearConfigs[year];
+      document.getElementById(`totaltax-${year}`).value = totalTax.toFixed(2);
 
-      const totalExpenses = mExp + aExp;
-      const taxableIncome = Math.floor(gross + wht - totalExpenses);
-      const taxPaid = tax + rwt;
-      const pieDebtCredit = roundDown2(calculatePieDebtCredit(pie, pir, yRate));
-      const ietcAmount = roundDown2(calculateIetc(taxableIncome, ietcMonths, config));
-      let taxRequired = calculateTax(taxableIncome, config) - imp;
+      const taxableIncome = floor0(gross + wht - mExp - aExp);
+      const taxPaid = totalTax + rwt;
+      const taxRequired = calculateTax(taxableIncome, year);
+      const pieAdjustment = calculatePieAdjustment(pie, pir, yRate);
+      const ietcAmount = calculateIetc(year, taxableIncome, ietcMonths);
 
-      if (pieDebtCredit < 0) {
-        taxRequired += Math.abs(pieDebtCredit);
-      }
+      const result = round2(taxPaid - taxRequired - impCr + pieAdjustment + ietcAmount);
 
-      taxRequired = roundDown2(taxRequired);
-
-      let result;
-      if (pieDebtCredit > 0) {
-        result = roundDown2((taxPaid - taxRequired) + ietcAmount + pieDebtCredit);
-      } else {
-        result = roundDown2((taxPaid - taxRequired) + ietcAmount);
-      }
-
-      document.getElementById(`calc-${year}`).textContent = result.toFixed(2);
+      document.getElementById(`result-${year}`).textContent = result.toFixed(2);
     }
 
     function calculateAll() {
-      years.forEach(calculateRow);
+      years.forEach(year => calculateRow(year));
+    }
+
+    function handleAllChanges() {
+      updateLookupExpenses();
+      calculateAll();
     }
 
     function resetAll() {
       document.getElementById("irdNumber").value = "";
+
       document.querySelectorAll(".cell-input").forEach(input => {
-        input.value = 0;
+        if (input.tagName === "SELECT") {
+          input.value = "";
+        } else if (input.type === "date") {
+          input.value = "";
+        } else if (!input.readOnly) {
+          input.value = 0;
+        }
       });
-      calculateAll();
+
+      years.forEach(year => {
+        document.getElementById(`totaltax-${year}`).value = "0.00";
+        document.getElementById(`aexp-${year}`).value = "0.00";
+        document.getElementById(`result-${year}`).textContent = "0.00";
+      });
+    }
+
+    function csvEscape(value) {
+      const str = String(value ?? "");
+      if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
     }
 
     function downloadResult() {
-      const ird = document.getElementById("irdNumber").value || "";
-      let lines = [];
-      lines.push(["IRD #", ird].join(","));
+      const ird = normalizeIrd(document.getElementById("irdNumber").value);
+      const lines = [];
+
+      lines.push(["IRD Number", ird].map(csvEscape).join(","));
       lines.push("");
-      lines.push(["YEAR","GROSS","TAX","WHT G/INT","RWT","IMP CR","PIE","PIR","Y RATE","IETC","M EXP","A EXP","MYR CALC"].join(","));
+
+      lines.push([
+        "Year",
+        "Status",
+        "Return Type",
+        "Return Date",
+        "Gross Income",
+        "PAYE",
+        "ACC",
+        "Total Tax",
+        "WHT/INT",
+        "RWT",
+        "IMP CR",
+        "PIE",
+        "PIR",
+        "Y Rate",
+        "IETC",
+        "M Exp",
+        "A Expense",
+        "Result"
+      ].map(csvEscape).join(","));
 
       years.forEach(year => {
         lines.push([
           year,
-          num(`gross-${year}`),
-          num(`tax-${year}`),
-          num(`wht-${year}`),
-          num(`rwt-${year}`),
-          num(`imp-${year}`),
-          num(`pie-${year}`),
-          num(`pir-${year}`),
-          num(`yrate-${year}`),
-          num(`ietc-${year}`),
-          num(`mexp-${year}`),
-          num(`aexp-${year}`),
-          document.getElementById(`calc-${year}`).textContent
-        ].join(","));
+          document.getElementById(`status-${year}`).value,
+          document.getElementById(`returntype-${year}`).value,
+          document.getElementById(`returndate-${year}`).value,
+          document.getElementById(`gross-${year}`).value,
+          document.getElementById(`paye-${year}`).value,
+          document.getElementById(`acc-${year}`).value,
+          document.getElementById(`totaltax-${year}`).value,
+          document.getElementById(`wht-${year}`).value,
+          document.getElementById(`rwt-${year}`).value,
+          document.getElementById(`imp-${year}`).value,
+          document.getElementById(`pie-${year}`).value,
+          document.getElementById(`pir-${year}`).value,
+          document.getElementById(`yrate-${year}`).value,
+          document.getElementById(`ietcmonths-${year}`).value,
+          document.getElementById(`mexp-${year}`).value,
+          document.getElementById(`aexp-${year}`).value,
+          document.getElementById(`result-${year}`).textContent
+        ].map(csvEscape).join(","));
       });
 
       const blob = new Blob([lines.join("\n")], { type: "text/csv" });
@@ -443,7 +583,7 @@
     }
 
     buildTable();
-    calculateAll();
+    handleAllChanges();
   </script>
 </body>
 </html>
