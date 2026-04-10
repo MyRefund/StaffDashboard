@@ -5,358 +5,917 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Language" content="en">
 <meta name="google" content="notranslate">
-<title>My Refund — Processing Workspace</title>
+<title>My Refund — Tax Calculator</title>
 
 <style>
 :root{
   --g0:#094B35;
+  --g1:#0f6b4b;
   --g2:#ECFDF5;
+  --bg:#f4f7f5;
+  --panel:rgba(255,255,255,.97);
   --text:#111827;
   --muted:#6b7280;
   --border:#e5e7eb;
   --radius:16px;
-  --shadow:0 12px 32px rgba(0,0,0,.14);
+  --shadow:0 12px 32px rgba(0,0,0,.12);
+  --danger:#b42318;
+  --danger-bg:#fef3f2;
+  --success:#027a48;
+  --success-bg:#ecfdf3;
+  --warning:#b54708;
+  --warning-bg:#fffaeb;
 }
+
 *{box-sizing:border-box}
-body{margin:0;font-family:"Okta Neue",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);}
-.page{min-height:100vh;background:url("My Refund-Hero Images-02 (1).jpg") center/cover no-repeat;transition:.2s ease;}
-.page.submitting{opacity:.7;}
-.header{background:var(--g0);color:#fff;padding:14px 24px;}
-.header-inner{max-width:1300px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
-.brand{display:flex;align-items:center;gap:14px;}
-.brand img{height:26px}
-.brand-text strong{font-size:15px;font-weight:900}
-.brand-text span{font-size:12px;opacity:.9;font-weight:700}
-.header-right{display:flex;align-items:center;gap:12px;}
-.dashboard-btn{border-radius:999px;padding:8px 16px;font-weight:900;font-size:13px;border:1px solid #fff;background:transparent;color:#fff;cursor:pointer;}
-.clock{font-weight:900;font-size:14px}
-.top-action{border-radius:999px;padding:8px 14px;font-weight:900;font-size:13px;border:1px solid #fff;background:#fff;color:var(--g0);cursor:pointer;position:relative;}
-.top-action.loading{pointer-events:none;opacity:.95;}
-.top-action.loading::after{content:"";position:absolute;right:12px;top:50%;width:14px;height:14px;margin-top:-7px;border:2px solid rgba(9,75,53,.25);border-top:2px solid var(--g0);border-radius:50%;animation:spin .8s linear infinite;}
-@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-.tabs{background:#fff;padding:12px 24px;display:flex;gap:10px;border-bottom:1px solid var(--border);}
-.tab{border-radius:999px;padding:8px 16px;font-weight:900;font-size:13px;border:1px solid var(--g0);background:#fff;color:var(--g0);cursor:pointer;}
-.tab.active{background:var(--g0);color:#fff;}
-.wrap{max-width:1300px;margin:0 auto;padding:36px 24px 60px;}
-.layout{display:grid;grid-template-columns:1fr 260px;gap:24px;}
-.panel{background:rgba(255,255,255,.96);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:20px;}
-.panel h3{margin:0 0 14px 0;font-size:18px;font-weight:900;color:var(--g0);}
-.fee-panel{border-top:6px solid var(--g0);}
-.banner{background:#fff3cd;border-left:6px solid #f0ad4e;padding:12px 16px;margin-bottom:20px;font-weight:800;border-radius:12px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
-.item{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;}
-.item label{display:block;font-weight:900;margin-bottom:8px;}
-.controls{display:flex;align-items:center;gap:6px;}
-.controls button{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:#fff;font-weight:900;cursor:pointer;}
-.controls input{width:56px;text-align:center;border:1px solid var(--border);border-radius:8px;padding:6px;font-weight:900;}
-.button-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:16px;}
-.type-btn{border-radius:12px;padding:10px;font-weight:900;border:2px solid var(--g0);background:#fff;color:var(--g0);cursor:pointer;}
-.type-btn.active{background:var(--g0);color:#fff;}
-input[type="text"]{padding:10px;border-radius:10px;border:1px solid var(--border);font-weight:700;width:100%;}
-.add-btn{margin-top:10px;padding:10px 16px;border:none;border-radius:12px;background:var(--g0);color:#fff;font-weight:900;cursor:pointer;}
-table{width:100%;border-collapse:collapse;}
-th,td{border-bottom:1px solid var(--border);padding:8px;font-size:13px;}
-th{color:var(--muted);font-weight:900;text-align:left;}
-td button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 8px;cursor:pointer;font-weight:900;}
-.total-box{background:var(--g2);border-radius:12px;padding:14px;font-weight:900;font-size:18px;text-align:right;}
-.submit button{width:100%;border-radius:14px;padding:14px;font-weight:900;font-size:15px;border:none;background:var(--g0);color:#fff;cursor:pointer;position:relative;}
-.submit button.loading{pointer-events:none;opacity:.95;}
-.submit button.loading::after{content:"";position:absolute;right:18px;top:50%;width:16px;height:16px;margin-top:-8px;border:2px solid rgba(255,255,255,.5);border-top:2px solid #fff;border-radius:50%;animation:spin .8s linear infinite;}
-.collapsible-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:900;}
-.hidden{display:none;}
-.inline-check{display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#fff;}
-.inline-check span{font-weight:900;color:var(--muted);font-size:13px;}
-.helper{margin-top:10px;color:var(--muted);font-weight:800;font-size:12px;line-height:1.4;}
-@media(max-width:1100px){.layout{grid-template-columns:1fr}}
+
+body{
+  margin:0;
+  font-family:"Okta Neue",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:linear-gradient(180deg,#eef5f1 0%, #f7faf8 100%);
+}
+
+.page{
+  min-height:100vh;
+}
+
+.header{
+  background:var(--g0);
+  color:#fff;
+  padding:14px 24px;
+}
+
+.header-inner{
+  max-width:1500px;
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.brand-mark{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background:rgba(255,255,255,.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:16px;
+}
+
+.brand-text strong{
+  display:block;
+  font-size:15px;
+  font-weight:900;
+}
+
+.brand-text span{
+  display:block;
+  font-size:12px;
+  opacity:.92;
+  font-weight:700;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.header-chip{
+  border-radius:999px;
+  padding:8px 14px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.08);
+  color:#fff;
+}
+
+.wrap{
+  max-width:1500px;
+  margin:0 auto;
+  padding:28px 24px 60px;
+}
+
+.hero{
+  margin-bottom:22px;
+}
+
+.hero h1{
+  margin:0;
+  font-size:28px;
+  font-weight:900;
+  color:var(--g0);
+}
+
+.hero p{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:14px;
+  font-weight:700;
+}
+
+.panel{
+  background:var(--panel);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+  margin-bottom:20px;
+  border-top:6px solid var(--g0);
+}
+
+.panel h3{
+  margin:0 0 14px 0;
+  font-size:18px;
+  font-weight:900;
+  color:var(--g0);
+}
+
+.top-grid{
+  display:grid;
+  grid-template-columns:minmax(240px,320px) 1fr;
+  gap:18px;
+  align-items:end;
+}
+
+.field label{
+  display:block;
+  font-weight:900;
+  margin-bottom:8px;
+  color:var(--text);
+}
+
+.field input{
+  width:100%;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-weight:800;
+  font-size:14px;
+  outline:none;
+}
+
+.field input:focus{
+  border-color:var(--g1);
+  box-shadow:0 0 0 4px rgba(15,107,75,.10);
+}
+
+.action-row{
+  display:flex;
+  gap:12px;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border-radius:12px;
+  padding:12px 16px;
+  font-weight:900;
+  font-size:14px;
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--text);
+  cursor:pointer;
+}
+
+.btn-primary{
+  background:var(--g0);
+  border-color:var(--g0);
+  color:#fff;
+}
+
+.btn-secondary{
+  background:#fff;
+  color:var(--g0);
+  border-color:var(--g0);
+}
+
+.helper-row{
+  margin-top:14px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.helper-chip{
+  border-radius:999px;
+  padding:8px 12px;
+  background:var(--g2);
+  color:var(--g0);
+  font-size:12px;
+  font-weight:900;
+}
+
+.table-shell{
+  overflow:hidden;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:#fff;
+}
+
+.table-wrap{
+  overflow:auto;
+  max-width:100%;
+}
+
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  min-width:1750px;
+}
+
+thead th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#f8faf9;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  border-bottom:1px solid var(--border);
+  padding:12px 10px;
+  white-space:nowrap;
+  text-align:center;
+}
+
+tbody td{
+  border-bottom:1px solid var(--border);
+  padding:8px;
+  text-align:center;
+  vertical-align:middle;
+  background:#fff;
+}
+
+tbody tr:nth-child(even) td{
+  background:#fcfcfc;
+}
+
+tbody tr:hover td{
+  background:#f8fbf9;
+}
+
+.year-cell{
+  position:sticky;
+  left:0;
+  z-index:1;
+  background:#f5f8f6 !important;
+  font-weight:900;
+  color:var(--g0);
+  min-width:78px;
+}
+
+.cell-input,
+.cell-select{
+  width:100%;
+  min-width:78px;
+  border:1px solid transparent;
+  outline:none;
+  text-align:center;
+  padding:10px 8px;
+  background:#f9fafb;
+  border-radius:10px;
+  font-size:14px;
+  font-weight:800;
+  color:var(--text);
+}
+
+.cell-select{
+  appearance:none;
+}
+
+.cell-input:focus,
+.cell-select:focus{
+  border-color:var(--g1);
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(15,107,75,.10);
+}
+
+.readonly-cell{
+  background:#f3f4f6 !important;
+  color:#374151;
+  font-weight:900;
+}
+
+.result-cell{
+  font-weight:900;
+  min-width:110px;
+}
+
+.result-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:88px;
+  padding:10px 12px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:14px;
+}
+
+.result-positive{
+  background:var(--success-bg);
+  color:var(--success);
+}
+
+.result-negative{
+  background:var(--danger-bg);
+  color:var(--danger);
+}
+
+.result-neutral{
+  background:#f3f4f6;
+  color:#374151;
+}
+
+.notes{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
+
+.note-card{
+  padding:14px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:#fff;
+}
+
+.note-card strong{
+  display:block;
+  color:var(--g0);
+  font-size:13px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+.note-card span{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+  line-height:1.4;
+}
+
+@media (max-width: 900px){
+  .top-grid{
+    grid-template-columns:1fr;
+  }
+
+  .action-row{
+    justify-content:flex-start;
+  }
+
+  .hero h1{
+    font-size:24px;
+  }
+}
 </style>
 </head>
 
 <body>
 <div class="page">
 
-<div class="header">
-<div class="header-inner">
-<div class="brand">
-<img src="logo.png" alt="My Refund">
-<div class="brand-text">
-<strong id="staffNameLabel">Processing</strong>
-<span>Daily Work Logger</span>
-</div>
-</div>
-<div class="header-right">
-<button class="top-action" id="topUpdateBtn" onclick="updateDay()">Update</button>
-<button class="dashboard-btn" onclick="goHome()">← Dashboard</button>
-<div class="clock" id="clock"></div>
-</div>
-</div>
-</div>
+  <div class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark">MR</div>
+        <div class="brand-text">
+          <strong>My Refund</strong>
+          <span>Processing Tax Calculator</span>
+        </div>
+      </div>
 
-<div class="tabs">
-<button class="tab active" onclick="switchTab('work', this)">Work Log</button>
-<button class="tab" onclick="switchTab('resources', this)">Resources</button>
-</div>
+      <div class="header-right">
+        <div class="header-chip">Auto Expense Lookup</div>
+        <div class="header-chip">Years 2026–2022</div>
+      </div>
+    </div>
+  </div>
 
-<div class="wrap">
-<div id="workTab">
-<div id="warningBanner" class="banner hidden"></div>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Tax Calculator Workspace</h1>
+      <p>Enter client information, review yearly calculations, and export the completed result set.</p>
+    </div>
 
-<div style="margin-bottom:28px;">
-<div style="font-size:24px;font-weight:900;color:var(--g0);">
-Hello, <span id="helloName"></span>
-</div>
-<div style="margin-top:6px;font-size:13px;font-weight:800;color:var(--muted);">
-<span id="todayDate"></span> • Division: Processing
-</div>
-</div>
+    <div class="panel">
+      <h3>Client Details</h3>
 
-<div class="layout">
-<div>
+      <div class="top-grid">
+        <div class="field">
+          <label for="irdNumber">IRD Number</label>
+          <input type="text" id="irdNumber" placeholder="Enter IRD Number">
+        </div>
 
-<div class="panel">
-<h3>Processing Output</h3>
-<div class="grid">
-<div class="item"><label>Filing</label><div class="controls"><button onclick="adj('filing',-1)">−</button><input id="filing" value="0"><button onclick="adj('filing',1)">+</button></div></div>
-<div class="item"><label>Linking</label><div class="controls"><button onclick="adj('linking',-1)">−</button><input id="linking" value="0"><button onclick="adj('linking',1)">+</button></div></div>
-<div class="item"><label>Linked Review</label><div class="controls"><button onclick="adj('linkedreview',-1)">−</button><input id="linkedreview" value="0"><button onclick="adj('linkedreview',1)">+</button></div></div>
-<div class="item"><label>Inbox</label><div class="controls"><button onclick="adj('inbox',-1)">−</button><input id="inbox" value="0"><button onclick="adj('inbox',1)">+</button></div></div>
-<div class="item"><label>Existing Review</label><div class="controls"><button onclick="adj('existingreview',-1)">−</button><input id="existingreview" value="0"><button onclick="adj('existingreview',1)">+</button></div></div>
-<div class="item"><label>Processing Review</label><div class="controls"><button onclick="adj('processingreview',-1)">−</button><input id="processingreview" value="0"><button onclick="adj('processingreview',1)">+</button></div></div>
-<div class="item"><label>Miscellaneous</label><div class="controls"><button onclick="adj('misc',-1)">−</button><input id="misc" value="0"><button onclick="adj('misc',1)">+</button></div></div>
-</div>
-</div>
+        <div class="action-row">
+          <button type="button" class="btn btn-primary" onclick="downloadResult()">Download Result</button>
+          <button type="button" class="btn btn-secondary" onclick="resetAll()">Reset</button>
+        </div>
+      </div>
 
-<div class="panel fee-panel">
-<h3>Return Fee Logging</h3>
-<div class="button-grid">
-<button class="type-btn" onclick="selectType(event,'ITA')">ITA</button>
-<button class="type-btn" onclick="selectType(event,'IR3')">IR3</button>
-<button class="type-btn" onclick="selectType(event,'REB')">REB</button>
-<button class="type-btn" onclick="autoAdd('ITATTP')">ITA TTP</button>
-<button class="type-btn" onclick="autoAdd('IR3TTP')">IR3 TTP</button>
-</div>
+      <div class="helper-row">
+        <div class="helper-chip">A Expense is auto-looked up</div>
+        <div class="helper-chip">Calculations update automatically</div>
+        <div class="helper-chip">IETC entered as 0–12 months</div>
+      </div>
+    </div>
 
-<div id="inputSection" class="hidden">
-<input type="text" id="amountInput" placeholder="Refund Amount">
-<label id="backYearLabel" class="hidden inline-check"><input type="checkbox" id="backYear"><span>Back Year</span></label>
-<label id="receiptLabel" class="hidden inline-check"><input type="checkbox" id="receiptAssist"><span>Receipt Assistance</span></label>
-<div class="helper" id="feeHelper" style="display:none;"></div>
-<button class="add-btn" onclick="addEntry()">Add</button>
-</div>
-</div>
+    <div class="panel">
+      <h3>Yearly Tax Summary</h3>
 
-<div class="panel fee-panel">
-<div class="collapsible-header" onclick="toggleLog()">
-<span>Today’s Fee Entries (<span id="entryCount">0</span>)</span>
-<span id="toggleIcon">▼</span>
-</div>
-<div id="logContainer" class="hidden">
-<table>
-<thead><tr><th>Time</th><th>Type</th><th>Fee</th><th></th></tr></thead>
-<tbody id="logTable"></tbody>
-</table>
-</div>
-</div>
+      <div class="table-shell">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Status</th>
+                <th>Return Type</th>
+                <th>Return Date</th>
+                <th>Gross Income</th>
+                <th>PAYE</th>
+                <th>ACC</th>
+                <th>Total Tax</th>
+                <th>WHT/INT</th>
+                <th>RWT</th>
+                <th>IMP CR</th>
+                <th>PIE</th>
+                <th>PIR</th>
+                <th>Y Rate</th>
+                <th>IETC</th>
+                <th>M Exp</th>
+                <th>A Expense</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody id="calcBody"></tbody>
+          </table>
+        </div>
+      </div>
 
-<div class="panel fee-panel">
-<div class="total-box">Total Fees Today: $<span id="totalFees">0.00</span></div>
-</div>
-
-<div class="submit">
-<button id="submitBtn" onclick="submitDay()">Submit & Finish Day</button>
-</div>
-
-</div>
-
-<div>
-<div class="panel">
-<h3>Quick Contacts</h3>
-<strong>My Refund</strong><br>
-0800 80 89 89<br>
-info@myrefund.co.nz<br>
-myrefund.co.nz<br><br>
-<strong>IRD</strong><br>
-ird.govt.nz<br>
-0800 227 774
-</div>
-</div>
-
-</div>
-</div>
-</div>
+      <div class="notes">
+        <div class="note-card">
+          <strong>Expense lookup</strong>
+          <span>Fake sample data is currently being used for A Expense. This can later be swapped to your Google Sheet lookup.</span>
+        </div>
+        <div class="note-card">
+          <strong>Read-only values</strong>
+          <span>Total Tax and A Expense are locked display fields so staff can review them without editing.</span>
+        </div>
+        <div class="note-card">
+          <strong>Result display</strong>
+          <span>Positive and negative results are highlighted so staff can scan outcomes more quickly.</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded",function(){
+const years = [2026, 2025, 2024, 2023, 2022];
 
-const WEB_APP_URL="https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
-const TZ="Pacific/Auckland";
-const DIVISION="Processing";
-const name=localStorage.getItem("currentStaff")||"Processing";
+const statusOptions = [
+  "Pending",
+  "Tax Refund",
+  "Tax to Pay",
+  "Income Tax Arrears",
+  "Child Support Arrears"
+];
 
-function nzISO(d){return(d||new Date()).toLocaleDateString("en-CA",{timeZone:TZ});}
-function nzHuman(iso){const[a,b,c]=iso.split("-").map(Number);return new Date(Date.UTC(a,b-1,c,12)).toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ});}
+const returnTypeOptions = [
+  "Auto Assessed",
+  "ITA",
+  "IR3"
+];
 
-const todayISO=nzISO(new Date());
-const yesterdayISO=nzISO(new Date(Date.now()-86400000));
-let workingISO=todayISO;
-
-const todayKey=`processing_${name}_${todayISO}`;
-const yesterdayKey=`processing_${name}_${yesterdayISO}`;
-let storageKey=todayKey;
-
-const savedYesterday=localStorage.getItem(yesterdayKey);
-if(!localStorage.getItem(todayKey)&&savedYesterday){
-const yState=JSON.parse(savedYesterday);
-if(yState&&yState.submitted===false){workingISO=yesterdayISO;storageKey=yesterdayKey;}
-}
-
-document.getElementById("staffNameLabel").textContent=name;
-document.getElementById("helloName").textContent=name;
-document.getElementById("todayDate").textContent=workingISO===todayISO?nzHuman(todayISO):nzHuman(workingISO)+" (Carry-over)";
-
-function tick(){clock.textContent=new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit",second:"2-digit"});}
-tick();setInterval(tick,1000);
-
-let entries=[];
-let submitted=false;
-let currentType=null;
-
-function saveState(){
-localStorage.setItem(storageKey,JSON.stringify({
-entries,submitted,
-counters:{
-filing:filing.value,linking:linking.value,linkedreview:linkedreview.value,
-inbox:inbox.value,existingreview:existingreview.value,
-processingreview:processingreview.value,misc:misc.value
-}}));
-}
-
-function loadState(){
-const saved=localStorage.getItem(storageKey);
-if(saved){
-const state=JSON.parse(saved);
-entries=state.entries||[];
-submitted=state.submitted||false;
-if(state.counters){Object.keys(state.counters).forEach(k=>{if(document.getElementById(k))document.getElementById(k).value=state.counters[k];});}
-}
-renderLog();updateTotal();
-}
-loadState();
-
-window.adj=function(id,d){if(submitted)return;const el=document.getElementById(id);el.value=Math.max(0,Number(el.value||0)+d);saveState();};
-
-function cleanAmount(v){return parseFloat(String(v||"").replace(/[$, ]/g,''))||0;}
-
-function calculateFee(type,R,ra,by){
-if(type==="ITA"){if(R<39.68)return R;let base=R*0.11+5;if(!by)base+=29.5;let f=base*1.15;return f>345?345:f;}
-if(type==="IR3"){if(by){if(R<23)return R;let base=R*0.11+20;let f=base*1.15;return f>402.5?402.5:f;}
-if(R<56.93)return R;let base=R*0.11+20+29.5;let f=base*1.15;return f>402.5?402.5:f;}
-if(type==="REB"){let tier=R<500?45.99:(R<2000?68.99:91.99);if(ra)tier+=6.89;return R<tier?R:tier;}
-return 0;
-}
-
-window.selectType=function(e,type){
-if(submitted)return;
-currentType=type;
-document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
-e.target.classList.add("active");
-inputSection.classList.remove("hidden");
-backYearLabel.classList.add("hidden");receiptLabel.classList.add("hidden");
-if(type==="ITA"||type==="IR3")backYearLabel.classList.remove("hidden");
-if(type==="REB")receiptLabel.classList.remove("hidden");
+const expenseLookup = {
+  "2026": {
+    "048286461": 2328.74,
+    "088633921": 1409.56,
+    "070005050": 1221.03
+  },
+  "2025": {
+    "048286461": 2100.00,
+    "088633921": 1320.45,
+    "070005050": 1185.20
+  },
+  "2024": {
+    "048286461": 1980.00,
+    "088633921": 1210.10,
+    "070005050": 1099.99
+  },
+  "2023": {
+    "048286461": 1845.50,
+    "088633921": 1150.25,
+    "070005050": 980.40
+  },
+  "2022": {
+    "048286461": 1720.00,
+    "088633921": 1044.44,
+    "070005050": 910.00
+  }
 };
 
-window.autoAdd=function(type){
-if(submitted)return;
-let fee=0;
-if(type==="ITATTP")fee=(29.5+5)*1.15;
-if(type==="IR3TTP")fee=(29.5+20)*1.15;
-entries.push({type,amount:null,fee:Number(fee.toFixed(2)),receiptAssist:false,backYear:false,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
-renderLog();updateTotal();saveState();
+const yearConfigs = {
+  2026: {
+    brackets: [
+      { max: 15600, rate: 0.105, baseAt: 0 },
+      { max: 53500, rate: 0.175, baseAt: 15600 },
+      { max: 78100, rate: 0.30, baseAt: 53500 },
+      { max: 180000, rate: 0.33, baseAt: 78100 },
+      { max: Infinity, rate: 0.39, baseAt: 180000 }
+    ]
+  },
+  2025: {
+    brackets: [
+      { max: 14000, rate: 0.105, baseAt: 0 },
+      { max: 15600, rate: 0.1282, baseAt: 14000 },
+      { max: 48000, rate: 0.175, baseAt: 15600 },
+      { max: 53500, rate: 0.2164, baseAt: 48000 },
+      { max: 70000, rate: 0.30, baseAt: 53500 },
+      { max: 78100, rate: 0.3099, baseAt: 70000 },
+      { max: 180000, rate: 0.33, baseAt: 78100 },
+      { max: Infinity, rate: 0.39, baseAt: 180000 }
+    ]
+  },
+  2024: {
+    brackets: [
+      { max: 14000, rate: 0.105, baseAt: 0 },
+      { max: 48000, rate: 0.175, baseAt: 14000 },
+      { max: 70000, rate: 0.30, baseAt: 48000 },
+      { max: 180000, rate: 0.33, baseAt: 70000 },
+      { max: Infinity, rate: 0.39, baseAt: 180000 }
+    ]
+  },
+  2023: {
+    brackets: [
+      { max: 14000, rate: 0.105, baseAt: 0 },
+      { max: 48000, rate: 0.175, baseAt: 14000 },
+      { max: 70000, rate: 0.30, baseAt: 48000 },
+      { max: 180000, rate: 0.33, baseAt: 70000 },
+      { max: Infinity, rate: 0.39, baseAt: 180000 }
+    ]
+  },
+  2022: {
+    brackets: [
+      { max: 14000, rate: 0.105, baseAt: 0 },
+      { max: 48000, rate: 0.175, baseAt: 14000 },
+      { max: 70000, rate: 0.30, baseAt: 48000 },
+      { max: 180000, rate: 0.33, baseAt: 70000 },
+      { max: Infinity, rate: 0.39, baseAt: 180000 }
+    ]
+  }
 };
 
-window.addEntry=function(){
-if(submitted||!currentType)return;
-const R=cleanAmount(amountInput.value);if(!R)return;
-const ra=receiptAssist.checked;const by=backYear.checked;
-const fee=calculateFee(currentType,R,ra,by);
-entries.push({type:currentType,amount:R,fee,receiptAssist:ra,backYear:by,time:new Date().toLocaleTimeString("en-NZ",{hour:"numeric",minute:"2-digit"})});
-if(["ITA","IR3","REB"].includes(currentType))adj("filing",1);
-amountInput.value="";renderLog();updateTotal();saveState();
-};
+function buildSelect(options, id) {
+  const select = document.createElement("select");
+  select.className = "cell-select";
+  select.id = id;
 
-function renderLog(){
-logTable.innerHTML="";
-entries.forEach((e,i)=>{
-const typeLabel=
-(e.type==="IR3"&&e.backYear)?"IR3 (Back Year)":
-(e.type==="ITA"&&e.backYear)?"ITA (Back Year)":
-(e.type==="ITATTP")?"ITA TTP":
-(e.type==="IR3TTP")?"IR3 TTP":
-e.type;
-const extra=(e.type==="REB"&&e.receiptAssist)?" + RA":"";
-const row=document.createElement("tr");
-row.innerHTML=`<td>${e.time}</td><td>${typeLabel}${extra}</td><td>$${Number(e.fee).toFixed(2)}</td><td></td>`;
-logTable.appendChild(row);
-});
-entryCount.textContent=entries.length;
+  const blankOption = document.createElement("option");
+  blankOption.value = "";
+  blankOption.textContent = "";
+  select.appendChild(blankOption);
+
+  options.forEach(optionText => {
+    const option = document.createElement("option");
+    option.value = optionText;
+    option.textContent = optionText;
+    select.appendChild(option);
+  });
+
+  return select;
 }
 
-function updateTotal(){
-totalFees.textContent=entries.reduce((s,e)=>s+Number(e.fee||0),0).toFixed(2);
+function buildTable() {
+  const body = document.getElementById("calcBody");
+  body.innerHTML = "";
+
+  years.forEach(year => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td class="year-cell">${year}</td>
+      <td id="status-cell-${year}"></td>
+      <td id="returntype-cell-${year}"></td>
+      <td><input class="cell-input" type="date" id="returndate-${year}"></td>
+      <td><input class="cell-input" type="number" step="0.01" id="gross-${year}" value="0"></td>
+      <td><input class="cell-input" type="number" step="0.01" id="paye-${year}" value="0"></td>
+      <td><input class="cell-input" type="number" step="0.01" id="acc-${year}" value="0"></td>
+      <td><input class="cell-input readonly-cell" type="number" step="0.01" id="totaltax-${year}" value="0" readonly></td>
+      <td><input class="cell-input" type="number" step="0.01" id="wht-${year}" value="0"></td>
+      <td><input class="cell-input" type="number" step="0.01" id="rwt-${year}" value="0"></td>
+      <td><input class="cell-input" type="number" step="0.01" id="imp-${year}" value="0"></td>
+      <td><input class="cell-input" type="number" step="0.01" id="pie-${year}" value="0"></td>
+      <td><input class="cell-input" type="number" step="0.01" id="pir-${year}" value="0"></td>
+      <td><input class="cell-input" type="number" step="0.0001" id="yrate-${year}" value="0"></td>
+      <td><input class="cell-input" type="number" min="0" max="12" step="1" id="ietcmonths-${year}" value="0"></td>
+      <td><input class="cell-input" type="number" step="0.01" id="mexp-${year}" value="0"></td>
+      <td><input class="cell-input readonly-cell" type="number" step="0.01" id="aexp-${year}" value="0" readonly></td>
+      <td class="result-cell"><span class="result-badge result-neutral" id="result-${year}">0.00</span></td>
+    `;
+
+    body.appendChild(tr);
+
+    document.getElementById(`status-cell-${year}`).appendChild(
+      buildSelect(statusOptions, `status-${year}`)
+    );
+
+    document.getElementById(`returntype-cell-${year}`).appendChild(
+      buildSelect(returnTypeOptions, `returntype-${year}`)
+    );
+  });
+
+  document.querySelectorAll(".cell-input, .cell-select").forEach(input => {
+    input.addEventListener("input", handleAllChanges);
+    input.addEventListener("change", handleAllChanges);
+  });
+
+  document.getElementById("irdNumber").addEventListener("input", handleAllChanges);
+  document.getElementById("irdNumber").addEventListener("change", handleAllChanges);
 }
 
-window.submitDay=async function(){
-if(submitted)return;
-if(!confirm("Submit day? This cannot be edited."))return;
-const btn=document.getElementById("submitBtn");
-btn.classList.add("loading");btn.textContent="Submitting...";
-const fd=new URLSearchParams();
-fd.append("action","submitProcessing");
-fd.append("date",workingISO);
-fd.append("staff",name);
-fd.append("division",DIVISION);
-fd.append("Filing",filing.value);
-fd.append("Linking",linking.value);
-fd.append("LinkedReview",linkedreview.value);
-fd.append("Inbox",inbox.value);
-fd.append("ExistingReview",existingreview.value);
-fd.append("ProcessingReview",processingreview.value);
-fd.append("Miscellaneous",misc.value);
-fd.append("TotalFees",totalFees.textContent);
-fd.append("feeEntries",JSON.stringify(entries));
-await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:fd});
-submitted=true;saveState();
-btn.textContent="Submitted ✓";
-setTimeout(()=>window.location.href="index.html",1500);
-};
+function num(id) {
+  return Number(document.getElementById(id).value || 0);
+}
 
-window.updateDay=async function(){
-if(submitted)return;
-const btn=document.getElementById("topUpdateBtn");
-btn.classList.add("loading");btn.textContent="Updating...";
-const fd=new URLSearchParams();
-fd.append("action","updateProcessing");
-fd.append("date",workingISO);
-fd.append("staff",name);
-fd.append("division",DIVISION);
-fd.append("Filing",filing.value);
-fd.append("Linking",linking.value);
-fd.append("LinkedReview",linkedreview.value);
-fd.append("Inbox",inbox.value);
-fd.append("ExistingReview",existingreview.value);
-fd.append("ProcessingReview",processingreview.value);
-fd.append("Miscellaneous",misc.value);
-fd.append("TotalFees",totalFees.textContent);
-fd.append("feeEntries",JSON.stringify(entries));
-fd.append("submitted","false");
-await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:fd});
-btn.classList.remove("loading");btn.textContent="Updated ✓";
-setTimeout(()=>btn.textContent="Update",1200);
-saveState();
-};
+function normalizeIrd(value) {
+  return String(value || "").replace(/\D/g, "");
+}
 
-});
+function round2(value) {
+  return Math.round((Number(value) || 0) * 100) / 100;
+}
+
+function roundDown2(value) {
+  return Math.floor((Number(value) || 0) * 100) / 100;
+}
+
+function floor0(value) {
+  return Math.floor(Number(value) || 0);
+}
+
+function calculateTax(taxableIncome, year) {
+  const config = yearConfigs[year];
+  if (!config) return 0;
+
+  let totalTax = 0;
+
+  config.brackets.forEach(bracket => {
+    if (taxableIncome <= bracket.baseAt) return;
+
+    let amountInBracket = 0;
+
+    if (bracket.max === Infinity) {
+      amountInBracket = taxableIncome - bracket.baseAt;
+    } else {
+      amountInBracket = Math.min(taxableIncome, bracket.max) - bracket.baseAt;
+    }
+
+    if (amountInBracket > 0) {
+      const bracketTax = roundDown2(amountInBracket * bracket.rate);
+      totalTax += bracketTax;
+    }
+  });
+
+  return roundDown2(totalTax);
+}
+
+function calculatePieAdjustment(pieIncome, pirPaid, yRate) {
+  const correctPieTax = roundDown2(pieIncome * yRate);
+  return round2(pirPaid - correctPieTax);
+}
+
+function calculateIetc(year, income, monthsEligible) {
+  if (monthsEligible <= 0) return 0;
+  if (income < 24000) return 0;
+
+  if (year === 2026) {
+    if (income > 70000) return 0;
+
+    let annualEntitlement = 520;
+    if (income > 66000) {
+      annualEntitlement = 520 - ((income - 66000) * 0.13);
+    }
+
+    annualEntitlement = Math.max(0, annualEntitlement);
+    return round2((annualEntitlement * monthsEligible) / 12);
+  }
+
+  if (year === 2025) {
+    if (income > 70000) return 0;
+
+    let part1Annual = 520;
+    if (income > 44000) {
+      part1Annual = 520 - ((income - 44000) * 0.13);
+    }
+    part1Annual = Math.max(0, part1Annual);
+    const part1Prorated = (part1Annual * 121) / 365;
+
+    let part2Annual = 520;
+    if (income > 66000) {
+      part2Annual = 520 - ((income - 66000) * 0.13);
+    }
+    part2Annual = Math.max(0, part2Annual);
+    const part2Prorated = (part2Annual * 244) / 365;
+
+    const combined = part1Prorated + part2Prorated;
+    return round2((combined * monthsEligible) / 12);
+  }
+
+  if (income > 48000) return 0;
+
+  let annualEntitlement = 520;
+  if (income > 44000) {
+    annualEntitlement = 520 - ((income - 44000) * 0.13);
+  }
+
+  annualEntitlement = Math.max(0, annualEntitlement);
+  return round2((annualEntitlement * monthsEligible) / 12);
+}
+
+function lookupExpenseForYear(year) {
+  const ird = normalizeIrd(document.getElementById("irdNumber").value);
+  if (!ird) return 0;
+
+  const yearBucket = expenseLookup[String(year)] || {};
+  return round2(yearBucket[ird] || 0);
+}
+
+function updateLookupExpenses() {
+  years.forEach(year => {
+    const expense = lookupExpenseForYear(year);
+    document.getElementById(`aexp-${year}`).value = expense.toFixed(2);
+  });
+}
+
+function renderResultBadge(year, value) {
+  const el = document.getElementById(`result-${year}`);
+  el.textContent = value.toFixed(2);
+  el.className = "result-badge";
+
+  if (value > 0) {
+    el.classList.add("result-positive");
+  } else if (value < 0) {
+    el.classList.add("result-negative");
+  } else {
+    el.classList.add("result-neutral");
+  }
+}
+
+function calculateRow(year) {
+  const gross = num(`gross-${year}`);
+  const paye = num(`paye-${year}`);
+  const acc = num(`acc-${year}`);
+  const totalTax = round2(paye - acc);
+  const wht = num(`wht-${year}`);
+  const rwt = num(`rwt-${year}`);
+  const impCr = num(`imp-${year}`);
+  const pie = num(`pie-${year}`);
+  const pirPaid = num(`pir-${year}`);
+  const yRate = num(`yrate-${year}`);
+  const ietcMonths = num(`ietcmonths-${year}`);
+  const mExp = num(`mexp-${year}`);
+  const aExp = num(`aexp-${year}`);
+
+  document.getElementById(`totaltax-${year}`).value = totalTax.toFixed(2);
+
+  const rawIncome = gross + wht - mExp - aExp;
+  const taxableIncome = floor0(rawIncome);
+  const ietcIncome = Math.round(rawIncome);
+
+  const taxPaid = round2(totalTax + rwt);
+
+  let taxRequired = calculateTax(taxableIncome, year);
+  taxRequired = round2(taxRequired - impCr);
+
+  const ietcAmount = calculateIetc(year, ietcIncome, ietcMonths);
+  const pieAdjustment = calculatePieAdjustment(pie, pirPaid, yRate);
+
+  const result = round2((taxPaid - taxRequired) + ietcAmount + pieAdjustment);
+
+  renderResultBadge(year, result);
+}
+
+function calculateAll() {
+  years.forEach(year => calculateRow(year));
+}
+
+function handleAllChanges() {
+  updateLookupExpenses();
+  calculateAll();
+}
+
+function resetAll() {
+  document.getElementById("irdNumber").value = "";
+
+  document.querySelectorAll(".cell-input, .cell-select").forEach(input => {
+    if (input.tagName === "SELECT") {
+      input.value = "";
+    } else if (input.type === "date") {
+      input.value = "";
+    } else if (!input.readOnly) {
+      input.value = 0;
+    }
+  });
+
+  years.forEach(year => {
+    document.getElementById(`totaltax-${year}`).value = "0.00";
+    document.getElementById(`aexp-${year}`).value = "0.00";
+    renderResultBadge(year, 0);
+  });
+}
+
+function csvEscape(value) {
+  const str = String(value ?? "");
+  if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+  return str;
+}
+
+function downloadResult() {
+  const ird = normalizeIrd(document.getElementById("irdNumber").value);
+  const lines = [];
+
+  lines.push(["IRD Number", ird].map(csvEscape).join(","));
+  lines.push("");
+
+  lines.push([
+    "Year",
+    "Status",
+    "Return Type",
+    "Return Date",
+    "Gross Income",
+    "PAYE",
+    "ACC",
+    "Total Tax",
+    "WHT/INT",
+    "RWT",
+    "IMP CR",
+    "PIE",
+    "PIR",
+    "Y Rate",
+    "IETC",
+    "M Exp",
+    "A Expense",
+    "Result"
+  ].map(csvEscape).join(","));
+
+  years.forEach(year => {
+    lines.push([
+      year,
+      document.getElementById(`status-${year}`).value,
+      document.getElementById(`returntype-${year}`).value,
+      document.getElementById(`returndate-${year}`).value,
+      document.getElementById(`gross-${year}`).value,
+      document.getElementById(`paye-${year}`).value,
+      document.getElementById(`acc-${year}`).value,
+      document.getElementById(`totaltax-${year}`).value,
+      document.getElementById(`wht-${year}`).value,
+      document.getElementById(`rwt-${year}`).value,
+      document.getElementById(`imp-${year}`).value,
+      document.getElementById(`pie-${year}`).value,
+      document.getElementById(`pir-${year}`).value,
+      document.getElementById(`yrate-${year}`).value,
+      document.getElementById(`ietcmonths-${year}`).value,
+      document.getElementById(`mexp-${year}`).value,
+      document.getElementById(`aexp-${year}`).value,
+      document.getElementById(`result-${year}`).textContent
+    ].map(csvEscape).join(","));
+  });
+
+  const blob = new Blob([lines.join("\n")], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `tax-calculator-${ird || "no-ird"}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+buildTable();
+handleAllChanges();
 </script>
 
 </body>
