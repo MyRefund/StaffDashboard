@@ -367,6 +367,30 @@ tbody tr:hover td.result-col{
   font-weight:700;
   line-height:1.4;
 }
+.status-text{
+  margin-top:10px;
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+}
+.status-ok{
+  color:var(--success);
+}
+.status-error{
+  color:var(--danger);
+}
+
+/* Hide number spinners/arrows */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{
+  -webkit-appearance:none;
+  margin:0;
+}
+input[type="number"]{
+  -moz-appearance:textfield;
+  appearance:textfield;
+}
+
 @media (max-width: 900px){
   .top-grid{grid-template-columns:1fr}
   .action-row{justify-content:flex-start}
@@ -387,7 +411,7 @@ tbody tr:hover td.result-col{
         </div>
       </div>
       <div class="header-right">
-        <div class="header-chip">Auto Expense Lookup</div>
+        <div class="header-chip">Google Sheet Expense Lookup</div>
         <div class="header-chip">Years 2026–2022</div>
       </div>
     </div>
@@ -405,6 +429,7 @@ tbody tr:hover td.result-col{
         <div class="field">
           <label for="irdNumber">IRD Number</label>
           <input type="text" id="irdNumber" placeholder="Enter IRD Number">
+          <div id="lookupStatus" class="status-text">Expense lookup loading…</div>
         </div>
         <div class="action-row">
           <button type="button" class="btn btn-primary" onclick="downloadResult()">Download Result</button>
@@ -413,7 +438,7 @@ tbody tr:hover td.result-col{
       </div>
 
       <div class="helper-row">
-        <div class="helper-chip">A Exp auto-looked up</div>
+        <div class="helper-chip">A Exp pulled from Google Sheet</div>
         <div class="helper-chip">Calculations auto-update</div>
         <div class="helper-chip">IETC entered as 0–12</div>
       </div>
@@ -474,8 +499,8 @@ tbody tr:hover td.result-col{
 
       <div class="notes">
         <div class="note-card">
-          <strong>Expense lookup</strong>
-          <span>Fake sample data is currently being used for A Expense. This can later be swapped to your Google Sheet lookup.</span>
+          <strong>Expense source</strong>
+          <span>A Expense is pulled live from your published Google Sheet using IRD Number + Year.</span>
         </div>
         <div class="note-card">
           <strong>Read-only values</strong>
@@ -499,33 +524,7 @@ const returnTypeOptions = [
   "IR3"
 ];
 
-const expenseLookup = {
-  "2026": {
-    "048286461": 2328.74,
-    "088633921": 1409.56,
-    "070005050": 1221.03
-  },
-  "2025": {
-    "048286461": 2100.00,
-    "088633921": 1320.45,
-    "070005050": 1185.20
-  },
-  "2024": {
-    "048286461": 1980.00,
-    "088633921": 1210.10,
-    "070005050": 1099.99
-  },
-  "2023": {
-    "048286461": 1845.50,
-    "088633921": 1150.25,
-    "070005050": 980.40
-  },
-  "2022": {
-    "048286461": 1720.00,
-    "088633921": 1044.44,
-    "070005050": 910.00
-  }
-};
+const EXPENSE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMFaPmSD7uw1ZQhJ1UoRI4mGkmu3CJ--7uCtYjgSu23U5GUtiNaku5qjLD_YiautHdq-zZ5TUGLeI_/pub?gid=0&single=true&output=csv";
 
 const yearConfigs = {
   2026: {
@@ -577,6 +576,9 @@ const yearConfigs = {
     ]
   }
 };
+
+let expenseLookup = {};
+let expenseLookupLoaded = false;
 
 function buildSelect(options, id) {
   const select = document.createElement("select");
@@ -662,6 +664,95 @@ function floor0(value) {
   return Math.floor(Number(value) || 0);
 }
 
+function setLookupStatus(message, className = "") {
+  const el = document.getElementById("lookupStatus");
+  el.textContent = message;
+  el.className = `status-text ${className}`.trim();
+}
+
+function parseCsvLine(line) {
+  const result = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    const nextChar = line[i + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        current += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === "," && !inQuotes) {
+      result.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+
+  result.push(current);
+  return result.map(value => value.trim());
+}
+
+async function loadExpenseLookup() {
+  try {
+    setLookupStatus("Expense lookup loading…");
+
+    const response = await fetch(EXPENSE_CSV_URL, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const csvText = await response.text();
+    const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== "");
+    if (lines.length < 2) {
+      throw new Error("No expense rows found");
+    }
+
+    const headers = parseCsvLine(lines[0]).map(h => h.toLowerCase());
+    const irdIndex = headers.findIndex(h => h.includes("ird"));
+    const yearIndex = headers.findIndex(h => h === "year" || h.includes("year"));
+    const expenseIndex = headers.findIndex(h => h.includes("a expense") || h.includes("expense"));
+
+    if (irdIndex === -1 || yearIndex === -1 || expenseIndex === -1) {
+      throw new Error("Could not find IRD Number, Year, and A Expense columns");
+    }
+
+    const lookup = {};
+
+    for (let i = 1; i < lines.length; i++) {
+      const parts = parseCsvLine(lines[i]);
+      const rawIrd = parts[irdIndex] || "";
+      const rawYear = parts[yearIndex] || "";
+      const rawExpense = parts[expenseIndex] || "";
+
+      const ird = normalizeIrd(rawIrd);
+      const year = String(rawYear).trim();
+      const expense = Number(String(rawExpense).replace(/[^0-9.-]/g, "") || 0);
+
+      if (!ird || !year) continue;
+
+      if (!lookup[ird]) {
+        lookup[ird] = {};
+      }
+
+      lookup[ird][year] = round2(expense);
+    }
+
+    expenseLookup = lookup;
+    expenseLookupLoaded = true;
+    setLookupStatus("Expense lookup connected.", "status-ok");
+  } catch (error) {
+    expenseLookup = {};
+    expenseLookupLoaded = false;
+    setLookupStatus(`Expense lookup failed: ${error.message}`, "status-error");
+  }
+}
+
 function calculateTax(taxableIncome, year) {
   const config = yearConfigs[year];
   if (!config) return 0;
@@ -744,9 +835,10 @@ function calculateIetc(year, income, monthsEligible) {
 function lookupExpenseForYear(year) {
   const ird = normalizeIrd(document.getElementById("irdNumber").value);
   if (!ird) return 0;
+  if (!expenseLookupLoaded) return 0;
 
-  const yearBucket = expenseLookup[String(year)] || {};
-  return round2(yearBucket[ird] || 0);
+  const personData = expenseLookup[ird] || {};
+  return round2(personData[String(year)] || 0);
 }
 
 function updateLookupExpenses() {
@@ -885,6 +977,8 @@ function resetAll() {
     renderResultBadge(year, 0);
     renderNetBadge(year, 0);
   });
+
+  handleAllChanges();
 }
 
 function csvEscape(value) {
@@ -957,8 +1051,13 @@ function downloadResult() {
   URL.revokeObjectURL(url);
 }
 
-buildTable();
-handleAllChanges();
+async function initCalculator() {
+  buildTable();
+  await loadExpenseLookup();
+  handleAllChanges();
+}
+
+initCalculator();
 </script>
 </body>
 </html>
