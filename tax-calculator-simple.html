@@ -202,13 +202,11 @@ table{
   width:100%;
   border-collapse:separate;
   border-spacing:0;
-  min-width:1500px;
+  min-width:1650px;
   table-layout:fixed;
 }
 col.c-year{width:72px}
-col.c-status{width:120px}
-col.c-type{width:110px}
-col.c-date{width:118px}
+col.c-type{width:120px}
 col.c-gross{width:105px}
 col.c-paye{width:95px}
 col.c-acc{width:78px}
@@ -223,6 +221,8 @@ col.c-ietc{width:70px}
 col.c-mexp{width:80px}
 col.c-aexp{width:90px}
 col.c-result{width:108px}
+col.c-fee{width:108px}
+col.c-net{width:118px}
 
 thead th{
   position:sticky;
@@ -427,9 +427,7 @@ tbody tr:hover td.result-col{
           <table>
             <colgroup>
               <col class="c-year">
-              <col class="c-status">
               <col class="c-type">
-              <col class="c-date">
               <col class="c-gross">
               <col class="c-paye">
               <col class="c-acc">
@@ -444,13 +442,13 @@ tbody tr:hover td.result-col{
               <col class="c-mexp">
               <col class="c-aexp">
               <col class="c-result">
+              <col class="c-fee">
+              <col class="c-net">
             </colgroup>
             <thead>
               <tr>
                 <th class="sticky-left">Year</th>
-                <th>Status</th>
                 <th>Type</th>
-                <th>Date</th>
                 <th>Gross</th>
                 <th>PAYE</th>
                 <th>ACC</th>
@@ -464,7 +462,9 @@ tbody tr:hover td.result-col{
                 <th>IETC</th>
                 <th>M Exp</th>
                 <th>A Exp</th>
-                <th class="sticky-right">Result</th>
+                <th>Result</th>
+                <th>Fee</th>
+                <th class="sticky-right">Net Refund</th>
               </tr>
             </thead>
             <tbody id="calcBody"></tbody>
@@ -479,11 +479,11 @@ tbody tr:hover td.result-col{
         </div>
         <div class="note-card">
           <strong>Read-only values</strong>
-          <span>Total Tax and A Expense are locked display fields so staff can review them without editing.</span>
+          <span>Total Tax, A Expense, and Fee are locked display fields so staff can review them without editing.</span>
         </div>
         <div class="note-card">
-          <strong>Sticky result</strong>
-          <span>Result stays visible on the right while scrolling so staff can always see the final outcome.</span>
+          <strong>Net refund</strong>
+          <span>Fee is calculated from the refund result and return type, then deducted to show the net amount.</span>
         </div>
       </div>
     </div>
@@ -492,14 +492,6 @@ tbody tr:hover td.result-col{
 
 <script>
 const years = [2026, 2025, 2024, 2023, 2022];
-
-const statusOptions = [
-  "Pending",
-  "Tax Refund",
-  "Tax to Pay",
-  "Income Tax Arrears",
-  "Child Support Arrears"
-];
 
 const returnTypeOptions = [
   "Auto Assessed",
@@ -615,9 +607,7 @@ function buildTable() {
 
     tr.innerHTML = `
       <td class="year-cell">${year}</td>
-      <td id="status-cell-${year}"></td>
       <td id="returntype-cell-${year}"></td>
-      <td><input class="cell-input" type="date" id="returndate-${year}"></td>
       <td><input class="cell-input" type="number" step="0.01" id="gross-${year}" value="0"></td>
       <td><input class="cell-input" type="number" step="0.01" id="paye-${year}" value="0"></td>
       <td><input class="cell-input" type="number" step="0.01" id="acc-${year}" value="0"></td>
@@ -631,14 +621,12 @@ function buildTable() {
       <td><input class="cell-input" type="number" min="0" max="12" step="1" id="ietcmonths-${year}" value="0"></td>
       <td><input class="cell-input" type="number" step="0.01" id="mexp-${year}" value="0"></td>
       <td><input class="cell-input readonly-cell" type="number" step="0.01" id="aexp-${year}" value="0" readonly></td>
-      <td class="result-col result-cell"><span class="result-badge result-neutral" id="result-${year}">0.00</span></td>
+      <td class="result-cell"><span class="result-badge result-neutral" id="result-${year}">0.00</span></td>
+      <td><input class="cell-input readonly-cell" type="number" step="0.01" id="fee-${year}" value="0" readonly></td>
+      <td class="result-col result-cell"><span class="result-badge result-neutral" id="net-${year}">0.00</span></td>
     `;
 
     body.appendChild(tr);
-
-    document.getElementById(`status-cell-${year}`).appendChild(
-      buildSelect(statusOptions, `status-${year}`)
-    );
 
     document.getElementById(`returntype-cell-${year}`).appendChild(
       buildSelect(returnTypeOptions, `returntype-${year}`)
@@ -782,6 +770,54 @@ function renderResultBadge(year, value) {
   }
 }
 
+function renderNetBadge(year, value) {
+  const el = document.getElementById(`net-${year}`);
+  el.textContent = value.toFixed(2);
+  el.className = "result-badge";
+
+  if (value > 0) {
+    el.classList.add("result-positive");
+  } else if (value < 0) {
+    el.classList.add("result-negative");
+  } else {
+    el.classList.add("result-neutral");
+  }
+}
+
+function calculateFee(refundAmount, returnType, year) {
+  const refund = round2(Number(refundAmount) || 0);
+  if (refund <= 0) return 0;
+  if (!returnType) return 0;
+
+  let fee = round2(refund * 0.11);
+
+  if (returnType === "ITA" || returnType === "IR3") {
+    let cappedBase = fee;
+
+    if (returnType === "ITA") {
+      cappedBase = Math.min(fee, 300);
+    } else if (returnType === "IR3") {
+      cappedBase = Math.min(fee, 350);
+    }
+
+    fee = round2(cappedBase * 1.15);
+
+    if (returnType === "ITA") {
+      fee = round2(fee + 5.75);
+    } else if (returnType === "IR3") {
+      fee = round2(fee + (20 * 1.15));
+    }
+
+    if (Number(year) === 2026) {
+      fee = round2(fee + (29.5 * 1.15));
+    }
+  } else {
+    fee = round2(Math.min(refund, 34 * 1.15));
+  }
+
+  return round2(Math.min(fee, refund));
+}
+
 function calculateRow(year) {
   const gross = num(`gross-${year}`);
   const paye = num(`paye-${year}`);
@@ -796,6 +832,7 @@ function calculateRow(year) {
   const ietcMonths = num(`ietcmonths-${year}`);
   const mExp = num(`mexp-${year}`);
   const aExp = num(`aexp-${year}`);
+  const returnType = document.getElementById(`returntype-${year}`).value;
 
   document.getElementById(`totaltax-${year}`).value = totalTax.toFixed(2);
 
@@ -812,8 +849,13 @@ function calculateRow(year) {
   const pieAdjustment = calculatePieAdjustment(pie, pirPaid, yRate);
 
   const result = round2((taxPaid - taxRequired) + ietcAmount + pieAdjustment);
-
   renderResultBadge(year, result);
+
+  const fee = calculateFee(result, returnType, year);
+  document.getElementById(`fee-${year}`).value = fee.toFixed(2);
+
+  const net = round2(result - fee);
+  renderNetBadge(year, net);
 }
 
 function calculateAll() {
@@ -831,8 +873,6 @@ function resetAll() {
   document.querySelectorAll(".cell-input, .cell-select").forEach(input => {
     if (input.tagName === "SELECT") {
       input.value = "";
-    } else if (input.type === "date") {
-      input.value = "";
     } else if (!input.readOnly) {
       input.value = 0;
     }
@@ -841,7 +881,9 @@ function resetAll() {
   years.forEach(year => {
     document.getElementById(`totaltax-${year}`).value = "0.00";
     document.getElementById(`aexp-${year}`).value = "0.00";
+    document.getElementById(`fee-${year}`).value = "0.00";
     renderResultBadge(year, 0);
+    renderNetBadge(year, 0);
   });
 }
 
@@ -862,9 +904,7 @@ function downloadResult() {
 
   lines.push([
     "Year",
-    "Status",
     "Return Type",
-    "Return Date",
     "Gross Income",
     "PAYE",
     "ACC",
@@ -878,15 +918,15 @@ function downloadResult() {
     "IETC",
     "M Exp",
     "A Expense",
-    "Result"
+    "Result",
+    "Fee",
+    "Net Refund"
   ].map(csvEscape).join(","));
 
   years.forEach(year => {
     lines.push([
       year,
-      document.getElementById(`status-${year}`).value,
       document.getElementById(`returntype-${year}`).value,
-      document.getElementById(`returndate-${year}`).value,
       document.getElementById(`gross-${year}`).value,
       document.getElementById(`paye-${year}`).value,
       document.getElementById(`acc-${year}`).value,
@@ -900,7 +940,9 @@ function downloadResult() {
       document.getElementById(`ietcmonths-${year}`).value,
       document.getElementById(`mexp-${year}`).value,
       document.getElementById(`aexp-${year}`).value,
-      document.getElementById(`result-${year}`).textContent
+      document.getElementById(`result-${year}`).textContent,
+      document.getElementById(`fee-${year}`).value,
+      document.getElementById(`net-${year}`).textContent
     ].map(csvEscape).join(","));
   });
 
