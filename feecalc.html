@@ -182,6 +182,12 @@ body{
 .card.net.negative span{
   color:var(--danger);
 }
+.sub-note{
+  margin-top:10px;
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+}
 .note{
   margin-top:18px;
   border:1px solid var(--border);
@@ -261,13 +267,13 @@ input[type="number"]{
             <div class="check-card">
               <label for="rebHasAn">
                 <input type="checkbox" id="rebHasAn">
-                REB
+                MYR FILED REB
               </label>
             </div>
             <div class="check-card">
               <label for="hasAreb">
                 <input type="checkbox" id="hasAreb">
-                Assisted REB (+6.89)
+                MYR ASSISTED REB (+6.89)
               </label>
             </div>
           </div>
@@ -294,11 +300,17 @@ input[type="number"]{
         </div>
       </div>
 
+      <div class="sub-note">
+        All fees shown are GST inclusive.
+      </div>
+
       <div class="note">
-        REB now includes both optional settings:
-        <br>• <strong>REB</strong> = uses the tiered REB fee bands
-        <br>• unticked = uses the capped 39.10 rule
-        <br>• <strong>AREB applies</strong> = adds 6.89 to the REB fee
+        REB options:
+        <br>• <strong>MYR FILED REB</strong> = uses tiered REB fee bands
+        <br>• unticked = capped at 39.10
+        <br>• <strong>MYR ASSISTED REB</strong> = adds 6.89
+        <br><br>
+        All fees are <strong>GST inclusive</strong>.
       </div>
     </div>
   </div>
