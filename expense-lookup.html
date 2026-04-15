@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Refund — Expense Lookup</title>
+
+<style>
+:root{
+  --g0:#094B35;
+  --g1:#0f6b4b;
+  --g2:#ECFDF5;
+  --panel:#ffffff;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --radius:18px;
+  --shadow:0 12px 32px rgba(0,0,0,.10);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Okta Neue",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:linear-gradient(180deg,#eef5f1 0%, #f7faf8 100%);
+}
+.page{
+  min-height:100vh;
+  padding:32px 18px;
+}
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+}
+.header{
+  margin-bottom:18px;
+}
+.header h1{
+  margin:0;
+  font-size:28px;
+  font-weight:900;
+  color:var(--g0);
+}
+.header p{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:14px;
+  font-weight:700;
+}
+.panel{
+  background:var(--panel);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  border-top:6px solid var(--g0);
+  padding:22px;
+  margin-bottom:18px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+.field label{
+  display:block;
+  font-weight:900;
+  margin-bottom:8px;
+  color:var(--g0);
+}
+.field input,
+.field textarea{
+  width:100%;
+  padding:13px 14px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#fff;
+  font-size:15px;
+  font-weight:800;
+  color:var(--text);
+  outline:none;
+}
+.field textarea{
+  min-height:140px;
+  resize:vertical;
+  font-family:inherit;
+  font-weight:700;
+}
+.field input:focus,
+.field textarea:focus{
+  border-color:var(--g1);
+  box-shadow:0 0 0 4px rgba(15,107,75,.10);
+}
+.actions{
+  margin-top:18px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.btn{
+  border-radius:12px;
+  padding:12px 16px;
+  font-weight:900;
+  font-size:14px;
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--text);
+  cursor:pointer;
+}
+.btn-primary{
+  background:var(--g0);
+  border-color:var(--g0);
+  color:#fff;
+}
+.btn-secondary{
+  background:#fff;
+  color:var(--g0);
+  border-color:var(--g0);
+}
+.status{
+  margin-top:12px;
+  font-size:13px;
+  font-weight:800;
+  color:var(--muted);
+}
+.summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-bottom:16px;
+}
+.card{
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  background:#fff;
+}
+.card strong{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  margin-bottom:8px;
+}
+.card span{
+  display:block;
+  font-size:26px;
+  font-weight:900;
+  color:var(--g0);
+}
+.table-wrap{
+  overflow:auto;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:#fff;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:720px;
+}
+th, td{
+  padding:12px 14px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+  font-size:14px;
+}
+th{
+  background:#f8faf9;
+  color:var(--muted);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+}
+tbody tr:nth-child(even){
+  background:#fcfcfc;
+}
+.empty{
+  padding:26px 18px;
+  text-align:center;
+  color:var(--muted);
+  font-weight:800;
+}
+.note{
+  margin-top:14px;
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+}
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:999px;
+  background:var(--g2);
+  color:var(--g0);
+  font-weight:900;
+  font-size:11px;
+}
+@media (max-width:800px){
+  .grid,
+  .summary{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wrap">
+    <div class="header">
+      <h1>Expense Lookup</h1>
+      <p>Search one IRD number or paste multiple IRD numbers to view all matching expense records across all tax years.</p>
+    </div>
+
+    <div class="panel">
+      <div class="grid">
+        <div class="field">
+          <label for="singleIrd">Single IRD Number</label>
+          <input type="text" id="singleIrd" placeholder="Enter one IRD number">
+        </div>
+
+        <div class="field">
+          <label for="bulkIrds">Bulk IRD Numbers</label>
+          <textarea id="bulkIrds" placeholder="Paste multiple IRD numbers here, separated by commas, spaces, or new lines"></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" type="button" onclick="runLookup()">Search</button>
+        <button class="btn btn-secondary" type="button" onclick="resetLookup()">Reset</button>
+        <button class="btn btn-secondary" type="button" onclick="downloadResults()">Download CSV</button>
+      </div>
+
+      <div id="status" class="status">Loading expense data…</div>
+    </div>
+
+    <div class="panel">
+      <div class="summary">
+        <div class="card">
+          <strong>IRD Numbers Searched</strong>
+          <span id="searchedCount">0</span>
+        </div>
+        <div class="card">
+          <strong>Matches Found</strong>
+          <span id="matchCount">0</span>
+        </div>
+        <div class="card">
+          <strong>Unique IRDs Matched</strong>
+          <span id="matchedIrdCount">0</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>IRD Number</th>
+              <th>Year</th>
+              <th>A Expense</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody">
+            <tr>
+              <td colspan="4" class="empty">No results yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        Results show all tax years found in the published expense sheet for each searched IRD number.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const EXPENSE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMFaPmSD7uw1ZQhJ1UoRI4mGkmu3CJ--7uCtYjgSu23U5GUtiNaku5qjLD_YiautHdq-zZ5TUGLeI_/pub?gid=0&single=true&output=csv";
+
+let expenseRows = [];
+let currentResults = [];
+
+function normalizeIrd(value) {
+  return String(value || "").replace(/\D/g, "");
+}
+
+function formatIrd(value) {
+  const digits = normalizeIrd(value);
+  if (digits.length === 9) {
+    return `${digits.slice(0,3)}-${digits.slice(3,6)}-${digits.slice(6)}`;
+  }
+  return digits;
+}
+
+function round2(value) {
+  return Math.round((Number(value) || 0) * 100) / 100;
+}
+
+function formatMoney(value) {
+  return round2(value).toFixed(2);
+}
+
+function setStatus(message) {
+  document.getElementById("status").textContent = message;
+}
+
+function parseCsvLine(line) {
+  const result = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    const nextChar = line[i + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        current += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === "," && !inQuotes) {
+      result.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+
+  result.push(current);
+  return result.map(value => value.trim());
+}
+
+async function loadExpenseData() {
+  try {
+    setStatus("Loading expense data…");
+
+    const response = await fetch(EXPENSE_CSV_URL, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const csvText = await response.text();
+    const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== "");
+
+    if (lines.length < 2) {
+      throw new Error("No expense rows found");
+    }
+
+    const headers = parseCsvLine(lines[0]).map(h => h.toLowerCase());
+    const irdIndex = headers.findIndex(h => h.includes("ird"));
+    const yearIndex = headers.findIndex(h => h.includes("year"));
+    const expenseIndex = headers.findIndex(h => h.includes("expense"));
+
+    if (irdIndex === -1 || yearIndex === -1 || expenseIndex === -1) {
+      throw new Error("Could not find IRD Number, Year, and A Expense columns");
+    }
+
+    const rows = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const parts = parseCsvLine(lines[i]);
+
+      const rawIrd = parts[irdIndex] || "";
+      const rawYear = parts[yearIndex] || "";
+      const rawExpense = parts[expenseIndex] || "";
+
+      const ird = normalizeIrd(rawIrd);
+      const year = String(rawYear).trim();
+      const expense = Number(String(rawExpense).replace(/[^0-9.-]/g, "") || 0);
+
+      if (!ird || !year) continue;
+
+      rows.push({
+        ird,
+        year,
+        expense: round2(expense)
+      });
+    }
+
+    expenseRows = rows;
+    setStatus(`Expense data loaded. ${rows.length} rows available.`);
+  } catch (error) {
+    expenseRows = [];
+    setStatus(`Failed to load expense data: ${error.message}`);
+  }
+}
+
+function getSearchIrds() {
+  const single = document.getElementById("singleIrd").value || "";
+  const bulk = document.getElementById("bulkIrds").value || "";
+  const combined = `${single}\n${bulk}`;
+
+  const rawItems = combined.split(/[\s,;]+/).filter(Boolean);
+  const normalized = rawItems.map(normalizeIrd).filter(Boolean);
+
+  return [...new Set(normalized)];
+}
+
+function renderResults(results, searchedIrds) {
+  const body = document.getElementById("resultsBody");
+  body.innerHTML = "";
+
+  document.getElementById("searchedCount").textContent = searchedIrds.length;
+  document.getElementById("matchCount").textContent = results.length;
+  document.getElementById("matchedIrdCount").textContent = [...new Set(results.map(r => r.ird))].length;
+
+  if (!searchedIrds.length) {
+    body.innerHTML = `<tr><td colspan="4" class="empty">Enter one or more IRD numbers to search.</td></tr>`;
+    return;
+  }
+
+  if (!results.length) {
+    body.innerHTML = `<tr><td colspan="4" class="empty">No matches found.</td></tr>`;
+    return;
+  }
+
+  results.forEach(row => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${formatIrd(row.ird)}</td>
+      <td>${row.year}</td>
+      <td>${formatMoney(row.expense)}</td>
+      <td><span class="badge">Matched</span></td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+function runLookup() {
+  const searchedIrds = getSearchIrds();
+
+  if (!searchedIrds.length) {
+    currentResults = [];
+    renderResults([], []);
+    return;
+  }
+
+  const results = expenseRows
+    .filter(row => searchedIrds.includes(row.ird))
+    .sort((a, b) => {
+      if (a.ird !== b.ird) return a.ird.localeCompare(b.ird);
+      return Number(b.year) - Number(a.year);
+    });
+
+  currentResults = results;
+  renderResults(results, searchedIrds);
+
+  const matchedIrds = new Set(results.map(r => r.ird));
+  const missingCount = searchedIrds.filter(ird => !matchedIrds.has(ird)).length;
+
+  if (missingCount > 0) {
+    setStatus(`Search complete. ${results.length} matches found. ${missingCount} IRD number(s) had no match.`);
+  } else {
+    setStatus(`Search complete. ${results.length} matches found.`);
+  }
+}
+
+function resetLookup() {
+  document.getElementById("singleIrd").value = "";
+  document.getElementById("bulkIrds").value = "";
+  currentResults = [];
+  renderResults([], []);
+  setStatus(`Expense data loaded. ${expenseRows.length} rows available.`);
+}
+
+function downloadResults() {
+  if (!currentResults.length) return;
+
+  const lines = [];
+  lines.push("IRD Number,Year,A Expense");
+
+  currentResults.forEach(row => {
+    lines.push([
+      formatIrd(row.ird),
+      row.year,
+      formatMoney(row.expense)
+    ].join(","));
+  });
+
+  const blob = new Blob([lines.join("\n")], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "expense-lookup-results.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById("singleIrd").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    runLookup();
+  }
+});
+
+loadExpenseData().then(() => {
+  renderResults([], []);
+});
+</script>
+</body>
+</html>
