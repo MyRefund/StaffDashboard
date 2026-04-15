@@ -3,19 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Refund — Expense Lookup</title>
+<title>My Refund — Expense Lookup Table</title>
 
 <style>
 :root{
   --g0:#094B35;
   --g1:#0f6b4b;
   --g2:#ECFDF5;
+  --g3:#d1fae5;
   --panel:#ffffff;
   --text:#111827;
   --muted:#6b7280;
   --border:#e5e7eb;
   --radius:18px;
   --shadow:0 12px 32px rgba(0,0,0,.10);
+  --warn:#b42318;
+  --warn-bg:#fef3f2;
 }
 *{box-sizing:border-box}
 body{
@@ -29,7 +32,7 @@ body{
   padding:32px 18px;
 }
 .wrap{
-  max-width:1100px;
+  max-width:1400px;
   margin:0 auto;
 }
 .header{
@@ -79,7 +82,7 @@ body{
   outline:none;
 }
 .field textarea{
-  min-height:140px;
+  min-height:130px;
   resize:vertical;
   font-family:inherit;
   font-weight:700;
@@ -121,6 +124,125 @@ body{
   font-weight:800;
   color:var(--muted);
 }
+.table-wrap{
+  overflow:auto;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:#fff;
+}
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  min-width:1100px;
+}
+th, td{
+  padding:12px 10px;
+  border-bottom:1px solid var(--border);
+  text-align:center;
+  vertical-align:middle;
+}
+th{
+  background:#f8faf9;
+  color:#6b7280;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  font-weight:900;
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+td{
+  font-size:14px;
+  font-weight:800;
+}
+tbody tr:nth-child(even) td{
+  background:#fcfcfc;
+}
+tbody tr.no-match td{
+  background:#fff8f8;
+}
+td.ird-cell, th.ird-head{
+  position:sticky;
+  left:0;
+  z-index:1;
+  text-align:left;
+  min-width:180px;
+  max-width:180px;
+}
+th.ird-head{
+  z-index:3;
+  background:#f1f6f3;
+}
+td.ird-cell{
+  background:#f8fbf9;
+}
+tbody tr:nth-child(even) td.ird-cell{
+  background:#f4f8f6;
+}
+tbody tr.no-match td.ird-cell{
+  background:#fff1f1;
+}
+.value-chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:84px;
+  padding:8px 10px;
+  border-radius:999px;
+  background:#f3f4f6;
+  color:#374151;
+  font-weight:900;
+  font-size:13px;
+}
+.value-chip.has-value{
+  background:var(--g2);
+  color:var(--g0);
+  box-shadow:0 0 0 1px rgba(9,75,53,.08), 0 6px 16px rgba(9,75,53,.16);
+}
+.value-chip.no-value{
+  background:#f3f4f6;
+  color:#6b7280;
+}
+.ird-main{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.ird-number{
+  font-weight:900;
+  color:var(--text);
+}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:900;
+}
+.badge.good{
+  background:var(--g2);
+  color:var(--g0);
+}
+.badge.none{
+  background:var(--warn-bg);
+  color:var(--warn);
+}
+.empty{
+  padding:28px 16px;
+  text-align:center;
+  color:var(--muted);
+  font-weight:800;
+}
+.note{
+  margin-top:14px;
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+}
 .summary{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -147,55 +269,13 @@ body{
   font-weight:900;
   color:var(--g0);
 }
-.table-wrap{
-  overflow:auto;
-  border:1px solid var(--border);
-  border-radius:16px;
-  background:#fff;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:720px;
-}
-th, td{
-  padding:12px 14px;
-  border-bottom:1px solid var(--border);
-  text-align:left;
-  font-size:14px;
-}
-th{
-  background:#f8faf9;
-  color:var(--muted);
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:.03em;
-}
-tbody tr:nth-child(even){
-  background:#fcfcfc;
-}
-.empty{
-  padding:26px 18px;
-  text-align:center;
-  color:var(--muted);
-  font-weight:800;
-}
-.note{
-  margin-top:14px;
+.helper-line{
+  margin-top:10px;
   font-size:12px;
   font-weight:800;
   color:var(--muted);
 }
-.badge{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:999px;
-  background:var(--g2);
-  color:var(--g0);
-  font-weight:900;
-  font-size:11px;
-}
-@media (max-width:800px){
+@media (max-width:900px){
   .grid,
   .summary{
     grid-template-columns:1fr;
@@ -208,7 +288,7 @@ tbody tr:nth-child(even){
   <div class="wrap">
     <div class="header">
       <h1>Expense Lookup</h1>
-      <p>Search one IRD number or paste multiple IRD numbers to view all matching expense records across all tax years.</p>
+      <p>Type one IRD number for instant lookup, or paste multiple IRD numbers and click Search.</p>
     </div>
 
     <div class="panel">
@@ -217,7 +297,6 @@ tbody tr:nth-child(even){
           <label for="singleIrd">Single IRD Number</label>
           <input type="text" id="singleIrd" placeholder="Enter one IRD number">
         </div>
-
         <div class="field">
           <label for="bulkIrds">Bulk IRD Numbers</label>
           <textarea id="bulkIrds" placeholder="Paste multiple IRD numbers here, separated by commas, spaces, or new lines"></textarea>
@@ -231,6 +310,7 @@ tbody tr:nth-child(even){
       </div>
 
       <div id="status" class="status">Loading expense data…</div>
+      <div class="helper-line">Single IRD auto-searches. Bulk paste uses the Search button.</div>
     </div>
 
     <div class="panel">
@@ -240,12 +320,12 @@ tbody tr:nth-child(even){
           <span id="searchedCount">0</span>
         </div>
         <div class="card">
-          <strong>Matches Found</strong>
-          <span id="matchCount">0</span>
+          <strong>IRD Numbers Matched</strong>
+          <span id="matchedCount">0</span>
         </div>
         <div class="card">
-          <strong>Unique IRDs Matched</strong>
-          <span id="matchedIrdCount">0</span>
+          <strong>Total Expense Values Found</strong>
+          <span id="valueCount">0</span>
         </div>
       </div>
 
@@ -253,22 +333,26 @@ tbody tr:nth-child(even){
         <table>
           <thead>
             <tr>
-              <th>IRD Number</th>
-              <th>Year</th>
-              <th>A Expense</th>
-              <th>Status</th>
+              <th class="ird-head">IRD#</th>
+              <th>2026 Exp</th>
+              <th>2025 Exp</th>
+              <th>2024 Exp</th>
+              <th>2023 Exp</th>
+              <th>2022 Exp</th>
+              <th>2021 Exp</th>
+              <th>2020 Exp</th>
             </tr>
           </thead>
           <tbody id="resultsBody">
             <tr>
-              <td colspan="4" class="empty">No results yet.</td>
+              <td colspan="8" class="empty">No results yet.</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <div class="note">
-        Results show all tax years found in the published expense sheet for each searched IRD number.
+        0.00 means no expense value was found for that IRD/year. Rows with no matches still display so staff can see the IRD was searched.
       </div>
     </div>
   </div>
@@ -276,9 +360,11 @@ tbody tr:nth-child(even){
 
 <script>
 const EXPENSE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMFaPmSD7uw1ZQhJ1UoRI4mGkmu3CJ--7uCtYjgSu23U5GUtiNaku5qjLD_YiautHdq-zZ5TUGLeI_/pub?gid=0&single=true&output=csv";
+const DISPLAY_YEARS = ["2026","2025","2024","2023","2022","2021","2020"];
 
 let expenseRows = [];
-let currentResults = [];
+let currentTableRows = [];
+let singleLookupDebounce = null;
 
 function normalizeIrd(value) {
   return String(value || "").replace(/\D/g, "");
@@ -361,7 +447,6 @@ async function loadExpenseData() {
 
     for (let i = 1; i < lines.length; i++) {
       const parts = parseCsvLine(lines[i]);
-
       const rawIrd = parts[irdIndex] || "";
       const rawYear = parts[yearIndex] || "";
       const rawExpense = parts[expenseIndex] || "";
@@ -390,40 +475,77 @@ async function loadExpenseData() {
 function getSearchIrds() {
   const single = document.getElementById("singleIrd").value || "";
   const bulk = document.getElementById("bulkIrds").value || "";
-  const combined = `${single}\n${bulk}`;
+  const bulkHasValue = bulk.trim() !== "";
 
-  const rawItems = combined.split(/[\s,;]+/).filter(Boolean);
-  const normalized = rawItems.map(normalizeIrd).filter(Boolean);
+  if (bulkHasValue) {
+    const rawItems = bulk.split(/[\s,;]+/).filter(Boolean);
+    const normalized = rawItems.map(normalizeIrd).filter(Boolean);
+    return [...new Set(normalized)];
+  }
 
-  return [...new Set(normalized)];
+  const singleNormalized = normalizeIrd(single);
+  return singleNormalized ? [singleNormalized] : [];
 }
 
-function renderResults(results, searchedIrds) {
+function buildWideRows(searchedIrds) {
+  return searchedIrds.map(ird => {
+    const matches = expenseRows.filter(row => row.ird === ird);
+    const row = {
+      ird,
+      foundAny: matches.length > 0
+    };
+
+    DISPLAY_YEARS.forEach(year => {
+      const match = matches.find(item => item.year === year);
+      row[year] = match ? match.expense : 0;
+    });
+
+    return row;
+  });
+}
+
+function renderResults(rows, searchedIrds) {
   const body = document.getElementById("resultsBody");
   body.innerHTML = "";
 
+  const matchedRows = rows.filter(row => row.foundAny).length;
+  const valueCount = rows.reduce((count, row) => {
+    return count + DISPLAY_YEARS.filter(year => Number(row[year]) > 0).length;
+  }, 0);
+
   document.getElementById("searchedCount").textContent = searchedIrds.length;
-  document.getElementById("matchCount").textContent = results.length;
-  document.getElementById("matchedIrdCount").textContent = [...new Set(results.map(r => r.ird))].length;
+  document.getElementById("matchedCount").textContent = matchedRows;
+  document.getElementById("valueCount").textContent = valueCount;
 
   if (!searchedIrds.length) {
-    body.innerHTML = `<tr><td colspan="4" class="empty">Enter one or more IRD numbers to search.</td></tr>`;
+    body.innerHTML = `<tr><td colspan="8" class="empty">Enter one or more IRD numbers to search.</td></tr>`;
     return;
   }
 
-  if (!results.length) {
-    body.innerHTML = `<tr><td colspan="4" class="empty">No matches found.</td></tr>`;
-    return;
-  }
-
-  results.forEach(row => {
+  rows.forEach(row => {
     const tr = document.createElement("tr");
+    if (!row.foundAny) {
+      tr.classList.add("no-match");
+    }
+
+    const yearCells = DISPLAY_YEARS.map(year => {
+      const value = Number(row[year]) || 0;
+      const cls = value > 0 ? "value-chip has-value" : "value-chip no-value";
+      return `<td><span class="${cls}">${formatMoney(value)}</span></td>`;
+    }).join("");
+
     tr.innerHTML = `
-      <td>${formatIrd(row.ird)}</td>
-      <td>${row.year}</td>
-      <td>${formatMoney(row.expense)}</td>
-      <td><span class="badge">Matched</span></td>
+      <td class="ird-cell">
+        <div class="ird-main">
+          <span class="ird-number">${formatIrd(row.ird)}</span>
+          <span class="badge ${row.foundAny ? "good" : "none"}">
+            ${row.foundAny ? "Expense found" : "No expense found"}
+          </span>
+        </div>
+      </td>
+      ${yearCells}
     `;
+
     body.appendChild(tr);
   });
 }
@@ -432,67 +554,93 @@ function runLookup() {
   const searchedIrds = getSearchIrds();
 
   if (!searchedIrds.length) {
-    currentResults = [];
+    currentTableRows = [];
     renderResults([], []);
+    setStatus(`Expense data loaded. ${expenseRows.length} rows available.`);
     return;
   }
 
-  const results = expenseRows
-    .filter(row => searchedIrds.includes(row.ird))
-    .sort((a, b) => {
-      if (a.ird !== b.ird) return a.ird.localeCompare(b.ird);
-      return Number(b.year) - Number(a.year);
-    });
+  const wideRows = buildWideRows(searchedIrds).sort((a, b) => a.ird.localeCompare(b.ird));
+  currentTableRows = wideRows;
+  renderResults(wideRows, searchedIrds);
 
-  currentResults = results;
-  renderResults(results, searchedIrds);
-
-  const matchedIrds = new Set(results.map(r => r.ird));
-  const missingCount = searchedIrds.filter(ird => !matchedIrds.has(ird)).length;
+  const matchedCount = wideRows.filter(row => row.foundAny).length;
+  const missingCount = wideRows.length - matchedCount;
+  const usingBulk = document.getElementById("bulkIrds").value.trim() !== "";
 
   if (missingCount > 0) {
-    setStatus(`Search complete. ${results.length} matches found. ${missingCount} IRD number(s) had no match.`);
+    setStatus(`${usingBulk ? "Bulk search" : "Search"} complete. ${matchedCount} IRD number(s) matched. ${missingCount} had no expense records.`);
   } else {
-    setStatus(`Search complete. ${results.length} matches found.`);
+    setStatus(`${usingBulk ? "Bulk search" : "Search"} complete. All searched IRD numbers matched.`);
   }
+}
+
+function scheduleSingleLookup() {
+  const bulkHasValue = document.getElementById("bulkIrds").value.trim() !== "";
+  if (bulkHasValue) return;
+
+  clearTimeout(singleLookupDebounce);
+
+  singleLookupDebounce = setTimeout(() => {
+    const singleValue = normalizeIrd(document.getElementById("singleIrd").value);
+    if (!singleValue) {
+      currentTableRows = [];
+      renderResults([], []);
+      setStatus(`Expense data loaded. ${expenseRows.length} rows available.`);
+      return;
+    }
+    runLookup();
+  }, 250);
 }
 
 function resetLookup() {
   document.getElementById("singleIrd").value = "";
   document.getElementById("bulkIrds").value = "";
-  currentResults = [];
+  currentTableRows = [];
+  clearTimeout(singleLookupDebounce);
   renderResults([], []);
   setStatus(`Expense data loaded. ${expenseRows.length} rows available.`);
 }
 
 function downloadResults() {
-  if (!currentResults.length) return;
+  if (!currentTableRows.length) return;
 
   const lines = [];
-  lines.push("IRD Number,Year,A Expense");
+  lines.push(["IRD#"].concat(DISPLAY_YEARS.map(y => `${y} EXP`)).join(","));
 
-  currentResults.forEach(row => {
-    lines.push([
-      formatIrd(row.ird),
-      row.year,
-      formatMoney(row.expense)
-    ].join(","));
+  currentTableRows.forEach(row => {
+    const values = DISPLAY_YEARS.map(year => formatMoney(row[year]));
+    lines.push([formatIrd(row.ird)].concat(values).join(","));
   });
 
   const blob = new Blob([lines.join("\n")], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "expense-lookup-results.csv";
+  a.download = "expense-lookup-table.csv";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
+document.getElementById("singleIrd").addEventListener("input", scheduleSingleLookup);
+
 document.getElementById("singleIrd").addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
+    clearTimeout(singleLookupDebounce);
     runLookup();
+  }
+});
+
+document.getElementById("bulkIrds").addEventListener("input", () => {
+  const bulkHasValue = document.getElementById("bulkIrds").value.trim() !== "";
+  clearTimeout(singleLookupDebounce);
+
+  if (!bulkHasValue) {
+    scheduleSingleLookup();
+  } else {
+    setStatus(`Bulk IRDs detected. Click Search to run the lookup.`);
   }
 });
 
