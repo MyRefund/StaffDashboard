@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Verified - My Refund</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f3f4f6; margin: 0; }
+    .container { max-width: 700px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 10px; }
+    .header { background: #094B35; color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+    h2 { margin: 0 0 10px; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; }
+    .radio-group label { font-weight: normal; display: block; }
+    .btn { margin-top: 20px; padding: 12px 20px; border: none; border-radius: 6px; background: #094B35; color: white; cursor: pointer; }
+    .btn-secondary { background: #ccc; color: #000; }
+    .step { display: none; }
+    .step.active { display: block; }
+    .nav-buttons { display: flex; justify-content: space-between; }
+    .hidden { display: none; }
+    .notice { color: #666; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- STEP 1 -->
+  <div class="step active">
+    <div class="header">
+      <h2>Let’s get you verified</h2>
+      <p>To continue your application, we just need to verify your ID.</p>
+    </div>
+
+    <label>Type of ID *</label>
+    <div class="radio-group" id="idTypeGroup">
+      <label><input type="radio" name="idType" value="driver"> NZ Driver Licence</label>
+      <label><input type="radio" name="idType" value="passport"> NZ Passport</label>
+      <label><input type="radio" name="idType" value="overseas"> Overseas Passport with NZ Visa</label>
+      <label><input type="radio" name="idType" value="kiwi"> Kiwi Access Card</label>
+      <label><input type="radio" name="idType" value="none"> I don't have any of these</label>
+    </div>
+
+    <div id="noIdMessage" class="notice hidden">
+      Unfortunately, we can’t complete your application without valid ID.
+    </div>
+
+    <label>Email Address *</label>
+    <input type="email">
+
+    <div class="nav-buttons">
+      <div></div>
+      <button class="btn" onclick="nextStep()">Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <div class="header">
+      <h2>Now let’s check your details</h2>
+    </div>
+
+    <label>IRD Number *</label>
+    <input type="text">
+
+    <label>Date of Birth *</label>
+    <input type="date">
+
+    <label>First Name *</label>
+    <input type="text">
+
+    <label>Middle Name</label>
+    <input type="text">
+
+    <label>Last Name *</label>
+    <input type="text">
+
+    <label>Are you known by any other names?</label>
+    <div>
+      <label><input type="radio" name="otherName" value="yes"> Yes</label>
+      <label><input type="radio" name="otherName" value="no"> No</label>
+    </div>
+
+    <div id="altNameFields" class="hidden">
+      <label>Alternative Name</label>
+      <input type="text">
+
+      <label>Reason for Alternative Name</label>
+      <input type="text">
+
+      <label>Evidence of Name Change</label>
+      <input type="file">
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="prevStep()">Back</button>
+      <button class="btn" onclick="nextStep()">Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step">
+    <div class="header">
+      <h2>Upload your ID and selfie</h2>
+    </div>
+
+    <label>Selfie *</label>
+    <input type="file">
+
+    <label>Front of ID *</label>
+    <input type="file">
+
+    <label>Back of ID *</label>
+    <input type="file">
+
+    <div id="visaUpload" class="hidden">
+      <label>Visa Upload *</label>
+      <input type="file">
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="prevStep()">Back</button>
+      <button class="btn" onclick="nextStep()">Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step">
+    <div class="header">
+      <h2>Declaration and signature</h2>
+    </div>
+
+    <label><input type="checkbox"> I confirm the information provided is correct</label>
+    <label><input type="checkbox"> I agree to terms and conditions</label>
+
+    <label>Signature *</label>
+    <input type="text">
+
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="prevStep()">Back</button>
+      <button class="btn">Submit</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let currentStep = 0;
+  const steps = document.querySelectorAll('.step');
+
+  function showStep(index) {
+    steps.forEach((step, i) => step.classList.toggle('active', i === index));
+  }
+
+  function nextStep() {
+    const idType = document.querySelector('input[name="idType"]:checked');
+
+    // Skip logic
+    if (currentStep === 0 && idType && idType.value === 'none') {
+      currentStep = 3;
+      showStep(currentStep);
+      return;
+    }
+
+    if (currentStep < steps.length - 1) {
+      currentStep++;
+      showStep(currentStep);
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 0) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  }
+
+  // ID Type logic
+  document.querySelectorAll('input[name="idType"]').forEach(el => {
+    el.addEventListener('change', () => {
+      const val = el.value;
+
+      document.getElementById('noIdMessage').classList.toggle('hidden', val !== 'none');
+      document.getElementById('visaUpload').classList.toggle('hidden', val !== 'overseas');
+    });
+  });
+
+  // Alternative name logic
+  document.querySelectorAll('input[name="otherName"]').forEach(el => {
+    el.addEventListener('change', () => {
+      const show = el.value === 'yes';
+      document.getElementById('altNameFields').classList.toggle('hidden', !show);
+    });
+  });
+</script>
+
+</body>
+</html>
