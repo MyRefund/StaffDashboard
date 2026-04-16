@@ -1,198 +1,1386 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-NZ">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Get Verified - My Refund</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Verified | My Refund</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f3f4f6; margin: 0; }
-    .container { max-width: 700px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 10px; }
-    .header { background: #094B35; color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-    h2 { margin: 0 0 10px; }
-    label { display: block; margin-top: 15px; font-weight: bold; }
-    input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; }
-    .radio-group label { font-weight: normal; display: block; }
-    .btn { margin-top: 20px; padding: 12px 20px; border: none; border-radius: 6px; background: #094B35; color: white; cursor: pointer; }
-    .btn-secondary { background: #ccc; color: #000; }
-    .step { display: none; }
-    .step.active { display: block; }
-    .nav-buttons { display: flex; justify-content: space-between; }
-    .hidden { display: none; }
-    .notice { color: #666; margin-top: 10px; }
+    :root {
+      --bg: #eeeff6;
+      --card: #f7f7f8;
+      --panel: #ffffff;
+      --brand: #045c3c;
+      --brand-dark: #094b35;
+      --text: #18302a;
+      --muted: #6f7b77;
+      --border: #d8dde3;
+      --soft: #dce8e2;
+      --danger: #d92d20;
+      --shadow: 0 10px 30px rgba(4, 92, 60, 0.08);
+      --radius: 16px;
+      --input-radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      padding: 20px 14px 40px;
+    }
+
+    .shell {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid #e5e8ee;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px 0;
+      font-size: 14px;
+    }
+
+    .topbar a {
+      color: #5d5bb1;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .progress-wrap {
+      padding: 0 20px 14px;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .progress {
+      width: 100%;
+      height: 10px;
+      background: #dde3ea;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 25%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand-dark), var(--brand));
+      transition: width 0.25s ease;
+    }
+
+    .page {
+      display: none;
+      min-height: 700px;
+    }
+
+    .page.active { display: block; }
+
+    .content {
+      padding: 8px 22px 24px;
+    }
+
+    .hero {
+      background: var(--brand-dark);
+      color: #fff;
+      border-radius: 10px;
+      padding: 22px 22px 18px;
+      margin: 2px 6px 24px;
+    }
+
+    .hero h1, .hero h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 600;
+      max-width: 620px;
+    }
+
+    .section {
+      margin: 0 10px 28px;
+    }
+
+    .label {
+      display: block;
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 800;
+      color: var(--brand-dark);
+      margin-bottom: 10px;
+    }
+
+    .required {
+      color: var(--danger);
+      margin-left: 3px;
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .muted-message {
+      color: #a1a6ad;
+      font-size: 13px;
+      line-height: 1.45;
+      margin-top: 18px;
+      max-width: 520px;
+    }
+
+    .input,
+    .date-input,
+    .text-input,
+    .signature-name,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid #cfd6dd;
+      border-radius: var(--input-radius);
+      background: #fff;
+      padding: 12px 14px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input:focus,
+    .date-input:focus,
+    .text-input:focus,
+    .signature-name:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(4, 92, 60, 0.12);
+    }
+
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 22px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .stack { display: grid; gap: 18px; }
+
+    .radio-list,
+    .checkbox-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .choice,
+    .tick-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .choice input[type="radio"],
+    .tick-row input[type="checkbox"],
+    .agree-row input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--brand-dark);
+      margin-top: 1px;
+      flex: 0 0 auto;
+    }
+
+    .choice span,
+    .tick-row span,
+    .agree-row span {
+      flex: 1;
+    }
+
+    .inline-yes-no {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .camera-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .button,
+    .button-secondary,
+    .button-ghost,
+    .capture-label {
+      border: 0;
+      border-radius: 8px;
+      min-height: 46px;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.12s ease, opacity 0.2s ease, background 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .button:hover,
+    .button-secondary:hover,
+    .button-ghost:hover,
+    .capture-label:hover { transform: translateY(-1px); }
+
+    .button {
+      background: var(--brand-dark);
+      color: #fff;
+      min-width: 160px;
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .button-secondary {
+      background: #d9dde2;
+      color: #162024;
+      min-width: 110px;
+    }
+
+    .button-ghost,
+    .capture-label {
+      background: #647089;
+      color: #fff;
+      min-width: 132px;
+    }
+
+    .footer-nav {
+      border-top: 1px solid #d9dde5;
+      background: rgba(255,255,255,0.35);
+      padding: 22px 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 40px;
+    }
+
+    .hidden { display: none !important; }
+
+    .warning-box,
+    .status-box,
+    .error-box,
+    .success-box,
+    .summary-card {
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .warning-box {
+      background: #fef3f2;
+      border: 1px solid #f4c7c3;
+      color: #7a271a;
+      margin-top: 16px;
+    }
+
+    .status-box {
+      background: #edf7f1;
+      border: 1px solid #c2decf;
+      color: #0f5132;
+      margin-top: 14px;
+    }
+
+    .error-box {
+      background: #fef3f2;
+      border: 1px solid #f4c7c3;
+      color: #7a271a;
+      margin: 0 10px 18px;
+    }
+
+    .success-box {
+      background: #edf7f1;
+      border: 1px solid #c2decf;
+      color: #0f5132;
+      margin: 0 10px 18px;
+    }
+
+    .field-error {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 7px;
+      min-height: 18px;
+    }
+
+    .field.invalid .input,
+    .field.invalid .date-input,
+    .field.invalid .text-input,
+    .field.invalid .signature-name,
+    .field.invalid .upload-box,
+    .field.invalid .signature-pad {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.08);
+    }
+
+    .sub-label {
+      display: block;
+      font-size: 13px;
+      margin-top: 8px;
+      color: var(--muted);
+    }
+
+    .upload-box {
+      border: 1px solid #cfd6dd;
+      border-radius: 10px;
+      background: #bdd0c6;
+      min-height: 108px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upload-box.dark {
+      background: var(--brand-dark);
+      color: #fff;
+      border-color: var(--brand-dark);
+    }
+
+    .upload-box input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upload-title {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .upload-text {
+      font-size: 14px;
+      opacity: 0.85;
+    }
+
+    .file-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .file-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #f3f6f8;
+      border: 1px solid #d9e0e5;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+
+    .mini-btn {
+      border: 0;
+      background: transparent;
+      color: #8a1f17;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .signature-wrap {
+      display: grid;
+      gap: 10px;
+    }
+
+    .signature-pad {
+      width: 100%;
+      height: 140px;
+      background: #fff;
+      border: 1px solid #cfd6dd;
+      border-radius: 10px;
+      display: block;
+      touch-action: none;
+    }
+
+    .signature-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .summary-card {
+      background: #fff;
+      border: 1px solid #dde4ea;
+      margin-bottom: 14px;
+    }
+
+    .summary-card h3 {
+      margin: 0 0 8px;
+      color: var(--brand-dark);
+      font-size: 16px;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid #eff2f5;
+      font-size: 14px;
+    }
+
+    .summary-row:last-child { border-bottom: 0; }
+
+    .summary-row strong { color: #33414b; }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+
+    .button.loading .spinner { display: inline-block; }
+    .button.loading .button-text { opacity: 0.9; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 720px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .footer-nav { padding: 18px; }
+      .button { min-width: 132px; }
+      .summary-row { grid-template-columns: 1fr; gap: 4px; }
+      .hero h1, .hero h2 { font-size: 20px; }
+      .content { padding: 8px 14px 20px; }
+      .section { margin-left: 6px; margin-right: 6px; }
+    }
   </style>
 </head>
 <body>
-
-<div class="container">
-
-  <!-- STEP 1 -->
-  <div class="step active">
-    <div class="header">
-      <h2>Let’s get you verified</h2>
-      <p>To continue your application, we just need to verify your ID.</p>
+  <div class="shell">
+    <div class="topbar">
+      <span></span>
+      <a href="#" aria-label="Return home">Home</a>
     </div>
 
-    <label>Type of ID *</label>
-    <div class="radio-group" id="idTypeGroup">
-      <label><input type="radio" name="idType" value="driver"> NZ Driver Licence</label>
-      <label><input type="radio" name="idType" value="passport"> NZ Passport</label>
-      <label><input type="radio" name="idType" value="overseas"> Overseas Passport with NZ Visa</label>
-      <label><input type="radio" name="idType" value="kiwi"> Kiwi Access Card</label>
-      <label><input type="radio" name="idType" value="none"> I don't have any of these</label>
+    <div class="progress-wrap">
+      <div class="progress-row">
+        <span id="pageLabel">Page 1 of 4</span>
+        <span id="saveStatus">Saved locally</span>
+      </div>
+      <div class="progress" aria-hidden="true">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
     </div>
 
-    <div id="noIdMessage" class="notice hidden">
-      Unfortunately, we can’t complete your application without valid ID.
-    </div>
+    <form id="verificationForm" novalidate>
+      <input type="hidden" id="signatureData" name="signatureData" />
 
-    <label>Email Address *</label>
-    <input type="email">
+      <section class="page active" data-step="1">
+        <div class="content">
+          <div class="hero">
+            <h1>Let’s get you verified</h1>
+            <p>To continue your application, we just need to verify your ID – once done, you'll be in the draw for $5,000. It only takes a couple of minutes.</p>
+          </div>
 
-    <div class="nav-buttons">
-      <div></div>
-      <button class="btn" onclick="nextStep()">Next</button>
-    </div>
+          <div id="page1Error" class="error-box hidden"></div>
+
+          <div class="section field" data-field="idType">
+            <label class="label">Type of ID <span class="required">*</span></label>
+            <div class="radio-list" role="radiogroup" aria-label="Type of ID">
+              <label class="choice"><input type="radio" name="idType" value="NZ Driver Licence" /><span>NZ Driver Licence</span></label>
+              <label class="choice"><input type="radio" name="idType" value="NZ Passport" /><span>NZ Passport</span></label>
+              <label class="choice"><input type="radio" name="idType" value="Overseas Passport with NZ Visa" /><span>Overseas Passport with NZ Visa</span></label>
+              <label class="choice"><input type="radio" name="idType" value="Kiwi Access Card (18+)" /><span>Kiwi Access Card (18+)</span></label>
+              <label class="choice"><input type="radio" name="idType" value="NZ Firearms or Dealer's Licence" /><span>NZ Firearms or Dealer's Licence</span></label>
+              <label class="choice"><input type="radio" name="idType" value="International Driver Permit" /><span>International Driver Permit</span></label>
+              <label class="choice"><input type="radio" name="idType" value="I don't have any of these" /><span>I don't have any of these</span></label>
+            </div>
+            <div class="field-error"></div>
+            <div id="noIdNotice" class="warning-box hidden">Unfortunately, we can’t complete your application without valid ID. When you’ve got one ready, feel free to re-apply at myrefund.co.nz.</div>
+          </div>
+
+          <div class="section field" data-field="email">
+            <label class="label" for="email">Email Address <span class="required">*</span></label>
+            <input class="input" id="email" name="email" type="email" autocomplete="email" />
+            <div class="hint">Use the same email address you used when signing up with My Refund.</div>
+            <div class="field-error"></div>
+          </div>
+
+          <div class="muted-message section">Unfortunately, we can’t complete your application without valid ID. When you’ve got one ready, feel free to re-apply at myrefund.co.nz.</div>
+        </div>
+
+        <div class="footer-nav">
+          <div></div>
+          <button type="button" class="button" id="next1">Next</button>
+        </div>
+      </section>
+
+      <section class="page" data-step="2">
+        <div class="content">
+          <div class="hero">
+            <h2>Now let’s check your details</h2>
+            <p>Confirm that your details match your ID, if not, update them below.</p>
+          </div>
+
+          <div id="page2Error" class="error-box hidden"></div>
+
+          <div class="section grid-2">
+            <div class="field" data-field="irdNumber">
+              <label class="label" for="irdNumber">IRD Number <span class="required">*</span></label>
+              <input class="text-input" id="irdNumber" name="irdNumber" inputmode="numeric" maxlength="11" placeholder="###-###-###" autocomplete="off" />
+              <div class="hint">Your 8 or 9-digit Inland Revenue number.</div>
+              <div class="field-error"></div>
+            </div>
+
+            <div class="field" data-field="dateOfBirth">
+              <label class="label" for="dateOfBirth">Date of Birth <span class="required">*</span></label>
+              <input class="date-input" id="dateOfBirth" name="dateOfBirth" type="date" autocomplete="bday" />
+              <div class="hint">We need this to confirm your identity.</div>
+              <div class="field-error"></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <label class="label">Enter your name exactly as it appears on your ID. <span class="required">*</span></label>
+            <div class="grid-3">
+              <div class="field" data-field="firstName">
+                <input class="text-input" id="firstName" name="firstName" type="text" autocomplete="given-name" />
+                <label class="sub-label" for="firstName">First Name</label>
+                <div class="field-error"></div>
+              </div>
+              <div class="field" data-field="middleName">
+                <input class="text-input" id="middleName" name="middleName" type="text" autocomplete="additional-name" />
+                <label class="sub-label" for="middleName">Middle Name</label>
+                <div class="field-error"></div>
+              </div>
+              <div class="field" data-field="lastName">
+                <input class="text-input" id="lastName" name="lastName" type="text" autocomplete="family-name" />
+                <label class="sub-label" for="lastName">Last Name</label>
+                <div class="field-error"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section grid-2">
+            <div class="field" data-field="otherNamesKnown">
+              <label class="label">Are you known by any other names? <span class="required">*</span></label>
+              <div class="inline-yes-no" role="radiogroup" aria-label="Are you known by any other names">
+                <label class="choice"><input type="radio" name="otherNamesKnown" value="Yes" /><span>Yes</span></label>
+                <label class="choice"><input type="radio" name="otherNamesKnown" value="No" /><span>No</span></label>
+              </div>
+              <div class="field-error"></div>
+            </div>
+
+            <div id="altNameWrap" class="field hidden" data-field="alternativeName">
+              <label class="label" for="alternativeName">Alternative Name <span class="required">*</span></label>
+              <input class="text-input" id="alternativeName" name="alternativeName" type="text" />
+              <div class="field-error"></div>
+            </div>
+          </div>
+
+          <div id="altExtraGroup" class="section stack hidden">
+            <div class="field" data-field="alternativeNameReason">
+              <label class="label" for="alternativeNameReason">Reason for Alternative Name <span class="required">*</span></label>
+              <input class="text-input" id="alternativeNameReason" name="alternativeNameReason" type="text" />
+              <div class="hint">e.g. marriage, name change, professional alias</div>
+              <div class="field-error"></div>
+            </div>
+
+            <div class="field" data-field="nameChangeEvidence">
+              <label class="label">Evidence of Name Change <span class="required">*</span></label>
+              <label class="upload-box" for="nameChangeEvidence">
+                <input id="nameChangeEvidence" name="nameChangeEvidence" type="file" accept="image/*,.pdf,.doc,.docx" />
+                <div>
+                  <div class="upload-title">Browse Files</div>
+                  <div class="upload-text">Drag and drop files here</div>
+                </div>
+              </label>
+              <div class="file-list" id="nameChangeEvidenceList"></div>
+              <div class="hint">Upload an official document, such as a marriage certificate or deed poll.</div>
+              <div class="field-error"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-nav">
+          <button type="button" class="button-secondary" id="back2">Back</button>
+          <button type="button" class="button" id="next2">Next</button>
+        </div>
+      </section>
+
+      <section class="page" data-step="3">
+        <div class="content">
+          <div class="hero">
+            <h2>Upload your ID and selfie</h2>
+            <p>We need clear photos of you and your ID to complete verification.</p>
+          </div>
+
+          <div id="page3Error" class="error-box hidden"></div>
+
+          <div class="section field" data-field="selfie">
+            <label class="label">Photo of Yourself - We use this to match your face to your ID photo. <span class="required">*</span></label>
+            <div class="camera-row">
+              <label class="capture-label" for="selfie">📷 Take Photo</label>
+            </div>
+            <input id="selfie" name="selfie" type="file" accept="image/*" capture="user" class="hidden" />
+            <div class="file-list" id="selfieList"></div>
+            <div class="field-error"></div>
+          </div>
+
+          <div class="section field" data-field="idFront">
+            <label class="label">Photo of the Front of Your ID - Make sure it’s clear and readable <span class="required">*</span></label>
+            <div class="camera-row">
+              <label class="capture-label" for="idFront">📷 Take Photo</label>
+            </div>
+            <input id="idFront" name="idFront" type="file" accept="image/*" capture="environment" class="hidden" />
+            <div class="file-list" id="idFrontList"></div>
+            <div class="field-error"></div>
+          </div>
+
+          <div class="section field" data-field="idBack">
+            <label class="label">Photo of the Back of Your ID <span class="required">*</span></label>
+            <div class="camera-row">
+              <label class="capture-label" for="idBack">📷 Take Photo</label>
+            </div>
+            <input id="idBack" name="idBack" type="file" accept="image/*" capture="environment" class="hidden" />
+            <div class="file-list" id="idBackList"></div>
+            <div class="field-error"></div>
+          </div>
+
+          <div id="visaGroup" class="section field hidden" data-field="visaUpload">
+            <label class="label">Visa Upload <span class="required">*</span></label>
+            <label class="upload-box dark" for="visaUpload">
+              <input id="visaUpload" name="visaUpload" type="file" accept="image/*,.pdf" />
+              <div>
+                <div class="upload-title">Browse Files</div>
+                <div class="upload-text">Drag and drop files here</div>
+              </div>
+            </label>
+            <div class="file-list" id="visaUploadList"></div>
+            <div class="hint">Only required if you selected “Overseas passport with NZ visa”.</div>
+            <div class="field-error"></div>
+          </div>
+        </div>
+
+        <div class="footer-nav">
+          <button type="button" class="button-secondary" id="back3">Back</button>
+          <button type="button" class="button" id="next3">Next</button>
+        </div>
+      </section>
+
+      <section class="page" data-step="4">
+        <div class="content">
+          <div class="hero">
+            <h2>Declaration and signature</h2>
+            <p>Almost done — please confirm the details below.</p>
+          </div>
+
+          <div id="page4Error" class="error-box hidden"></div>
+          <div id="page4Success" class="success-box hidden"></div>
+
+          <div class="section field" data-field="confirmations">
+            <label class="label">Please confirm the following before you continue: <span class="required">*</span></label>
+            <div class="checkbox-list">
+              <label class="tick-row"><input type="checkbox" name="confirmations" value="I confirm the information I have provided is for myself and to be true and correct." /><span>I confirm the information I have provided is for myself and to be true and correct.</span></label>
+              <label class="tick-row"><input type="checkbox" name="confirmations" value="I understand that My Refund Ltd will act on my behalf until I choose to terminate this arrangement." /><span>I understand that My Refund Ltd will act on my behalf until I choose to terminate this arrangement (I can terminate this agreement by contacting either My Refund Ltd or Inland Revenue at any time).</span></label>
+              <label class="tick-row"><input type="checkbox" name="confirmations" value="I agree My Refund Ltd will act on my behalf for all tax types at Inland Revenue." /><span>I agree My Refund Ltd will act on my behalf for all tax types at Inland Revenue.</span></label>
+              <label class="tick-row"><input type="checkbox" name="confirmations" value="I give permission for My Refund Ltd to obtain my information from Inland Revenue." /><span>I give permission for My Refund Ltd to obtain my information from Inland Revenue.</span></label>
+              <label class="tick-row"><input type="checkbox" name="confirmations" value="I agree that My Refund Ltd will be able to access or modify my details at Inland Revenue." /><span>I agree that My Refund Ltd will be able to access or modify my details at Inland Revenue.</span></label>
+              <label class="tick-row"><input type="checkbox" name="confirmations" value="I give permission for my tax correspondence to be sent to My Refund Ltd." /><span>I give permission for my tax correspondence to be sent to My Refund Ltd.</span></label>
+              <label class="tick-row"><input type="checkbox" name="confirmations" value="I understand my refund will be paid into My Refund Ltd trust account and then paid directly to me less any agreed fees." /><span>I understand my refund will be paid into My Refund Ltd trust account and then paid directly to me less any agreed fees.</span></label>
+              <label class="tick-row"><input type="checkbox" name="confirmations" value="I authorise My Refund Ltd to prepare, submit, and sign tax returns, auto assessments and PTS's on my behalf." /><span>I authorise My Refund Ltd to prepare, submit, and sign tax returns, auto assessments and PTS's on my behalf regardless of whether the result is a tax refund or tax bill.</span></label>
+            </div>
+            <div class="field-error"></div>
+          </div>
+
+          <div class="section grid-2">
+            <div class="field" data-field="termsAgreement">
+              <label class="label">&nbsp;</label>
+              <label class="agree-row choice"><input type="checkbox" id="termsAgreement" name="termsAgreement" /><span>I agree to <a href="#" target="_blank" rel="noopener">terms &amp; conditions</a>. <span class="required">*</span></span></label>
+              <div class="field-error"></div>
+            </div>
+
+            <div class="field" data-field="signatureCanvas">
+              <label class="label">Signature <span class="required">*</span></label>
+              <div class="signature-wrap">
+                <canvas id="signaturePad" class="signature-pad" width="560" height="140" aria-label="Signature pad"></canvas>
+                <div class="signature-actions">
+                  <input class="signature-name" id="signatureName" name="signatureName" type="text" placeholder="Type your full name" autocomplete="name" />
+                  <button type="button" class="button-secondary" id="clearSignature">Clear signature</button>
+                </div>
+              </div>
+              <div class="field-error"></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="summary-card">
+              <h3>Review your details</h3>
+              <div id="reviewSummary"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-nav">
+          <button type="button" class="button-secondary" id="back4">Back</button>
+          <button type="submit" class="button" id="submitButton">
+            <span class="spinner" aria-hidden="true"></span>
+            <span class="button-text">Submit My Verification</span>
+          </button>
+        </div>
+      </section>
+    </form>
   </div>
 
-  <!-- STEP 2 -->
-  <div class="step">
-    <div class="header">
-      <h2>Now let’s check your details</h2>
-    </div>
+  <script>
+    const SUBMIT_ENDPOINT = "";
+    const LOCAL_STORAGE_KEY = "myrefund_get_verified_v1";
+    const MAX_FILE_SIZE_MB = 10;
 
-    <label>IRD Number *</label>
-    <input type="text">
+    const form = document.getElementById("verificationForm");
+    const pages = [...document.querySelectorAll(".page")];
+    const progressBar = document.getElementById("progressBar");
+    const pageLabel = document.getElementById("pageLabel");
+    const saveStatus = document.getElementById("saveStatus");
+    const noIdNotice = document.getElementById("noIdNotice");
+    const visaGroup = document.getElementById("visaGroup");
+    const altNameWrap = document.getElementById("altNameWrap");
+    const altExtraGroup = document.getElementById("altExtraGroup");
+    const reviewSummary = document.getElementById("reviewSummary");
+    const submitButton = document.getElementById("submitButton");
+    const signaturePad = document.getElementById("signaturePad");
+    const signatureData = document.getElementById("signatureData");
+    const signatureName = document.getElementById("signatureName");
+    const clearSignatureBtn = document.getElementById("clearSignature");
 
-    <label>Date of Birth *</label>
-    <input type="date">
+    let currentStep = 1;
+    let isDrawing = false;
+    let hasSignatureStroke = false;
+    let lastX = 0;
+    let lastY = 0;
 
-    <label>First Name *</label>
-    <input type="text">
+    const summaryFields = [
+      ["Type of ID", () => getRadioValue("idType") || "-"],
+      ["Email", () => form.email.value || "-"],
+      ["IRD Number", () => form.irdNumber.value || "-"],
+      ["Date of Birth", () => form.dateOfBirth.value || "-"],
+      ["Full Name", () => [form.firstName.value, form.middleName.value, form.lastName.value].filter(Boolean).join(" ") || "-"],
+      ["Other names?", () => getRadioValue("otherNamesKnown") || "-"],
+      ["Alternative Name", () => form.alternativeName.value || "-"],
+      ["Reason", () => form.alternativeNameReason.value || "-"],
+      ["Visa Upload Required", () => getRadioValue("idType") === "Overseas Passport with NZ Visa" ? "Yes" : "No"],
+      ["Signature Name", () => form.signatureName.value || "-"],
+    ];
 
-    <label>Middle Name</label>
-    <input type="text">
-
-    <label>Last Name *</label>
-    <input type="text">
-
-    <label>Are you known by any other names?</label>
-    <div>
-      <label><input type="radio" name="otherName" value="yes"> Yes</label>
-      <label><input type="radio" name="otherName" value="no"> No</label>
-    </div>
-
-    <div id="altNameFields" class="hidden">
-      <label>Alternative Name</label>
-      <input type="text">
-
-      <label>Reason for Alternative Name</label>
-      <input type="text">
-
-      <label>Evidence of Name Change</label>
-      <input type="file">
-    </div>
-
-    <div class="nav-buttons">
-      <button class="btn btn-secondary" onclick="prevStep()">Back</button>
-      <button class="btn" onclick="nextStep()">Next</button>
-    </div>
-  </div>
-
-  <!-- STEP 3 -->
-  <div class="step">
-    <div class="header">
-      <h2>Upload your ID and selfie</h2>
-    </div>
-
-    <label>Selfie *</label>
-    <input type="file">
-
-    <label>Front of ID *</label>
-    <input type="file">
-
-    <label>Back of ID *</label>
-    <input type="file">
-
-    <div id="visaUpload" class="hidden">
-      <label>Visa Upload *</label>
-      <input type="file">
-    </div>
-
-    <div class="nav-buttons">
-      <button class="btn btn-secondary" onclick="prevStep()">Back</button>
-      <button class="btn" onclick="nextStep()">Next</button>
-    </div>
-  </div>
-
-  <!-- STEP 4 -->
-  <div class="step">
-    <div class="header">
-      <h2>Declaration and signature</h2>
-    </div>
-
-    <label><input type="checkbox"> I confirm the information provided is correct</label>
-    <label><input type="checkbox"> I agree to terms and conditions</label>
-
-    <label>Signature *</label>
-    <input type="text">
-
-    <div class="nav-buttons">
-      <button class="btn btn-secondary" onclick="prevStep()">Back</button>
-      <button class="btn">Submit</button>
-    </div>
-  </div>
-
-</div>
-
-<script>
-  let currentStep = 0;
-  const steps = document.querySelectorAll('.step');
-
-  function showStep(index) {
-    steps.forEach((step, i) => step.classList.toggle('active', i === index));
-  }
-
-  function nextStep() {
-    const idType = document.querySelector('input[name="idType"]:checked');
-
-    // Skip logic
-    if (currentStep === 0 && idType && idType.value === 'none') {
-      currentStep = 3;
-      showStep(currentStep);
-      return;
+    function setSaveStatus(text) {
+      saveStatus.textContent = text;
     }
 
-    if (currentStep < steps.length - 1) {
-      currentStep++;
-      showStep(currentStep);
+    function getFieldWrapper(name) {
+      return document.querySelector(`[data-field="${name}"]`);
     }
-  }
 
-  function prevStep() {
-    if (currentStep > 0) {
-      currentStep--;
-      showStep(currentStep);
+    function clearFieldError(name) {
+      const wrapper = getFieldWrapper(name);
+      if (!wrapper) return;
+      wrapper.classList.remove("invalid");
+      const error = wrapper.querySelector(".field-error");
+      if (error) error.textContent = "";
     }
-  }
 
-  // ID Type logic
-  document.querySelectorAll('input[name="idType"]').forEach(el => {
-    el.addEventListener('change', () => {
-      const val = el.value;
+    function setFieldError(name, message) {
+      const wrapper = getFieldWrapper(name);
+      if (!wrapper) return;
+      wrapper.classList.add("invalid");
+      const error = wrapper.querySelector(".field-error");
+      if (error) error.textContent = message;
+    }
 
-      document.getElementById('noIdMessage').classList.toggle('hidden', val !== 'none');
-      document.getElementById('visaUpload').classList.toggle('hidden', val !== 'overseas');
+    function clearPageMessage(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = "";
+      el.classList.add("hidden");
+    }
+
+    function showPageError(id, message) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = message;
+      el.classList.remove("hidden");
+    }
+
+    function showPageSuccess(id, message) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = message;
+      el.classList.remove("hidden");
+    }
+
+    function getRadioValue(name) {
+      const checked = form.querySelector(`input[name="${name}"]:checked`);
+      return checked ? checked.value : "";
+    }
+
+    function getCheckedValues(name) {
+      return [...form.querySelectorAll(`input[name="${name}"]:checked`)].map(el => el.value);
+    }
+
+    function updateConditionalUI() {
+      const idType = getRadioValue("idType");
+      const otherNamesKnown = getRadioValue("otherNamesKnown");
+      const showNoId = idType === "I don't have any of these";
+      const showVisa = idType === "Overseas Passport with NZ Visa";
+      const showAlt = otherNamesKnown === "Yes";
+
+      noIdNotice.classList.toggle("hidden", !showNoId);
+      visaGroup.classList.toggle("hidden", !showVisa);
+      altNameWrap.classList.toggle("hidden", !showAlt);
+      altExtraGroup.classList.toggle("hidden", !showAlt);
+
+      if (!showAlt) {
+        form.alternativeName.value = "";
+        form.alternativeNameReason.value = "";
+        form.nameChangeEvidence.value = "";
+        renderFileList(form.nameChangeEvidence, "nameChangeEvidenceList");
+        ["alternativeName", "alternativeNameReason", "nameChangeEvidence"].forEach(clearFieldError);
+      }
+
+      if (!showVisa) {
+        form.visaUpload.value = "";
+        renderFileList(form.visaUpload, "visaUploadList");
+        clearFieldError("visaUpload");
+      }
+
+      buildReviewSummary();
+      persistForm();
+    }
+
+    function showStep(step) {
+      currentStep = step;
+      pages.forEach(page => page.classList.toggle("active", Number(page.dataset.step) === step));
+      const percent = (step / pages.length) * 100;
+      progressBar.style.width = `${percent}%`;
+      pageLabel.textContent = `Page ${step} of ${pages.length}`;
+      buildReviewSummary();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function sanitiseIRD(value) {
+      return value.replace(/\D/g, "").slice(0, 9);
+    }
+
+    function formatIRDInput() {
+      const raw = sanitiseIRD(form.irdNumber.value);
+      const groups = [];
+      if (raw.length <= 3) {
+        form.irdNumber.value = raw;
+        return;
+      }
+      groups.push(raw.slice(0, 3));
+      if (raw.length > 3 && raw.length <= 6) {
+        groups.push(raw.slice(3));
+      } else if (raw.length > 3) {
+        groups.push(raw.slice(3, 6));
+        groups.push(raw.slice(6));
+      }
+      form.irdNumber.value = groups.filter(Boolean).join("-");
+    }
+
+    function validateEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
+    function validateDateOfBirth(value) {
+      if (!value) return false;
+      const date = new Date(value + "T00:00:00");
+      if (Number.isNaN(date.getTime())) return false;
+      const now = new Date();
+      if (date >= now) return false;
+      const age = now.getFullYear() - date.getFullYear() - ((now.getMonth() < date.getMonth() || (now.getMonth() === date.getMonth() && now.getDate() < date.getDate())) ? 1 : 0);
+      return age >= 16 && age <= 120;
+    }
+
+    function validateFileInput(input, { required = false, imagesOnly = false } = {}) {
+      const files = input.files ? [...input.files] : [];
+      if (required && files.length === 0) return "This file is required.";
+      if (files.length === 0) return "";
+      for (const file of files) {
+        const sizeMb = file.size / (1024 * 1024);
+        if (sizeMb > MAX_FILE_SIZE_MB) {
+          return `Each file must be ${MAX_FILE_SIZE_MB}MB or smaller.`;
+        }
+        if (imagesOnly && !file.type.startsWith("image/")) {
+          return "Please upload an image file.";
+        }
+      }
+      return "";
+    }
+
+    function validateStep(step) {
+      let valid = true;
+      ["page1Error", "page2Error", "page3Error", "page4Error"].forEach(clearPageMessage);
+
+      const fail = (field, message) => {
+        valid = false;
+        setFieldError(field, message);
+      };
+
+      if (step === 1) {
+        clearFieldError("idType");
+        clearFieldError("email");
+
+        const idType = getRadioValue("idType");
+        if (!idType) fail("idType", "Please select a type of ID.");
+
+        const email = form.email.value.trim();
+        if (!email) fail("email", "Please enter your email address.");
+        else if (!validateEmail(email)) fail("email", "Please enter a valid email address.");
+
+        if (!valid) showPageError("page1Error", "Please fix the fields below before continuing.");
+      }
+
+      if (step === 2) {
+        ["irdNumber", "dateOfBirth", "firstName", "lastName", "otherNamesKnown", "alternativeName", "alternativeNameReason", "nameChangeEvidence"].forEach(clearFieldError);
+
+        const ird = sanitiseIRD(form.irdNumber.value);
+        if (!ird) fail("irdNumber", "Please enter your IRD number.");
+        else if (!(ird.length === 8 || ird.length === 9)) fail("irdNumber", "IRD number must be 8 or 9 digits.");
+
+        if (!validateDateOfBirth(form.dateOfBirth.value)) fail("dateOfBirth", "Please enter a valid date of birth.");
+        if (!form.firstName.value.trim()) fail("firstName", "Please enter your first name.");
+        if (!form.lastName.value.trim()) fail("lastName", "Please enter your last name.");
+
+        const otherNamesKnown = getRadioValue("otherNamesKnown");
+        if (!otherNamesKnown) fail("otherNamesKnown", "Please select Yes or No.");
+
+        if (otherNamesKnown === "Yes") {
+          if (!form.alternativeName.value.trim()) fail("alternativeName", "Please enter the alternative name.");
+          if (!form.alternativeNameReason.value.trim()) fail("alternativeNameReason", "Please enter the reason for the alternative name.");
+          const fileError = validateFileInput(form.nameChangeEvidence, { required: true });
+          if (fileError) fail("nameChangeEvidence", fileError);
+        }
+
+        if (!valid) showPageError("page2Error", "Please fix the fields below before continuing.");
+      }
+
+      if (step === 3) {
+        ["selfie", "idFront", "idBack", "visaUpload"].forEach(clearFieldError);
+
+        const selfieError = validateFileInput(form.selfie, { required: true, imagesOnly: true });
+        const frontError = validateFileInput(form.idFront, { required: true, imagesOnly: true });
+        const backError = validateFileInput(form.idBack, { required: true, imagesOnly: true });
+        const visaRequired = getRadioValue("idType") === "Overseas Passport with NZ Visa";
+        const visaError = validateFileInput(form.visaUpload, { required: visaRequired });
+
+        if (selfieError) fail("selfie", selfieError);
+        if (frontError) fail("idFront", frontError);
+        if (backError) fail("idBack", backError);
+        if (visaError) fail("visaUpload", visaError);
+
+        if (!valid) showPageError("page3Error", "Please fix the fields below before continuing.");
+      }
+
+      if (step === 4) {
+        ["confirmations", "termsAgreement", "signatureCanvas"].forEach(clearFieldError);
+        clearPageMessage("page4Success");
+
+        const confirmations = getCheckedValues("confirmations");
+        if (confirmations.length !== 8) fail("confirmations", "Please confirm all statements to continue.");
+        if (!form.termsAgreement.checked) fail("termsAgreement", "You must agree to the terms and conditions.");
+        if (!form.signatureName.value.trim()) fail("signatureCanvas", "Please type your full name.");
+        if (!hasSignatureStroke) fail("signatureCanvas", "Please add your signature in the box.");
+
+        if (!valid) showPageError("page4Error", "Please fix the fields below before submitting.");
+      }
+
+      return valid;
+    }
+
+    function nextFrom(step) {
+      if (!validateStep(step)) return;
+      if (step === 1 && getRadioValue("idType") === "I don't have any of these") {
+        showStep(4);
+        return;
+      }
+      showStep(step + 1);
+    }
+
+    function persistForm() {
+      const data = {
+        idType: getRadioValue("idType"),
+        email: form.email.value,
+        irdNumber: form.irdNumber.value,
+        dateOfBirth: form.dateOfBirth.value,
+        firstName: form.firstName.value,
+        middleName: form.middleName.value,
+        lastName: form.lastName.value,
+        otherNamesKnown: getRadioValue("otherNamesKnown"),
+        alternativeName: form.alternativeName.value,
+        alternativeNameReason: form.alternativeNameReason.value,
+        termsAgreement: form.termsAgreement.checked,
+        confirmations: getCheckedValues("confirmations"),
+        signatureName: form.signatureName.value,
+        signatureData: signatureData.value,
+        currentStep
+      };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+      setSaveStatus("Saved locally");
+    }
+
+    function restoreForm() {
+      const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        if (data.idType) setRadioValue("idType", data.idType);
+        if (data.email) form.email.value = data.email;
+        if (data.irdNumber) form.irdNumber.value = data.irdNumber;
+        if (data.dateOfBirth) form.dateOfBirth.value = data.dateOfBirth;
+        if (data.firstName) form.firstName.value = data.firstName;
+        if (data.middleName) form.middleName.value = data.middleName;
+        if (data.lastName) form.lastName.value = data.lastName;
+        if (data.otherNamesKnown) setRadioValue("otherNamesKnown", data.otherNamesKnown);
+        if (data.alternativeName) form.alternativeName.value = data.alternativeName;
+        if (data.alternativeNameReason) form.alternativeNameReason.value = data.alternativeNameReason;
+        form.termsAgreement.checked = Boolean(data.termsAgreement);
+        if (Array.isArray(data.confirmations)) {
+          [...form.querySelectorAll('input[name="confirmations"]')].forEach(box => {
+            box.checked = data.confirmations.includes(box.value);
+          });
+        }
+        if (data.signatureName) form.signatureName.value = data.signatureName;
+        if (data.signatureData) {
+          signatureData.value = data.signatureData;
+          redrawSignatureImage(data.signatureData);
+          hasSignatureStroke = true;
+        }
+        updateConditionalUI();
+        showStep(Math.min(Math.max(Number(data.currentStep) || 1, 1), 4));
+      } catch (error) {
+        console.error("Could not restore saved form", error);
+      }
+    }
+
+    function setRadioValue(name, value) {
+      const input = form.querySelector(`input[name="${name}"][value="${CSS.escape(value)}"]`);
+      if (input) input.checked = true;
+    }
+
+    function buildReviewSummary() {
+      reviewSummary.innerHTML = "";
+      const rows = summaryFields
+        .filter(([label, getter]) => {
+          if (label === "Alternative Name" || label === "Reason") {
+            return getRadioValue("otherNamesKnown") === "Yes";
+          }
+          return true;
+        })
+        .map(([label, getter]) => `<div class="summary-row"><strong>${escapeHtml(label)}</strong><span>${escapeHtml(String(getter() || "-"))}</span></div>`)
+        .join("");
+      reviewSummary.innerHTML = rows;
+    }
+
+    function escapeHtml(value) {
+      return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function renderFileList(input, targetId) {
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      const files = input.files ? [...input.files] : [];
+      target.innerHTML = files.map((file, index) => {
+        const size = `${(file.size / 1024 / 1024).toFixed(2)} MB`;
+        return `<div class="file-chip"><span>${escapeHtml(file.name)} (${size})</span><button type="button" class="mini-btn" data-input="${input.id}" data-index="${index}">Remove</button></div>`;
+      }).join("");
+    }
+
+    document.addEventListener("click", (event) => {
+      const btn = event.target.closest(".mini-btn");
+      if (!btn) return;
+      const input = document.getElementById(btn.dataset.input);
+      if (!input) return;
+      input.value = "";
+      const map = {
+        nameChangeEvidence: "nameChangeEvidenceList",
+        selfie: "selfieList",
+        idFront: "idFrontList",
+        idBack: "idBackList",
+        visaUpload: "visaUploadList"
+      };
+      renderFileList(input, map[input.id]);
+      persistForm();
     });
-  });
 
-  // Alternative name logic
-  document.querySelectorAll('input[name="otherName"]').forEach(el => {
-    el.addEventListener('change', () => {
-      const show = el.value === 'yes';
-      document.getElementById('altNameFields').classList.toggle('hidden', !show);
+    function gatherSubmissionData() {
+      return {
+        idType: getRadioValue("idType"),
+        email: form.email.value.trim(),
+        irdNumber: sanitiseIRD(form.irdNumber.value),
+        dateOfBirth: form.dateOfBirth.value,
+        firstName: form.firstName.value.trim(),
+        middleName: form.middleName.value.trim(),
+        lastName: form.lastName.value.trim(),
+        otherNamesKnown: getRadioValue("otherNamesKnown"),
+        alternativeName: form.alternativeName.value.trim(),
+        alternativeNameReason: form.alternativeNameReason.value.trim(),
+        termsAgreement: form.termsAgreement.checked,
+        confirmations: getCheckedValues("confirmations"),
+        signatureName: form.signatureName.value.trim(),
+        signatureData: signatureData.value,
+        uploadedFiles: {
+          selfie: form.selfie.files?.[0]?.name || null,
+          idFront: form.idFront.files?.[0]?.name || null,
+          idBack: form.idBack.files?.[0]?.name || null,
+          visaUpload: form.visaUpload.files?.[0]?.name || null,
+          nameChangeEvidence: form.nameChangeEvidence.files?.[0]?.name || null,
+        },
+        submittedAt: new Date().toISOString(),
+      };
+    }
+
+    async function handleSubmit(event) {
+      event.preventDefault();
+      if (!validateStep(4)) return;
+
+      clearPageMessage("page4Error");
+      clearPageMessage("page4Success");
+      submitButton.disabled = true;
+      submitButton.classList.add("loading");
+      setSaveStatus("Submitting...");
+
+      try {
+        const payload = gatherSubmissionData();
+
+        if (SUBMIT_ENDPOINT) {
+          const response = await fetch(SUBMIT_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            throw new Error("The server could not accept the verification right now.");
+          }
+
+          localStorage.removeItem(LOCAL_STORAGE_KEY);
+          showPageSuccess("page4Success", "Verification submitted successfully.");
+          form.reset();
+          clearSignature();
+          updateConditionalUI();
+          buildReviewSummary();
+          setSaveStatus("Submitted");
+          showStep(1);
+        } else {
+          const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `get-verified-${Date.now()}.json`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+          showPageSuccess("page4Success", "Frontend is production-ready, but no backend endpoint is connected yet. A JSON export has been downloaded so the submission is not lost.");
+          setSaveStatus("Awaiting backend connection");
+        }
+      } catch (error) {
+        console.error(error);
+        showPageError("page4Error", error.message || "Something went wrong while submitting.");
+        setSaveStatus("Save failed");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.classList.remove("loading");
+      }
+    }
+
+    function initSignaturePad() {
+      const ctx = signaturePad.getContext("2d");
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#7d8793";
+
+      const getPos = (event) => {
+        const rect = signaturePad.getBoundingClientRect();
+        const touch = event.touches ? event.touches[0] : event;
+        return {
+          x: ((touch.clientX - rect.left) / rect.width) * signaturePad.width,
+          y: ((touch.clientY - rect.top) / rect.height) * signaturePad.height,
+        };
+      };
+
+      const start = (event) => {
+        isDrawing = true;
+        const pos = getPos(event);
+        lastX = pos.x;
+        lastY = pos.y;
+      };
+
+      const move = (event) => {
+        if (!isDrawing) return;
+        event.preventDefault();
+        const pos = getPos(event);
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        lastX = pos.x;
+        lastY = pos.y;
+        hasSignatureStroke = true;
+        signatureData.value = signaturePad.toDataURL("image/png");
+        clearFieldError("signatureCanvas");
+        persistForm();
+      };
+
+      const end = () => {
+        if (!isDrawing) return;
+        isDrawing = false;
+        signatureData.value = signaturePad.toDataURL("image/png");
+        persistForm();
+      };
+
+      signaturePad.addEventListener("mousedown", start);
+      signaturePad.addEventListener("mousemove", move);
+      window.addEventListener("mouseup", end);
+      signaturePad.addEventListener("touchstart", start, { passive: false });
+      signaturePad.addEventListener("touchmove", move, { passive: false });
+      window.addEventListener("touchend", end);
+    }
+
+    function clearSignature() {
+      const ctx = signaturePad.getContext("2d");
+      ctx.clearRect(0, 0, signaturePad.width, signaturePad.height);
+      hasSignatureStroke = false;
+      signatureData.value = "";
+      persistForm();
+    }
+
+    function redrawSignatureImage(dataUrl) {
+      if (!dataUrl) return;
+      const ctx = signaturePad.getContext("2d");
+      const img = new Image();
+      img.onload = () => {
+        ctx.clearRect(0, 0, signaturePad.width, signaturePad.height);
+        ctx.drawImage(img, 0, 0, signaturePad.width, signaturePad.height);
+      };
+      img.src = dataUrl;
+    }
+
+    document.getElementById("next1").addEventListener("click", () => nextFrom(1));
+    document.getElementById("next2").addEventListener("click", () => nextFrom(2));
+    document.getElementById("next3").addEventListener("click", () => nextFrom(3));
+    document.getElementById("back2").addEventListener("click", () => showStep(1));
+    document.getElementById("back3").addEventListener("click", () => showStep(2));
+    document.getElementById("back4").addEventListener("click", () => {
+      if (getRadioValue("idType") === "I don't have any of these") showStep(1);
+      else showStep(3);
     });
-  });
-</script>
+    clearSignatureBtn.addEventListener("click", clearSignature);
+    form.addEventListener("submit", handleSubmit);
 
+    form.irdNumber.addEventListener("input", () => {
+      formatIRDInput();
+      clearFieldError("irdNumber");
+      persistForm();
+      buildReviewSummary();
+    });
+
+    ["email", "dateOfBirth", "firstName", "middleName", "lastName", "alternativeName", "alternativeNameReason", "signatureName"].forEach(name => {
+      form[name].addEventListener("input", () => {
+        clearFieldError(name === "signatureName" ? "signatureCanvas" : name);
+        persistForm();
+        buildReviewSummary();
+      });
+    });
+
+    ["termsAgreement"].forEach(name => {
+      form[name].addEventListener("change", () => {
+        clearFieldError(name);
+        persistForm();
+      });
+    });
+
+    ["idType", "otherNamesKnown", "confirmations"].forEach(name => {
+      [...form.querySelectorAll(`input[name="${name}"]`)].forEach(input => {
+        input.addEventListener("change", () => {
+          if (name === "idType") clearFieldError("idType");
+          if (name === "otherNamesKnown") clearFieldError("otherNamesKnown");
+          if (name === "confirmations") clearFieldError("confirmations");
+          updateConditionalUI();
+          persistForm();
+        });
+      });
+    });
+
+    [
+      [form.nameChangeEvidence, "nameChangeEvidenceList", "nameChangeEvidence"],
+      [form.selfie, "selfieList", "selfie"],
+      [form.idFront, "idFrontList", "idFront"],
+      [form.idBack, "idBackList", "idBack"],
+      [form.visaUpload, "visaUploadList", "visaUpload"],
+    ].forEach(([input, targetId, fieldName]) => {
+      input.addEventListener("change", () => {
+        renderFileList(input, targetId);
+        clearFieldError(fieldName);
+        persistForm();
+      });
+    });
+
+    initSignaturePad();
+    restoreForm();
+    updateConditionalUI();
+    buildReviewSummary();
+    showStep(currentStep);
+    setSaveStatus("Saved locally");
+  </script>
 </body>
 </html>
