@@ -63,7 +63,7 @@ body{
 }
 .clock{font-weight:900;font-size:14px}
 
-/* ✅ NEW: Calculator button */
+/* ✅ ADDED: Calculator button */
 .calculator-btn{
   border-radius:999px;
   padding:8px 14px;
@@ -207,7 +207,7 @@ body{
   to{transform:rotate(360deg)}
 }
 
-/* ✅ NEW: Drawer */
+/* ✅ ADDED: Drawer */
 .calculator-drawer{
   position:fixed;
   top:0;
@@ -221,9 +221,7 @@ body{
   flex-direction:column;
   transition:right 0.35s ease;
 }
-.calculator-drawer.open{
-  right:0;
-}
+.calculator-drawer.open{ right:0; }
 
 .drawer-header{
   background:#094B35;
@@ -248,7 +246,7 @@ body{
   border:none;
 }
 
-/* ✅ NEW: Overlay */
+/* ✅ ADDED: Overlay */
 .drawer-overlay{
   position:fixed;
   inset:0;
@@ -288,4 +286,229 @@ body{
   </div>
 </div>
 
-<!-- EVERYTHING ELSE UNCHANGED -->
+<div class="wrap">
+
+<div id="recoveryContainer"></div>
+
+<div class="hello" id="helloText">Hello</div>
+<div class="subline" id="dateLine"></div>
+
+<div class="layout">
+
+<!-- LEFT -->
+<div>
+<div class="panel">
+<h3>Inbound Calls</h3>
+<div class="controls">
+<button onclick="adj('inbound',-1)">−</button>
+<input id="inbound" value="0">
+<button onclick="adj('inbound',1)">+</button>
+</div>
+</div>
+
+<div class="panel">
+<h3>Outbound Calls (Auto)</h3>
+<div class="controls">
+<button onclick="adjManualOutbound(-1)">−</button>
+<input id="outbound" value="0" readonly>
+<button onclick="adjManualOutbound(1)">+</button>
+</div>
+</div>
+
+<div class="panel">
+<h3>Live Chat</h3>
+<div class="controls">
+<button onclick="adj('chat',-1)">−</button>
+<input id="chat" value="0">
+<button onclick="adj('chat',1)">+</button>
+</div>
+</div>
+</div>
+
+<!-- MIDDLE -->
+<div>
+
+<div class="panel">
+<h3>Allocated Work</h3>
+<div class="grid">
+<div class="item"><label>A2A</label><div class="controls"><button onclick="adj('a2a',-1)">−</button><input id="a2a" value="0"><button onclick="adj('a2a',1)">+</button></div></div>
+<div class="item"><label>Unverified</label><div class="controls"><button onclick="adj('unverified',-1)">−</button><input id="unverified" value="0"><button onclick="adj('unverified',1)">+</button></div></div>
+<div class="item"><label>Emails</label><div class="controls"><button onclick="adj('emails',-1)">−</button><input id="emails" value="0"><button onclick="adj('emails',1)">+</button></div></div>
+<div class="item"><label>INC/C Calling</label><div class="controls"><button onclick="adjCalling('inccalling',-1)">−</button><input id="inccalling" value="0"><button onclick="adjCalling('inccalling',1)">+</button></div></div>
+<div class="item"><label>Question Calling</label><div class="controls"><button onclick="adjCalling('questioncalling',-1)">−</button><input id="questioncalling" value="0"><button onclick="adjCalling('questioncalling',1)">+</button></div></div>
+<div class="item"><label>A2A Calling</label><div class="controls"><button onclick="adjCalling('a2acalling',-1)">−</button><input id="a2acalling" value="0"><button onclick="adjCalling('a2acalling',1)">+</button></div></div>
+</div>
+</div>
+
+<div class="panel">
+<h3>Delinks & Cancellations</h3>
+<div class="grid">
+<div class="item"><label>Delinks</label><div class="controls"><button onclick="adj('delink',-1)">−</button><input id="delink" value="0"><button onclick="adj('delink',1)">+</button></div></div>
+<div class="item"><label>Cancellations</label><div class="controls"><button onclick="adj('cancel',-1)">−</button><input id="cancel" value="0"><button onclick="adj('cancel',1)">+</button></div></div>
+</div>
+</div>
+
+<div class="submit">
+<button onclick="submitDay()">Submit & Finish Day</button>
+</div>
+
+</div>
+
+<!-- RIGHT -->
+<div>
+<div class="panel">
+<h3>Quick Contacts</h3>
+<strong>My Refund</strong><br>
+0800 80 89 89<br>
+info@myrefund.co.nz<br>
+myrefund.co.nz
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+const WEB_APP_URL="https://script.google.com/macros/s/AKfycbwCZTuvnbwTAfkDXMjbLzCR-YXkzcbQ-hujbrZW7Hib5iLhbVwfkJ1xmSfpu-YfRGTn/exec";
+const TZ="Pacific/Auckland";
+const name=localStorage.getItem("currentStaff")||"CSR";
+
+const todayISO=new Date().toLocaleDateString("en-CA",{timeZone:TZ});
+const yesterdayISO=new Date(Date.now()-86400000).toLocaleDateString("en-CA",{timeZone:TZ});
+
+let workingDate=todayISO;
+let manualOutbound=0;
+let submitted=false;
+
+staffNameLabel.textContent=name+" Daily Work Logger";
+helloText.textContent="Hello, "+name;
+dateLine.textContent=new Date().toLocaleDateString("en-NZ",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:TZ})+" · Division: CSR";
+
+window.goHome=function(){window.location.href="index.html";};
+
+/* RECOVERY CHECK */
+const recoveryContainer=document.getElementById("recoveryContainer");
+const yesterdayKey="csr_"+name+"_"+yesterdayISO;
+const yesterdayData=localStorage.getItem(yesterdayKey);
+
+if(yesterdayData){
+recoveryContainer.innerHTML=`
+<div class="recovery-banner">
+⚠ You have unsubmitted data from yesterday.<br>
+<button class="continue" onclick="continueYesterday()">Continue Yesterday</button>
+<button class="fresh" onclick="startFresh()">Start Fresh Today</button>
+</div>
+`;
+}
+
+window.continueYesterday=function(){
+workingDate=yesterdayISO;
+alert("You are now logging for yesterday. Submission will use yesterday's date.");
+recoveryContainer.innerHTML="";
+};
+
+window.startFresh=function(){
+recoveryContainer.innerHTML="";
+};
+
+/* COUNTERS */
+window.adj=function(id,d){
+if(submitted)return;
+const el=document.getElementById(id);
+let v=Number(el.value||0)+d;
+if(v<0)v=0;
+el.value=v;
+};
+
+window.adjManualOutbound=function(d){
+if(submitted)return;
+manualOutbound+=d;
+if(manualOutbound<0)manualOutbound=0;
+updateOutbound();
+};
+
+window.adjCalling=function(id,d){
+if(submitted)return;
+const el=document.getElementById(id);
+let v=Number(el.value||0)+d;
+if(v<0)v=0;
+el.value=v;
+updateOutbound();
+};
+
+function updateOutbound(){
+const inc=Number(inccalling.value||0);
+const q=Number(questioncalling.value||0);
+const a2aCall=Number(a2acalling.value||0);
+outbound.value=manualOutbound+inc+q+a2aCall;
+}
+
+/* SUBMIT */
+window.submitDay=async function(){
+
+if(submitted)return;
+if(!confirm("Submit & Finish Day? This cannot be edited."))return;
+
+const btn=document.querySelector(".submit button");
+btn.classList.add("loading");
+btn.textContent="Submitting...";
+document.querySelector(".page").classList.add("submitting");
+
+const formData=new URLSearchParams();
+formData.append("action","submitCSR");
+formData.append("date",workingDate);
+formData.append("staff",name);
+formData.append("Inbound",inbound.value);
+formData.append("Outbound",outbound.value);
+formData.append("Chat",chat.value);
+formData.append("Emails",emails.value);
+formData.append("A2A",a2a.value);
+formData.append("Unverified",unverified.value);
+formData.append("INC_C_Calling",inccalling.value);
+formData.append("Question_Calling",questioncalling.value);
+formData.append("A2A_Calling",a2acalling.value);
+formData.append("Delinks",delink.value);
+formData.append("Cancellations",cancel.value);
+
+try{
+await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:formData});
+btn.textContent="Submitted ✓";
+submitted=true;
+setTimeout(()=>{window.location.href="index.html";},2000);
+}catch(err){
+btn.classList.remove("loading");
+btn.textContent="Submit & Finish Day";
+document.querySelector(".page").classList.remove("submitting");
+alert("Network error. Data not submitted.");
+}
+};
+
+});
+</script>
+
+<!-- ✅ ADDED DRAWER -->
+<div id="calculatorDrawer" class="calculator-drawer">
+  <div class="drawer-header">
+    <strong>Fee Calculator</strong>
+    <button onclick="toggleCalculator()">✕</button>
+  </div>
+  <iframe src="feecalc.html" class="drawer-iframe"></iframe>
+</div>
+
+<!-- ✅ ADDED OVERLAY -->
+<div id="drawerOverlay" class="drawer-overlay" onclick="toggleCalculator()"></div>
+
+<script>
+function toggleCalculator(){
+  const drawer = document.getElementById("calculatorDrawer");
+  const overlay = document.getElementById("drawerOverlay");
+  drawer.classList.toggle("open");
+  overlay.classList.toggle("show");
+}
+</script>
+
+</body>
+</html>
