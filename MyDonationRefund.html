@@ -6,21 +6,6 @@
   <title>My Donation Refund</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Okta Neue Font -->
-  <style>
-    @font-face {
-      font-family: 'Okta Neue';
-      src: local('Okta Neue'), local('OktaNeue');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    body {
-      font-family: 'Okta Neue', system-ui, -apple-system, sans-serif;
-    }
-  </style>
-
-  <!-- Tailwind Custom Colours -->
   <script>
     tailwind.config = {
       theme: {
@@ -35,175 +20,82 @@
       }
     }
   </script>
-</head>
-<body class="bg-brandGrey text-gray-800">
-
-  <!-- Header -->
-  <header class="bg-white shadow-sm">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-      <div class="flex items-center">
-        <img src="Untitled%20(1).png" alt="My Donation Refund Logo" class="h-10 w-auto" />
-      </div>
-      <a href="#" class="bg-brandGreen text-white px-5 py-2 rounded-xl shadow">Get Started</a>
-    </div>
-  </header>
-
-  <!-- Hero -->
-  <!-- Hero -->
-  <section class="bg-gradient-to-r from-brandDark to-brandGreen text-white">
-    <div class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-12 items-center">
-      
-      <!-- Image (left) -->
-      <div class="flex justify-center md:justify-start">
-        <img src="My Refund-lllustration-07.png" alt="Illustration" class="w-full max-w-md h-auto" />
-      </div>
-
-      <!-- Content (right) -->
-      <div>
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">Claim your donation tax refund the easy way</h1>
-        <p class="text-lg text-white/90 mb-6">If you've donated to charities, you could be eligible for a tax refund. We handle the process for you from start to finish.</p>
-        <a href="#" class="bg-white text-brandDark px-6 py-3 rounded-xl text-lg font-semibold">Start My Refund</a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Partnered Charities -->
-  <!-- Partnered Charities -->
-  <section class="bg-white py-8 overflow-hidden relative left-1/2 right-1/2 w-screen -ml-[50vw] -mr-[50vw]">
-    <h2 class="text-2xl font-bold text-brandDark mb-4 text-center">Partnered Charities</h2>
-
-    <div class="w-full overflow-hidden">
-      <div class="flex gap-12 animate-marquee w-max px-6">
-        <a href="#" class="flex flex-col items-center min-w-[140px]">
-          <div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div>
-          <span class="text-sm text-center text-gray-700 mt-2">Charity One</span>
-        </a>
-        <a href="#" class="flex flex-col items-center min-w-[140px]">
-          <div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div>
-          <span class="text-sm text-center text-gray-700 mt-2">Charity Two</span>
-        </a>
-        <a href="#" class="flex flex-col items-center min-w-[140px]">
-          <div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div>
-          <span class="text-sm text-center text-gray-700 mt-2">Charity Three</span>
-        </a>
-        <a href="#" class="flex flex-col items-center min-w-[140px]">
-          <div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div>
-          <span class="text-sm text-center text-gray-700 mt-2">Charity Four</span>
-        </a>
-        <a href="#" class="flex flex-col items-center min-w-[140px]">
-          <div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div>
-          <span class="text-sm text-center text-gray-700 mt-2">Charity Five</span>
-        </a>
-
-        <!-- Duplicate for seamless scroll -->
-        <a href="#" class="flex flex-col items-center min-w-[140px]">
-          <div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div>
-          <span class="text-sm text-center text-gray-700 mt-2">Charity One</span>
-        </a>
-        <a href="#" class="flex flex-col items-center min-w-[140px]">
-          <div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div>
-          <span class="text-sm text-center text-gray-700 mt-2">Charity Two</span>
-        </a>
-        <a href="#" class="flex flex-col items-center min-w-[140px]">
-          <div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div>
-          <span class="text-sm text-center text-gray-700 mt-2">Charity Three</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Key Info Section -->
-  <section class="bg-brandGreen text-white py-16">
-    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <h2 class="text-3xl font-bold mb-4">Get paid out within 3–4 working days</h2>
-      </div>
-      <div>
-        <p class="mb-4">Most donation tax credit claims we file are paid out within 3–4 working days.</p>
-        <p>Claiming yourself can take up to 12 weeks with Inland Revenue. We take care of the paperwork, lodge everything correctly, and help avoid delays.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Give Back Option -->
-  <section class="bg-white py-16">
-    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <h2 class="text-3xl font-bold text-brandDark mb-4">Choose to give your refund back</h2>
-        <p class="text-gray-700 mb-4">You can choose to have your donation tax refund paid directly back to the charity instead of to you.</p>
-        <p class="text-gray-700">We work directly with the charity on your behalf. They provide the donation receipts, we prepare and file your claim, and once Inland Revenue pays the refund, we pass it back to the charity.</p>
-      </div>
-      <div class="bg-brandGrey p-6 rounded-2xl">
-        <ul class="space-y-3 text-gray-800">
-          <li>We liaise with the charity</li>
-          <li>Receipts are collected and verified</li>
-          <li>We file your claim with Inland Revenue</li>
-          <li>Your refund is paid back to the charity</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  
 
   <style>
+    body { font-family: system-ui, -apple-system, sans-serif; }
+
     @keyframes marquee {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
-    .animate-marquee {
-      animation: marquee 28s linear infinite;
+
+    .marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee 30s linear infinite;
     }
   </style>
+</head>
 
-  <!-- How it works -->
-  <section class="bg-white py-16">
-    <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-3xl font-bold text-center text-brandDark mb-12">How it works</h2>
-      <div class="grid md:grid-cols-3 gap-8 text-center">
-        <div>
-          <div class="text-4xl mb-4">1.</div>
-          <h3 class="font-semibold text-lg mb-2">Upload your donation receipts</h3>
-          <p class="text-gray-600">Send us your receipts or donation history.</p>
-        </div>
-        <div>
-          <div class="text-4xl mb-4">2.</div>
-          <h3 class="font-semibold text-lg mb-2">We file your claim</h3>
-          <p class="text-gray-600">We prepare and submit everything to IRD.</p>
-        </div>
-        <div>
-          <div class="text-4xl mb-4">3.</div>
-          <h3 class="font-semibold text-lg mb-2">Get your refund</h3>
-          <p class="text-gray-600">Receive your money back once processed.</p>
-        </div>
+<body class="bg-brandGrey">
+
+  <!-- Header -->
+  <header class="bg-white">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      <img src="Untitled%20(1).png" class="h-10" />
+      <a href="#" class="bg-brandGreen text-white px-5 py-2 rounded-xl">Get Started</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-r from-brandDark to-brandGreen text-white">
+    <div class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <img src="My Refund-lllustration-07.png" class="w-full max-w-md" />
+      </div>
+      <div>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Claim your donation tax refund the easy way</h1>
+        <p class="text-lg text-white/90 mb-6">If you've donated to charities, you could be eligible for a tax refund. We handle the process for you from start to finish.</p>
+        <a href="#" class="bg-white text-brandDark px-6 py-3 rounded-xl font-semibold">Start My Refund</a>
       </div>
     </div>
   </section>
 
-  <!-- Trust section -->
-  <section class="py-16">
-    <div class="max-w-4xl mx-auto text-center px-6">
-      <h2 class="text-3xl font-bold text-brandDark mb-4">Why use My Donation Refund?</h2>
-      <p class="text-gray-600 mb-6">We make claiming donation tax refunds simple and stress-free. Our team handles everything so you don’t have to.</p>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-white p-6 rounded-xl shadow">✔ Done for you</div>
-        <div class="bg-white p-6 rounded-xl shadow">✔ Fast processing</div>
-        <div class="bg-white p-6 rounded-xl shadow">✔ Trusted service</div>
+  <!-- FULL WIDTH Partnered Charities -->
+  <section class="bg-white py-8 overflow-hidden">
+    <h2 class="text-center text-2xl font-bold text-brandDark mb-6">Partnered Charities</h2>
+
+    <div class="overflow-hidden w-full">
+      <div class="marquee gap-12 px-6">
+
+        <!-- ITEMS (duplicated for seamless loop) -->
+        <div class="flex gap-12">
+          <!-- set 1 -->
+          <div class="flex flex-col items-center min-w-[140px]"><div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div><span class="text-sm mt-2">Charity One</span></div>
+          <div class="flex flex-col items-center min-w-[140px]"><div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div><span class="text-sm mt-2">Charity Two</span></div>
+          <div class="flex flex-col items-center min-w-[140px]"><div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div><span class="text-sm mt-2">Charity Three</span></div>
+          <div class="flex flex-col items-center min-w-[140px]"><div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div><span class="text-sm mt-2">Charity Four</span></div>
+          <div class="flex flex-col items-center min-w-[140px]"><div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div><span class="text-sm mt-2">Charity Five</span></div>
+
+          <!-- duplicate -->
+          <div class="flex flex-col items-center min-w-[140px]"><div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div><span class="text-sm mt-2">Charity One</span></div>
+          <div class="flex flex-col items-center min-w-[140px]"><div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div><span class="text-sm mt-2">Charity Two</span></div>
+          <div class="flex flex-col items-center min-w-[140px]"><div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div><span class="text-sm mt-2">Charity Three</span></div>
+          <div class="flex flex-col items-center min-w-[140px]"><div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div><span class="text-sm mt-2">Charity Four</span></div>
+          <div class="flex flex-col items-center min-w-[140px]"><div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div><span class="text-sm mt-2">Charity Five</span></div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="bg-brandDark text-white py-16 text-center">
-    <h2 class="text-3xl font-bold mb-4">Ready to claim your refund?</h2>
-    <a href="#" class="bg-white text-brandDark px-6 py-3 rounded-xl text-lg font-semibold">Start Now</a>
+  <!-- Content continues -->
+  <section class="bg-brandGreen text-white py-16">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+      <h2 class="text-3xl font-bold">Get paid out within 3–4 working days</h2>
+      <p>Most donation tax credit claims we file are paid out within 3–4 working days. Claiming yourself can take up to 12 weeks.</p>
+    </div>
   </section>
-
-  <!-- Footer -->
-  <footer class="bg-brandGrey py-6 text-center text-sm text-gray-600">
-    © 2026 My Donation Refund. All rights reserved.
-  </footer>
 
 </body>
 </html>
