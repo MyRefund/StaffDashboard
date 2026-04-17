@@ -235,7 +235,7 @@ input[type="number"]{
       <div class="grid">
         <div class="field full">
           <label for="refundAmount">Total Refund Amount</label>
-          <input type="number" id="refundAmount" step="0.01" min="0" value="0">
+          <input type="number" id="refundAmount" step="0.01" value="0">
         </div>
 
         <div class="field">
@@ -258,6 +258,14 @@ input[type="number"]{
             <option value="2024">2024</option>
             <option value="2023">2023</option>
             <option value="2022">2022</option>
+          </select>
+        </div>
+
+        <div class="field full hidden" id="taxAgency2025Wrap">
+          <label for="add2025TaxAgencyFee">2025 Tax Agency Fee</label>
+          <select id="add2025TaxAgencyFee">
+            <option value="no">Do not add</option>
+            <option value="yes">Add 29.50 + GST</option>
           </select>
         </div>
 
@@ -305,10 +313,16 @@ input[type="number"]{
       </div>
 
       <div class="note">
+        Fees shown are based on the fee structure effective from <strong>01/05/2025</strong>.
+        <br><br>
+        Refunds paid out prior to this date are under a different fee structure and should be checked separately.
+        <br><br>
         REB options:
         <br>• <strong>MYR FILED REB</strong> = uses tiered REB fee bands
         <br>• unticked = capped at 39.10
         <br>• <strong>MYR ASSISTED REB</strong> = adds 6.89
+        <br><br>
+        If <strong>2025</strong> is selected, you can optionally add the <strong>Tax Agency Fee = 29.50 + GST</strong>.
         <br><br>
         All fees are <strong>GST inclusive</strong>.
       </div>
@@ -328,7 +342,9 @@ function formatMoney(value) {
 
 function updateReturnTypeOptions() {
   const returnType = document.getElementById("returnType").value;
+  const taxYear = document.getElementById("taxYear").value;
   const rebOptions = document.getElementById("rebOptions");
+  const taxAgency2025Wrap = document.getElementById("taxAgency2025Wrap");
 
   if (returnType === "REB") {
     rebOptions.classList.remove("hidden");
@@ -336,6 +352,13 @@ function updateReturnTypeOptions() {
     rebOptions.classList.add("hidden");
     document.getElementById("rebHasAn").checked = false;
     document.getElementById("hasAreb").checked = false;
+  }
+
+  if (taxYear === "2025") {
+    taxAgency2025Wrap.classList.remove("hidden");
+  } else {
+    taxAgency2025Wrap.classList.add("hidden");
+    document.getElementById("add2025TaxAgencyFee").value = "no";
   }
 }
 
@@ -370,18 +393,23 @@ function calculateRebFee(refund, rebHasAn, hasAreb) {
   return round2(fee);
 }
 
-function calculateFee(refundAmount, returnType, taxYear, rebHasAn, hasAreb) {
+function calculateFee(refundAmount, returnType, taxYear, rebHasAn, hasAreb, add2025TaxAgencyFee) {
   const refund = Number(refundAmount) || 0;
   if (refund <= 0) return 0;
   if (!returnType) return 0;
 
+  const taxAgencyFeeWithGst = 29.5 * 1.15;
   let fee = 0;
 
   if (returnType === "Auto Assessed") {
     fee = Math.min(refund, 34 * 1.15);
 
     if (Number(taxYear) === 2026) {
-      fee += 29.5 * 1.15;
+      fee += taxAgencyFeeWithGst;
+    }
+
+    if (Number(taxYear) === 2025 && add2025TaxAgencyFee) {
+      fee += taxAgencyFeeWithGst;
     }
 
     fee = Math.min(fee, refund);
@@ -406,7 +434,11 @@ function calculateFee(refundAmount, returnType, taxYear, rebHasAn, hasAreb) {
     }
 
     if (Number(taxYear) === 2026) {
-      fee += 29.5 * 1.15;
+      fee += taxAgencyFeeWithGst;
+    }
+
+    if (Number(taxYear) === 2025 && add2025TaxAgencyFee) {
+      fee += taxAgencyFeeWithGst;
     }
 
     fee = Math.min(fee, refund);
@@ -414,7 +446,14 @@ function calculateFee(refundAmount, returnType, taxYear, rebHasAn, hasAreb) {
   }
 
   if (returnType === "REB") {
-    return calculateRebFee(refund, rebHasAn, hasAreb);
+    fee = calculateRebFee(refund, rebHasAn, hasAreb);
+
+    if (Number(taxYear) === 2025 && add2025TaxAgencyFee) {
+      fee += taxAgencyFeeWithGst;
+    }
+
+    fee = Math.min(fee, refund);
+    return round2(fee);
   }
 
   return 0;
@@ -426,8 +465,9 @@ function calculateAll() {
   const taxYear = document.getElementById("taxYear").value;
   const rebHasAn = document.getElementById("rebHasAn").checked;
   const hasAreb = document.getElementById("hasAreb").checked;
+  const add2025TaxAgencyFee = document.getElementById("add2025TaxAgencyFee").value === "yes";
 
-  const fee = calculateFee(refundAmount, returnType, taxYear, rebHasAn, hasAreb);
+  const fee = calculateFee(refundAmount, returnType, taxYear, rebHasAn, hasAreb, add2025TaxAgencyFee);
   const net = round2(refundAmount - fee);
 
   document.getElementById("refundDisplay").textContent = formatMoney(refundAmount);
@@ -443,6 +483,7 @@ function resetCalculator() {
   document.getElementById("refundAmount").value = 0;
   document.getElementById("returnType").value = "";
   document.getElementById("taxYear").value = "";
+  document.getElementById("add2025TaxAgencyFee").value = "no";
   document.getElementById("rebHasAn").checked = false;
   document.getElementById("hasAreb").checked = false;
 
@@ -462,7 +503,11 @@ document.getElementById("returnType").addEventListener("change", () => {
   updateReturnTypeOptions();
   calculateAll();
 });
-document.getElementById("taxYear").addEventListener("change", calculateAll);
+document.getElementById("taxYear").addEventListener("change", () => {
+  updateReturnTypeOptions();
+  calculateAll();
+});
+document.getElementById("add2025TaxAgencyFee").addEventListener("change", calculateAll);
 document.getElementById("rebHasAn").addEventListener("change", calculateAll);
 document.getElementById("hasAreb").addEventListener("change", calculateAll);
 
