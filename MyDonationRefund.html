@@ -70,11 +70,11 @@
 
   <!-- Partnered Charities -->
   <!-- Partnered Charities -->
-  <section class="bg-white py-8 overflow-hidden w-full">
+  <section class="bg-white py-8 overflow-hidden relative left-1/2 right-1/2 w-screen -ml-[50vw] -mr-[50vw]">
     <h2 class="text-2xl font-bold text-brandDark mb-4 text-center">Partnered Charities</h2>
 
     <div class="w-full overflow-hidden">
-      <div class="flex gap-12 animate-scroll px-6 w-max">
+      <div class="flex gap-12 animate-marquee w-max px-6">
         <a href="#" class="flex flex-col items-center min-w-[140px]">
           <div class="w-24 h-24 rounded-full bg-brandGrey border-2 border-brandGreen"></div>
           <span class="text-sm text-center text-gray-700 mt-2">Charity One</span>
@@ -148,14 +148,12 @@
   
 
   <style>
-    @keyframes scroll {
+    @keyframes marquee {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
-    .animate-scroll {
-      display: flex;
-      width: max-content;
-      animation: scroll 20s linear infinite;
+    .animate-marquee {
+      animation: marquee 28s linear infinite;
     }
   </style>
 
