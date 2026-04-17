@@ -48,9 +48,10 @@ body{
 .hero p{margin:8px 0 0;color:var(--muted);font-size:13px;font-weight:700}
 .panel{background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px;border-top:6px solid var(--g0)}
 .panel h3{margin:0 0 14px 0;font-size:17px;font-weight:900;color:var(--g0)}
-.top-grid{display:grid;grid-template-columns:minmax(220px,280px) 1fr;gap:16px;align-items:end}
+.top-grid{display:grid;grid-template-columns:minmax(220px,280px) minmax(150px,180px) auto;gap:12px;align-items:end}
 .field label{display:block;font-weight:900;margin-bottom:8px}
 .field input,.field select{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--border);background:#fff;font-weight:800;font-size:14px;outline:none}
+.field.compact select{padding:11px 10px;font-size:13px}
 .field input:focus,.field select:focus{border-color:var(--g1);box-shadow:0 0 0 4px rgba(15,107,75,.10)}
 .action-row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .btn{border-radius:12px;padding:11px 15px;font-weight:900;font-size:14px;border:1px solid var(--border);background:#fff;color:var(--text);cursor:pointer}
@@ -59,22 +60,22 @@ body{
 .helper-chip{border-radius:999px;padding:7px 11px;background:var(--g2);color:var(--g0);font-size:11px;font-weight:900}
 .table-shell{overflow:hidden;border-radius:16px;border:1px solid var(--border);background:#fff}
 .table-wrap{overflow:auto;max-width:100%}
-table{width:100%;border-collapse:separate;border-spacing:0;min-width:1900px;table-layout:fixed}
+table{width:100%;border-collapse:separate;border-spacing:0;min-width:1560px;table-layout:fixed}
 col.c-year{width:72px}
-col.c-gross{width:110px}
-col.c-paye{width:96px}
-col.c-acc{width:96px}
-col.c-total{width:100px}
+col.c-gross{width:96px}
+col.c-paye{width:92px}
+col.c-acc{width:88px}
+col.c-total{width:96px}
 col.c-wht{width:88px}
 col.c-rwt{width:78px}
 col.c-imp{width:82px}
-col.c-pie{width:88px}
-col.c-pir{width:88px}
-col.c-yrate{width:95px}
-col.c-ietc{width:80px}
-col.c-mexp{width:86px}
-col.c-aexp{width:90px}
-col.c-result{width:108px}
+col.c-pie{width:84px}
+col.c-pir{width:84px}
+col.c-yrate{width:76px}
+col.c-ietc{width:64px}
+col.c-mexp{width:82px}
+col.c-aexp{width:86px}
+col.c-result{width:88px}
 
 thead th{position:sticky;top:0;z-index:3;background:#f8faf9;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.02em;text-transform:uppercase;border-bottom:1px solid var(--border);padding:10px 6px;white-space:nowrap;text-align:center}
 thead tr.group-row th{top:0;font-size:10px;color:#374151;padding:8px 6px;border-bottom:1px solid var(--border)}
@@ -103,7 +104,7 @@ tbody tr:hover td.result-col{background:#f8fbf9!important}
 .readonly-cell{background:#f3f4f6!important;color:#374151;font-weight:900}
 .disabled-cell{opacity:.6}
 .result-cell{font-weight:900}
-.result-badge{display:inline-flex;align-items:center;justify-content:center;width:94px;padding:9px 10px;border-radius:999px;font-weight:900;font-size:13px}
+.result-badge{display:inline-flex;align-items:center;justify-content:center;width:76px;padding:8px 8px;border-radius:999px;font-weight:900;font-size:12px}
 .result-positive{background:var(--success-bg);color:var(--success)}
 .result-negative{background:var(--danger-bg);color:var(--danger)}
 .result-neutral{background:#f3f4f6;color:#374151}
@@ -143,7 +144,7 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
   <div class="wrap">
     <div class="hero">
       <h1>Tax Calculator Workspace</h1>
-      <p>Stripped back working table with grouped inputs and flexible tax entry methods.</p>
+      <p>Stripped back working table with grouped inputs and a single tax entry method for all years.</p>
     </div>
 
     <div class="panel">
@@ -155,13 +156,12 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
           <div id="lookupStatus" class="status-text">Expense lookup loading...</div>
         </div>
 
-        <div class="field">
+        <div class="field compact">
           <label for="taxInputMode">Tax Input</label>
           <select id="taxInputMode">
             <option value="direct_total">Total Tax</option>
             <option value="paye_acc">PAYE + ACC</option>
           </select>
-          <div class="status-text">This applies to the full calculator and shows only the fields needed for that option.</div>
         </div>
 
         <div class="action-row">
@@ -173,9 +173,9 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
         <div class="helper-chip">A Exp pulled from Google Sheet</div>
         <div class="helper-chip">Y Rate locked to 10.5%, 17.5% or 28%</div>
         <div class="helper-chip">Alternate row shading + grouped columns</div>
-        <div class="helper-chip">One tax input mode for all years</div>
+        <div class="helper-chip">Tax input mode applies to all years</div>
       </div>
-      <div class="hint">Choose either Total Tax or PAYE + ACC. The table adjusts so only the relevant employment tax fields are used.</div>
+      <div class="hint">Choose one tax input method for the full calculator: Total Tax or PAYE + ACC.</div>
     </div>
 
     <div class="panel">
@@ -186,9 +186,9 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
             <colgroup>
               <col class="c-year">
               <col class="c-gross">
-              <col class="c-paye col-paye">
-              <col class="c-acc col-acc">
-              <col class="c-total col-totaltax">
+              <col class="c-paye">
+              <col class="c-acc">
+              <col class="c-total">
               <col class="c-wht">
               <col class="c-rwt">
               <col class="c-imp">
@@ -203,17 +203,17 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
             <thead>
               <tr class="group-row">
                 <th class="sticky-left" rowspan="2">Year</th>
-                <th rowspan="2">Gross</th>
-                <th colspan="3" class="group-head-tax group-start employment-group-head" id="employmentGroupHead">Employment Tax</th>
+                <th colspan="4" class="group-head-tax group-start employment-group-head">Employment Tax</th>
                 <th colspan="3" class="group-head-tax group-start">WHT / RWT / Credits</th>
                 <th colspan="3" class="group-head-pie group-start">PIE</th>
                 <th colspan="3" class="group-head-adj group-start">Adjustments</th>
                 <th class="sticky-right" rowspan="2">Result</th>
               </tr>
               <tr class="label-row">
-                <th class="group-start col-paye">PAYE</th>
-                <th class="col-acc">ACC</th>
-                <th class="col-totaltax">Total Tax</th>
+                <th class="group-start">Gross</th>
+                <th class="employment-paye-col">PAYE</th>
+                <th class="employment-acc-col">ACC</th>
+                <th>Total Tax</th>
                 <th class="group-start">WHT/INT</th>
                 <th>RWT</th>
                 <th>Imp Cr</th>
@@ -233,11 +233,11 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
       <div class="notes">
         <div class="note-card">
           <strong>Tax entry flow</strong>
-          <span>Use the tax input selector at the top of the calculator to switch the full table between Total Tax and PAYE + ACC.</span>
+          <span>Use the top tax input dropdown to decide whether Total Tax is entered directly or calculated from PAYE + ACC for every year.</span>
         </div>
         <div class="note-card">
           <strong>Rounding</strong>
-          <span>Bracket tax, PIE tax and auto-calculated ACC all round down to 2 decimals to keep the treatment consistent.</span>
+          <span>Bracket tax and PIE tax round down to 2 decimals to keep the treatment consistent.</span>
         </div>
         <div class="note-card">
           <strong>Manual expense</strong>
@@ -250,11 +250,6 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 
 <script>
 const years = [2026, 2025, 2024, 2023, 2022];
-
-const taxInputModes = [
-  { value: "direct_total", label: "Total Tax" },
-  { value: "paye_acc", label: "PAYE + ACC" }
-];
 
 const yRateOptions = [
   { value: 0.105, label: "10.5%" },
@@ -349,10 +344,10 @@ function buildTable() {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="year-cell">${year}</td>
-      <td><input class="cell-input" type="number" step="0.01" id="gross-${year}" value="0"></td>
-      <td class="col-paye"><input class="cell-input group-start" type="number" step="0.01" id="paye-${year}" value="0"></td>
-      <td class="col-acc"><input class="cell-input" type="number" step="0.01" id="acc-${year}" value="0"></td>
-      <td class="col-totaltax"><input class="cell-input readonly-cell" type="number" step="0.01" id="totaltax-${year}" value="0"></td>
+      <td><input class="cell-input group-start" type="number" step="0.01" id="gross-${year}" value="0"></td>
+      <td><input class="cell-input employment-paye-col" type="number" step="0.01" id="paye-${year}" value="0"></td>
+      <td><input class="cell-input employment-acc-col" type="number" step="0.01" id="acc-${year}" value="0"></td>
+      <td><input class="cell-input readonly-cell" type="number" step="0.01" id="totaltax-${year}" value="0"></td>
       <td class="group-tax-cell"><input class="cell-input group-start" type="number" step="0.01" id="wht-${year}" value="0"></td>
       <td class="group-tax-cell"><input class="cell-input" type="number" step="0.01" id="rwt-${year}" value="0"></td>
       <td class="group-tax-cell"><input class="cell-input" type="number" step="0.01" id="imp-${year}" value="0"></td>
@@ -376,6 +371,7 @@ function buildTable() {
 
   document.getElementById("irdNumber").addEventListener("input", handleAllChanges);
   document.getElementById("irdNumber").addEventListener("change", handleAllChanges);
+  document.getElementById("taxInputMode").addEventListener("change", handleAllChanges);
 }
 
 function num(id) {
@@ -540,61 +536,47 @@ function getTaxMode() {
   return document.getElementById("taxInputMode").value;
 }
 
+function syncTaxEntryState() {
+  const showPayeAcc = getTaxMode() === "paye_acc";
 
-function applyGlobalTaxModeVisibility() {
-  const mode = getTaxMode();
-  const showPayeAcc = mode === "paye_acc";
-
-  document.querySelectorAll(".col-paye, .col-acc").forEach(el => {
+  document.querySelectorAll(".employment-paye-col").forEach(el => {
     el.style.display = showPayeAcc ? "" : "none";
   });
-
-  document.querySelectorAll(".col-totaltax").forEach(el => {
-    el.style.display = "";
+  document.querySelectorAll(".employment-acc-col").forEach(el => {
+    el.style.display = showPayeAcc ? "" : "none";
+  });
+  document.querySelectorAll(".employment-group-head").forEach(el => {
+    el.colSpan = showPayeAcc ? 4 : 2;
   });
 
-  const head = document.getElementById("employmentGroupHead");
-  if (head) {
-    head.colSpan = showPayeAcc ? 3 : 1;
-  }
-}
+  years.forEach(year => {
+    const payeEl = document.getElementById(`paye-${year}`);
+    const accEl = document.getElementById(`acc-${year}`);
+    const totalTaxEl = document.getElementById(`totaltax-${year}`);
 
-function syncTaxEntryState(year) {
-  const mode = getTaxMode(year);
-  const payeEl = document.getElementById(`paye-${year}`);
-  const accEl = document.getElementById(`acc-${year}`);
-  const totalTaxEl = document.getElementById(`totaltax-${year}`);
-  payeEl.readOnly = false;
-  accEl.readOnly = false;
-  totalTaxEl.readOnly = true;
-  payeEl.classList.remove("readonly-cell", "disabled-cell");
-  accEl.classList.remove("readonly-cell", "disabled-cell");
-  totalTaxEl.classList.remove("readonly-cell", "disabled-cell");
+    payeEl.readOnly = !showPayeAcc;
+    accEl.readOnly = !showPayeAcc;
+    totalTaxEl.readOnly = showPayeAcc;
 
-  if (mode === "direct_total") {
-    payeEl.readOnly = true;
-    accEl.readOnly = true;
-    totalTaxEl.readOnly = false;
-    payeEl.classList.add("readonly-cell", "disabled-cell");
-    accEl.classList.add("readonly-cell", "disabled-cell");
-  } else if (mode === "paye_acc") {
-    totalTaxEl.readOnly = true;
-    totalTaxEl.classList.add("readonly-cell", "disabled-cell");
-  }
+    payeEl.classList.toggle("readonly-cell", !showPayeAcc);
+    payeEl.classList.toggle("disabled-cell", !showPayeAcc);
+    accEl.classList.toggle("readonly-cell", !showPayeAcc);
+    accEl.classList.toggle("disabled-cell", !showPayeAcc);
+    totalTaxEl.classList.toggle("readonly-cell", showPayeAcc);
+    totalTaxEl.classList.toggle("disabled-cell", showPayeAcc);
+
+    if (!showPayeAcc) {
+      payeEl.value = "0.00";
+      accEl.value = "0.00";
+    }
+  });
 }
 
 function getTotalTaxForRow(year) {
-  const mode = getTaxMode(year);
-  const paye = num(`paye-${year}`);
-  const acc = num(`acc-${year}`);
-
-  if (mode === "direct_total") {
+  if (getTaxMode() === "direct_total") {
     return round2(num(`totaltax-${year}`));
   }
-  if (mode === "paye_acc") {
-    return round2(paye + acc);
-  }
-  return 0;
+  return round2(num(`paye-${year}`) + num(`acc-${year}`));
 }
 
 function renderResultBadge(year, value) {
@@ -607,7 +589,7 @@ function renderResultBadge(year, value) {
 }
 
 function calculateRow(year) {
-  syncTaxEntryState(year);
+  syncTaxEntryState();
 
   const gross = num(`gross-${year}`);
   const totalTax = getTotalTaxForRow(year);
@@ -643,21 +625,21 @@ function calculateAll() {
 }
 
 function handleAllChanges() {
-  applyGlobalTaxModeVisibility();
   updateLookupExpenses();
   calculateAll();
 }
 
 function resetAll() {
   document.getElementById("irdNumber").value = "";
+  document.getElementById("taxInputMode").value = "direct_total";
   document.querySelectorAll(".cell-input").forEach(input => {
     if (!input.readOnly) input.value = 0;
   });
-  document.getElementById("taxInputMode").value = "direct_total";
   years.forEach(year => {
     document.getElementById(`yrate-${year}`).value = "0.105";
     document.getElementById(`totaltax-${year}`).value = "0.00";
     document.getElementById(`aexp-${year}`).value = "0.00";
+    document.getElementById(`paye-${year}`).value = "0.00";
     document.getElementById(`acc-${year}`).value = "0.00";
     renderResultBadge(year, 0);
   });
@@ -666,8 +648,6 @@ function resetAll() {
 
 async function initCalculator() {
   buildTable();
-  document.getElementById("taxInputMode").value = "direct_total";
-  document.getElementById("taxInputMode").addEventListener("change", handleAllChanges);
   years.forEach(year => {
     document.getElementById(`yrate-${year}`).value = "0.105";
   });
