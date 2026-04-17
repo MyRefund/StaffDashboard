@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Language" content="en">
 <meta name="google" content="notranslate">
-<title>My Refund — Tax Calculator</title>
-
+<title>My Refund - Tax Calculator</title>
 <style>
 :root{
   --g0:#094B35;
@@ -23,6 +22,9 @@
   --danger-bg:#fef3f2;
   --success:#027a48;
   --success-bg:#ecfdf3;
+  --group-tax:#f8fafc;
+  --group-pie:#f0fdf4;
+  --group-adj:#fff7ed;
 }
 *{box-sizing:border-box}
 body{
@@ -32,535 +34,99 @@ body{
   background:linear-gradient(180deg,#eef5f1 0%, #f7faf8 100%);
 }
 .page{min-height:100vh}
-.header{
-  background:var(--g0);
-  color:#fff;
-  padding:14px 24px;
-}
-.header-inner{
-  max-width:1500px;
-  margin:0 auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  flex-wrap:wrap;
-}
-.brand{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-.brand-mark{
-  width:42px;
-  height:42px;
-  border-radius:12px;
-  background:rgba(255,255,255,.12);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-  font-size:16px;
-}
-.brand-text strong{
-  display:block;
-  font-size:15px;
-  font-weight:900;
-}
-.brand-text span{
-  display:block;
-  font-size:12px;
-  opacity:.92;
-  font-weight:700;
-}
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-}
-.header-chip{
-  border-radius:999px;
-  padding:8px 14px;
-  font-weight:900;
-  font-size:13px;
-  border:1px solid rgba(255,255,255,.25);
-  background:rgba(255,255,255,.08);
-  color:#fff;
-}
-.wrap{
-  max-width:1800px;
-  margin:0 auto;
-  padding:24px 18px 50px;
-}
-.hero{
-  margin-bottom:18px;
-}
-.hero h1{
-  margin:0;
-  font-size:26px;
-  font-weight:900;
-  color:var(--g0);
-}
-.hero p{
-  margin:8px 0 0;
-  color:var(--muted);
-  font-size:13px;
-  font-weight:700;
-}
-.panel{
-  background:var(--panel);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:18px;
-  margin-bottom:18px;
-  border-top:6px solid var(--g0);
-}
-.panel h3{
-  margin:0 0 14px 0;
-  font-size:17px;
-  font-weight:900;
-  color:var(--g0);
-}
-.top-grid{
-  display:grid;
-  grid-template-columns:minmax(220px,280px) minmax(220px,300px) 1fr;
-  gap:16px;
-  align-items:end;
-}
-.field label{
-  display:block;
-  font-weight:900;
-  margin-bottom:8px;
-}
-.field input,
-.field select{
-  width:100%;
-  padding:11px 13px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:#fff;
-  font-weight:800;
-  font-size:14px;
-  outline:none;
-}
-.field input:focus,
-.field select:focus{
-  border-color:var(--g1);
-  box-shadow:0 0 0 4px rgba(15,107,75,.10);
-}
-.action-row{
-  display:flex;
-  gap:10px;
-  justify-content:flex-end;
-  flex-wrap:wrap;
-}
-.btn{
-  border-radius:12px;
-  padding:11px 15px;
-  font-weight:900;
-  font-size:14px;
-  border:1px solid var(--border);
-  background:#fff;
-  color:var(--text);
-  cursor:pointer;
-}
-.btn-primary{
-  background:var(--g0);
-  border-color:var(--g0);
-  color:#fff;
-}
-.btn-secondary{
-  background:#fff;
-  color:var(--g0);
-  border-color:var(--g0);
-}
-.helper-row{
-  margin-top:12px;
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.helper-chip{
-  border-radius:999px;
-  padding:7px 11px;
-  background:var(--g2);
-  color:var(--g0);
-  font-size:11px;
-  font-weight:900;
-}
-.table-shell{
-  overflow:hidden;
-  border-radius:16px;
-  border:1px solid var(--border);
-  background:#fff;
-}
-.table-wrap{
-  overflow:auto;
-  max-width:100%;
-}
-table{
-  width:100%;
-  border-collapse:separate;
-  border-spacing:0;
-  min-width:1650px;
-  table-layout:fixed;
-}
+.header{background:var(--g0);color:#fff;padding:14px 24px}
+.header-inner{max-width:1700px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-mark{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px}
+.brand-text strong{display:block;font-size:15px;font-weight:900}
+.brand-text span{display:block;font-size:12px;opacity:.92;font-weight:700}
+.header-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.header-chip{border-radius:999px;padding:8px 14px;font-weight:900;font-size:13px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff}
+.wrap{max-width:1800px;margin:0 auto;padding:24px 18px 50px}
+.hero{margin-bottom:18px}
+.hero h1{margin:0;font-size:26px;font-weight:900;color:var(--g0)}
+.hero p{margin:8px 0 0;color:var(--muted);font-size:13px;font-weight:700}
+.panel{background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px;border-top:6px solid var(--g0)}
+.panel h3{margin:0 0 14px 0;font-size:17px;font-weight:900;color:var(--g0)}
+.top-grid{display:grid;grid-template-columns:minmax(220px,280px) 1fr;gap:16px;align-items:end}
+.field label{display:block;font-weight:900;margin-bottom:8px}
+.field input,.field select{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--border);background:#fff;font-weight:800;font-size:14px;outline:none}
+.field input:focus,.field select:focus{border-color:var(--g1);box-shadow:0 0 0 4px rgba(15,107,75,.10)}
+.action-row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.btn{border-radius:12px;padding:11px 15px;font-weight:900;font-size:14px;border:1px solid var(--border);background:#fff;color:var(--text);cursor:pointer}
+.btn-secondary{background:#fff;color:var(--g0);border-color:var(--g0)}
+.helper-row{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+.helper-chip{border-radius:999px;padding:7px 11px;background:var(--g2);color:var(--g0);font-size:11px;font-weight:900}
+.table-shell{overflow:hidden;border-radius:16px;border:1px solid var(--border);background:#fff}
+.table-wrap{overflow:auto;max-width:100%}
+table{width:100%;border-collapse:separate;border-spacing:0;min-width:1900px;table-layout:fixed}
 col.c-year{width:72px}
-col.c-type{width:120px}
-col.c-gross{width:105px}
-col.c-paye{width:95px}
-col.c-acc{width:78px}
-col.c-total{width:92px}
+col.c-gross{width:110px}
+col.c-taxmode{width:145px}
+col.c-paye{width:96px}
+col.c-acc{width:96px}
+col.c-total{width:100px}
+col.c-nonacc{width:122px}
 col.c-wht{width:88px}
-col.c-rwt{width:70px}
-col.c-imp{width:78px}
-col.c-pie{width:90px}
-col.c-pir{width:78px}
-col.c-yrate{width:78px}
-col.c-ietc{width:70px}
-col.c-mexp{width:80px}
+col.c-rwt{width:78px}
+col.c-imp{width:82px}
+col.c-pie{width:88px}
+col.c-pir{width:88px}
+col.c-yrate{width:95px}
+col.c-ietc{width:80px}
+col.c-mexp{width:86px}
 col.c-aexp{width:90px}
 col.c-result{width:108px}
-col.c-fee{width:108px}
-col.c-net{width:118px}
 
-thead th{
-  position:sticky;
-  top:0;
-  z-index:3;
-  background:#f8faf9;
-  color:var(--muted);
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:.02em;
-  text-transform:uppercase;
-  border-bottom:1px solid var(--border);
-  padding:10px 6px;
-  white-space:nowrap;
-  text-align:center;
-}
-tbody td{
-  border-bottom:1px solid var(--border);
-  padding:6px;
-  text-align:center;
-  vertical-align:middle;
-  background:#fff;
-}
-tbody tr:nth-child(even) td{
-  background:#fcfcfc;
-}
-tbody tr:hover td{
-  background:#f8fbf9;
-}
-.year-cell{
-  position:sticky;
-  left:0;
-  z-index:2;
-  background:#f5f8f6 !important;
-  font-weight:900;
-  color:var(--g0);
-}
-thead th.sticky-left{
-  position:sticky;
-  left:0;
-  z-index:4;
-  background:#f1f6f3;
-}
-.result-col{
-  position:sticky;
-  right:0;
-  z-index:2;
-  background:#fff !important;
-  box-shadow:-1px 0 0 var(--border);
-}
-thead th.sticky-right{
-  position:sticky;
-  right:0;
-  z-index:4;
-  background:#f1f6f3;
-  box-shadow:-1px 0 0 var(--border);
-}
-tbody tr:nth-child(even) td.result-col{
-  background:#fcfcfc !important;
-}
-tbody tr:hover td.result-col{
-  background:#f8fbf9 !important;
-}
-.cell-input,
-.cell-select{
-  width:100%;
-  min-width:0;
-  border:1px solid transparent;
-  outline:none;
-  text-align:center;
-  padding:8px 6px;
-  background:#f9fafb;
-  border-radius:10px;
-  font-size:13px;
-  font-weight:800;
-  color:var(--text);
-}
-.cell-select{
-  appearance:none;
-}
-.cell-input:focus,
-.cell-select:focus{
-  border-color:var(--g1);
-  background:#fff;
-  box-shadow:0 0 0 3px rgba(15,107,75,.10);
-}
-.readonly-cell{
-  background:#f3f4f6 !important;
-  color:#374151;
-  font-weight:900;
-}
-.result-cell{
-  font-weight:900;
-}
-.result-badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:94px;
-  padding:9px 10px;
-  border-radius:999px;
-  font-weight:900;
-  font-size:13px;
-}
-.result-positive{
-  background:var(--success-bg);
-  color:var(--success);
-}
-.result-negative{
-  background:var(--danger-bg);
-  color:var(--danger);
-}
-.result-neutral{
-  background:#f3f4f6;
-  color:#374151;
-}
-.notes{
-  margin-top:12px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:10px;
-}
-.note-card{
-  padding:12px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:#fff;
-}
-.note-card strong{
-  display:block;
-  color:var(--g0);
-  font-size:13px;
-  font-weight:900;
-  margin-bottom:6px;
-}
-.note-card span{
-  display:block;
-  color:var(--muted);
-  font-size:12px;
-  font-weight:700;
-  line-height:1.4;
-}
-.status-text{
-  margin-top:10px;
-  font-size:12px;
-  font-weight:800;
-  color:var(--muted);
-}
+thead th{position:sticky;top:0;z-index:3;background:#f8faf9;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.02em;text-transform:uppercase;border-bottom:1px solid var(--border);padding:10px 6px;white-space:nowrap;text-align:center}
+thead tr.group-row th{top:0;font-size:10px;color:#374151;padding:8px 6px;border-bottom:1px solid var(--border)}
+thead tr.label-row th{top:36px}
+@media (max-width:900px){thead tr.label-row th{top:34px}}
+.group-head-tax{background:var(--group-tax)}
+.group-head-pie{background:var(--group-pie)}
+.group-head-adj{background:var(--group-adj)}
+.group-start{box-shadow:inset 2px 0 0 #d1d5db}
+
+tbody td{border-bottom:1px solid var(--border);padding:6px;text-align:center;vertical-align:middle;background:#fff}
+tbody tr:nth-child(even) td{background:#fcfcfc}
+tbody tr:hover td{background:#f8fbf9}
+.group-tax-cell{background:var(--group-tax)!important}
+.group-pie-cell{background:var(--group-pie)!important}
+.group-adj-cell{background:var(--group-adj)!important}
+.year-cell{position:sticky;left:0;z-index:2;background:#f5f8f6!important;font-weight:900;color:var(--g0)}
+thead th.sticky-left{position:sticky;left:0;z-index:5;background:#f1f6f3}
+.result-col{position:sticky;right:0;z-index:2;background:#fff!important;box-shadow:-1px 0 0 var(--border)}
+thead th.sticky-right{position:sticky;right:0;z-index:5;background:#f1f6f3;box-shadow:-1px 0 0 var(--border)}
+tbody tr:nth-child(even) td.result-col{background:#fcfcfc!important}
+tbody tr:hover td.result-col{background:#f8fbf9!important}
+.cell-input,.cell-select{width:100%;min-width:0;border:1px solid transparent;outline:none;text-align:center;padding:8px 6px;background:#f9fafb;border-radius:10px;font-size:13px;font-weight:800;color:var(--text)}
+.cell-select{appearance:none}
+.cell-input:focus,.cell-select:focus{border-color:var(--g1);background:#fff;box-shadow:0 0 0 3px rgba(15,107,75,.10)}
+.readonly-cell{background:#f3f4f6!important;color:#374151;font-weight:900}
+.disabled-cell{opacity:.6}
+.result-cell{font-weight:900}
+.result-badge{display:inline-flex;align-items:center;justify-content:center;width:94px;padding:9px 10px;border-radius:999px;font-weight:900;font-size:13px}
+.result-positive{background:var(--success-bg);color:var(--success)}
+.result-negative{background:var(--danger-bg);color:var(--danger)}
+.result-neutral{background:#f3f4f6;color:#374151}
+.notes{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.note-card{padding:12px;border-radius:14px;border:1px solid var(--border);background:#fff}
+.note-card strong{display:block;color:var(--g0);font-size:13px;font-weight:900;margin-bottom:6px}
+.note-card span{display:block;color:var(--muted);font-size:12px;font-weight:700;line-height:1.4}
+.status-text{margin-top:10px;font-size:12px;font-weight:800;color:var(--muted)}
 .status-ok{color:var(--success)}
 .status-error{color:var(--danger)}
-.print-sheet{
-  display:none;
-}
-.print-cover{
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:22px;
-  background:#fff;
-  margin-bottom:16px;
-}
-.print-cover h2{
-  margin:0 0 10px;
-  font-size:28px;
-  color:var(--g0);
-}
-.print-cover p{
-  margin:4px 0;
-  color:#374151;
-  font-size:14px;
-  font-weight:700;
-}
-.print-year-card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px;
-  margin-bottom:16px;
-  break-inside:avoid;
-  page-break-inside:avoid;
-}
-.print-year-header{
-  display:flex;
-  justify-content:space-between;
-  gap:14px;
-  align-items:flex-start;
-  margin-bottom:16px;
-  border-bottom:2px solid #ecf0ee;
-  padding-bottom:12px;
-}
-.print-year-header h3{
-  margin:0;
-  color:var(--g0);
-  font-size:22px;
-}
-.print-pill{
-  display:inline-flex;
-  align-items:center;
-  padding:8px 12px;
-  border-radius:999px;
-  background:var(--g2);
-  color:var(--g0);
-  font-weight:900;
-  font-size:12px;
-}
-.print-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:16px;
-  margin-bottom:16px;
-}
-.print-box{
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-  background:#fcfdfd;
-}
-.print-box h4{
-  margin:0 0 10px;
-  color:var(--g0);
-  font-size:14px;
-}
-.print-rows{
-  display:grid;
-  gap:7px;
-}
-.print-row{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  font-size:13px;
-  font-weight:700;
-}
-.print-row span:first-child{color:#4b5563}
-.print-row strong{text-align:right}
-.bracket-table{
-  width:100%;
-  min-width:0;
-  border-collapse:collapse;
-  margin-top:10px;
-}
-.bracket-table th,
-.bracket-table td{
-  border:1px solid var(--border);
-  padding:9px 10px;
-  text-align:left;
-  font-size:12px;
-}
-.bracket-table th{
-  background:#f7faf8;
-  color:#374151;
-  font-weight:900;
-}
-.bracket-table td{
-  background:#fff;
-  font-weight:700;
-}
-.print-summary{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-  margin-top:16px;
-}
-.summary-tile{
-  border-radius:14px;
-  border:1px solid var(--border);
-  padding:14px;
-  background:#fff;
-}
-.summary-tile small{
-  display:block;
-  color:#6b7280;
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:.03em;
-  font-weight:900;
-  margin-bottom:6px;
-}
-.summary-tile strong{
-  font-size:20px;
-  color:#111827;
-}
-.summary-tile.positive{
-  background:var(--success-bg);
-  border-color:#b7ebcd;
-}
-.summary-tile.negative{
-  background:var(--danger-bg);
-  border-color:#fecaca;
-}
-.summary-tile.neutral{
-  background:#f8fafc;
-}
-.print-footer-note{
-  margin-top:14px;
-  color:#6b7280;
-  font-size:11px;
-  font-weight:700;
-  line-height:1.5;
-}
+.hint{margin-top:10px;font-size:12px;font-weight:800;color:var(--muted)}
 input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button{
-  -webkit-appearance:none;
-  margin:0;
-}
-input[type="number"]{
-  -moz-appearance:textfield;
-  appearance:textfield;
-}
-@media (max-width: 1100px){
-  .top-grid{grid-template-columns:1fr}
-  .action-row{justify-content:flex-start}
-}
-@media (max-width: 900px){
-  .hero h1{font-size:24px}
-  .print-grid,.print-summary{grid-template-columns:1fr}
-}
-@media print{
-  body{background:#fff}
-  .header,.hero,.panel:not(.printable-panel),.helper-row,.notes,.status-text,.table-shell,.action-row .btn:not(.btn-print), .screen-only{display:none !important}
-  .wrap{max-width:none;padding:0}
-  .panel{
-    box-shadow:none;
-    border:none;
-    padding:0;
-    margin:0;
-    background:#fff;
-  }
-  .print-sheet{display:block !important}
-  .print-year-card{margin-bottom:18px}
-  @page{size:auto; margin:14mm}
-}
+input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input[type="number"]{-moz-appearance:textfield;appearance:textfield}
+@media (max-width: 1100px){.top-grid{grid-template-columns:1fr}.action-row{justify-content:flex-start}}
+@media (max-width: 900px){.hero h1{font-size:24px}}
 </style>
 </head>
-
 <body>
 <div class="page">
-  <div class="header screen-only">
+  <div class="header">
     <div class="header-inner">
       <div class="brand">
         <div class="brand-mark">MR</div>
@@ -571,62 +137,53 @@ input[type="number"]{
       </div>
       <div class="header-right">
         <div class="header-chip">Google Sheet Expense Lookup</div>
-        <div class="header-chip">Years 2026–2022</div>
+        <div class="header-chip">Years 2026-2022</div>
       </div>
     </div>
   </div>
 
   <div class="wrap">
-    <div class="hero screen-only">
+    <div class="hero">
       <h1>Tax Calculator Workspace</h1>
-      <p>Enter client details, review yearly calculations, and export the completed result set.</p>
+      <p>Stripped back working table with grouped inputs and flexible tax entry methods.</p>
     </div>
 
-    <div class="panel screen-only">
+    <div class="panel">
       <h3>Client Details</h3>
       <div class="top-grid">
         <div class="field">
           <label for="irdNumber">IRD Number</label>
           <input type="text" id="irdNumber" placeholder="Enter IRD Number">
-          <div id="lookupStatus" class="status-text">Expense lookup loading…</div>
-        </div>
-
-        <div class="field">
-          <label for="printYearSelect">Tax Year to Print</label>
-          <select id="printYearSelect">
-            <option value="all">All years</option>
-          </select>
-          <div class="status-text">Choose a single year for a tidy print pack, or print all years together.</div>
+          <div id="lookupStatus" class="status-text">Expense lookup loading...</div>
         </div>
 
         <div class="action-row">
-          <button type="button" class="btn btn-primary" onclick="downloadResult()">Download Result</button>
-          <button type="button" class="btn btn-secondary" onclick="printToPdf()">Print to PDF</button>
           <button type="button" class="btn btn-secondary" onclick="resetAll()">Reset</button>
         </div>
       </div>
 
       <div class="helper-row">
         <div class="helper-chip">A Exp pulled from Google Sheet</div>
-        <div class="helper-chip">Calculations auto-update</div>
-        <div class="helper-chip">IETC entered as 0–12</div>
-        <div class="helper-chip">Printable year-by-year summary included</div>
+        <div class="helper-chip">Y Rate locked to 10.5%, 17.5% or 28%</div>
+        <div class="helper-chip">Alternate row shading + grouped columns</div>
+        <div class="helper-chip">Tax input mode per year</div>
       </div>
+      <div class="hint">Tax input mode options: Direct Total Tax, PAYE + ACC, or PAYE + Non-ACC Earnings (auto-calculates ACC).</div>
     </div>
 
-    <div class="panel screen-only">
+    <div class="panel">
       <h3>Yearly Tax Summary</h3>
-
       <div class="table-shell">
         <div class="table-wrap">
           <table>
             <colgroup>
               <col class="c-year">
-              <col class="c-type">
               <col class="c-gross">
+              <col class="c-taxmode">
               <col class="c-paye">
               <col class="c-acc">
               <col class="c-total">
+              <col class="c-nonacc">
               <col class="c-wht">
               <col class="c-rwt">
               <col class="c-imp">
@@ -637,29 +194,32 @@ input[type="number"]{
               <col class="c-mexp">
               <col class="c-aexp">
               <col class="c-result">
-              <col class="c-fee">
-              <col class="c-net">
             </colgroup>
             <thead>
-              <tr>
-                <th class="sticky-left">Year</th>
-                <th>Type</th>
-                <th>Gross</th>
-                <th>PAYE</th>
+              <tr class="group-row">
+                <th class="sticky-left" rowspan="2">Year</th>
+                <th rowspan="2">Gross</th>
+                <th rowspan="2">Tax Input</th>
+                <th colspan="4" class="group-head-tax group-start">Employment Tax</th>
+                <th colspan="3" class="group-head-tax group-start">WHT / RWT / Credits</th>
+                <th colspan="3" class="group-head-pie group-start">PIE</th>
+                <th colspan="3" class="group-head-adj group-start">Adjustments</th>
+                <th class="sticky-right" rowspan="2">Result</th>
+              </tr>
+              <tr class="label-row">
+                <th class="group-start">PAYE</th>
                 <th>ACC</th>
                 <th>Total Tax</th>
-                <th>WHT/INT</th>
+                <th>Non-ACC Earn</th>
+                <th class="group-start">WHT/INT</th>
                 <th>RWT</th>
                 <th>Imp Cr</th>
-                <th>PIE</th>
+                <th class="group-start">PIE</th>
                 <th>PIR</th>
                 <th>Y Rate</th>
-                <th>IETC</th>
+                <th class="group-start">IETC</th>
                 <th>M Exp</th>
                 <th>A Exp</th>
-                <th>Result</th>
-                <th>Fee</th>
-                <th class="sticky-right">Net Refund</th>
               </tr>
             </thead>
             <tbody id="calcBody"></tbody>
@@ -669,22 +229,18 @@ input[type="number"]{
 
       <div class="notes">
         <div class="note-card">
-          <strong>Expense source</strong>
-          <span>A Expense is pulled live from your published Google Sheet using IRD Number + Year.</span>
+          <strong>Tax entry flow</strong>
+          <span>Use the tax input dropdown to decide whether Total Tax is entered directly, calculated from PAYE + ACC, or calculated from PAYE plus Non-ACC earnings.</span>
         </div>
         <div class="note-card">
-          <strong>Read-only values</strong>
-          <span>Total Tax, A Expense, and Fee are locked display fields so staff can review them without editing.</span>
+          <strong>Rounding</strong>
+          <span>Bracket tax, PIE tax and auto-calculated ACC all round down to 2 decimals to keep the treatment consistent.</span>
         </div>
         <div class="note-card">
-          <strong>Net refund</strong>
-          <span>Fee is calculated from the refund result and return type, then deducted to show the net amount.</span>
+          <strong>Manual expense</strong>
+          <span>M Exp stays editable for extra manual expense adjustments, while A Exp stays locked from the lookup sheet.</span>
         </div>
       </div>
-    </div>
-
-    <div class="panel printable-panel">
-      <div id="printSheet" class="print-sheet"></div>
     </div>
   </div>
 </div>
@@ -692,10 +248,16 @@ input[type="number"]{
 <script>
 const years = [2026, 2025, 2024, 2023, 2022];
 
-const returnTypeOptions = [
-  "Auto Assessed",
-  "ITA",
-  "IR3"
+const taxInputModes = [
+  { value: "direct_total", label: "Direct Total Tax" },
+  { value: "paye_acc", label: "PAYE + ACC" },
+  { value: "paye_nonacc", label: "PAYE + Non-ACC" }
+];
+
+const yRateOptions = [
+  { value: 0.105, label: "10.5%" },
+  { value: 0.175, label: "17.5%" },
+  { value: 0.28, label: "28%" }
 ];
 
 const EXPENSE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMFaPmSD7uw1ZQhJ1UoRI4mGkmu3CJ--7uCtYjgSu23U5GUtiNaku5qjLD_YiautHdq-zZ5TUGLeI_/pub?gid=0&single=true&output=csv";
@@ -708,7 +270,9 @@ const yearConfigs = {
       { max: 78100, rate: 0.30, baseAt: 53500 },
       { max: 180000, rate: 0.33, baseAt: 78100 },
       { max: Infinity, rate: 0.39, baseAt: 180000 }
-    ]
+    ],
+    accRate: 0.0167,
+    accMaxEarnings: 152790
   },
   2025: {
     brackets: [
@@ -720,7 +284,9 @@ const yearConfigs = {
       { max: 78100, rate: 0.3099, baseAt: 70000 },
       { max: 180000, rate: 0.33, baseAt: 78100 },
       { max: Infinity, rate: 0.39, baseAt: 180000 }
-    ]
+    ],
+    accRate: 0.016,
+    accMaxEarnings: 142283
   },
   2024: {
     brackets: [
@@ -729,7 +295,9 @@ const yearConfigs = {
       { max: 70000, rate: 0.30, baseAt: 48000 },
       { max: 180000, rate: 0.33, baseAt: 70000 },
       { max: Infinity, rate: 0.39, baseAt: 180000 }
-    ]
+    ],
+    accRate: 0.0153,
+    accMaxEarnings: 139384
   },
   2023: {
     brackets: [
@@ -738,7 +306,9 @@ const yearConfigs = {
       { max: 70000, rate: 0.30, baseAt: 48000 },
       { max: 180000, rate: 0.33, baseAt: 70000 },
       { max: Infinity, rate: 0.39, baseAt: 180000 }
-    ]
+    ],
+    accRate: 0.0146,
+    accMaxEarnings: 136544
   },
   2022: {
     brackets: [
@@ -747,43 +317,26 @@ const yearConfigs = {
       { max: 70000, rate: 0.30, baseAt: 48000 },
       { max: 180000, rate: 0.33, baseAt: 70000 },
       { max: Infinity, rate: 0.39, baseAt: 180000 }
-    ]
+    ],
+    accRate: 0.0139,
+    accMaxEarnings: 130911
   }
 };
 
 let expenseLookup = {};
 let expenseLookupLoaded = false;
-let latestRowData = {};
 
-function buildSelect(options, id) {
+function buildSelect(options, id, className = "cell-select") {
   const select = document.createElement("select");
-  select.className = "cell-select";
+  select.className = className;
   select.id = id;
-
-  const blankOption = document.createElement("option");
-  blankOption.value = "";
-  blankOption.textContent = "";
-  select.appendChild(blankOption);
-
-  options.forEach(optionText => {
+  options.forEach(optionConfig => {
     const option = document.createElement("option");
-    option.value = optionText;
-    option.textContent = optionText;
+    option.value = String(optionConfig.value);
+    option.textContent = optionConfig.label;
     select.appendChild(option);
   });
-
   return select;
-}
-
-function buildPrintYearOptions() {
-  const select = document.getElementById("printYearSelect");
-  years.forEach(year => {
-    const option = document.createElement("option");
-    option.value = String(year);
-    option.textContent = String(year);
-    select.appendChild(option);
-  });
-  select.addEventListener("change", renderPrintSheet);
 }
 
 function buildTable() {
@@ -792,33 +345,29 @@ function buildTable() {
 
   years.forEach(year => {
     const tr = document.createElement("tr");
-
     tr.innerHTML = `
       <td class="year-cell">${year}</td>
-      <td id="returntype-cell-${year}"></td>
       <td><input class="cell-input" type="number" step="0.01" id="gross-${year}" value="0"></td>
-      <td><input class="cell-input" type="number" step="0.01" id="paye-${year}" value="0"></td>
+      <td id="taxmode-cell-${year}"></td>
+      <td><input class="cell-input group-start" type="number" step="0.01" id="paye-${year}" value="0"></td>
       <td><input class="cell-input" type="number" step="0.01" id="acc-${year}" value="0"></td>
-      <td><input class="cell-input readonly-cell" type="number" step="0.01" id="totaltax-${year}" value="0" readonly></td>
-      <td><input class="cell-input" type="number" step="0.01" id="wht-${year}" value="0"></td>
-      <td><input class="cell-input" type="number" step="0.01" id="rwt-${year}" value="0"></td>
-      <td><input class="cell-input" type="number" step="0.01" id="imp-${year}" value="0"></td>
-      <td><input class="cell-input" type="number" step="0.01" id="pie-${year}" value="0"></td>
-      <td><input class="cell-input" type="number" step="0.01" id="pir-${year}" value="0"></td>
-      <td><input class="cell-input" type="number" step="0.0001" id="yrate-${year}" value="0"></td>
-      <td><input class="cell-input" type="number" min="0" max="12" step="1" id="ietcmonths-${year}" value="0"></td>
-      <td><input class="cell-input" type="number" step="0.01" id="mexp-${year}" value="0"></td>
-      <td><input class="cell-input readonly-cell" type="number" step="0.01" id="aexp-${year}" value="0" readonly></td>
-      <td class="result-cell"><span class="result-badge result-neutral" id="result-${year}">0.00</span></td>
-      <td><input class="cell-input readonly-cell" type="number" step="0.01" id="fee-${year}" value="0" readonly></td>
-      <td class="result-col result-cell"><span class="result-badge result-neutral" id="net-${year}">0.00</span></td>
+      <td><input class="cell-input readonly-cell" type="number" step="0.01" id="totaltax-${year}" value="0"></td>
+      <td><input class="cell-input" type="number" step="0.01" id="nonacc-${year}" value="0"></td>
+      <td class="group-tax-cell"><input class="cell-input group-start" type="number" step="0.01" id="wht-${year}" value="0"></td>
+      <td class="group-tax-cell"><input class="cell-input" type="number" step="0.01" id="rwt-${year}" value="0"></td>
+      <td class="group-tax-cell"><input class="cell-input" type="number" step="0.01" id="imp-${year}" value="0"></td>
+      <td class="group-pie-cell"><input class="cell-input group-start" type="number" step="0.01" id="pie-${year}" value="0"></td>
+      <td class="group-pie-cell"><input class="cell-input" type="number" step="0.01" id="pir-${year}" value="0"></td>
+      <td class="group-pie-cell" id="yrate-cell-${year}"></td>
+      <td class="group-adj-cell"><input class="cell-input group-start" type="number" min="0" max="12" step="1" id="ietcmonths-${year}" value="0"></td>
+      <td class="group-adj-cell"><input class="cell-input" type="number" step="0.01" id="mexp-${year}" value="0"></td>
+      <td class="group-adj-cell"><input class="cell-input readonly-cell" type="number" step="0.01" id="aexp-${year}" value="0" readonly></td>
+      <td class="result-col result-cell"><span class="result-badge result-neutral" id="result-${year}">0.00</span></td>
     `;
 
     body.appendChild(tr);
-
-    document.getElementById(`returntype-cell-${year}`).appendChild(
-      buildSelect(returnTypeOptions, `returntype-${year}`)
-    );
+    document.getElementById(`taxmode-cell-${year}`).appendChild(buildSelect(taxInputModes, `taxmode-${year}`));
+    document.getElementById(`yrate-cell-${year}`).appendChild(buildSelect(yRateOptions, `yrate-${year}`));
   });
 
   document.querySelectorAll(".cell-input, .cell-select").forEach(input => {
@@ -831,7 +380,8 @@ function buildTable() {
 }
 
 function num(id) {
-  return Number(document.getElementById(id).value || 0);
+  const el = document.getElementById(id);
+  return Number(el && el.value ? el.value : 0);
 }
 
 function normalizeIrd(value) {
@@ -850,19 +400,6 @@ function floor0(value) {
   return Math.floor(Number(value) || 0);
 }
 
-function formatMoney(value) {
-  return new Intl.NumberFormat("en-NZ", {
-    style: "currency",
-    currency: "NZD",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(Number(value) || 0);
-}
-
-function formatPercent(value) {
-  return `${(Number(value || 0) * 100).toFixed(2)}%`;
-}
-
 function setLookupStatus(message, className = "") {
   const el = document.getElementById("lookupStatus");
   el.textContent = message;
@@ -873,11 +410,9 @@ function parseCsvLine(line) {
   const result = [];
   let current = "";
   let inQuotes = false;
-
   for (let i = 0; i < line.length; i++) {
     const char = line[i];
     const nextChar = line[i + 1];
-
     if (char === '"') {
       if (inQuotes && nextChar === '"') {
         current += '"';
@@ -892,53 +427,35 @@ function parseCsvLine(line) {
       current += char;
     }
   }
-
   result.push(current);
   return result.map(value => value.trim());
 }
 
 async function loadExpenseLookup() {
   try {
-    setLookupStatus("Expense lookup loading…");
-
+    setLookupStatus("Expense lookup loading...");
     const response = await fetch(EXPENSE_CSV_URL, { cache: "no-store" });
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const csvText = await response.text();
     const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== "");
-    if (lines.length < 2) {
-      throw new Error("No expense rows found");
-    }
+    if (lines.length < 2) throw new Error("No expense rows found");
 
     const headers = parseCsvLine(lines[0]).map(h => h.toLowerCase());
     const irdIndex = headers.findIndex(h => h.includes("ird"));
     const yearIndex = headers.findIndex(h => h === "year" || h.includes("year"));
     const expenseIndex = headers.findIndex(h => h.includes("a expense") || h.includes("expense"));
-
     if (irdIndex === -1 || yearIndex === -1 || expenseIndex === -1) {
       throw new Error("Could not find IRD Number, Year, and A Expense columns");
     }
 
     const lookup = {};
-
     for (let i = 1; i < lines.length; i++) {
       const parts = parseCsvLine(lines[i]);
-      const rawIrd = parts[irdIndex] || "";
-      const rawYear = parts[yearIndex] || "";
-      const rawExpense = parts[expenseIndex] || "";
-
-      const ird = normalizeIrd(rawIrd);
-      const year = String(rawYear).trim();
-      const expense = Number(String(rawExpense).replace(/[^0-9.-]/g, "") || 0);
-
+      const ird = normalizeIrd(parts[irdIndex] || "");
+      const year = String(parts[yearIndex] || "").trim();
+      const expense = Number(String(parts[expenseIndex] || 0).replace(/[^0-9.-]/g, "") || 0);
       if (!ird || !year) continue;
-
-      if (!lookup[ird]) {
-        lookup[ird] = {};
-      }
-
+      if (!lookup[ird]) lookup[ird] = {};
       lookup[ird][year] = round2(expense);
     }
 
@@ -952,67 +469,38 @@ async function loadExpenseLookup() {
   }
 }
 
+function lookupExpenseForYear(year) {
+  const ird = normalizeIrd(document.getElementById("irdNumber").value);
+  if (!ird || !expenseLookupLoaded) return 0;
+  const personData = expenseLookup[ird] || {};
+  return round2(personData[String(year)] || 0);
+}
+
+function updateLookupExpenses() {
+  years.forEach(year => {
+    document.getElementById(`aexp-${year}`).value = lookupExpenseForYear(year).toFixed(2);
+  });
+}
+
 function calculateTax(taxableIncome, year) {
   const config = yearConfigs[year];
   if (!config) return 0;
-
   let totalTax = 0;
-
   config.brackets.forEach(bracket => {
     if (taxableIncome <= bracket.baseAt) return;
-
-    let amountInBracket = 0;
-
-    if (bracket.max === Infinity) {
-      amountInBracket = taxableIncome - bracket.baseAt;
-    } else {
-      amountInBracket = Math.min(taxableIncome, bracket.max) - bracket.baseAt;
-    }
-
+    const amountInBracket = bracket.max === Infinity
+      ? taxableIncome - bracket.baseAt
+      : Math.min(taxableIncome, bracket.max) - bracket.baseAt;
     if (amountInBracket > 0) {
-      const bracketTax = roundDown2(amountInBracket * bracket.rate);
-      totalTax += bracketTax;
+      totalTax += roundDown2(amountInBracket * bracket.rate);
     }
   });
-
   return roundDown2(totalTax);
-}
-
-function getBracketBreakdown(taxableIncome, year) {
-  const config = yearConfigs[year];
-  if (!config) return [];
-
-  return config.brackets.map((bracket, index) => {
-    const lower = bracket.baseAt;
-    const upper = bracket.max;
-
-    let amountInBracket = 0;
-    if (taxableIncome > lower) {
-      amountInBracket = upper === Infinity
-        ? taxableIncome - lower
-        : Math.min(taxableIncome, upper) - lower;
-    }
-
-    amountInBracket = Math.max(0, floor0(amountInBracket));
-    const taxForBracket = amountInBracket > 0 ? roundDown2(amountInBracket * bracket.rate) : 0;
-
-    const label = upper === Infinity
-      ? `${formatMoney(lower)} and over`
-      : `${formatMoney(lower)} to ${formatMoney(upper)}`;
-
-    return {
-      index: index + 1,
-      label,
-      rate: bracket.rate,
-      taxablePortion: amountInBracket,
-      taxForBracket
-    };
-  });
 }
 
 function calculatePieAdjustment(pieIncome, pirPaid, yRate) {
   const correctPieTax = roundDown2(pieIncome * yRate);
-  return round2(pirPaid - correctPieTax);
+  return roundDown2(pirPaid - correctPieTax);
 }
 
 function calculateIetc(year, income, monthsEligible) {
@@ -1021,131 +509,122 @@ function calculateIetc(year, income, monthsEligible) {
 
   if (year === 2026) {
     if (income > 70000) return 0;
-
     let annualEntitlement = 520;
-    if (income > 66000) {
-      annualEntitlement = 520 - ((income - 66000) * 0.13);
-    }
-
+    if (income > 66000) annualEntitlement = 520 - ((income - 66000) * 0.13);
     annualEntitlement = Math.max(0, annualEntitlement);
     return round2((annualEntitlement * monthsEligible) / 12);
   }
 
   if (year === 2025) {
     if (income > 70000) return 0;
-
     let part1Annual = 520;
-    if (income > 44000) {
-      part1Annual = 520 - ((income - 44000) * 0.13);
-    }
+    if (income > 44000) part1Annual = 520 - ((income - 44000) * 0.13);
     part1Annual = Math.max(0, part1Annual);
     const part1Prorated = (part1Annual * 121) / 365;
 
     let part2Annual = 520;
-    if (income > 66000) {
-      part2Annual = 520 - ((income - 66000) * 0.13);
-    }
+    if (income > 66000) part2Annual = 520 - ((income - 66000) * 0.13);
     part2Annual = Math.max(0, part2Annual);
     const part2Prorated = (part2Annual * 244) / 365;
 
-    const combined = part1Prorated + part2Prorated;
-    return round2((combined * monthsEligible) / 12);
+    return round2(((part1Prorated + part2Prorated) * monthsEligible) / 12);
   }
 
   if (income > 48000) return 0;
-
   let annualEntitlement = 520;
-  if (income > 44000) {
-    annualEntitlement = 520 - ((income - 44000) * 0.13);
-  }
-
+  if (income > 44000) annualEntitlement = 520 - ((income - 44000) * 0.13);
   annualEntitlement = Math.max(0, annualEntitlement);
   return round2((annualEntitlement * monthsEligible) / 12);
 }
 
-function lookupExpenseForYear(year) {
-  const ird = normalizeIrd(document.getElementById("irdNumber").value);
-  if (!ird) return 0;
-  if (!expenseLookupLoaded) return 0;
-
-  const personData = expenseLookup[ird] || {};
-  return round2(personData[String(year)] || 0);
+function getTaxMode(year) {
+  return document.getElementById(`taxmode-${year}`).value;
 }
 
-function updateLookupExpenses() {
-  years.forEach(year => {
-    const expense = lookupExpenseForYear(year);
-    document.getElementById(`aexp-${year}`).value = expense.toFixed(2);
-  });
+function calculateAccFromNonAcc(year, gross, nonAccEarnings) {
+  const config = yearConfigs[year];
+  if (!config) return 0;
+  const liableEarnings = Math.max(0, gross - Math.max(0, nonAccEarnings));
+  const cappedLiableEarnings = Math.min(liableEarnings, config.accMaxEarnings);
+  return roundDown2(cappedLiableEarnings * config.accRate);
+}
+
+function syncTaxEntryState(year) {
+  const mode = getTaxMode(year);
+  const payeEl = document.getElementById(`paye-${year}`);
+  const accEl = document.getElementById(`acc-${year}`);
+  const totalTaxEl = document.getElementById(`totaltax-${year}`);
+  const nonAccEl = document.getElementById(`nonacc-${year}`);
+
+  payeEl.readOnly = false;
+  accEl.readOnly = false;
+  totalTaxEl.readOnly = true;
+  nonAccEl.readOnly = false;
+  payeEl.classList.remove("readonly-cell", "disabled-cell");
+  accEl.classList.remove("readonly-cell", "disabled-cell");
+  totalTaxEl.classList.remove("readonly-cell", "disabled-cell");
+  nonAccEl.classList.remove("readonly-cell", "disabled-cell");
+
+  if (mode === "direct_total") {
+    payeEl.readOnly = true;
+    accEl.readOnly = true;
+    totalTaxEl.readOnly = false;
+    nonAccEl.readOnly = true;
+    payeEl.classList.add("readonly-cell", "disabled-cell");
+    accEl.classList.add("readonly-cell", "disabled-cell");
+    nonAccEl.classList.add("readonly-cell", "disabled-cell");
+  } else if (mode === "paye_acc") {
+    totalTaxEl.readOnly = true;
+    totalTaxEl.classList.add("readonly-cell", "disabled-cell");
+    nonAccEl.readOnly = true;
+    nonAccEl.classList.add("readonly-cell", "disabled-cell");
+  } else if (mode === "paye_nonacc") {
+    totalTaxEl.readOnly = true;
+    totalTaxEl.classList.add("readonly-cell", "disabled-cell");
+    accEl.readOnly = true;
+    accEl.classList.add("readonly-cell", "disabled-cell");
+  }
+}
+
+function getTotalTaxForRow(year) {
+  const mode = getTaxMode(year);
+  const paye = num(`paye-${year}`);
+  const acc = num(`acc-${year}`);
+  const gross = num(`gross-${year}`);
+  const nonAccEarnings = num(`nonacc-${year}`);
+
+  if (mode === "direct_total") {
+    return round2(num(`totaltax-${year}`));
+  }
+  if (mode === "paye_acc") {
+    return round2(paye + acc);
+  }
+  if (mode === "paye_nonacc") {
+    const autoAcc = calculateAccFromNonAcc(year, gross, nonAccEarnings);
+    document.getElementById(`acc-${year}`).value = autoAcc.toFixed(2);
+    return round2(paye + autoAcc);
+  }
+  return 0;
 }
 
 function renderResultBadge(year, value) {
   const el = document.getElementById(`result-${year}`);
   el.textContent = value.toFixed(2);
   el.className = "result-badge";
-
-  if (value > 0) {
-    el.classList.add("result-positive");
-  } else if (value < 0) {
-    el.classList.add("result-negative");
-  } else {
-    el.classList.add("result-neutral");
-  }
-}
-
-function renderNetBadge(year, value) {
-  const el = document.getElementById(`net-${year}`);
-  el.textContent = value.toFixed(2);
-  el.className = "result-badge";
-
-  if (value > 0) {
-    el.classList.add("result-positive");
-  } else if (value < 0) {
-    el.classList.add("result-negative");
-  } else {
-    el.classList.add("result-neutral");
-  }
-}
-
-function calculateFee(refundAmount, returnType, year) {
-  const refund = round2(Number(refundAmount) || 0);
-  if (refund <= 0) return 0;
-  if (!returnType) return 0;
-
-  let fee = round2(refund * 0.11);
-
-  if (returnType === "ITA" || returnType === "IR3") {
-    let cappedBase = fee;
-
-    if (returnType === "ITA") {
-      cappedBase = Math.min(fee, 300);
-    } else if (returnType === "IR3") {
-      cappedBase = Math.min(fee, 350);
-    }
-
-    fee = round2(cappedBase * 1.15);
-
-    if (returnType === "ITA") {
-      fee = round2(fee + 5.75);
-    } else if (returnType === "IR3") {
-      fee = round2(fee + (20 * 1.15));
-    }
-
-    if (Number(year) === 2026) {
-      fee = round2(fee + (29.5 * 1.15));
-    }
-  } else {
-    fee = round2(Math.min(refund, 34 * 1.15));
-  }
-
-  return round2(Math.min(fee, refund));
+  if (value > 0) el.classList.add("result-positive");
+  else if (value < 0) el.classList.add("result-negative");
+  else el.classList.add("result-neutral");
 }
 
 function calculateRow(year) {
+  syncTaxEntryState(year);
+
   const gross = num(`gross-${year}`);
-  const paye = num(`paye-${year}`);
-  const acc = num(`acc-${year}`);
-  const totalTax = round2(paye - acc);
+  const totalTax = getTotalTaxForRow(year);
+  if (getTaxMode(year) !== "direct_total") {
+    document.getElementById(`totaltax-${year}`).value = totalTax.toFixed(2);
+  }
+
   const wht = num(`wht-${year}`);
   const rwt = num(`rwt-${year}`);
   const impCr = num(`imp-${year}`);
@@ -1155,324 +634,51 @@ function calculateRow(year) {
   const ietcMonths = num(`ietcmonths-${year}`);
   const mExp = num(`mexp-${year}`);
   const aExp = num(`aexp-${year}`);
-  const returnType = document.getElementById(`returntype-${year}`).value;
-
-  document.getElementById(`totaltax-${year}`).value = totalTax.toFixed(2);
 
   const rawIncome = gross + wht - mExp - aExp;
   const taxableIncome = Math.max(0, floor0(rawIncome));
   const ietcIncome = Math.round(rawIncome);
-
   const taxPaid = round2(totalTax + rwt);
-
-  const bracketBreakdown = getBracketBreakdown(taxableIncome, year);
-  let taxRequiredBeforeCredits = bracketBreakdown.reduce((sum, item) => sum + item.taxForBracket, 0);
-  taxRequiredBeforeCredits = roundDown2(taxRequiredBeforeCredits);
-
-  let taxRequired = round2(taxRequiredBeforeCredits - impCr);
+  const taxRequiredBeforeCredits = calculateTax(taxableIncome, year);
+  const taxRequired = roundDown2(taxRequiredBeforeCredits - impCr);
   const ietcAmount = calculateIetc(year, ietcIncome, ietcMonths);
   const pieAdjustment = calculatePieAdjustment(pie, pirPaid, yRate);
-
   const result = round2((taxPaid - taxRequired) + ietcAmount + pieAdjustment);
+
   renderResultBadge(year, result);
-
-  const fee = calculateFee(result, returnType, year);
-  document.getElementById(`fee-${year}`).value = fee.toFixed(2);
-
-  const net = round2(result - fee);
-  renderNetBadge(year, net);
-
-  latestRowData[year] = {
-    year,
-    returnType,
-    gross,
-    paye,
-    acc,
-    totalTax,
-    wht,
-    rwt,
-    impCr,
-    pie,
-    pirPaid,
-    yRate,
-    ietcMonths,
-    mExp,
-    aExp,
-    rawIncome,
-    taxableIncome,
-    ietcIncome,
-    taxPaid,
-    taxRequiredBeforeCredits,
-    taxRequired,
-    ietcAmount,
-    pieAdjustment,
-    result,
-    fee,
-    net,
-    bracketBreakdown
-  };
 }
 
 function calculateAll() {
   years.forEach(year => calculateRow(year));
 }
 
-function getSelectedPrintYears() {
-  const value = document.getElementById("printYearSelect").value;
-  return value === "all" ? [...years] : [Number(value)];
-}
-
-function summaryClass(value) {
-  if (value > 0) return "summary-tile positive";
-  if (value < 0) return "summary-tile negative";
-  return "summary-tile neutral";
-}
-
-function safeText(value, fallback = "—") {
-  return value === undefined || value === null || value === "" ? fallback : value;
-}
-
-function renderPrintSheet() {
-  const container = document.getElementById("printSheet");
-  const ird = normalizeIrd(document.getElementById("irdNumber").value);
-  const selectedYears = getSelectedPrintYears();
-  const generatedAt = new Date().toLocaleString("en-NZ");
-
-  const cover = `
-    <div class="print-cover">
-      <h2>Tax Calculation Summary</h2>
-      <p><strong>IRD Number:</strong> ${safeText(ird)}</p>
-      <p><strong>Tax year selection:</strong> ${selectedYears.length === years.length ? "All years" : selectedYears.join(", ")}</p>
-      <p><strong>Generated:</strong> ${generatedAt}</p>
-    </div>
-  `;
-
-  const yearCards = selectedYears.map(year => {
-    const row = latestRowData[year];
-    if (!row) return "";
-
-    const bracketRows = row.bracketBreakdown.map(item => `
-      <tr>
-        <td>Bracket ${item.index}</td>
-        <td>${item.label}</td>
-        <td>${formatPercent(item.rate)}</td>
-        <td>${formatMoney(item.taxablePortion)}</td>
-        <td>${formatMoney(item.taxForBracket)}</td>
-      </tr>
-    `).join("");
-
-    return `
-      <section class="print-year-card">
-        <div class="print-year-header">
-          <div>
-            <h3>${year} Tax Year</h3>
-            <div class="print-pill">${safeText(row.returnType, "No return type selected")}</div>
-          </div>
-          <div style="text-align:right;font-weight:900;color:#374151;">
-            <div style="font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:#6b7280;">Net refund</div>
-            <div style="font-size:24px;color:${row.net < 0 ? '#b42318' : '#094B35'};">${formatMoney(row.net)}</div>
-          </div>
-        </div>
-
-        <div class="print-grid">
-          <div class="print-box">
-            <h4>Earnings and adjustments</h4>
-            <div class="print-rows">
-              <div class="print-row"><span>Gross income</span><strong>${formatMoney(row.gross)}</strong></div>
-              <div class="print-row"><span>WHT / interest income</span><strong>${formatMoney(row.wht)}</strong></div>
-              <div class="print-row"><span>Manual expenses</span><strong>${formatMoney(row.mExp)}</strong></div>
-              <div class="print-row"><span>Annual expenses lookup</span><strong>${formatMoney(row.aExp)}</strong></div>
-              <div class="print-row"><span>Income used for IETC</span><strong>${formatMoney(row.ietcIncome)}</strong></div>
-              <div class="print-row"><span>Taxable income for bracket calc</span><strong>${formatMoney(row.taxableIncome)}</strong></div>
-            </div>
-          </div>
-
-          <div class="print-box">
-            <h4>Tax paid and tax adjustments</h4>
-            <div class="print-rows">
-              <div class="print-row"><span>PAYE less ACC</span><strong>${formatMoney(row.totalTax)}</strong></div>
-              <div class="print-row"><span>RWT paid</span><strong>${formatMoney(row.rwt)}</strong></div>
-              <div class="print-row"><span>Total tax already paid</span><strong>${formatMoney(row.taxPaid)}</strong></div>
-              <div class="print-row"><span>Imputation credits</span><strong>${formatMoney(row.impCr)}</strong></div>
-              <div class="print-row"><span>IETC months entered</span><strong>${row.ietcMonths}</strong></div>
-              <div class="print-row"><span>IETC value applied</span><strong>${formatMoney(row.ietcAmount)}</strong></div>
-              <div class="print-row"><span>PIE income</span><strong>${formatMoney(row.pie)}</strong></div>
-              <div class="print-row"><span>PIR paid / entered</span><strong>${formatMoney(row.pirPaid)}</strong></div>
-              <div class="print-row"><span>Year rate used for PIE</span><strong>${formatPercent(row.yRate)}</strong></div>
-              <div class="print-row"><span>PIE adjustment</span><strong>${formatMoney(row.pieAdjustment)}</strong></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="print-box">
-          <h4>Tax bracket breakdown</h4>
-          <table class="bracket-table">
-            <thead>
-              <tr>
-                <th>Bracket</th>
-                <th>Income range</th>
-                <th>Rate</th>
-                <th>Income taxed in bracket</th>
-                <th>Tax from bracket</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${bracketRows}
-            </tbody>
-          </table>
-        </div>
-
-        <div class="print-summary">
-          <div class="${summaryClass(row.taxRequiredBeforeCredits)}">
-            <small>Tax before credits</small>
-            <strong>${formatMoney(row.taxRequiredBeforeCredits)}</strong>
-          </div>
-          <div class="${summaryClass(row.result)}">
-            <small>Gross result</small>
-            <strong>${formatMoney(row.result)}</strong>
-          </div>
-          <div class="${summaryClass(row.net)}">
-            <small>Net refund after fee</small>
-            <strong>${formatMoney(row.net)}</strong>
-          </div>
-        </div>
-
-        <div class="print-box" style="margin-top:16px;">
-          <h4>How this year was worked out</h4>
-          <div class="print-rows">
-            <div class="print-row"><span>Bracket tax total</span><strong>${formatMoney(row.taxRequiredBeforeCredits)}</strong></div>
-            <div class="print-row"><span>Less imputation credits</span><strong>${formatMoney(row.impCr)}</strong></div>
-            <div class="print-row"><span>Tax required after credits</span><strong>${formatMoney(row.taxRequired)}</strong></div>
-            <div class="print-row"><span>Tax already paid</span><strong>${formatMoney(row.taxPaid)}</strong></div>
-            <div class="print-row"><span>Plus IETC</span><strong>${formatMoney(row.ietcAmount)}</strong></div>
-            <div class="print-row"><span>Plus PIE adjustment</span><strong>${formatMoney(row.pieAdjustment)}</strong></div>
-            <div class="print-row"><span>Gross refund / result</span><strong>${formatMoney(row.result)}</strong></div>
-            <div class="print-row"><span>Fee deducted</span><strong>${formatMoney(row.fee)}</strong></div>
-            <div class="print-row"><span>Final net refund</span><strong>${formatMoney(row.net)}</strong></div>
-          </div>
-        </div>
-
-        <div class="print-footer-note">
-          This print view is generated from the values entered into the calculator for ${year}. It is designed to be easier to read than the working table and to show the full tax-bracket calculation in plain language.
-        </div>
-      </section>
-    `;
-  }).join("");
-
-  container.innerHTML = cover + yearCards;
-}
-
 function handleAllChanges() {
   updateLookupExpenses();
   calculateAll();
-  renderPrintSheet();
 }
 
 function resetAll() {
   document.getElementById("irdNumber").value = "";
-  document.getElementById("printYearSelect").value = "all";
-
-  document.querySelectorAll(".cell-input, .cell-select").forEach(input => {
-    if (input.tagName === "SELECT") {
-      if (input.id.startsWith("returntype-")) {
-        input.value = "";
-      }
-    } else if (!input.readOnly) {
-      input.value = 0;
-    }
+  document.querySelectorAll(".cell-input").forEach(input => {
+    if (!input.readOnly) input.value = 0;
   });
-
   years.forEach(year => {
+    document.getElementById(`taxmode-${year}`).value = "direct_total";
+    document.getElementById(`yrate-${year}`).value = "0.105";
     document.getElementById(`totaltax-${year}`).value = "0.00";
     document.getElementById(`aexp-${year}`).value = "0.00";
-    document.getElementById(`fee-${year}`).value = "0.00";
+    document.getElementById(`acc-${year}`).value = "0.00";
     renderResultBadge(year, 0);
-    renderNetBadge(year, 0);
   });
-
   handleAllChanges();
-}
-
-function csvEscape(value) {
-  const str = String(value ?? "");
-  if (str.includes(",") || str.includes('"') || str.includes("\n")) {
-    return `"${str.replace(/"/g, '""')}"`;
-  }
-  return str;
-}
-
-function downloadResult() {
-  const ird = normalizeIrd(document.getElementById("irdNumber").value);
-  const selectedYears = getSelectedPrintYears();
-  const lines = [];
-
-  lines.push(["IRD Number", ird].map(csvEscape).join(","));
-  lines.push(["Print Selection", selectedYears.length === years.length ? "All years" : selectedYears.join(", ")].map(csvEscape).join(","));
-  lines.push("");
-
-  lines.push([
-    "Year",
-    "Return Type",
-    "Gross Income",
-    "PAYE",
-    "ACC",
-    "Total Tax",
-    "WHT/INT",
-    "RWT",
-    "IMP CR",
-    "PIE",
-    "PIR",
-    "Y Rate",
-    "IETC Months",
-    "M Exp",
-    "A Expense",
-    "Result",
-    "Fee",
-    "Net Refund"
-  ].map(csvEscape).join(","));
-
-  selectedYears.forEach(year => {
-    lines.push([
-      year,
-      document.getElementById(`returntype-${year}`).value,
-      document.getElementById(`gross-${year}`).value,
-      document.getElementById(`paye-${year}`).value,
-      document.getElementById(`acc-${year}`).value,
-      document.getElementById(`totaltax-${year}`).value,
-      document.getElementById(`wht-${year}`).value,
-      document.getElementById(`rwt-${year}`).value,
-      document.getElementById(`imp-${year}`).value,
-      document.getElementById(`pie-${year}`).value,
-      document.getElementById(`pir-${year}`).value,
-      document.getElementById(`yrate-${year}`).value,
-      document.getElementById(`ietcmonths-${year}`).value,
-      document.getElementById(`mexp-${year}`).value,
-      document.getElementById(`aexp-${year}`).value,
-      document.getElementById(`result-${year}`).textContent,
-      document.getElementById(`fee-${year}`).value,
-      document.getElementById(`net-${year}`).textContent
-    ].map(csvEscape).join(","));
-  });
-
-  const blob = new Blob([lines.join("\n")], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `tax-calculator-${ird || "no-ird"}-${selectedYears.length === years.length ? "all-years" : selectedYears[0]}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-function printToPdf() {
-  renderPrintSheet();
-  window.print();
 }
 
 async function initCalculator() {
   buildTable();
-  buildPrintYearOptions();
+  years.forEach(year => {
+    document.getElementById(`taxmode-${year}`).value = "direct_total";
+    document.getElementById(`yrate-${year}`).value = "0.105";
+  });
   await loadExpenseLookup();
   handleAllChanges();
 }
