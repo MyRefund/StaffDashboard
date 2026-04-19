@@ -63,6 +63,18 @@ body{
 }
 .clock{font-weight:900;font-size:14px}
 
+/* ✅ ADDED: Calculator button */
+.calculator-btn{
+  border-radius:999px;
+  padding:8px 14px;
+  font-weight:900;
+  font-size:13px;
+  border:1px solid #fff;
+  background:transparent;
+  color:#fff;
+  cursor:pointer;
+}
+
 /* RECOVERY BANNER */
 .recovery-banner{
   background:#fff3cd;
@@ -194,6 +206,61 @@ body{
   from{transform:rotate(0deg)}
   to{transform:rotate(360deg)}
 }
+
+/* ✅ ADDED: Drawer */
+.calculator-drawer{
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:520px;
+  height:100%;
+  background:#fff;
+  box-shadow:-10px 0 40px rgba(0,0,0,.2);
+  z-index:9999;
+  display:flex;
+  flex-direction:column;
+  transition:right 0.35s ease;
+}
+.calculator-drawer.open{ right:0; }
+
+.drawer-header{
+  background:#094B35;
+  color:#fff;
+  padding:14px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-weight:900;
+}
+.drawer-header button{
+  background:transparent;
+  border:none;
+  color:#fff;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.drawer-iframe{
+  width:100%;
+  height:100%;
+  border:none;
+}
+
+/* ✅ ADDED: Overlay */
+.drawer-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.3);
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:9998;
+}
+.drawer-overlay.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
 </style>
 </head>
 
@@ -210,6 +277,9 @@ body{
       </div>
     </div>
     <div class="header-right">
+      <!-- ✅ ADDED BUTTON -->
+      <button class="calculator-btn" onclick="toggleCalculator()">Calculator</button>
+
       <button class="dashboard-btn" onclick="goHome()">← Dashboard</button>
       <div class="clock" id="clock"></div>
     </div>
@@ -417,6 +487,27 @@ alert("Network error. Data not submitted.");
 };
 
 });
+</script>
+
+<!-- ✅ ADDED DRAWER -->
+<div id="calculatorDrawer" class="calculator-drawer">
+  <div class="drawer-header">
+    <strong>Fee Calculator</strong>
+    <button onclick="toggleCalculator()">✕</button>
+  </div>
+  <iframe src="feecalc.html" class="drawer-iframe"></iframe>
+</div>
+
+<!-- ✅ ADDED OVERLAY -->
+<div id="drawerOverlay" class="drawer-overlay" onclick="toggleCalculator()"></div>
+
+<script>
+function toggleCalculator(){
+  const drawer = document.getElementById("calculatorDrawer");
+  const overlay = document.getElementById("drawerOverlay");
+  drawer.classList.toggle("open");
+  overlay.classList.toggle("show");
+}
 </script>
 
 </body>
