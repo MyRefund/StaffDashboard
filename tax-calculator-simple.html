@@ -306,8 +306,8 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
             <colgroup>
               <col class="c-year">
               <col class="c-gross">
-              <col class="c-paye">
-              <col class="c-acc">
+              <col class="c-paye paye-col-def">
+              <col class="c-acc acc-col-def">
               <col class="c-total">
               <col class="c-wht">
               <col class="c-rwt">
@@ -323,7 +323,7 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
             <thead>
               <tr class="group-row">
                 <th class="sticky-left" rowspan="2">Year</th>
-                <th class="group-emp" colspan="4">Employment Tax</th>
+                <th class="group-emp" id="employmentGroupHeader" colspan="4">Employment Tax</th>
                 <th class="group-tax" colspan="3">WHT / RWT / Imputation</th>
                 <th class="group-pie" colspan="3">PIE</th>
                 <th class="group-adj" colspan="2">Adjustments</th>
@@ -680,9 +680,11 @@ function setMode(mode) {
     ? "Current mode: Enter Tax Deductions."
     : "Current mode: Use PAYE + ACC Figures.";
 
-  document.querySelectorAll(".paye-col, .acc-col, .paye-header, .acc-header").forEach(el => {
+  document.querySelectorAll(".paye-col, .acc-col, .paye-header, .acc-header, .paye-col-def, .acc-col-def").forEach(el => {
     el.classList.toggle("hidden-col", mode === "total");
   });
+
+  document.getElementById("employmentGroupHeader").colSpan = mode === "total" ? 2 : 4;
 
   years.forEach(year => {
     const totalEl = document.getElementById(`totaltax-${year}`);
