@@ -5,122 +5,247 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Language" content="en">
 <meta name="google" content="notranslate">
-<title>My Refund - Tax Calculator</title>
+<title>My Refund — Tax Calculator</title>
 <style>
 :root{
   --g0:#094B35;
   --g1:#0f6b4b;
-  --g2:#ECFDF5;
-  --bg:#f4f7f5;
-  --panel:rgba(255,255,255,.97);
+  --g2:#ecfdf5;
+  --bg:#f3f7f4;
+  --panel:#ffffff;
   --text:#111827;
   --muted:#6b7280;
-  --border:#e5e7eb;
-  --radius:16px;
-  --shadow:0 12px 32px rgba(0,0,0,.12);
+  --border:#dfe7e2;
+  --radius:18px;
+  --shadow:0 12px 28px rgba(9,75,53,.08);
   --danger:#b42318;
   --danger-bg:#fef3f2;
   --success:#027a48;
   --success-bg:#ecfdf3;
-  --group-tax:#f8fafc;
-  --group-pie:#f0fdf4;
-  --group-adj:#fff7ed;
+  --emp:#eef6ff;
+  --emp-head:#dceeff;
+  --tax:#effbf2;
+  --tax-head:#d7f2df;
+  --pie:#fff6eb;
+  --pie-head:#ffe7c7;
+  --adj:#f7f1ff;
+  --adj-head:#eadfff;
+  --exp:#f6f8fb;
+  --exp-head:#e5eaf1;
+  --out:#ecfdf5;
+  --out-head:#d1fae5;
 }
 *{box-sizing:border-box}
 body{
   margin:0;
   font-family:"Okta Neue",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--text);
-  background:linear-gradient(180deg,#eef5f1 0%, #f7faf8 100%);
+  background:linear-gradient(180deg,#eef5f1 0%, #f8fbf9 100%);
 }
 .page{min-height:100vh}
-.header{background:var(--g0);color:#fff;padding:14px 24px}
-.header-inner{max-width:1700px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.header{
+  background:var(--g0);
+  color:#fff;
+  padding:14px 24px;
+}
+.header-inner{
+  max-width:1500px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
 .brand{display:flex;align-items:center;gap:14px}
-.brand-mark{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px}
+.brand-mark{
+  width:40px;height:40px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.12);font-weight:900
+}
 .brand-text strong{display:block;font-size:15px;font-weight:900}
-.brand-text span{display:block;font-size:12px;opacity:.92;font-weight:700}
-.header-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.header-chip{border-radius:999px;padding:8px 14px;font-weight:900;font-size:13px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff}
-.wrap{max-width:1800px;margin:0 auto;padding:24px 18px 50px}
-.hero{margin-bottom:18px}
-.hero h1{margin:0;font-size:26px;font-weight:900;color:var(--g0)}
+.brand-text span{display:block;font-size:12px;font-weight:700;opacity:.92}
+.wrap{max-width:1500px;margin:0 auto;padding:22px 18px 44px}
+.hero{margin-bottom:16px}
+.hero h1{margin:0;font-size:28px;font-weight:900;color:var(--g0)}
 .hero p{margin:8px 0 0;color:var(--muted);font-size:13px;font-weight:700}
-.panel{background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px;border-top:6px solid var(--g0)}
-.panel h3{margin:0 0 14px 0;font-size:17px;font-weight:900;color:var(--g0)}
-.top-grid{display:grid;grid-template-columns:minmax(220px,280px) minmax(150px,180px) auto;gap:12px;align-items:end}
-.field label{display:block;font-weight:900;margin-bottom:8px}
-.field input,.field select{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--border);background:#fff;font-weight:800;font-size:14px;outline:none}
-.field.compact select{padding:11px 10px;font-size:13px}
-.field input:focus,.field select:focus{border-color:var(--g1);box-shadow:0 0 0 4px rgba(15,107,75,.10)}
-.action-row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
-.btn{border-radius:12px;padding:11px 15px;font-weight:900;font-size:14px;border:1px solid var(--border);background:#fff;color:var(--text);cursor:pointer}
-.btn-secondary{background:#fff;color:var(--g0);border-color:var(--g0)}
-.helper-row{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-.helper-chip{border-radius:999px;padding:7px 11px;background:var(--g2);color:var(--g0);font-size:11px;font-weight:900}
-.table-shell{overflow:hidden;border-radius:16px;border:1px solid var(--border);background:#fff}
-.table-wrap{overflow:auto;max-width:100%}
-table{width:100%;border-collapse:separate;border-spacing:0;min-width:1560px;table-layout:fixed}
-col.c-year{width:72px}
-col.c-gross{width:96px}
-col.c-paye{width:92px}
-col.c-acc{width:88px}
-col.c-total{width:96px}
-col.c-wht{width:88px}
-col.c-rwt{width:78px}
-col.c-imp{width:82px}
-col.c-pie{width:84px}
-col.c-pir{width:84px}
-col.c-yrate{width:76px}
-col.c-ietc{width:64px}
+.panel{
+  background:var(--panel);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  border:1px solid #e8efea;
+  padding:18px;
+  margin-bottom:18px;
+}
+.panel h3{margin:0 0 14px;font-size:17px;font-weight:900;color:var(--g0)}
+.client-bar{
+  display:grid;
+  grid-template-columns:minmax(220px,300px) minmax(420px,1fr) auto;
+  gap:16px;
+  align-items:end;
+}
+.field{min-width:0}
+.field label,.mode-block .block-label{
+  display:block;
+  margin-bottom:8px;
+  font-size:13px;
+  font-weight:900;
+}
+.field input{
+  width:100%;height:42px;padding:0 13px;border-radius:12px;border:1px solid var(--border);
+  background:#fff;font-size:14px;font-weight:800;outline:none;
+}
+.field input:focus,.cell-input:focus,.cell-select:focus{
+  border-color:var(--g1);box-shadow:0 0 0 4px rgba(15,107,75,.08);background:#fff;
+}
+.status-text{margin-top:8px;font-size:12px;font-weight:800;color:var(--muted)}
+.status-ok{color:var(--success)}
+.status-error{color:var(--danger)}
+.mode-block{min-width:0}
+.mode-switch{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:#f8fbf9;
+  flex-wrap:wrap;
+}
+.mode-option{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+.mode-option input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+.mode-option span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  padding:0 14px;
+  border-radius:10px;
+  border:1px solid transparent;
+  background:transparent;
+  font-size:13px;
+  font-weight:900;
+  color:#35534a;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.mode-option input:checked + span{
+  background:var(--g0);
+  color:#fff;
+  box-shadow:0 6px 14px rgba(9,75,53,.18);
+}
+.mode-note{margin-top:8px;font-size:12px;font-weight:800;color:var(--muted)}
+.action-row{display:flex;justify-content:flex-end;align-items:end}
+.btn{
+  height:42px;padding:0 16px;border-radius:12px;border:1px solid var(--g0);background:#fff;
+  color:var(--g0);font-size:14px;font-weight:900;cursor:pointer;
+}
+.table-shell{border:1px solid var(--border);border-radius:18px;overflow:hidden;background:#fff}
+.table-wrap{overflow:auto}
+table{width:100%;min-width:1280px;border-collapse:separate;border-spacing:0;table-layout:fixed}
+col.c-year{width:74px}
+col.c-gross{width:110px}
+col.c-paye{width:94px}
+col.c-acc{width:86px}
+col.c-total{width:102px}
+col.c-wht{width:92px}
+col.c-rwt{width:76px}
+col.c-imp{width:84px}
+col.c-pie{width:92px}
+col.c-pir{width:82px}
+col.c-yrate{width:78px}
+col.c-ietc{width:70px}
 col.c-mexp{width:82px}
-col.c-aexp{width:86px}
-col.c-result{width:88px}
-
-thead th{position:sticky;top:0;z-index:3;background:#f8faf9;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.02em;text-transform:uppercase;border-bottom:1px solid var(--border);padding:10px 6px;white-space:nowrap;text-align:center}
-thead tr.group-row th{top:0;font-size:10px;color:#374151;padding:8px 6px;border-bottom:1px solid var(--border)}
-thead tr.label-row th{top:36px}
-@media (max-width:900px){thead tr.label-row th{top:34px}}
-.group-head-tax{background:var(--group-tax)}
-.group-head-pie{background:var(--group-pie)}
-.group-head-adj{background:var(--group-adj)}
-.group-start{box-shadow:inset 2px 0 0 #d1d5db}
-
-tbody td{border-bottom:1px solid var(--border);padding:6px;text-align:center;vertical-align:middle;background:#fff}
-tbody tr:nth-child(even) td{background:#fcfcfc}
-tbody tr:hover td{background:#f8fbf9}
-.group-tax-cell{background:var(--group-tax)!important}
-.group-pie-cell{background:var(--group-pie)!important}
-.group-adj-cell{background:var(--group-adj)!important}
-.year-cell{position:sticky;left:0;z-index:2;background:#f5f8f6!important;font-weight:900;color:var(--g0)}
-thead th.sticky-left{position:sticky;left:0;z-index:5;background:#f1f6f3}
-.result-col{position:sticky;right:0;z-index:2;background:#fff!important;box-shadow:-1px 0 0 var(--border)}
-thead th.sticky-right{position:sticky;right:0;z-index:5;background:#f1f6f3;box-shadow:-1px 0 0 var(--border)}
-tbody tr:nth-child(even) td.result-col{background:#fcfcfc!important}
-tbody tr:hover td.result-col{background:#f8fbf9!important}
-.cell-input,.cell-select{width:100%;min-width:0;border:1px solid transparent;outline:none;text-align:center;padding:8px 6px;background:#f9fafb;border-radius:10px;font-size:13px;font-weight:800;color:var(--text)}
+col.c-aexp{width:92px}
+col.c-result{width:104px}
+thead th{
+  position:sticky;top:0;z-index:3;
+  text-align:center;
+  padding:11px 6px;
+  font-size:11px;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  color:#425466;
+  border-bottom:1px solid var(--border);
+}
+thead tr.group-row th{font-size:10px;font-weight:900;color:#31443b}
+thead tr.label-row th{background:#f8faf9;font-weight:900}
+thead .group-emp{background:var(--emp-head)}
+thead .group-tax{background:var(--tax-head)}
+thead .group-pie{background:var(--pie-head)}
+thead .group-adj{background:var(--adj-head)}
+thead .group-exp{background:var(--exp-head)}
+thead .group-out{background:var(--out-head)}
+tbody td{
+  padding:7px 6px;
+  text-align:center;
+  vertical-align:middle;
+  border-bottom:1px solid #ecf1ee;
+  background:#fff;
+}
+tbody tr:nth-child(even) td{filter:brightness(.99)}
+tbody tr:hover td{filter:brightness(.97)}
+.year-cell, thead th.sticky-left{
+  position:sticky;left:0;z-index:4;background:#f4f8f6 !important;font-weight:900;color:var(--g0)
+}
+.year-cell{z-index:2}
+.emp{background:var(--emp)}
+.tax{background:var(--tax)}
+.pie{background:var(--pie)}
+.adj{background:var(--adj)}
+.exp{background:var(--exp)}
+.out{background:var(--out)}
+.group-start{box-shadow:inset 2px 0 0 rgba(17,24,39,.08)}
+.cell-input,.cell-select{
+  width:100%;min-width:0;height:36px;padding:0 8px;border-radius:10px;border:1px solid transparent;
+  background:rgba(255,255,255,.78);font-size:13px;font-weight:800;color:var(--text);text-align:center;outline:none;
+}
 .cell-select{appearance:none}
-.cell-input:focus,.cell-select:focus{border-color:var(--g1);background:#fff;box-shadow:0 0 0 3px rgba(15,107,75,.10)}
-.readonly-cell{background:#f3f4f6!important;color:#374151;font-weight:900}
-.disabled-cell{opacity:.6}
-.result-cell{font-weight:900}
-.result-badge{display:inline-flex;align-items:center;justify-content:center;width:76px;padding:8px 8px;border-radius:999px;font-weight:900;font-size:12px}
+.readonly-cell{background:#eef1f4 !important;color:#475467;font-weight:900}
+.result-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:82px;height:36px;padding:0 10px;border-radius:999px;font-weight:900;font-size:13px;
+}
 .result-positive{background:var(--success-bg);color:var(--success)}
 .result-negative{background:var(--danger-bg);color:var(--danger)}
 .result-neutral{background:#f3f4f6;color:#374151}
-.notes{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
-.note-card{padding:12px;border-radius:14px;border:1px solid var(--border);background:#fff}
-.note-card strong{display:block;color:var(--g0);font-size:13px;font-weight:900;margin-bottom:6px}
-.note-card span{display:block;color:var(--muted);font-size:12px;font-weight:700;line-height:1.4}
-.status-text{margin-top:10px;font-size:12px;font-weight:800;color:var(--muted)}
-.status-ok{color:var(--success)}
-.status-error{color:var(--danger)}
-.hint{margin-top:10px;font-size:12px;font-weight:800;color:var(--muted)}
+.hidden-col{display:none}
+.hint-row{
+  margin-top:12px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.hint-pill{
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:11px;
+  font-weight:900;
+  color:#3b4f48;
+  background:#f3f7f5;
+  border:1px solid #e5ece8;
+}
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 input[type="number"]{-moz-appearance:textfield;appearance:textfield}
-@media (max-width: 1100px){.top-grid{grid-template-columns:1fr}.action-row{justify-content:flex-start}}
-@media (max-width: 900px){.hero h1{font-size:24px}}
+@media (max-width: 1100px){
+  .client-bar{grid-template-columns:1fr}
+  .action-row{justify-content:flex-start}
+}
+@media (max-width: 720px){
+  .header-inner{justify-content:flex-start}
+  .hero h1{font-size:24px}
+  .mode-switch{width:100%}
+  .mode-option{flex:1 1 100%}
+  .mode-option span{width:100%}
+}
 </style>
 </head>
 <body>
@@ -134,48 +259,43 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
           <span>Processing Tax Calculator</span>
         </div>
       </div>
-      <div class="header-right">
-        <div class="header-chip">Google Sheet Expense Lookup</div>
-        <div class="header-chip">Years 2026-2022</div>
-      </div>
     </div>
   </div>
 
   <div class="wrap">
     <div class="hero">
       <h1>Tax Calculator Workspace</h1>
-      <p>Stripped back working table with grouped inputs and a single tax entry method for all years.</p>
+      <p>Cleaner working table with one calculator format for all years.</p>
     </div>
 
     <div class="panel">
       <h3>Client Details</h3>
-      <div class="top-grid">
+      <div class="client-bar">
         <div class="field">
           <label for="irdNumber">IRD Number</label>
           <input type="text" id="irdNumber" placeholder="Enter IRD Number">
-          <div id="lookupStatus" class="status-text">Expense lookup loading...</div>
+          <div id="lookupStatus" class="status-text">Expense lookup loading…</div>
         </div>
 
-        <div class="field compact">
-          <label for="taxInputMode">Tax Input</label>
-          <select id="taxInputMode">
-            <option value="direct_total">Total Tax</option>
-            <option value="paye_acc">PAYE + ACC</option>
-          </select>
+        <div class="mode-block">
+          <div class="block-label">Calculator Format</div>
+          <div class="mode-switch" role="radiogroup" aria-label="Calculator Format">
+            <label class="mode-option">
+              <input type="checkbox" id="mode-total" checked>
+              <span>Enter Tax Deductions</span>
+            </label>
+            <label class="mode-option">
+              <input type="checkbox" id="mode-payeacc">
+              <span>Use PAYE + ACC Figures</span>
+            </label>
+          </div>
+          <div class="mode-note" id="modeNote">Current mode: Enter Tax Deductions.</div>
         </div>
 
         <div class="action-row">
-          <button type="button" class="btn btn-secondary" onclick="resetAll()">Reset</button>
+          <button type="button" class="btn" onclick="resetAll()">Reset</button>
         </div>
       </div>
-
-      <div class="helper-row">
-        <div class="helper-chip">A Exp pulled from Google Sheet</div>
-        <div class="helper-chip">Y Rate locked to 10.5%, 17.5% or 28%</div>
-        <div class="helper-chip">Alternate row shading + grouped columns</div>
-        <div class="helper-chip">Tax input mode applies to all years</div>
-      </div>
-      <div class="hint">Choose one tax input method for the full calculator: Total Tax or PAYE + ACC.</div>
     </div>
 
     <div class="panel">
@@ -203,16 +323,17 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
             <thead>
               <tr class="group-row">
                 <th class="sticky-left" rowspan="2">Year</th>
-                <th colspan="4" class="group-head-tax group-start employment-group-head">Employment Tax</th>
-                <th colspan="3" class="group-head-tax group-start">WHT / RWT / Credits</th>
-                <th colspan="3" class="group-head-pie group-start">PIE</th>
-                <th colspan="3" class="group-head-adj group-start">Adjustments</th>
-                <th class="sticky-right" rowspan="2">Result</th>
+                <th class="group-emp" colspan="4">Employment Tax</th>
+                <th class="group-tax" colspan="3">WHT / RWT / Imputation</th>
+                <th class="group-pie" colspan="3">PIE</th>
+                <th class="group-adj" colspan="2">Adjustments</th>
+                <th class="group-exp" colspan="1">Expenses</th>
+                <th class="group-out" colspan="1">Result</th>
               </tr>
               <tr class="label-row">
                 <th class="group-start">Gross</th>
-                <th class="employment-paye-col">PAYE</th>
-                <th class="employment-acc-col">ACC</th>
+                <th class="paye-header">PAYE</th>
+                <th class="acc-header">ACC</th>
                 <th>Total Tax</th>
                 <th class="group-start">WHT/INT</th>
                 <th>RWT</th>
@@ -222,27 +343,18 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
                 <th>Y Rate</th>
                 <th class="group-start">IETC</th>
                 <th>M Exp</th>
-                <th>A Exp</th>
+                <th class="group-start">A Exp</th>
+                <th class="group-start">Result</th>
               </tr>
             </thead>
             <tbody id="calcBody"></tbody>
           </table>
         </div>
       </div>
-
-      <div class="notes">
-        <div class="note-card">
-          <strong>Tax entry flow</strong>
-          <span>Use the top tax input dropdown to decide whether Total Tax is entered directly or calculated from PAYE + ACC for every year.</span>
-        </div>
-        <div class="note-card">
-          <strong>Rounding</strong>
-          <span>Bracket tax and PIE tax round down to 2 decimals to keep the treatment consistent.</span>
-        </div>
-        <div class="note-card">
-          <strong>Manual expense</strong>
-          <span>M Exp stays editable for extra manual expense adjustments, while A Exp stays locked from the lookup sheet.</span>
-        </div>
+      <div class="hint-row">
+        <div class="hint-pill">A Exp auto-fills from the sheet</div>
+        <div class="hint-pill">Y Rate is locked to 10.5%, 17.5% or 28%</div>
+        <div class="hint-pill">One format applies to every year</div>
       </div>
     </div>
   </div>
@@ -250,89 +362,74 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 
 <script>
 const years = [2026, 2025, 2024, 2023, 2022];
-
 const yRateOptions = [
-  { value: 0.105, label: "10.5%" },
-  { value: 0.175, label: "17.5%" },
-  { value: 0.28, label: "28%" }
+  { label: "10.5%", value: "0.105" },
+  { label: "17.5%", value: "0.175" },
+  { label: "28%", value: "0.28" }
 ];
-
 const EXPENSE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMFaPmSD7uw1ZQhJ1UoRI4mGkmu3CJ--7uCtYjgSu23U5GUtiNaku5qjLD_YiautHdq-zZ5TUGLeI_/pub?gid=0&single=true&output=csv";
-
 const yearConfigs = {
-  2026: {
-    brackets: [
-      { max: 15600, rate: 0.105, baseAt: 0 },
-      { max: 53500, rate: 0.175, baseAt: 15600 },
-      { max: 78100, rate: 0.30, baseAt: 53500 },
-      { max: 180000, rate: 0.33, baseAt: 78100 },
-      { max: Infinity, rate: 0.39, baseAt: 180000 }
-    ],
-    accRate: 0.0167,
-    accMaxEarnings: 152790
-  },
-  2025: {
-    brackets: [
-      { max: 14000, rate: 0.105, baseAt: 0 },
-      { max: 15600, rate: 0.1282, baseAt: 14000 },
-      { max: 48000, rate: 0.175, baseAt: 15600 },
-      { max: 53500, rate: 0.2164, baseAt: 48000 },
-      { max: 70000, rate: 0.30, baseAt: 53500 },
-      { max: 78100, rate: 0.3099, baseAt: 70000 },
-      { max: 180000, rate: 0.33, baseAt: 78100 },
-      { max: Infinity, rate: 0.39, baseAt: 180000 }
-    ],
-    accRate: 0.016,
-    accMaxEarnings: 142283
-  },
-  2024: {
-    brackets: [
-      { max: 14000, rate: 0.105, baseAt: 0 },
-      { max: 48000, rate: 0.175, baseAt: 14000 },
-      { max: 70000, rate: 0.30, baseAt: 48000 },
-      { max: 180000, rate: 0.33, baseAt: 70000 },
-      { max: Infinity, rate: 0.39, baseAt: 180000 }
-    ],
-    accRate: 0.0153,
-    accMaxEarnings: 139384
-  },
-  2023: {
-    brackets: [
-      { max: 14000, rate: 0.105, baseAt: 0 },
-      { max: 48000, rate: 0.175, baseAt: 14000 },
-      { max: 70000, rate: 0.30, baseAt: 48000 },
-      { max: 180000, rate: 0.33, baseAt: 70000 },
-      { max: Infinity, rate: 0.39, baseAt: 180000 }
-    ],
-    accRate: 0.0146,
-    accMaxEarnings: 136544
-  },
-  2022: {
-    brackets: [
-      { max: 14000, rate: 0.105, baseAt: 0 },
-      { max: 48000, rate: 0.175, baseAt: 14000 },
-      { max: 70000, rate: 0.30, baseAt: 48000 },
-      { max: 180000, rate: 0.33, baseAt: 70000 },
-      { max: Infinity, rate: 0.39, baseAt: 180000 }
-    ],
-    accRate: 0.0139,
-    accMaxEarnings: 130911
-  }
+  2026: { brackets: [
+    { max: 15600, rate: 0.105, baseAt: 0 },
+    { max: 53500, rate: 0.175, baseAt: 15600 },
+    { max: 78100, rate: 0.30, baseAt: 53500 },
+    { max: 180000, rate: 0.33, baseAt: 78100 },
+    { max: Infinity, rate: 0.39, baseAt: 180000 }
+  ]},
+  2025: { brackets: [
+    { max: 14000, rate: 0.105, baseAt: 0 },
+    { max: 15600, rate: 0.1282, baseAt: 14000 },
+    { max: 48000, rate: 0.175, baseAt: 15600 },
+    { max: 53500, rate: 0.2164, baseAt: 48000 },
+    { max: 70000, rate: 0.30, baseAt: 53500 },
+    { max: 78100, rate: 0.3099, baseAt: 70000 },
+    { max: 180000, rate: 0.33, baseAt: 78100 },
+    { max: Infinity, rate: 0.39, baseAt: 180000 }
+  ]},
+  2024: { brackets: [
+    { max: 14000, rate: 0.105, baseAt: 0 },
+    { max: 48000, rate: 0.175, baseAt: 14000 },
+    { max: 70000, rate: 0.30, baseAt: 48000 },
+    { max: 180000, rate: 0.33, baseAt: 70000 },
+    { max: Infinity, rate: 0.39, baseAt: 180000 }
+  ]},
+  2023: { brackets: [
+    { max: 14000, rate: 0.105, baseAt: 0 },
+    { max: 48000, rate: 0.175, baseAt: 14000 },
+    { max: 70000, rate: 0.30, baseAt: 48000 },
+    { max: 180000, rate: 0.33, baseAt: 70000 },
+    { max: Infinity, rate: 0.39, baseAt: 180000 }
+  ]},
+  2022: { brackets: [
+    { max: 14000, rate: 0.105, baseAt: 0 },
+    { max: 48000, rate: 0.175, baseAt: 14000 },
+    { max: 70000, rate: 0.30, baseAt: 48000 },
+    { max: 180000, rate: 0.33, baseAt: 70000 },
+    { max: Infinity, rate: 0.39, baseAt: 180000 }
+  ]}
 };
 
 let expenseLookup = {};
 let expenseLookupLoaded = false;
+let currentMode = "total";
 
-function buildSelect(options, id, className = "cell-select") {
+function buildYRateSelect(id) {
   const select = document.createElement("select");
-  select.className = className;
+  select.className = "cell-select";
   select.id = id;
-  options.forEach(optionConfig => {
+
+  const blank = document.createElement("option");
+  blank.value = "";
+  blank.textContent = "";
+  select.appendChild(blank);
+
+  yRateOptions.forEach(item => {
     const option = document.createElement("option");
-    option.value = String(optionConfig.value);
-    option.textContent = optionConfig.label;
+    option.value = item.value;
+    option.textContent = item.label;
     select.appendChild(option);
   });
+
   return select;
 }
 
@@ -344,24 +441,23 @@ function buildTable() {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="year-cell">${year}</td>
-      <td><input class="cell-input group-start" type="number" step="0.01" id="gross-${year}" value="0"></td>
-      <td><input class="cell-input employment-paye-col" type="number" step="0.01" id="paye-${year}" value="0"></td>
-      <td><input class="cell-input employment-acc-col" type="number" step="0.01" id="acc-${year}" value="0"></td>
-      <td><input class="cell-input readonly-cell" type="number" step="0.01" id="totaltax-${year}" value="0"></td>
-      <td class="group-tax-cell"><input class="cell-input group-start" type="number" step="0.01" id="wht-${year}" value="0"></td>
-      <td class="group-tax-cell"><input class="cell-input" type="number" step="0.01" id="rwt-${year}" value="0"></td>
-      <td class="group-tax-cell"><input class="cell-input" type="number" step="0.01" id="imp-${year}" value="0"></td>
-      <td class="group-pie-cell"><input class="cell-input group-start" type="number" step="0.01" id="pie-${year}" value="0"></td>
-      <td class="group-pie-cell"><input class="cell-input" type="number" step="0.01" id="pir-${year}" value="0"></td>
-      <td class="group-pie-cell" id="yrate-cell-${year}"></td>
-      <td class="group-adj-cell"><input class="cell-input group-start" type="number" min="0" max="12" step="1" id="ietcmonths-${year}" value="0"></td>
-      <td class="group-adj-cell"><input class="cell-input" type="number" step="0.01" id="mexp-${year}" value="0"></td>
-      <td class="group-adj-cell"><input class="cell-input readonly-cell" type="number" step="0.01" id="aexp-${year}" value="0" readonly></td>
-      <td class="result-col result-cell"><span class="result-badge result-neutral" id="result-${year}">0.00</span></td>
+      <td class="emp group-start"><input class="cell-input" type="number" step="0.01" id="gross-${year}" value="0"></td>
+      <td class="emp paye-col"><input class="cell-input" type="number" step="0.01" id="paye-${year}" value="0"></td>
+      <td class="emp acc-col"><input class="cell-input" type="number" step="0.01" id="acc-${year}" value="0"></td>
+      <td class="emp"><input class="cell-input" type="number" step="0.01" id="totaltax-${year}" value="0"></td>
+      <td class="tax group-start"><input class="cell-input" type="number" step="0.01" id="wht-${year}" value="0"></td>
+      <td class="tax"><input class="cell-input" type="number" step="0.01" id="rwt-${year}" value="0"></td>
+      <td class="tax"><input class="cell-input" type="number" step="0.01" id="imp-${year}" value="0"></td>
+      <td class="pie group-start"><input class="cell-input" type="number" step="0.01" id="pie-${year}" value="0"></td>
+      <td class="pie"><input class="cell-input" type="number" step="0.01" id="pir-${year}" value="0"></td>
+      <td class="pie" id="yrate-cell-${year}"></td>
+      <td class="adj group-start"><input class="cell-input" type="number" min="0" max="12" step="1" id="ietcmonths-${year}" value="0"></td>
+      <td class="adj"><input class="cell-input" type="number" step="0.01" id="mexp-${year}" value="0"></td>
+      <td class="exp group-start"><input class="cell-input readonly-cell" type="number" step="0.01" id="aexp-${year}" value="0" readonly></td>
+      <td class="out group-start"><span class="result-badge result-neutral" id="result-${year}">0.00</span></td>
     `;
-
     body.appendChild(tr);
-    document.getElementById(`yrate-cell-${year}`).appendChild(buildSelect(yRateOptions, `yrate-${year}`));
+    document.getElementById(`yrate-cell-${year}`).appendChild(buildYRateSelect(`yrate-${year}`));
   });
 
   document.querySelectorAll(".cell-input, .cell-select").forEach(input => {
@@ -371,12 +467,10 @@ function buildTable() {
 
   document.getElementById("irdNumber").addEventListener("input", handleAllChanges);
   document.getElementById("irdNumber").addEventListener("change", handleAllChanges);
-  document.getElementById("taxInputMode").addEventListener("change", handleAllChanges);
 }
 
 function num(id) {
-  const el = document.getElementById(id);
-  return Number(el && el.value ? el.value : 0);
+  return Number(document.getElementById(id).value || 0);
 }
 
 function normalizeIrd(value) {
@@ -405,6 +499,7 @@ function parseCsvLine(line) {
   const result = [];
   let current = "";
   let inQuotes = false;
+
   for (let i = 0; i < line.length; i++) {
     const char = line[i];
     const nextChar = line[i + 1];
@@ -428,9 +523,10 @@ function parseCsvLine(line) {
 
 async function loadExpenseLookup() {
   try {
-    setLookupStatus("Expense lookup loading...");
+    setLookupStatus("Expense lookup loading…");
     const response = await fetch(EXPENSE_CSV_URL, { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
     const csvText = await response.text();
     const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== "");
     if (lines.length < 2) throw new Error("No expense rows found");
@@ -448,7 +544,7 @@ async function loadExpenseLookup() {
       const parts = parseCsvLine(lines[i]);
       const ird = normalizeIrd(parts[irdIndex] || "");
       const year = String(parts[yearIndex] || "").trim();
-      const expense = Number(String(parts[expenseIndex] || 0).replace(/[^0-9.-]/g, "") || 0);
+      const expense = Number(String(parts[expenseIndex] || "").replace(/[^0-9.-]/g, "") || 0);
       if (!ird || !year) continue;
       if (!lookup[ird]) lookup[ird] = {};
       lookup[ird][year] = round2(expense);
@@ -464,6 +560,56 @@ async function loadExpenseLookup() {
   }
 }
 
+function calculateTax(taxableIncome, year) {
+  const config = yearConfigs[year];
+  if (!config) return 0;
+  let totalTax = 0;
+
+  config.brackets.forEach(bracket => {
+    if (taxableIncome <= bracket.baseAt) return;
+    const amountInBracket = bracket.max === Infinity
+      ? taxableIncome - bracket.baseAt
+      : Math.min(taxableIncome, bracket.max) - bracket.baseAt;
+    if (amountInBracket > 0) totalTax += roundDown2(amountInBracket * bracket.rate);
+  });
+
+  return roundDown2(totalTax);
+}
+
+function calculatePieAdjustment(pieIncome, pirPaid, yRate) {
+  const correctPieTax = roundDown2(pieIncome * yRate);
+  return round2(pirPaid - correctPieTax);
+}
+
+function calculateIetc(year, income, monthsEligible) {
+  if (monthsEligible <= 0 || income < 24000) return 0;
+
+  if (year === 2026) {
+    if (income > 70000) return 0;
+    let annualEntitlement = 520;
+    if (income > 66000) annualEntitlement = 520 - ((income - 66000) * 0.13);
+    return round2((Math.max(0, annualEntitlement) * monthsEligible) / 12);
+  }
+
+  if (year === 2025) {
+    if (income > 70000) return 0;
+    let part1Annual = 520;
+    if (income > 44000) part1Annual = 520 - ((income - 44000) * 0.13);
+    const part1Prorated = (Math.max(0, part1Annual) * 121) / 365;
+
+    let part2Annual = 520;
+    if (income > 66000) part2Annual = 520 - ((income - 66000) * 0.13);
+    const part2Prorated = (Math.max(0, part2Annual) * 244) / 365;
+
+    return round2(((part1Prorated + part2Prorated) * monthsEligible) / 12);
+  }
+
+  if (income > 48000) return 0;
+  let annualEntitlement = 520;
+  if (income > 44000) annualEntitlement = 520 - ((income - 44000) * 0.13);
+  return round2((Math.max(0, annualEntitlement) * monthsEligible) / 12);
+}
+
 function lookupExpenseForYear(year) {
   const ird = normalizeIrd(document.getElementById("irdNumber").value);
   if (!ird || !expenseLookupLoaded) return 0;
@@ -477,108 +623,6 @@ function updateLookupExpenses() {
   });
 }
 
-function calculateTax(taxableIncome, year) {
-  const config = yearConfigs[year];
-  if (!config) return 0;
-  let totalTax = 0;
-  config.brackets.forEach(bracket => {
-    if (taxableIncome <= bracket.baseAt) return;
-    const amountInBracket = bracket.max === Infinity
-      ? taxableIncome - bracket.baseAt
-      : Math.min(taxableIncome, bracket.max) - bracket.baseAt;
-    if (amountInBracket > 0) {
-      totalTax += roundDown2(amountInBracket * bracket.rate);
-    }
-  });
-  return roundDown2(totalTax);
-}
-
-function calculatePieAdjustment(pieIncome, pirPaid, yRate) {
-  const correctPieTax = roundDown2(pieIncome * yRate);
-  return roundDown2(pirPaid - correctPieTax);
-}
-
-function calculateIetc(year, income, monthsEligible) {
-  if (monthsEligible <= 0) return 0;
-  if (income < 24000) return 0;
-
-  if (year === 2026) {
-    if (income > 70000) return 0;
-    let annualEntitlement = 520;
-    if (income > 66000) annualEntitlement = 520 - ((income - 66000) * 0.13);
-    annualEntitlement = Math.max(0, annualEntitlement);
-    return round2((annualEntitlement * monthsEligible) / 12);
-  }
-
-  if (year === 2025) {
-    if (income > 70000) return 0;
-    let part1Annual = 520;
-    if (income > 44000) part1Annual = 520 - ((income - 44000) * 0.13);
-    part1Annual = Math.max(0, part1Annual);
-    const part1Prorated = (part1Annual * 121) / 365;
-
-    let part2Annual = 520;
-    if (income > 66000) part2Annual = 520 - ((income - 66000) * 0.13);
-    part2Annual = Math.max(0, part2Annual);
-    const part2Prorated = (part2Annual * 244) / 365;
-
-    return round2(((part1Prorated + part2Prorated) * monthsEligible) / 12);
-  }
-
-  if (income > 48000) return 0;
-  let annualEntitlement = 520;
-  if (income > 44000) annualEntitlement = 520 - ((income - 44000) * 0.13);
-  annualEntitlement = Math.max(0, annualEntitlement);
-  return round2((annualEntitlement * monthsEligible) / 12);
-}
-
-function getTaxMode() {
-  return document.getElementById("taxInputMode").value;
-}
-
-function syncTaxEntryState() {
-  const showPayeAcc = getTaxMode() === "paye_acc";
-
-  document.querySelectorAll(".employment-paye-col").forEach(el => {
-    el.style.display = showPayeAcc ? "" : "none";
-  });
-  document.querySelectorAll(".employment-acc-col").forEach(el => {
-    el.style.display = showPayeAcc ? "" : "none";
-  });
-  document.querySelectorAll(".employment-group-head").forEach(el => {
-    el.colSpan = showPayeAcc ? 4 : 2;
-  });
-
-  years.forEach(year => {
-    const payeEl = document.getElementById(`paye-${year}`);
-    const accEl = document.getElementById(`acc-${year}`);
-    const totalTaxEl = document.getElementById(`totaltax-${year}`);
-
-    payeEl.readOnly = !showPayeAcc;
-    accEl.readOnly = !showPayeAcc;
-    totalTaxEl.readOnly = showPayeAcc;
-
-    payeEl.classList.toggle("readonly-cell", !showPayeAcc);
-    payeEl.classList.toggle("disabled-cell", !showPayeAcc);
-    accEl.classList.toggle("readonly-cell", !showPayeAcc);
-    accEl.classList.toggle("disabled-cell", !showPayeAcc);
-    totalTaxEl.classList.toggle("readonly-cell", showPayeAcc);
-    totalTaxEl.classList.toggle("disabled-cell", showPayeAcc);
-
-    if (!showPayeAcc) {
-      payeEl.value = "0.00";
-      accEl.value = "0.00";
-    }
-  });
-}
-
-function getTotalTaxForRow(year) {
-  if (getTaxMode() === "direct_total") {
-    return round2(num(`totaltax-${year}`));
-  }
-  return round2(num(`paye-${year}`) + num(`acc-${year}`));
-}
-
 function renderResultBadge(year, value) {
   const el = document.getElementById(`result-${year}`);
   el.textContent = value.toFixed(2);
@@ -589,11 +633,13 @@ function renderResultBadge(year, value) {
 }
 
 function calculateRow(year) {
-  syncTaxEntryState();
-
   const gross = num(`gross-${year}`);
-  const totalTax = getTotalTaxForRow(year);
-  if (getTaxMode() !== "direct_total") {
+  const paye = num(`paye-${year}`);
+  const acc = num(`acc-${year}`);
+  let totalTax = num(`totaltax-${year}`);
+
+  if (currentMode === "payeacc") {
+    totalTax = round2(paye + acc);
     document.getElementById(`totaltax-${year}`).value = totalTax.toFixed(2);
   }
 
@@ -611,8 +657,10 @@ function calculateRow(year) {
   const taxableIncome = Math.max(0, floor0(rawIncome));
   const ietcIncome = Math.round(rawIncome);
   const taxPaid = round2(totalTax + rwt);
-  const taxRequiredBeforeCredits = calculateTax(taxableIncome, year);
-  const taxRequired = roundDown2(taxRequiredBeforeCredits - impCr);
+
+  let taxRequired = calculateTax(taxableIncome, year);
+  taxRequired = round2(taxRequired - impCr);
+
   const ietcAmount = calculateIetc(year, ietcIncome, ietcMonths);
   const pieAdjustment = calculatePieAdjustment(pie, pirPaid, yRate);
   const result = round2((taxPaid - taxRequired) + ietcAmount + pieAdjustment);
@@ -621,7 +669,35 @@ function calculateRow(year) {
 }
 
 function calculateAll() {
-  years.forEach(year => calculateRow(year));
+  years.forEach(calculateRow);
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById("mode-total").checked = mode === "total";
+  document.getElementById("mode-payeacc").checked = mode === "payeacc";
+  document.getElementById("modeNote").textContent = mode === "total"
+    ? "Current mode: Enter Tax Deductions."
+    : "Current mode: Use PAYE + ACC Figures.";
+
+  document.querySelectorAll(".paye-col, .acc-col, .paye-header, .acc-header").forEach(el => {
+    el.classList.toggle("hidden-col", mode === "total");
+  });
+
+  years.forEach(year => {
+    const totalEl = document.getElementById(`totaltax-${year}`);
+    if (mode === "total") {
+      document.getElementById(`paye-${year}`).value = "0";
+      document.getElementById(`acc-${year}`).value = "0";
+      totalEl.readOnly = false;
+      totalEl.classList.remove("readonly-cell");
+    } else {
+      totalEl.readOnly = true;
+      totalEl.classList.add("readonly-cell");
+    }
+  });
+
+  calculateAll();
 }
 
 function handleAllChanges() {
@@ -631,27 +707,29 @@ function handleAllChanges() {
 
 function resetAll() {
   document.getElementById("irdNumber").value = "";
-  document.getElementById("taxInputMode").value = "direct_total";
-  document.querySelectorAll(".cell-input").forEach(input => {
-    if (!input.readOnly) input.value = 0;
+  document.querySelectorAll(".cell-input, .cell-select").forEach(input => {
+    if (input.tagName === "SELECT") input.value = "";
+    else if (!input.readOnly) input.value = 0;
   });
   years.forEach(year => {
-    document.getElementById(`yrate-${year}`).value = "0.105";
-    document.getElementById(`totaltax-${year}`).value = "0.00";
     document.getElementById(`aexp-${year}`).value = "0.00";
-    document.getElementById(`paye-${year}`).value = "0.00";
-    document.getElementById(`acc-${year}`).value = "0.00";
+    document.getElementById(`totaltax-${year}`).value = "0";
     renderResultBadge(year, 0);
   });
+  setMode("total");
   handleAllChanges();
+}
+
+function initModeControls() {
+  document.getElementById("mode-total").addEventListener("change", () => setMode("total"));
+  document.getElementById("mode-payeacc").addEventListener("change", () => setMode("payeacc"));
 }
 
 async function initCalculator() {
   buildTable();
-  years.forEach(year => {
-    document.getElementById(`yrate-${year}`).value = "0.105";
-  });
+  initModeControls();
   await loadExpenseLookup();
+  setMode("total");
   handleAllChanges();
 }
 
