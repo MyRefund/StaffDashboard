@@ -12,11 +12,11 @@
   --g1:#0f6b4b;
   --bg:#f3f7f4;
   --panel:#ffffff;
-  --text:#111827;
+  --text:#1f2937;
   --muted:#6b7280;
   --border:#dfe7e2;
   --radius:16px;
-  --shadow:0 10px 24px rgba(9,75,53,.08);
+  --shadow:0 10px 22px rgba(9,75,53,.08);
   --danger:#b42318;
   --danger-bg:#fef3f2;
   --success:#027a48;
@@ -42,66 +42,64 @@ body{
   background:linear-gradient(180deg,#eef5f1 0%, #f8fbf9 100%);
 }
 .page{min-height:100vh}
-.header{background:var(--g0);color:#fff;padding:12px 18px}
-.header-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.header{background:var(--g0);color:#fff;padding:12px 20px}
+.header-inner{max-width:1420px;margin:0 auto;display:flex;align-items:center;gap:14px}
 .brand{display:flex;align-items:center;gap:12px}
-.brand-mark{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);font-weight:900}
-.brand-text strong{display:block;font-size:14px;font-weight:900}
-.brand-text span{display:block;font-size:11px;font-weight:700;opacity:.92}
-.wrap{max-width:1080px;margin:0 auto;padding:16px 12px 28px}
-.hero{margin-bottom:12px}
-.hero h1{margin:0;font-size:22px;font-weight:900;color:var(--g0)}
-.hero p{margin:6px 0 0;color:var(--muted);font-size:12px;font-weight:700}
+.brand-mark{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);font-weight:700}
+.brand-text strong{display:block;font-size:14px;font-weight:700}
+.brand-text span{display:block;font-size:12px;font-weight:500;opacity:.92}
+.wrap{max-width:1420px;margin:0 auto;padding:18px 14px 34px}
+.hero{margin-bottom:14px}
+.hero h1{margin:0;font-size:24px;font-weight:700;color:var(--g0)}
+.hero p{margin:6px 0 0;color:var(--muted);font-size:12px;font-weight:500}
 .panel{background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid #e8efea;padding:14px;margin-bottom:14px}
-.panel h3{margin:0 0 12px;font-size:15px;font-weight:900;color:var(--g0)}
-.client-bar{display:grid;grid-template-columns:minmax(180px,220px) minmax(320px,1fr) auto;gap:12px;align-items:end}
+.panel h3{margin:0 0 10px;font-size:15px;font-weight:700;color:var(--g0)}
+.client-bar{display:grid;grid-template-columns:minmax(180px,260px) minmax(340px,1fr) auto;gap:12px;align-items:end}
 .field{min-width:0}
-.field label,.mode-block .block-label{display:block;margin-bottom:6px;font-size:12px;font-weight:900}
-.field input{width:100%;height:38px;padding:0 11px;border-radius:10px;border:1px solid var(--border);background:#fff;font-size:13px;font-weight:800;outline:none}
-.field input:focus,.cell-input:focus,.cell-select:focus{border-color:var(--g1);box-shadow:0 0 0 3px rgba(15,107,75,.08);background:#fff}
-.status-text{margin-top:6px;font-size:11px;font-weight:800;color:var(--muted)}
+.field label,.mode-block .block-label{display:block;margin-bottom:6px;font-size:12px;font-weight:700}
+.field input{width:100%;height:36px;padding:0 11px;border-radius:10px;border:1px solid var(--border);background:#fff;font-size:13px;font-weight:500;outline:none}
+.field input:focus,.cell-input:focus,.cell-select:focus,.alloc-input:focus{border-color:var(--g1);box-shadow:0 0 0 4px rgba(15,107,75,.08);background:#fff}
+.status-text{margin-top:6px;font-size:11px;font-weight:600;color:var(--muted)}
 .status-ok{color:var(--success)}
 .status-error{color:var(--danger)}
-.mode-block{min-width:0}
 .mode-switch{display:inline-flex;align-items:center;gap:6px;padding:5px;border:1px solid var(--border);border-radius:12px;background:#f8fbf9;flex-wrap:wrap}
 .mode-option{position:relative;display:flex;align-items:center}
 .mode-option input{position:absolute;opacity:0;pointer-events:none}
-.mode-option span{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 12px;border-radius:8px;border:1px solid transparent;background:transparent;font-size:12px;font-weight:900;color:#35534a;cursor:pointer;white-space:nowrap}
+.mode-option span{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 12px;border-radius:9px;border:1px solid transparent;background:transparent;font-size:12px;font-weight:600;color:#35534a;cursor:pointer;white-space:nowrap}
 .mode-option input:checked + span{background:var(--g0);color:#fff;box-shadow:0 4px 12px rgba(9,75,53,.16)}
-.mode-note{margin-top:6px;font-size:11px;font-weight:800;color:var(--muted)}
+.mode-note{margin-top:6px;font-size:11px;font-weight:500;color:var(--muted)}
 .action-row{display:flex;justify-content:flex-end;align-items:end}
-.btn{height:38px;padding:0 14px;border-radius:10px;border:1px solid var(--g0);background:#fff;color:var(--g0);font-size:13px;font-weight:900;cursor:pointer}
+.btn{height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--g0);background:#fff;color:var(--g0);font-size:13px;font-weight:600;cursor:pointer}
 .table-shell{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#fff}
 .table-wrap{overflow:auto}
-table{width:100%;min-width:1040px;border-collapse:separate;border-spacing:0;table-layout:fixed}
-col.c-year{width:62px}
-col.c-gross{width:86px}
-col.c-paye{width:82px}
-col.c-acc{width:76px}
-col.c-total{width:90px}
-col.c-wht{width:84px}
-col.c-rwt{width:68px}
-col.c-imp{width:74px}
-col.c-pie{width:84px}
-col.c-pir{width:74px}
-col.c-yrate{width:68px}
+table{width:100%;min-width:1110px;border-collapse:separate;border-spacing:0;table-layout:fixed}
+col.c-year{width:60px}
+col.c-gross{width:82px}
+col.c-paye{width:74px}
+col.c-acc{width:68px}
+col.c-total{width:78px}
+col.c-wht{width:94px}
+col.c-rwt{width:66px}
+col.c-imp{width:66px}
+col.c-pie{width:70px}
+col.c-pir{width:70px}
+col.c-yrate{width:62px}
 col.c-ietc{width:58px}
-col.c-mexp{width:70px}
-col.c-aexp{width:82px}
-col.c-result{width:92px}
+col.c-mexp{width:66px}
+col.c-aexp{width:74px}
+col.c-result{width:78px}
 thead th{position:sticky;top:0;z-index:3;text-align:center;padding:8px 4px;font-size:10px;letter-spacing:.03em;text-transform:uppercase;color:#425466;border-bottom:1px solid var(--border)}
-thead tr.group-row th{font-size:9px;font-weight:900;color:#31443b}
-thead tr.label-row th{background:#f8faf9;font-weight:900}
+thead tr.group-row th{font-size:9px;font-weight:700;color:#31443b}
+thead tr.label-row th{background:#f8faf9;font-weight:700}
 thead .group-emp{background:var(--emp-head)}
 thead .group-tax{background:var(--tax-head)}
 thead .group-pie{background:var(--pie-head)}
 thead .group-adj{background:var(--adj-head)}
 thead .group-exp{background:var(--exp-head)}
 thead .group-out{background:var(--out-head)}
-tbody td{padding:5px 4px;text-align:center;vertical-align:middle;border-bottom:1px solid #ecf1ee;background:#fff}
-tbody tr:nth-child(even) td{filter:brightness(.99)}
-tbody tr:hover td{filter:brightness(.97)}
-.year-cell, thead th.sticky-left{position:sticky;left:0;z-index:4;background:#f4f8f6 !important;font-weight:900;color:var(--g0)}
+tbody td{padding:4px;text-align:center;vertical-align:middle;border-bottom:1px solid #ecf1ee;background:#fff}
+tbody tr:nth-child(even) td{filter:brightness(.992)}
+.year-cell, thead th.sticky-left{position:sticky;left:0;z-index:4;background:#f4f8f6 !important;font-weight:700;color:var(--g0)}
 .year-cell{z-index:2}
 .emp{background:var(--emp)}
 .tax{background:var(--tax)}
@@ -110,31 +108,41 @@ tbody tr:hover td{filter:brightness(.97)}
 .exp{background:var(--exp)}
 .out{background:var(--out)}
 .group-start{box-shadow:inset 2px 0 0 rgba(17,24,39,.08)}
-.cell-input,.cell-select{width:100%;min-width:0;height:32px;padding:0 6px;border-radius:8px;border:1px solid transparent;background:rgba(255,255,255,.82);font-size:12px;font-weight:800;color:var(--text);text-align:center;outline:none}
+.cell-input,.cell-select{width:100%;min-width:0;height:28px;padding:0 6px;border-radius:8px;border:1px solid transparent;background:rgba(255,255,255,.82);font-size:12px;font-weight:500;color:var(--text);text-align:center;outline:none}
 .cell-select{appearance:none}
-.readonly-cell{background:#eef1f4 !important;color:#475467;font-weight:900}
-.result-badge{display:inline-flex;align-items:center;justify-content:center;min-width:72px;height:32px;padding:0 8px;border-radius:999px;font-weight:900;font-size:12px}
+.readonly-cell{background:#eef1f4 !important;color:#475467;font-weight:600}
+.result-badge{display:inline-flex;align-items:center;justify-content:center;min-width:64px;height:28px;padding:0 6px;border-radius:999px;font-weight:600;font-size:12px}
 .result-positive{background:var(--success-bg);color:var(--success)}
 .result-negative{background:var(--danger-bg);color:var(--danger)}
 .result-neutral{background:#f3f4f6;color:#374151}
 .hidden-col{display:none}
+.inline-allocation{display:flex;align-items:center;gap:4px}
+.inline-allocation .cell-input{flex:1 1 auto}
+.plus-btn{width:24px;height:24px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--g0);font-size:16px;font-weight:600;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+.plus-btn:hover{background:#f5faf7}
 .hint-row{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
-.hint-pill{border-radius:999px;padding:6px 10px;font-size:10px;font-weight:900;color:#3b4f48;background:#f3f7f5;border:1px solid #e5ece8}
-.input-row{display:none}
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.hint-pill{border-radius:999px;padding:6px 10px;font-size:10px;font-weight:600;color:#3b4f48;background:#f3f7f5;border:1px solid #e5ece8}
+.modal-backdrop{position:fixed;inset:0;background:rgba(17,24,39,.35);display:none;align-items:center;justify-content:center;padding:18px;z-index:1000}
+.modal-backdrop.open{display:flex}
+.modal-card{width:min(760px,100%);background:#fff;border-radius:18px;border:1px solid var(--border);box-shadow:0 20px 40px rgba(17,24,39,.2);padding:18px}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.modal-head h4{margin:0;color:var(--g0);font-size:18px;font-weight:700}
+.modal-head p{margin:4px 0 0;color:var(--muted);font-size:12px;font-weight:500}
+.modal-close{border:1px solid var(--border);background:#fff;border-radius:10px;width:34px;height:34px;cursor:pointer;font-size:18px;color:#475467}
+.alloc-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.alloc-head{font-size:11px;font-weight:700;color:#475467;text-transform:uppercase;letter-spacing:.03em;padding:0 2px}
+.alloc-input{width:100%;height:34px;padding:0 8px;border-radius:10px;border:1px solid var(--border);font-size:13px;font-weight:500;outline:none;background:#fff}
+.modal-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.summary-box{border-radius:14px;padding:10px 12px;background:#f7faf8;border:1px solid #e4ebe7}
+.summary-box small{display:block;font-size:11px;font-weight:700;color:#6b7280;margin-bottom:4px;text-transform:uppercase}
+.summary-box strong{font-size:16px;font-weight:700;color:#111827}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+.btn-ghost{height:38px;padding:0 14px;border-radius:12px;border:1px solid var(--border);background:#fff;color:#344054;font-size:13px;font-weight:600;cursor:pointer}
+.btn-solid{height:38px;padding:0 14px;border-radius:12px;border:1px solid var(--g0);background:var(--g0);color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 input[type="number"]{-moz-appearance:textfield;appearance:textfield}
-@media (max-width: 1100px){
-  .client-bar{grid-template-columns:1fr}
-  .action-row{justify-content:flex-start}
-}
-@media (max-width: 720px){
-  .header-inner{justify-content:flex-start}
-  .hero h1{font-size:20px}
-  .mode-switch{width:100%}
-  .mode-option{flex:1 1 100%}
-  .mode-option span{width:100%}
-}
+@media (max-width:1100px){.client-bar{grid-template-columns:1fr}.action-row{justify-content:flex-start}}
+@media (max-width:720px){.header-inner{justify-content:flex-start}.hero h1{font-size:22px}.mode-switch{width:100%}.mode-option{flex:1 1 100%}.mode-option span{width:100%}.alloc-grid{grid-template-columns:1fr}.alloc-head{display:none}.modal-summary{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -145,7 +153,7 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
         <div class="brand-mark">MR</div>
         <div class="brand-text">
           <strong>My Refund</strong>
-          <span>Compact tax calculator</span>
+          <span>Processing Tax Calculator</span>
         </div>
       </div>
     </div>
@@ -154,7 +162,7 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
   <div class="wrap">
     <div class="hero">
       <h1>Tax Calculator Workspace</h1>
-      <p>Compact layout for split-screen work and overdue returns, with years extended to 2016.</p>
+      <p>Compact layout for split-screen work, with popup breakdowns for withholding lines.</p>
     </div>
 
     <div class="panel">
@@ -213,7 +221,7 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
               <tr class="group-row">
                 <th class="sticky-left" rowspan="2">Year</th>
                 <th class="group-emp" id="employmentGroupHeader" colspan="4">Employment Tax</th>
-                <th class="group-tax" colspan="3">WHT / RWT / Imputation</th>
+                <th class="group-tax" colspan="3">Withholding / Credits</th>
                 <th class="group-pie" colspan="3">PIE</th>
                 <th class="group-adj" colspan="2">Adjustments</th>
                 <th class="group-exp" colspan="1">Expenses</th>
@@ -223,13 +231,13 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
                 <th class="group-start">Gross</th>
                 <th class="paye-header">PAYE</th>
                 <th class="acc-header">ACC</th>
-                <th>Total Tax</th>
-                <th class="group-start">WHT/INT</th>
+                <th>Tax</th>
+                <th class="group-start">WHT</th>
                 <th>RWT</th>
-                <th>Imp Cr</th>
+                <th>Imp</th>
                 <th class="group-start">PIE</th>
                 <th>PIR</th>
-                <th>Y Rate</th>
+                <th>Rate</th>
                 <th class="group-start">IETC</th>
                 <th>M Exp</th>
                 <th class="group-start">A Exp</th>
@@ -241,11 +249,52 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
         </div>
       </div>
       <div class="hint-row">
-        <div class="hint-pill">Split-screen friendly</div>
-        <div class="hint-pill">Years 2026 to 2016</div>
-        <div class="hint-pill">A Exp auto-fills from the sheet</div>
-        <div class="hint-pill">One format applies to every year</div>
+        <div class="hint-pill">Use + beside WHT to add up to 4 extra WHT / RWT / Imp Cr lines</div>
+        <div class="hint-pill">Blank defaults keep the sheet cleaner than walls of zeroes</div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="allocationModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="allocationTitle">
+    <div class="modal-head">
+      <div>
+        <h4 id="allocationTitle">Additional withholding entries</h4>
+        <p>Add up to 4 extra lines. Totals flow back into WHT, RWT and Imp Cr for the selected year.</p>
+      </div>
+      <button type="button" class="modal-close" id="allocationClose" aria-label="Close">×</button>
+    </div>
+    <div class="alloc-grid">
+      <div class="alloc-head">Type</div>
+      <div class="alloc-head">WHT</div>
+      <div class="alloc-head">RWT</div>
+      <div class="alloc-head">Imp Cr</div>
+      <input class="alloc-input" id="alloc-type-0" type="text" placeholder="Interest / Schedular / Subsidy">
+      <input class="alloc-input alloc-num" id="alloc-wht-0" type="number" step="0.01">
+      <input class="alloc-input alloc-num" id="alloc-rwt-0" type="number" step="0.01">
+      <input class="alloc-input alloc-num" id="alloc-imp-0" type="number" step="0.01">
+      <input class="alloc-input" id="alloc-type-1" type="text">
+      <input class="alloc-input alloc-num" id="alloc-wht-1" type="number" step="0.01">
+      <input class="alloc-input alloc-num" id="alloc-rwt-1" type="number" step="0.01">
+      <input class="alloc-input alloc-num" id="alloc-imp-1" type="number" step="0.01">
+      <input class="alloc-input" id="alloc-type-2" type="text">
+      <input class="alloc-input alloc-num" id="alloc-wht-2" type="number" step="0.01">
+      <input class="alloc-input alloc-num" id="alloc-rwt-2" type="number" step="0.01">
+      <input class="alloc-input alloc-num" id="alloc-imp-2" type="number" step="0.01">
+      <input class="alloc-input" id="alloc-type-3" type="text">
+      <input class="alloc-input alloc-num" id="alloc-wht-3" type="number" step="0.01">
+      <input class="alloc-input alloc-num" id="alloc-rwt-3" type="number" step="0.01">
+      <input class="alloc-input alloc-num" id="alloc-imp-3" type="number" step="0.01">
+    </div>
+    <div class="modal-summary">
+      <div class="summary-box"><small>Total WHT</small><strong id="alloc-total-wht">0.00</strong></div>
+      <div class="summary-box"><small>Total RWT</small><strong id="alloc-total-rwt">0.00</strong></div>
+      <div class="summary-box"><small>Total Imp Cr</small><strong id="alloc-total-imp">0.00</strong></div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-ghost" id="allocationClear">Clear</button>
+      <button type="button" class="btn-solid" id="allocationApply">Apply totals</button>
     </div>
   </div>
 </div>
@@ -253,11 +302,11 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 <script>
 const years = [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016];
 const yRateOptions = [
-  { label: "10.5%", value: "0.105" },
-  { label: "17.5%", value: "0.175" },
-  { label: "28%", value: "0.28" }
+  { label: '10.5%', value: '0.105' },
+  { label: '17.5%', value: '0.175' },
+  { label: '28%', value: '0.28' }
 ];
-const EXPENSE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMFaPmSD7uw1ZQhJ1UoRI4mGkmu3CJ--7uCtYjgSu23U5GUtiNaku5qjLD_YiautHdq-zZ5TUGLeI_/pub?gid=0&single=true&output=csv";
+const EXPENSE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQMFaPmSD7uw1ZQhJ1UoRI4mGkmu3CJ--7uCtYjgSu23U5GUtiNaku5qjLD_YiautHdq-zZ5TUGLeI_/pub?gid=0&single=true&output=csv';
 const classicBrackets = [
   { max: 14000, rate: 0.105, baseAt: 0 },
   { max: 48000, rate: 0.175, baseAt: 14000 },
@@ -282,9 +331,27 @@ const yearConfigs = {
     { max: 180000, rate: 0.33, baseAt: 78100 },
     { max: Infinity, rate: 0.39, baseAt: 180000 }
   ]},
-  2024: { brackets: [...classicBrackets, { max: 180000, rate: 0.33, baseAt: 70000 }, { max: Infinity, rate: 0.39, baseAt: 180000 }] },
-  2023: { brackets: [...classicBrackets, { max: 180000, rate: 0.33, baseAt: 70000 }, { max: Infinity, rate: 0.39, baseAt: 180000 }] },
-  2022: { brackets: [...classicBrackets, { max: 180000, rate: 0.33, baseAt: 70000 }, { max: Infinity, rate: 0.39, baseAt: 180000 }] },
+  2024: { brackets: [
+    { max: 14000, rate: 0.105, baseAt: 0 },
+    { max: 48000, rate: 0.175, baseAt: 14000 },
+    { max: 70000, rate: 0.30, baseAt: 48000 },
+    { max: 180000, rate: 0.33, baseAt: 70000 },
+    { max: Infinity, rate: 0.39, baseAt: 180000 }
+  ]},
+  2023: { brackets: [
+    { max: 14000, rate: 0.105, baseAt: 0 },
+    { max: 48000, rate: 0.175, baseAt: 14000 },
+    { max: 70000, rate: 0.30, baseAt: 48000 },
+    { max: 180000, rate: 0.33, baseAt: 70000 },
+    { max: Infinity, rate: 0.39, baseAt: 180000 }
+  ]},
+  2022: { brackets: [
+    { max: 14000, rate: 0.105, baseAt: 0 },
+    { max: 48000, rate: 0.175, baseAt: 14000 },
+    { max: 70000, rate: 0.30, baseAt: 48000 },
+    { max: 180000, rate: 0.33, baseAt: 70000 },
+    { max: Infinity, rate: 0.39, baseAt: 180000 }
+  ]},
   2021: { brackets: classicBrackets },
   2020: { brackets: classicBrackets },
   2019: { brackets: classicBrackets },
@@ -292,21 +359,22 @@ const yearConfigs = {
   2017: { brackets: classicBrackets },
   2016: { brackets: classicBrackets }
 };
-
 let expenseLookup = {};
 let expenseLookupLoaded = false;
-let currentMode = "total";
+let currentMode = 'total';
+let activeAllocationYear = null;
+const allocationsByYear = {};
 
 function buildYRateSelect(id) {
-  const select = document.createElement("select");
-  select.className = "cell-select";
+  const select = document.createElement('select');
+  select.className = 'cell-select';
   select.id = id;
-  const blank = document.createElement("option");
-  blank.value = "";
-  blank.textContent = "";
+  const blank = document.createElement('option');
+  blank.value = '';
+  blank.textContent = '';
   select.appendChild(blank);
   yRateOptions.forEach(item => {
-    const option = document.createElement("option");
+    const option = document.createElement('option');
     option.value = item.value;
     option.textContent = item.label;
     select.appendChild(option);
@@ -315,64 +383,74 @@ function buildYRateSelect(id) {
 }
 
 function buildTable() {
-  const body = document.getElementById("calcBody");
-  body.innerHTML = "";
+  const body = document.getElementById('calcBody');
+  body.innerHTML = '';
   years.forEach(year => {
-    const tr = document.createElement("tr");
+    const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="year-cell">${year}</td>
-      <td class="emp group-start"><input class="cell-input" type="number" step="0.01" id="gross-${year}" value="0"></td>
-      <td class="emp paye-col"><input class="cell-input" type="number" step="0.01" id="paye-${year}" value="0"></td>
-      <td class="emp acc-col"><input class="cell-input" type="number" step="0.01" id="acc-${year}" value="0"></td>
-      <td class="emp"><input class="cell-input" type="number" step="0.01" id="totaltax-${year}" value="0"></td>
-      <td class="tax group-start"><input class="cell-input" type="number" step="0.01" id="wht-${year}" value="0"></td>
-      <td class="tax"><input class="cell-input" type="number" step="0.01" id="rwt-${year}" value="0"></td>
-      <td class="tax"><input class="cell-input" type="number" step="0.01" id="imp-${year}" value="0"></td>
-      <td class="pie group-start"><input class="cell-input" type="number" step="0.01" id="pie-${year}" value="0"></td>
-      <td class="pie"><input class="cell-input" type="number" step="0.01" id="pir-${year}" value="0"></td>
+      <td class="emp group-start"><input class="cell-input" type="number" step="0.01" id="gross-${year}"></td>
+      <td class="emp paye-col"><input class="cell-input" type="number" step="0.01" id="paye-${year}"></td>
+      <td class="emp acc-col"><input class="cell-input" type="number" step="0.01" id="acc-${year}"></td>
+      <td class="emp"><input class="cell-input" type="number" step="0.01" id="totaltax-${year}"></td>
+      <td class="tax group-start"><div class="inline-allocation"><input class="cell-input" type="number" step="0.01" id="wht-${year}"><button type="button" class="plus-btn" data-year="${year}" aria-label="Add withholding lines">+</button></div></td>
+      <td class="tax"><input class="cell-input" type="number" step="0.01" id="rwt-${year}"></td>
+      <td class="tax"><input class="cell-input" type="number" step="0.01" id="imp-${year}"></td>
+      <td class="pie group-start"><input class="cell-input" type="number" step="0.01" id="pie-${year}"></td>
+      <td class="pie"><input class="cell-input" type="number" step="0.01" id="pir-${year}"></td>
       <td class="pie" id="yrate-cell-${year}"></td>
-      <td class="adj group-start"><input class="cell-input" type="number" min="0" max="12" step="1" id="ietcmonths-${year}" value="0"></td>
-      <td class="adj"><input class="cell-input" type="number" step="0.01" id="mexp-${year}" value="0"></td>
-      <td class="exp group-start"><input class="cell-input readonly-cell" type="number" step="0.01" id="aexp-${year}" value="0" readonly></td>
-      <td class="out group-start"><span class="result-badge result-neutral" id="result-${year}">0.00</span></td>
+      <td class="adj group-start"><input class="cell-input" type="number" min="0" max="12" step="1" id="ietcmonths-${year}"></td>
+      <td class="adj"><input class="cell-input" type="number" step="0.01" id="mexp-${year}"></td>
+      <td class="exp group-start"><input class="cell-input readonly-cell" type="number" step="0.01" id="aexp-${year}" readonly></td>
+      <td class="out group-start"><span class="result-badge result-neutral" id="result-${year}"></span></td>
     `;
     body.appendChild(tr);
     document.getElementById(`yrate-cell-${year}`).appendChild(buildYRateSelect(`yrate-${year}`));
   });
 
-  document.querySelectorAll(".cell-input, .cell-select").forEach(input => {
-    input.addEventListener("input", handleAllChanges);
-    input.addEventListener("change", handleAllChanges);
+  document.querySelectorAll('.cell-input, .cell-select').forEach(input => {
+    input.addEventListener('input', handleAllChanges);
+    input.addEventListener('change', handleAllChanges);
   });
-  document.getElementById("irdNumber").addEventListener("input", handleAllChanges);
-  document.getElementById("irdNumber").addEventListener("change", handleAllChanges);
+  document.querySelectorAll('.plus-btn').forEach(btn => {
+    btn.addEventListener('click', () => openAllocationModal(btn.dataset.year));
+  });
+  document.getElementById('irdNumber').addEventListener('input', handleAllChanges);
+  document.getElementById('irdNumber').addEventListener('change', handleAllChanges);
 }
 
 function num(id) { return Number(document.getElementById(id).value || 0); }
-function normalizeIrd(value) { return String(value || "").replace(/\D/g, ""); }
+function normalizeIrd(value) { return String(value || '').replace(/\D/g, ''); }
 function round2(value) { return Math.round((Number(value) || 0) * 100) / 100; }
 function roundDown2(value) { return Math.floor((Number(value) || 0) * 100) / 100; }
 function floor0(value) { return Math.floor(Number(value) || 0); }
 
-function setLookupStatus(message, className = "") {
-  const el = document.getElementById("lookupStatus");
+function setLookupStatus(message, className = '') {
+  const el = document.getElementById('lookupStatus');
   el.textContent = message;
   el.className = `status-text ${className}`.trim();
 }
 
 function parseCsvLine(line) {
   const result = [];
-  let current = "";
+  let current = '';
   let inQuotes = false;
   for (let i = 0; i < line.length; i++) {
     const char = line[i];
     const nextChar = line[i + 1];
     if (char === '"') {
-      if (inQuotes && nextChar === '"') { current += '"'; i++; }
-      else inQuotes = !inQuotes;
-    } else if (char === "," && !inQuotes) {
-      result.push(current); current = "";
-    } else current += char;
+      if (inQuotes && nextChar === '"') {
+        current += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
   }
   result.push(current);
   return result.map(value => value.trim());
@@ -380,36 +458,34 @@ function parseCsvLine(line) {
 
 async function loadExpenseLookup() {
   try {
-    setLookupStatus("Expense lookup loading…");
-    const response = await fetch(EXPENSE_CSV_URL, { cache: "no-store" });
+    setLookupStatus('Expense lookup loading…');
+    const response = await fetch(EXPENSE_CSV_URL, { cache: 'no-store' });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const csvText = await response.text();
-    const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== "");
-    if (lines.length < 2) throw new Error("No expense rows found");
-
+    const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+    if (lines.length < 2) throw new Error('No expense rows found');
     const headers = parseCsvLine(lines[0]).map(h => h.toLowerCase());
-    const irdIndex = headers.findIndex(h => h.includes("ird"));
-    const yearIndex = headers.findIndex(h => h === "year" || h.includes("year"));
-    const expenseIndex = headers.findIndex(h => h.includes("a expense") || h.includes("expense"));
-    if (irdIndex === -1 || yearIndex === -1 || expenseIndex === -1) throw new Error("Could not find IRD Number, Year, and A Expense columns");
-
+    const irdIndex = headers.findIndex(h => h.includes('ird'));
+    const yearIndex = headers.findIndex(h => h === 'year' || h.includes('year'));
+    const expenseIndex = headers.findIndex(h => h.includes('a expense') || h.includes('expense'));
+    if (irdIndex === -1 || yearIndex === -1 || expenseIndex === -1) throw new Error('Could not find IRD Number, Year, and A Expense columns');
     const lookup = {};
     for (let i = 1; i < lines.length; i++) {
       const parts = parseCsvLine(lines[i]);
-      const ird = normalizeIrd(parts[irdIndex] || "");
-      const year = String(parts[yearIndex] || "").trim();
-      const expense = Number(String(parts[expenseIndex] || "").replace(/[^0-9.-]/g, "") || 0);
+      const ird = normalizeIrd(parts[irdIndex] || '');
+      const year = String(parts[yearIndex] || '').trim();
+      const expense = Number(String(parts[expenseIndex] || '').replace(/[^0-9.-]/g, '') || 0);
       if (!ird || !year) continue;
       if (!lookup[ird]) lookup[ird] = {};
       lookup[ird][year] = round2(expense);
     }
     expenseLookup = lookup;
     expenseLookupLoaded = true;
-    setLookupStatus("Expense lookup connected.", "status-ok");
+    setLookupStatus('Expense lookup connected.', 'status-ok');
   } catch (error) {
     expenseLookup = {};
     expenseLookupLoaded = false;
-    setLookupStatus(`Expense lookup failed: ${error.message}`, "status-error");
+    setLookupStatus(`Expense lookup failed: ${error.message}`, 'status-error');
   }
 }
 
@@ -455,23 +531,116 @@ function calculateIetc(year, income, monthsEligible) {
 }
 
 function lookupExpenseForYear(year) {
-  const ird = normalizeIrd(document.getElementById("irdNumber").value);
+  const ird = normalizeIrd(document.getElementById('irdNumber').value);
   if (!ird || !expenseLookupLoaded) return 0;
   const personData = expenseLookup[ird] || {};
   return round2(personData[String(year)] || 0);
 }
 
 function updateLookupExpenses() {
-  years.forEach(year => { document.getElementById(`aexp-${year}`).value = lookupExpenseForYear(year).toFixed(2); });
+  years.forEach(year => {
+    const expense = lookupExpenseForYear(year);
+    document.getElementById(`aexp-${year}`).value = expense ? expense.toFixed(2) : '';
+  });
+}
+
+function isRowEmpty(year) {
+  const ids = [
+    `gross-${year}`, `paye-${year}`, `acc-${year}`, `totaltax-${year}`,
+    `wht-${year}`, `rwt-${year}`, `imp-${year}`, `pie-${year}`, `pir-${year}`,
+    `yrate-${year}`, `ietcmonths-${year}`, `mexp-${year}`
+  ];
+  return ids.every(id => !String(document.getElementById(id).value || '').trim()) && !lookupExpenseForYear(year);
 }
 
 function renderResultBadge(year, value) {
   const el = document.getElementById(`result-${year}`);
+  el.className = 'result-badge';
+  if (isRowEmpty(year)) {
+    el.textContent = '';
+    el.classList.add('result-neutral');
+    return;
+  }
   el.textContent = value.toFixed(2);
-  el.className = "result-badge";
-  if (value > 0) el.classList.add("result-positive");
-  else if (value < 0) el.classList.add("result-negative");
-  else el.classList.add("result-neutral");
+  if (value > 0) el.classList.add('result-positive');
+  else if (value < 0) el.classList.add('result-negative');
+  else el.classList.add('result-neutral');
+}
+
+function getAllocationRows(year) {
+  return allocationsByYear[year] || Array.from({ length: 4 }, () => ({ type: '', wht: '', rwt: '', imp: '' }));
+}
+
+function openAllocationModal(year) {
+  activeAllocationYear = String(year);
+  const rows = getAllocationRows(activeAllocationYear);
+  rows.forEach((row, i) => {
+    document.getElementById(`alloc-type-${i}`).value = row.type || '';
+    document.getElementById(`alloc-wht-${i}`).value = row.wht || '';
+    document.getElementById(`alloc-rwt-${i}`).value = row.rwt || '';
+    document.getElementById(`alloc-imp-${i}`).value = row.imp || '';
+  });
+  updateAllocationTotals();
+  const modal = document.getElementById('allocationModal');
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeAllocationModal() {
+  const modal = document.getElementById('allocationModal');
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  activeAllocationYear = null;
+}
+
+function updateAllocationTotals() {
+  let wht = 0;
+  let rwt = 0;
+  let imp = 0;
+  for (let i = 0; i < 4; i++) {
+    wht += Number(document.getElementById(`alloc-wht-${i}`).value || 0);
+    rwt += Number(document.getElementById(`alloc-rwt-${i}`).value || 0);
+    imp += Number(document.getElementById(`alloc-imp-${i}`).value || 0);
+  }
+  document.getElementById('alloc-total-wht').textContent = round2(wht).toFixed(2);
+  document.getElementById('alloc-total-rwt').textContent = round2(rwt).toFixed(2);
+  document.getElementById('alloc-total-imp').textContent = round2(imp).toFixed(2);
+}
+
+function applyAllocationTotals() {
+  if (!activeAllocationYear) return;
+  const rows = [];
+  let wht = 0;
+  let rwt = 0;
+  let imp = 0;
+  for (let i = 0; i < 4; i++) {
+    const row = {
+      type: document.getElementById(`alloc-type-${i}`).value || '',
+      wht: document.getElementById(`alloc-wht-${i}`).value || '',
+      rwt: document.getElementById(`alloc-rwt-${i}`).value || '',
+      imp: document.getElementById(`alloc-imp-${i}`).value || ''
+    };
+    rows.push(row);
+    wht += Number(row.wht || 0);
+    rwt += Number(row.rwt || 0);
+    imp += Number(row.imp || 0);
+  }
+  allocationsByYear[activeAllocationYear] = rows;
+  document.getElementById(`wht-${activeAllocationYear}`).value = wht ? round2(wht).toFixed(2) : '';
+  document.getElementById(`rwt-${activeAllocationYear}`).value = rwt ? round2(rwt).toFixed(2) : '';
+  document.getElementById(`imp-${activeAllocationYear}`).value = imp ? round2(imp).toFixed(2) : '';
+  handleAllChanges();
+  closeAllocationModal();
+}
+
+function clearAllocationModal() {
+  for (let i = 0; i < 4; i++) {
+    document.getElementById(`alloc-type-${i}`).value = '';
+    document.getElementById(`alloc-wht-${i}`).value = '';
+    document.getElementById(`alloc-rwt-${i}`).value = '';
+    document.getElementById(`alloc-imp-${i}`).value = '';
+  }
+  updateAllocationTotals();
 }
 
 function calculateRow(year) {
@@ -479,9 +648,10 @@ function calculateRow(year) {
   const paye = num(`paye-${year}`);
   const acc = num(`acc-${year}`);
   let totalTax = num(`totaltax-${year}`);
-  if (currentMode === "payeacc") {
+  if (currentMode === 'payeacc') {
+    const hasPayeAcc = String(document.getElementById(`paye-${year}`).value || '').trim() || String(document.getElementById(`acc-${year}`).value || '').trim();
     totalTax = round2(paye + acc);
-    document.getElementById(`totaltax-${year}`).value = totalTax.toFixed(2);
+    document.getElementById(`totaltax-${year}`).value = hasPayeAcc ? totalTax.toFixed(2) : '';
   }
   const wht = num(`wht-${year}`);
   const rwt = num(`rwt-${year}`);
@@ -492,7 +662,6 @@ function calculateRow(year) {
   const ietcMonths = num(`ietcmonths-${year}`);
   const mExp = num(`mexp-${year}`);
   const aExp = num(`aexp-${year}`);
-
   const rawIncome = gross + wht - mExp - aExp;
   const taxableIncome = Math.max(0, floor0(rawIncome));
   const ietcIncome = Math.round(rawIncome);
@@ -509,23 +678,23 @@ function calculateAll() { years.forEach(calculateRow); }
 
 function setMode(mode) {
   currentMode = mode;
-  document.getElementById("mode-total").checked = mode === "total";
-  document.getElementById("mode-payeacc").checked = mode === "payeacc";
-  document.getElementById("modeNote").textContent = mode === "total" ? "Current mode: Enter Tax Deductions." : "Current mode: Use PAYE + ACC Figures.";
-  document.querySelectorAll(".paye-col, .acc-col, .paye-header, .acc-header, .paye-col-def, .acc-col-def").forEach(el => {
-    el.classList.toggle("hidden-col", mode === "total");
+  document.getElementById('mode-total').checked = mode === 'total';
+  document.getElementById('mode-payeacc').checked = mode === 'payeacc';
+  document.getElementById('modeNote').textContent = mode === 'total' ? 'Current mode: Enter Tax Deductions.' : 'Current mode: Use PAYE + ACC Figures.';
+  document.querySelectorAll('.paye-col, .acc-col, .paye-header, .acc-header, .paye-col-def, .acc-col-def').forEach(el => {
+    el.classList.toggle('hidden-col', mode === 'total');
   });
-  document.getElementById("employmentGroupHeader").colSpan = mode === "total" ? 2 : 4;
+  document.getElementById('employmentGroupHeader').colSpan = mode === 'total' ? 2 : 4;
   years.forEach(year => {
     const totalEl = document.getElementById(`totaltax-${year}`);
-    if (mode === "total") {
-      document.getElementById(`paye-${year}`).value = "0";
-      document.getElementById(`acc-${year}`).value = "0";
+    if (mode === 'total') {
+      document.getElementById(`paye-${year}`).value = '';
+      document.getElementById(`acc-${year}`).value = '';
       totalEl.readOnly = false;
-      totalEl.classList.remove("readonly-cell");
+      totalEl.classList.remove('readonly-cell');
     } else {
       totalEl.readOnly = true;
-      totalEl.classList.add("readonly-cell");
+      totalEl.classList.add('readonly-cell');
     }
   });
   calculateAll();
@@ -537,30 +706,41 @@ function handleAllChanges() {
 }
 
 function resetAll() {
-  document.getElementById("irdNumber").value = "";
-  document.querySelectorAll(".cell-input, .cell-select").forEach(input => {
-    if (input.tagName === "SELECT") input.value = "";
-    else if (!input.readOnly) input.value = 0;
+  document.getElementById('irdNumber').value = '';
+  Object.keys(allocationsByYear).forEach(key => delete allocationsByYear[key]);
+  document.querySelectorAll('.cell-input, .cell-select').forEach(input => {
+    if (!input.readOnly) input.value = '';
+    else input.value = '';
   });
   years.forEach(year => {
-    document.getElementById(`aexp-${year}`).value = "0.00";
-    document.getElementById(`totaltax-${year}`).value = "0";
+    document.getElementById(`aexp-${year}`).value = '';
+    document.getElementById(`totaltax-${year}`).value = '';
     renderResultBadge(year, 0);
   });
-  setMode("total");
+  setMode('total');
   handleAllChanges();
 }
 
-function initModeControls() {
-  document.getElementById("mode-total").addEventListener("change", () => setMode("total"));
-  document.getElementById("mode-payeacc").addEventListener("change", () => setMode("payeacc"));
+function initControls() {
+  document.getElementById('mode-total').addEventListener('change', () => setMode('total'));
+  document.getElementById('mode-payeacc').addEventListener('change', () => setMode('payeacc'));
+  document.getElementById('allocationClose').addEventListener('click', closeAllocationModal);
+  document.getElementById('allocationApply').addEventListener('click', applyAllocationTotals);
+  document.getElementById('allocationClear').addEventListener('click', clearAllocationModal);
+  document.getElementById('allocationModal').addEventListener('click', e => {
+    if (e.target.id === 'allocationModal') closeAllocationModal();
+  });
+  document.querySelectorAll('.alloc-num').forEach(input => {
+    input.addEventListener('input', updateAllocationTotals);
+    input.addEventListener('change', updateAllocationTotals);
+  });
 }
 
 async function initCalculator() {
   buildTable();
-  initModeControls();
+  initControls();
   await loadExpenseLookup();
-  setMode("total");
+  setMode('total');
   handleAllChanges();
 }
 
