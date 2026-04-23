@@ -139,6 +139,80 @@ tbody tr:nth-child(even) td{filter:brightness(.992)}
 .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
 .btn-ghost{height:38px;padding:0 14px;border-radius:12px;border:1px solid var(--border);background:#fff;color:#344054;font-size:13px;font-weight:600;cursor:pointer}
 .btn-solid{height:38px;padding:0 14px;border-radius:12px;border:1px solid var(--g0);background:var(--g0);color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+
+
+/* Auto compact mode: applied by JavaScript when the calculator is used in a narrow or split-screen window. */
+body.auto-compact .header{padding:8px 12px}
+body.auto-compact .brand-mark{width:32px;height:32px;border-radius:10px;font-size:12px}
+body.auto-compact .brand-text strong{font-size:13px}
+body.auto-compact .brand-text span{font-size:10px}
+body.auto-compact .wrap{padding:8px 8px 18px;max-width:none}
+body.auto-compact .hero{display:none}
+body.auto-compact .panel{padding:8px;border-radius:12px;margin-bottom:8px;box-shadow:none}
+body.auto-compact .panel h3{margin:0 0 6px;font-size:12px}
+body.auto-compact .client-bar{grid-template-columns:150px 1fr auto;gap:8px;align-items:end}
+body.auto-compact .field label,
+body.auto-compact .mode-block .block-label{font-size:10px;margin-bottom:4px}
+body.auto-compact .field input{height:28px;padding:0 7px;font-size:11px;border-radius:7px}
+body.auto-compact .status-text,
+body.auto-compact .mode-note{display:none}
+body.auto-compact .mode-switch{gap:4px;padding:3px;border-radius:9px;flex-wrap:nowrap}
+body.auto-compact .mode-option span{min-height:26px;padding:0 8px;border-radius:7px;font-size:10px;font-weight:500}
+body.auto-compact .btn{height:28px;padding:0 9px;border-radius:8px;font-size:11px;font-weight:500}
+body.auto-compact table{min-width:920px}
+body.auto-compact col.c-year{width:48px}
+body.auto-compact col.c-gross{width:70px}
+body.auto-compact col.c-paye{width:64px}
+body.auto-compact col.c-acc{width:58px}
+body.auto-compact col.c-total{width:70px}
+body.auto-compact col.c-wht{width:80px}
+body.auto-compact col.c-rwt{width:56px}
+body.auto-compact col.c-imp{width:56px}
+body.auto-compact col.c-pie{width:60px}
+body.auto-compact col.c-pir{width:60px}
+body.auto-compact col.c-yrate{width:54px}
+body.auto-compact col.c-ietc{width:50px}
+body.auto-compact col.c-mexp{width:58px}
+body.auto-compact col.c-aexp{width:64px}
+body.auto-compact col.c-result{width:70px}
+body.auto-compact thead th{padding:4px 2px;font-size:8.5px;letter-spacing:.015em;font-weight:500}
+body.auto-compact thead tr.group-row th{font-size:8px;font-weight:600}
+body.auto-compact tbody td{padding:2px;border-bottom-color:#edf2ef}
+body.auto-compact .cell-input,
+body.auto-compact .cell-select{height:24px;padding:0 3px;border-radius:6px;font-size:10.5px;font-weight:400}
+body.auto-compact .result-badge{min-width:56px;height:24px;padding:0 4px;font-size:10.5px;font-weight:500}
+body.auto-compact .plus-btn{width:20px;height:20px;font-size:13px}
+body.auto-compact .inline-allocation{gap:2px}
+body.auto-compact .hint-row{display:none}
+body.auto-compact .table-shell{border-radius:10px}
+
+/* Extra squeeze for very narrow windows. It keeps the table usable, but prioritises fitting over whitespace. */
+body.auto-ultra .client-bar{grid-template-columns:1fr;gap:6px}
+body.auto-ultra .mode-switch{width:100%;display:grid;grid-template-columns:1fr 1fr}
+body.auto-ultra .mode-option span{width:100%;padding:0 4px}
+body.auto-ultra table{min-width:830px}
+body.auto-ultra col.c-year{width:42px}
+body.auto-ultra col.c-gross{width:62px}
+body.auto-ultra col.c-paye{width:56px}
+body.auto-ultra col.c-acc{width:52px}
+body.auto-ultra col.c-total{width:62px}
+body.auto-ultra col.c-wht{width:72px}
+body.auto-ultra col.c-rwt{width:50px}
+body.auto-ultra col.c-imp{width:50px}
+body.auto-ultra col.c-pie{width:54px}
+body.auto-ultra col.c-pir{width:54px}
+body.auto-ultra col.c-yrate{width:48px}
+body.auto-ultra col.c-ietc{width:46px}
+body.auto-ultra col.c-mexp{width:52px}
+body.auto-ultra col.c-aexp{width:58px}
+body.auto-ultra col.c-result{width:62px}
+body.auto-ultra thead th{font-size:7.8px;padding:3px 1px}
+body.auto-ultra thead tr.group-row th{font-size:7.4px}
+body.auto-ultra .cell-input,
+body.auto-ultra .cell-select{height:22px;font-size:9.5px}
+body.auto-ultra .result-badge{min-width:50px;height:22px;font-size:9.5px}
+body.auto-ultra .plus-btn{width:18px;height:18px;font-size:12px}
+
 input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 @media (max-width:1100px){.client-bar{grid-template-columns:1fr}.action-row{justify-content:flex-start}}
@@ -736,7 +810,20 @@ function initControls() {
   });
 }
 
+
+function updateAutoCompactMode() {
+  const width = window.innerWidth || document.documentElement.clientWidth || 0;
+  document.body.classList.toggle('auto-compact', width <= 1180);
+  document.body.classList.toggle('auto-ultra', width <= 900);
+}
+
+function initAutoCompactMode() {
+  updateAutoCompactMode();
+  window.addEventListener('resize', updateAutoCompactMode);
+}
+
 async function initCalculator() {
+  initAutoCompactMode();
   buildTable();
   initControls();
   await loadExpenseLookup();
